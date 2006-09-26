@@ -82,6 +82,7 @@ void mainui::paintEvent( QPaintEvent * event )
        interact->initContext(oview);
        interact->initPart();
    }
+    if (&event == 0) {;}  //supress unused parameter warning
 }
 
 void mainui::init() {

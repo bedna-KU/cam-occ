@@ -27,13 +27,13 @@ Standard_Boolean ImportExport::ReadBREP(const Standard_CString &aFileName,
 IFSelect_ReturnStatus ImportExport::ReadSTEP(const Standard_CString& aFileName,
                                               Handle_TopTools_HSequenceOfShape& aHSequenceOfShape)
 {
-	TopoDS_Shape aShape;
+  TopoDS_Shape aShape;
   STEPControl_Reader aReader;
   IFSelect_ReturnStatus status = aReader.ReadFile(aFileName);
 
   if (status == IFSelect_RetDone)
   {
-  	Standard_CString LogFileName = "ReadStepFile.log";
+    Standard_CString LogFileName = "ReadStepFile.log";
     Standard_Boolean failsonly = Standard_False;
     aReader.PrintCheckLoad (failsonly, IFSelect_ItemsByEntity);
     // Root transfers
@@ -58,6 +58,7 @@ IFSelect_ReturnStatus ImportExport::ReadSTEP(const Standard_CString& aFileName,
  	        aHSequenceOfShape->Append(aShape);
  	      }
   	  }
+	  if (!ok) {LogFileName = "";} //supress unused variable warnings
   	}
   }
   else

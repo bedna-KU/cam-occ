@@ -65,6 +65,7 @@ void occview::slotDocumentChanged(bool erase, bool axo)
 void occview::paintEvent(QPaintEvent* event) {
     if (!myView.IsNull())
 	myView->Redraw();
+    if (&event == 0) {;} //supress unused parameter warning
 }
 
 void occview::mousePressEvent(QMouseEvent* event)
