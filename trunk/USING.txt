@@ -1,0 +1,17 @@
+-Run the program
+-Click the "new" icon
+-Choose one of the brep files.  (I have not found a step file that it likes.)
+-On the purple toolbar, click the icon that shows one face selected.  Click on a face on the object.
+-On the gray toolbar, click on the icon with the black, red, and blue lines. Give it a minute.
+-Click the code icon next to it, type in a file name.
+-That's it!
+
+
+Nonfunctional buttons on toolbars:
+-green and yellow bar each have 2 buttons which do nothing right now.
+-button on orange bar does nothing.
+-middle buttons on purple bar are not useful.
+-open, save, undo, redo do nothing.
+
+Based on work by Olivier Coma - see http://olivier.coma.free.fr/opencascade/opencascade.html
+I tried to contact him, no luck... he seems to have dissapeared.  There are no web pages mentioning his name.

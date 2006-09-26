@@ -1,0 +1,10 @@
+Requires:
+OpenCascade (I use 6.1)
+Qt (I use 3.3.6)
+qmake (from qt 3.3.6)
+
+To compile:
+
+run qmake (this is in place of configure)
+run make
+run the program (you probably need to set LD_LIBRARY_PATH for the OpenCascade libs -- see ldl.sh)
