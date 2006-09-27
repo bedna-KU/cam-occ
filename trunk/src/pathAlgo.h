@@ -51,7 +51,7 @@ protected:
     TopoDS_Face F;
     bool continue_compute;
     bool computed;
-    Handle_AIS_InteractiveContext Context;
+    //Handle_AIS_InteractiveContext Context;
     Standard_Real safeHeight;	//height for rapids
     bool safeHeightSet;
 
@@ -60,7 +60,7 @@ public:
     TopoDS_Shape& GetFace() {return F;};
     void init();
     //void FreeA_Coord();
-    void SetContext(Handle_AIS_InteractiveContext &C) {Context=C;};
+    //void SetContext(Handle_AIS_InteractiveContext &C) {Context=C;};
     void outputProtoCode();
 
 public slots:
