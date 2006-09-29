@@ -143,6 +143,7 @@ void occview::mouseMoveEvent(QMouseEvent* event)
 	}
 }
 
+//unnecessary?  TODO:verify usefulness
 void occview::slotHasSelected(bool b)
 {
 	hasSelected=b;

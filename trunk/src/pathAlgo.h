@@ -50,6 +50,7 @@ public:
 protected:
     TopoDS_Face F;
     bool continue_compute;
+    bool canBeComputed;
     bool computed;
     //Handle_AIS_InteractiveContext Context;
     Standard_Real safeHeight;	//height for rapids

@@ -17,7 +17,8 @@
 interactive::interactive(pathAlgo *pAlg)
 {
     Path = pAlg;
-    modified = false;
+    modified = false;	//unused?
+    displayedPaths.clear();
 }
 
 interactive::~interactive()
@@ -27,15 +28,22 @@ interactive::~interactive()
 
 void interactive::loadPart(const QString& filename)
 {
-	Part.Erase();
+	Part.Erase();			//erase part from screen
+	Path->init();			//clear pathAlgo path data
+	for (uint i=0;i < displayedPaths.size();i++) {
+		occObject X = displayedPaths.at(i);
+		X.Erase();
+	}  //this for loop erases these lines from the display
+	displayedPaths.clear();	//erase displayable path data
+
 	TopoDS_Shape myShape;
 	ImportExport::ReadBREP((Standard_CString)(const char*)filename, myShape);
 	Part.SetContext(myContext);
 	Part.SetShape(myShape);
 	Part.SetColor(Quantity_NOC_RED);
 	Part.SetMaterial(Graphic3d_NOM_PLASTIC);
-	Part.Display();
-	//Path->SetContext(myContext);
+	Part.Display(true);
+
 }
 
 bool interactive::newInteract()
@@ -73,7 +81,7 @@ void interactive::initContext(occview* v)
 void interactive::initPath()
 {
     connect (Path, SIGNAL(showPath()), this, SLOT(slotShowPath()));
-    computed=false;
+    //computed=false;
 }
 
 void interactive::initPart()
@@ -206,19 +214,53 @@ void interactive::slotCasWireframe()
 	  myContext->SetDisplayMode(myContext->Current(),0);
 }
 
-//well s---!  fixes more than one problem with above code.
+//probably causes a memory leak.  Need to do it better.
+
+void interactive::slotShowPath()
+{
+puts("start show");
+	int numLines = Path->projectedLines.size();
+	occObject tracedPath;
+	TopoDS_Edge anEdge;
+	TopoDS_Shape linesOnThisFace;
+	myContext->CloseAllContexts();  //otherwise, lines will disapear if you click on certain buttons!
+
+	tracedPath.Erase();
+	for(int i=0;i < numLines; i++) {
+		anEdge = Path->projectedLines.at(i);
+		if (linesOnThisFace.IsNull()) {
+			linesOnThisFace = anEdge;
+		} else {
+			linesOnThisFace = BRepAlgoAPI_Fuse(linesOnThisFace,anEdge);
+		}
+	}
+	tracedPath.SetContext(myContext);
+	tracedPath.SetShape(linesOnThisFace);
+	tracedPath.SetColor(Quantity_NOC_BLUE1);
+	tracedPath.Display();
+
+	displayedPaths.push_back(tracedPath);
+}
+
+/*************************************************************************
 void interactive::slotShowPath()
 {
 	vector<TopoDS_Edge> projectedVec = Path->projectedLines;
 	int numLines = projectedVec.size();
 	occObject tracedPath[numLines];
+
+	myContext->CloseAllContexts();  //otherwise, lines will dissapear if you click on certain buttons!
+
 	for(int i=0;i < numLines; i++)
 	{
 		tracedPath[i].Erase();
 		tracedPath[i].SetContext(myContext);
 		tracedPath[i].SetShape(projectedVec.at(i));
 		tracedPath[i].SetColor(Quantity_NOC_BLUE1);
+		//tracedPath[i].SetMaterial(Graphic3d_NOM_PLASTIC);
 		tracedPath[i].Display();
 	}
 
 }
+************************************************************************/
+

@@ -18,11 +18,13 @@
 #include <Graphic3d_NameOfMaterial.hxx>
 #include <gp_Pnt.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopAbs_ShapeEnum.hxx>
 #include <AIS_Shape.hxx>
+#include <vector>
 
-class occObject : public QObject
+class occObject //: public QObject
 {
-  Q_OBJECT
+  //Q_OBJECT
 
 protected:
 	TopoDS_Shape Shape;
@@ -39,7 +41,7 @@ public:
 	void SetContext(Handle_AIS_InteractiveContext &C) {Context=C;};
 	void SetColor(Quantity_NameOfColor aColor);
 	void SetMaterial(Graphic3d_NameOfMaterial aName);
-	void Display();
+	void Display(bool t = false);
 	void Erase();
 	void Init();
 

@@ -14,16 +14,15 @@
 
 //occ includes
 #include <AIS_InteractiveContext.hxx>
-#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepAlgoAPI_Fuse.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
-
+#include <TopoDS_Shape.hxx>
 
 //app includes
 #include "occObject.h"
 #include "ImportExport.h"
 #include "pathAlgo.h"
-
 
 class occview;
 
@@ -76,6 +75,9 @@ public slots:
     
 protected:
     bool modified;
+private:
+    vector<occObject> displayedPaths;
+
 
 };
 

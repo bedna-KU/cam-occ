@@ -17,6 +17,7 @@ extern QApplication* pA;
 pathAlgo::pathAlgo() {
     //??
     computed = false;
+    canBeComputed = false;
     safeHeightSet = false;
     safeHeight = 0;
 }
@@ -25,8 +26,12 @@ pathAlgo::~pathAlgo() {
 }
 
 void pathAlgo::init() {
-	//puts("pathalgo init");
-
+	//clear selected face, vector,...
+	F.Nullify();
+	computed = false;
+	canBeComputed = false;
+	listOfFaces.clear();
+	projectedLines.clear();
 }
 
 void pathAlgo::slotCancel()
@@ -36,20 +41,23 @@ void pathAlgo::slotCancel()
 
 void pathAlgo::SetFace(TopoDS_Face &aFace) {
 	F = aFace;
+	listOfFaces.push_back(F);
 	computed = false;
-	puts("pathAlgo face set.\n");
+	canBeComputed = true;
+	//puts("pathAlgo face set.\n");
 }
 
 //compute simple path on most recently selected face (F).
 //simple, as in don't check if the tool is gouging/assume ball nose...
 void pathAlgo::slotComputeSimplePathOnFace() {
+	projectedLines.clear();
 	Standard_Real bboxWidth;	//width (y) of bounding box
 	Standard_Real lineY;		//for computing line to project
 	Standard_Real passWidth = .75;	//cutting width, one pass
 	int numPasses;	//number of passes that must be made to cover surface
 	TopoDS_Iterator wireIterator;
 
-	if (!computed) {
+	if ((!computed) && (canBeComputed)) {
 		//face is stored in global F
 	//compute bounding box
 		Bnd_Box aBox;
@@ -58,6 +66,10 @@ void pathAlgo::slotComputeSimplePathOnFace() {
   		Standard_Real aXmin, aYmin, aZmin, aXmax, aYmax, aZmax;
   		aBox.Get(aXmin,aYmin,aZmin, aXmax,aYmax,aZmax);
 		bboxWidth = aYmax-aYmin;
+		if (aXmax - aXmin < .1) {
+			puts("bad face, possibly vertical. ignoring it.");
+			return;
+		}
 		Standard_Real H = aZmax + (aZmax-aZmin)/10;  //max + 10%
 		if ((!safeHeightSet)||(H>safeHeight))
 			safeHeight = H;
@@ -78,8 +90,8 @@ void pathAlgo::slotComputeSimplePathOnFace() {
 
 		printf("Number of passes %i\n Pass width %f\n", numPasses, passWidth);
 
-		projectedLines.clear();
-		for (int i=0;i<numPasses;i++) {
+
+		for (int i=0;i<=numPasses;i++) {
 			lineY = aYmin + i*passWidth;
 			TopoDS_Edge lineToProject = BRepBuilderAPI_MakeEdge( gp_Pnt(aXmin,lineY,aZmax+1), gp_Pnt(aXmax,lineY,aZmax+1) );
 
@@ -101,6 +113,7 @@ void pathAlgo::slotComputeSimplePathOnFace() {
 			}
 		}
 	computed = true;
+	canBeComputed = false;
 	emit showPath();
 	}
 }
