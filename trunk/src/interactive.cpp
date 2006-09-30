@@ -21,16 +21,33 @@ interactive::interactive(mainui *mui, QSplitter *qs, pathAlgo *pAlg)
     Path = pAlg;
     modified = false;	//unused?
     displayedPaths.clear();
-	add progressbar below tabwidget?
-    tabWidget = new QTabWidget(splitter);
-    listView = new QListView(tabWidget);
-    tabWidget->setMaximumWidth(175);
-    tabWidget->setMinimumWidth(100);
+    setupFrame();
 }
 
 interactive::~interactive()
 {
     
+}
+
+void interactive::setupFrame()
+{
+    leftFrame = new QVBox(splitter);
+      leftFrame->setMaximumWidth(175);
+      leftFrame->setMinimumWidth(100);
+      tabWidget = new QTabWidget(leftFrame);
+        faceView = new QListView(tabWidget);
+	pathView = new QListView(tabWidget);
+	//passView = new QListView(tabWidget);   //add to pathview?
+	toolView = new QListView(tabWidget);
+	tabWidget->addTab(faceView,"Faces");
+	tabWidget->addTab(pathView,"Paths");
+	//tabWidget->addTab(passView,"Passes");
+	tabWidget->addTab(toolView,"Tools");
+      pBar = new QProgressBar(leftFrame);
+        pBar->setMaximumHeight(20);
+	//pBar->setProgress(5);
+
+
 }
 
 void interactive::loadPart(const QString& filename)
@@ -220,9 +237,11 @@ void interactive::slotCasRMat()
 	for ( myContext->InitCurrent(); myContext->MoreCurrent (); myContext->NextCurrent () )
 		myContext->SetMaterial( myContext->Current(), (Graphic3d_NameOfMaterial)theMaterial );
 	char matStr[25];
-	sprintf(matStr,"Material currently: %s\n", NoM[theMaterial]);
+	sprintf(matStr,"Cycle through materials (currently: %s)", NoM[theMaterial]);
+
+	//looks better if we set statusTip AND directly set statusbar (no flicker)
 	mainIntf->statusBar()->message(tr(matStr));
-	possibility to change mat button's txt?
+	mainIntf->viewRenderMaterialAction->setStatusTip(tr(matStr));
 
 	theMaterial++;  //increment for next time user clicks
 	if (theMaterial > 20)  //only 0-20 are valid

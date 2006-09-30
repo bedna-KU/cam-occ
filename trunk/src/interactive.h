@@ -13,8 +13,11 @@
 #include <qobject.h>
 #include <qsplitter.h>
 #include <qlistview.h>
+#include <qvbox.h>
+#include <qprogressbar.h>
 #include <qtabwidget.h>
 #include <qstatusbar.h>
+#include <qaction.h>
 #include "mainui.h"
 
 //occ includes
@@ -44,14 +47,20 @@ public:
     bool computed;
     bool opened;
     QSplitter *splitter;
+    QVBox *leftFrame;
+    QProgressBar *pBar;
     QTabWidget *tabWidget;
-    QListView *listView;
+    QListView *faceView;
+    QListView *pathView;
+    QListView *passView;
+    QListView *toolView;
     mainui *mainIntf;
     pathAlgo *Path;
     
 public:
     interactive(mainui *mui, QSplitter *qs, pathAlgo *pAlg);
     ~interactive();
+    void setupFrame();
     bool newInteract();
     void loadPart(const QString& filename);
     bool isModified() const;

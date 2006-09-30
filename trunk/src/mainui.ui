@@ -2139,6 +2139,12 @@
         <property name="menuText">
             <string>Material</string>
         </property>
+        <property name="toolTip">
+            <string>Cycle through materials</string>
+        </property>
+        <property name="statusTip">
+            <string>Cycle through materials</string>
+        </property>
     </action>
     <action>
         <property name="name">
