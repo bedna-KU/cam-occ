@@ -14,11 +14,18 @@
 #include "interactive.h"
 #include "occview.h"
 
-interactive::interactive(pathAlgo *pAlg)
+interactive::interactive(mainui *mui, QSplitter *qs, pathAlgo *pAlg)
 {
+    mainIntf = mui;
+    splitter = qs;
     Path = pAlg;
     modified = false;	//unused?
     displayedPaths.clear();
+	add progressbar below tabwidget?
+    tabWidget = new QTabWidget(splitter);
+    listView = new QListView(tabWidget);
+    tabWidget->setMaximumWidth(175);
+    tabWidget->setMinimumWidth(100);
 }
 
 interactive::~interactive()
@@ -197,6 +204,42 @@ void interactive::slotCasColor()
 	  Quantity_Color CSFColor = Quantity_Color (r/255.,g/255.,b/255.,Quantity_TOC_RGB);
 	  for (;myContext->MoreCurrent ();myContext->NextCurrent ())
 		  myContext->SetColor (myContext->Current(),CSFColor.Name());
+	}
+}
+
+//we're doing materials the easy way -- cycle through all 20.
+void interactive::slotCasRMat()
+{
+	//int values 0 thru 20 inclusive for Graphic3d_NameOfMaterial
+
+	//this matches the order the materials are defined in the ENUM.
+	//there is no way to retrieve enum names in gnu C++ 
+	char NoM[21][14] = {"BRASS","BRONZE","COPPER","GOLD","PEWTER","PLASTER","PLASTIC","SILVER","STEEL","STONE","SHINY_PLASTIC","SATIN","METALIZED","NEON_GNC","CHROME","ALUMINIUM","OBSIDIAN","NEON_PHC","JADE","DEFAULT","UserDefined"};
+
+	static int theMaterial = 0;
+	for ( myContext->InitCurrent(); myContext->MoreCurrent (); myContext->NextCurrent () )
+		myContext->SetMaterial( myContext->Current(), (Graphic3d_NameOfMaterial)theMaterial );
+	char matStr[25];
+	sprintf(matStr,"Material currently: %s\n", NoM[theMaterial]);
+	mainIntf->statusBar()->message(tr(matStr));
+	possibility to change mat button's txt?
+
+	theMaterial++;  //increment for next time user clicks
+	if (theMaterial > 20)  //only 0-20 are valid
+		theMaterial = 0;
+}
+
+//Toggle transparency for each obj selected.  Toggle between 40% and 100%.
+void interactive::slotCasTransparency()
+{
+    static bool transparencyOff = true;
+    for( myContext->InitCurrent(); myContext->MoreCurrent(); myContext->NextSelected() )
+	if (transparencyOff) {
+		myContext->SetTransparency( myContext->Current(), .4);
+		transparencyOff = false;
+	} else {
+		myContext->UnsetTransparency( myContext->Current(), 1);
+		transparencyOff = true;
 	}
 }
 

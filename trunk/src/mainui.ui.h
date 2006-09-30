@@ -26,7 +26,7 @@
 #include "pathAlgo.h"
 
 
-
+QSplitter *splitter;
 occview *oview;
 interactive *interact;
 pathAlgo *pathAlg;
@@ -52,9 +52,9 @@ void mainui::initActions() {
     connect(viewZoomResetAction, SIGNAL(activated()), oview,SLOT(slotCasReset()));
     connect(viewRenderWireframeAction, SIGNAL(activated()), interact,SLOT(slotCasWireframe()));
     connect(viewRenderShadedAction, SIGNAL(activated()), interact,SLOT(slotCasShading()));
-    //connect(viewRenderTransparencyAction, SIGNAL(activated()), interact,SLOT(slotCas_()));
+    connect(viewRenderTransparencyAction, SIGNAL(activated()), interact,SLOT(slotCasTransparency()));
     connect(viewRenderColorAction, SIGNAL(activated()), interact,SLOT(slotCasColor()));
-    //connect(viewRenderMaterialAction, SIGNAL(activated()), interact,SLOT(slotCasRMat()));
+    connect(viewRenderMaterialAction, SIGNAL(activated()), interact,SLOT(slotCasRMat()));
     connect(viewRenderHidden_Lines_OnAction, SIGNAL(activated()), oview,SLOT(slotCasHlrOn()));
     connect(viewRenderHidden_Lines_OffAction, SIGNAL(activated()), oview,SLOT(slotCasHlrOff()));
     connect(selectionModeNeutralAction, SIGNAL(activated()), interact,SLOT(slotNeutral()));
@@ -86,10 +86,14 @@ void mainui::paintEvent( QPaintEvent * event )
 }
 
 void mainui::init() {
+    splitter = new QSplitter(this);
+
     pathAlg = new pathAlgo();
-    interact = new interactive(pathAlg);		//AIS
-    oview = new occview(this, interact);
-    setCentralWidget(oview);
+    interact = new interactive(this, splitter, pathAlg);  //interact = AIS
+    oview = new occview(splitter, interact);
+    setCentralWidget(splitter);
+    QPaintEvent *pE;
+    oview->paintEvent(pE);  //make the %$@^%$#^#@ view reset
     initActions();
 }
 

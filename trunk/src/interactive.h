@@ -11,6 +11,11 @@
 
 //qt includes
 #include <qobject.h>
+#include <qsplitter.h>
+#include <qlistview.h>
+#include <qtabwidget.h>
+#include <qstatusbar.h>
+#include "mainui.h"
 
 //occ includes
 #include <AIS_InteractiveContext.hxx>
@@ -18,6 +23,7 @@
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
+#include <Graphic3d_NameOfMaterial.hxx>
 
 //app includes
 #include "occObject.h"
@@ -37,10 +43,14 @@ public:
     QString myGeomFile;
     bool computed;
     bool opened;
+    QSplitter *splitter;
+    QTabWidget *tabWidget;
+    QListView *listView;
+    mainui *mainIntf;
     pathAlgo *Path;
     
 public:
-    interactive(pathAlgo *pAlg);
+    interactive(mainui *mui, QSplitter *qs, pathAlgo *pAlg);
     ~interactive();
     bool newInteract();
     void loadPart(const QString& filename);
@@ -72,13 +82,13 @@ public slots:
     void slotCasColor();
     void slotCasShading();
     void slotCasWireframe();
-    
+    void slotCasRMat();
+    void slotCasTransparency();
+
 protected:
     bool modified;
 private:
     vector<occObject> displayedPaths;
-
-
 };
 
     
