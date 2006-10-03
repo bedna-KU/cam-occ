@@ -68,6 +68,23 @@ void occview::paintEvent(QPaintEvent* event) {
     if (&event == 0) {;} //supress unused parameter warning
 }
 
+void occview::slotRedraw() {
+	if (!myView.IsNull())
+	myView->Redraw();
+}
+
+void occview::resizeEvent(QResizeEvent* event)
+{ 
+    if (!myView.IsNull()) {
+	myView->MustBeResized();
+
+	QTimer *timer = new QTimer(this);
+        connect( timer, SIGNAL(timeout()), this, SLOT(slotRedraw()) );
+        timer->start( 50, TRUE ); // .1 second single-shot timer
+    }
+    if (&event == 0) {;} //supress unused parameter warning
+}
+
 void occview::mousePressEvent(QMouseEvent* event)
 {
   //  save the current mouse coordinate in min

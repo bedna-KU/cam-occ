@@ -86,13 +86,13 @@ void mainui::paintEvent( QPaintEvent * event )
 }
 
 void mainui::init() {
-    splitter = new QSplitter(this);
+    splitter = new QSplitter(this);  //split the window vertically
 
     pathAlg = new pathAlgo();
     interact = new interactive(this, splitter, pathAlg);  //interact = AIS
     oview = new occview(splitter, interact);
     setCentralWidget(splitter);
-    QPaintEvent *pE;
+    QPaintEvent *pE = 0;
     oview->paintEvent(pE);  //make the %$@^%$#^#@ view reset
     initActions();
 }

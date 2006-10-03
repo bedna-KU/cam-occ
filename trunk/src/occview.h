@@ -10,6 +10,7 @@
 
 #include "interactive.h"
 
+#include <qtimer.h>
 #include <qwidget.h>
 #include <qpen.h>
 #include <qobject.h>
@@ -38,7 +39,7 @@ public:
     ~occview();
     void init();
     virtual void paintEvent ( QPaintEvent * );
-    virtual void resizeEvent ( QResizeEvent * ) { if (!myView.IsNull()) myView->MustBeResized(); }
+    virtual void resizeEvent ( QResizeEvent * );
     void mousePressEvent(QMouseEvent*);
     void mouseReleaseEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
@@ -85,6 +86,7 @@ protected slots:
 
     void slotCasHlrOff();
     void slotCasHlrOn();
+    void slotRedraw();
 		
 };
 

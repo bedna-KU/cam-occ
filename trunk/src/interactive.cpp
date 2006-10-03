@@ -32,7 +32,7 @@ interactive::~interactive()
 void interactive::setupFrame()
 {
     leftFrame = new QVBox(splitter);
-      leftFrame->setMaximumWidth(175);
+      leftFrame->setMaximumWidth(210);  //default to all tabs visible
       leftFrame->setMinimumWidth(100);
       tabWidget = new QTabWidget(leftFrame);
         faceView = new QListView(tabWidget);
