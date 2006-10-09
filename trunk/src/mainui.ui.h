@@ -62,7 +62,7 @@ void mainui::initActions() {
     connect(selectionModeEdgeAction, SIGNAL(activated()), interact,SLOT(slotEdgeSelection()));
     connect(selectionModeFaceAction, SIGNAL(activated()), interact,SLOT(slotFaceSelection()));
     connect(SimpleToolpathOnFace, SIGNAL(activated()), pathAlg,SLOT(slotComputeSimplePathOnFace()));
-    connect(outputProtoCode, SIGNAL(activated()), pathAlg,SLOT(slotOutputProtoCode()));
+    //connect(outputProtoCode, SIGNAL(activated()), pathAlg,SLOT(slotOutputProtoCode()));
 //TODO: add progress bar to statusbar? how?
 }
 

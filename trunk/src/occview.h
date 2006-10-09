@@ -86,7 +86,7 @@ protected slots:
 
     void slotCasHlrOff();
     void slotCasHlrOn();
-    void slotRedraw();
+    void slotRedrawResize();
 		
 };
 

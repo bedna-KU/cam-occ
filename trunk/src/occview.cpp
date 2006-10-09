@@ -68,21 +68,25 @@ void occview::paintEvent(QPaintEvent* event) {
     if (&event == 0) {;} //supress unused parameter warning
 }
 
-void occview::slotRedraw() {
-	if (!myView.IsNull())
-	myView->Redraw();
+void occview::slotRedrawResize() {
+	if (!myView.IsNull()) {
+		myView->Redraw();
+		myView->MustBeResized();
+	}
 }
+
 
 void occview::resizeEvent(QResizeEvent* event)
 { 
-    if (!myView.IsNull()) {
+    if (!myView.IsNull())
 	myView->MustBeResized();
 
-	QTimer *timer = new QTimer(this);
-        connect( timer, SIGNAL(timeout()), this, SLOT(slotRedraw()) );
-        timer->start( 50, TRUE ); // .1 second single-shot timer
-    }
     if (&event == 0) {;} //supress unused parameter warning
+
+	//not sure why, but without the delay below, the view won't be the right size.
+    QTimer *timer = new QTimer(this);
+    connect( timer, SIGNAL(timeout()), this, SLOT(slotRedrawResize()) );
+    timer->start( 100, TRUE ); // .1 second single-shot timer
 }
 
 void occview::mousePressEvent(QMouseEvent* event)

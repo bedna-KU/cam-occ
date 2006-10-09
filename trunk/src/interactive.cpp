@@ -144,7 +144,7 @@ void interactive::slotSelectionChanged()
 		if (S.ShapeType()==TopAbs_FACE)
 		{
 			TopoDS_Face F=TopoDS::Face(S);
-			Path->SetFace(F);
+			Path->AddFace(F,Part.GetShape());
 		}
 		else if (S.ShapeType()==TopAbs_EDGE )
 		{
@@ -251,6 +251,7 @@ void interactive::slotCasRMat()
 //Toggle transparency for each obj selected.  Toggle between 40% and 100%.
 void interactive::slotCasTransparency()
 {
+	//TODO: fix crash when in face selection mode (and possibly others)
     static bool transparencyOff = true;
     for( myContext->InitCurrent(); myContext->MoreCurrent(); myContext->NextSelected() )
 	if (transparencyOff) {
@@ -280,49 +281,25 @@ void interactive::slotCasWireframe()
 
 void interactive::slotShowPath()
 {
-puts("start show");
-	int numLines = Path->projectedLines.size();
-	occObject tracedPath;
-	TopoDS_Edge anEdge;
-	TopoDS_Shape linesOnThisFace;
+//puts("start show");
+	//int numFaces = Path->projectedPasses.size();
+	//TopoDS_Edge anEdge;
+	//TopoDS_Shape linesOnThisFace;
 	myContext->CloseAllContexts();  //otherwise, lines will disapear if you click on certain buttons!
 
-	tracedPath.Erase();
-	for(int i=0;i < numLines; i++) {
-		anEdge = Path->projectedLines.at(i);
-		if (linesOnThisFace.IsNull()) {
-			linesOnThisFace = anEdge;
-		} else {
-			linesOnThisFace = BRepAlgoAPI_Fuse(linesOnThisFace,anEdge);
+	
+	for(uint i=0;i < Path->projectedPasses.size(); i++) {
+//	puts("show one");
+	//TODO: check projectedPasses.at(i).displayed - only display new ones.
+		if (!Path->projectedPasses.at(i).displayed) {
+			occObject tracedPath;
+			tracedPath.Erase();
+			tracedPath.SetContext(myContext);
+			tracedPath.SetShape(Path->projectedPasses.at(i).P);
+			tracedPath.SetColor(Quantity_NOC_BLUE1);
+			tracedPath.Display();
+			displayedPaths.push_back(tracedPath);
+			Path->projectedPasses.at(i).displayed = true;
 		}
 	}
-	tracedPath.SetContext(myContext);
-	tracedPath.SetShape(linesOnThisFace);
-	tracedPath.SetColor(Quantity_NOC_BLUE1);
-	tracedPath.Display();
-
-	displayedPaths.push_back(tracedPath);
 }
-
-/*************************************************************************
-void interactive::slotShowPath()
-{
-	vector<TopoDS_Edge> projectedVec = Path->projectedLines;
-	int numLines = projectedVec.size();
-	occObject tracedPath[numLines];
-
-	myContext->CloseAllContexts();  //otherwise, lines will dissapear if you click on certain buttons!
-
-	for(int i=0;i < numLines; i++)
-	{
-		tracedPath[i].Erase();
-		tracedPath[i].SetContext(myContext);
-		tracedPath[i].SetShape(projectedVec.at(i));
-		tracedPath[i].SetColor(Quantity_NOC_BLUE1);
-		//tracedPath[i].SetMaterial(Graphic3d_NOM_PLASTIC);
-		tracedPath[i].Display();
-	}
-
-}
-************************************************************************/
-

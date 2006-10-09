@@ -22,7 +22,7 @@
 
 //occ includes
 #include <AIS_InteractiveContext.hxx>
-#include <BRepAlgoAPI_Fuse.hxx>
+//#include <BRepAlgoAPI_Fuse.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
@@ -56,8 +56,7 @@ public:
     QListView *toolView;
     mainui *mainIntf;
     pathAlgo *Path;
-    
-public:
+
     interactive(mainui *mui, QSplitter *qs, pathAlgo *pAlg);
     ~interactive();
     void setupFrame();

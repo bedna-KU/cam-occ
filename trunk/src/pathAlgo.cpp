@@ -16,8 +16,8 @@ extern QApplication* pA;
 
 pathAlgo::pathAlgo() {
     //??
-    computed = false;
-    canBeComputed = false;
+    //computed = false;
+    //canBeComputed = false;
     safeHeightSet = false;
     safeHeight = 0;
 }
@@ -27,162 +27,158 @@ pathAlgo::~pathAlgo() {
 
 void pathAlgo::init() {
 	//clear selected face, vector,...
-	F.Nullify();
-	computed = false;
-	canBeComputed = false;
+	//F.Nullify();
+	//computed = false;
+	//canBeComputed = false;
 	listOfFaces.clear();
-	projectedLines.clear();
+	projectedPasses.clear();
 }
 
+/*  10sept06
 void pathAlgo::slotCancel()
 {
     continue_compute=false;
 }
+*/
 
-void pathAlgo::SetFace(TopoDS_Face &aFace) {
-	F = aFace;
-	listOfFaces.push_back(F);
-	computed = false;
-	canBeComputed = true;
+void pathAlgo::AddFace(TopoDS_Face &aFace, TopoDS_Shape &theShape) {
+	TopoDS_Iterator faceFinder;
+	uint f = 0;
+	bool keepGoing = true;
+		//assign a number to this face
+	for(faceFinder.Initialize(theShape); (faceFinder.More() && keepGoing); faceFinder.Next()) {
+		TopoDS_Shape S = faceFinder.Value();
+		if (S.ShapeType()==TopAbs_FACE) {
+			if (TopoDS::Face(S) == aFace) {
+				//get out of loop, preserving f.
+				keepGoing = false;
+			}
+		}
+		if (keepGoing)
+			f++;
+	}
+	if (keepGoing) {
+		printf("This face not in the shape!");
+		return;
+	}
+
+		//check the face's number against others in listOfFaces
+	bool duplicate = false;
+	for (uint i=0;i<listOfFaces.size();i++) {
+		if (listOfFaces.at(i).faceNumber == f)
+			duplicate = true;
+	}
+
+	if (!duplicate) {
+		mFace mf;
+		mf.faceNumber = f;
+		mf.F=aFace;
+		mf.computed=false;
+		listOfFaces.push_back(mf);
+	}
+	//TODO: automatically check for - and remove - duplicate faces.
+	//computed = false;
+	//canBeComputed = true;
 	//puts("pathAlgo face set.\n");
 }
 
-//compute simple path on most recently selected face (F).
+
 //simple, as in don't check if the tool is gouging/assume ball nose...
 void pathAlgo::slotComputeSimplePathOnFace() {
-	projectedLines.clear();
+	TopoDS_Shape theProjLines;	//use TopoDS_Shape, because it can hold multiple edges
 	Standard_Real bboxWidth;	//width (y) of bounding box
 	Standard_Real lineY;		//for computing line to project
 	Standard_Real passWidth = .75;	//cutting width, one pass
 	int numPasses;	//number of passes that must be made to cover surface
-	TopoDS_Iterator wireIterator;
+	Bnd_Box aBox;
+	Standard_Real aXmin, aYmin, aZmin, aXmax, aYmax, aZmax;
+	TopoDS_Shape faces;
+	TopoDS_Shape lines;
+	pPass proj;
 
-	if ((!computed) && (canBeComputed)) {
-		//face is stored in global F
-	//compute bounding box
-		Bnd_Box aBox;
-		BRepAdaptor_Surface aSurf(F);
-  		BndLib_AddSurface::Add(aSurf,(Standard_Real) 0.0,aBox);
-  		Standard_Real aXmin, aYmin, aZmin, aXmax, aYmax, aZmax;
-  		aBox.Get(aXmin,aYmin,aZmin, aXmax,aYmax,aZmax);
-		bboxWidth = aYmax-aYmin;
-		if (aXmax - aXmin < .1) {
-			puts("bad face, possibly vertical. ignoring it.");
-			return;
+	for (uint i=0;i<listOfFaces.size();i++) {
+		//printf ("i %i\n",i);
+		//add each face to listOfFaces
+		TopoDS_Face curFace = listOfFaces.at(i).F; 
+		if (faces.IsNull()) {
+			faces=curFace;
+		} else {
+			//wtf pita
+			if (BRepAlgoAPI_Fuse(faces,curFace).BuilderCanWork()) //not sure if this has any effect...
+				faces=BRepAlgoAPI_Fuse(faces,curFace);
 		}
-		Standard_Real H = aZmax + (aZmax-aZmin)/10;  //max + 10%
-		if ((!safeHeightSet)||(H>safeHeight))
-			safeHeight = H;
+		//bounding box
+		//puts("bbox");
+		BRepAdaptor_Surface aSurf(curFace);
+		BndLib_AddSurface::Add(aSurf,(Standard_Real) 0.0,aBox);
+		proj.facesUsed.push_back(listOfFaces.at(i).faceNumber);  //keep face number associated with the toolpath
+	}
+
+	aBox.Get(aXmin,aYmin,aZmin, aXmax,aYmax,aZmax);
+	//printf("%f,%f,%f\n%f,%f,%f\n",aXmin,aYmin,aZmin, aXmax,aYmax,aZmax);
+	bboxWidth = aYmax-aYmin;
+	if (aXmax - aXmin < .1) {
+		puts("bad face, possibly vertical. ignoring it.");
+		return;
+	}
+	Standard_Real H = aZmax + 1 + (aZmax-aZmin)/10;  //max + 10% + a bit (yes, needs fixed)
+	if ((!safeHeightSet)||(H>safeHeight))
+		safeHeight = H;
 
 	//create a series of lines "covering" bbox (in Z)
 	//and project lines onto surface
-		numPasses = 1 + (int)round(bboxWidth/passWidth);
+	numPasses = 1 + (int)round(bboxWidth/passWidth);
 
-		//get a reasonable number of passes
-		while (numPasses > 200) {
-			numPasses = numPasses/10;
-			passWidth = passWidth*10;
-		}
-		while (numPasses < 20) {
-			numPasses = numPasses*10;
-			passWidth = passWidth/10;
-		}
-
-		printf("Number of passes %i\n Pass width %f\n", numPasses, passWidth);
-
-
-		for (int i=0;i<=numPasses;i++) {
-			lineY = aYmin + i*passWidth;
-			TopoDS_Edge lineToProject = BRepBuilderAPI_MakeEdge( gp_Pnt(aXmin,lineY,aZmax+1), gp_Pnt(aXmax,lineY,aZmax+1) );
-
-			//compute result
-			TopoDS_Shape projShape = BRepProj_Projection( lineToProject, F, gp_Dir(0,0,-1)).Shape();
-			if (!projShape.IsNull()) {
-				if (projShape.ShapeType()==TopAbs_EDGE) {
-					//store in vector projectedLines.
-					projectedLines.push_back(TopoDS::Edge(projShape));
-				} else {  //break whatever-it-is down, add any edges
-					for(wireIterator.Initialize(projShape); wireIterator.More();wireIterator.Next())
-					{
-						TopoDS_Shape S = wireIterator.Value();
-						if (S.ShapeType()==TopAbs_EDGE) {
-							projectedLines.push_back(TopoDS::Edge(S));
-						}
-					}
-				}
-			}
-		}
-	computed = true;
-	canBeComputed = false;
-	emit showPath();
+	//get a reasonable number of passes (this is only for testing the program)
+	while (numPasses > 200) {
+		numPasses = numPasses/10;
+		passWidth = passWidth*10;
 	}
-}
-
-
-//saves g-code to a file
-//originally, it was not going to print out usable g-code
-void pathAlgo::slotOutputProtoCode() {
-	int numLines = projectedLines.size();
-	TopoDS_Iterator lineIterator;
-	bool odd = true;		//used to flip every other curve around (see unidirectional)
-	bool unidirectional = true;	//false -> back-and-forth, true -> cut one direction only
-	TopLoc_Location loc;	//transform used for edge
-	Standard_Real first, last, tmp;  //parameters at start/end of curve created from edge, tmp is used to swap them
-	FILE *outG;
-
-	if (!computed) {
-		QMessageBox::warning( 0, "Warning", "Compute path first !");
-		return;
+	while (numPasses < 20) {
+		numPasses = numPasses*10;
+		passWidth = passWidth/10;
 	}
-	QString fileName = QFileDialog::getSaveFileName(QString::null, "G-code (*.ngc)", 0, 0);
-	outG = fopen ((const char*)fileName, "w");
-	if (outG == NULL) {
-		QMessageBox::warning( 0, "Warning", "Can't open that file for writing!");
-		return;
-	}
-	
-	//g-code to place at beginning of file
-	fprintf(outG,"(File %s created by cam-occ)\n",(const char*)fileName);
-			//ought to insert model's file name and the face ID into comment also...
-	fprintf(outG,"#101 = %f (Safe height for rapids)\n",safeHeight);  //safeHeight set in slotComputeSimplePathOnFace() above
-	fprintf(outG,"M09 M05 M48 G17 G21 G40\nG54 G64 G90 G92.2 G94\nM06 T1 G43 H1\n");  //reset everything, tool change-tool 1
-	fprintf(outG,"G00 Z#101\nX0.0 Y0.0\n");  	//rapid to safeZ, then to x0y0
-	fprintf(outG,"M03 S1000 F100 M08\n\n");  		//spindle CW 1000rpm feed 100 flood cool
 
-	//this loop processes the blue lines drawn on the face
-	for(int i=0;i < numLines; i++)
-	{
-		bool betweenCuts = true;  	//used to determine when to rapid
-		TopoDS_Edge E = projectedLines.at(i);
-		Handle(Geom_Curve) C = BRep_Tool::Curve(E,loc,first,last);
-		C->Transform(loc.Transformation());  //transform C using loc
-		if (odd & !unidirectional) {
-			odd = false;
-			tmp = last;
-			last = first;
-			first = last;
-		} else {
-			odd = true;  //for next time around
-		}
-		for (Standard_Real j=first;j<=last;j=j+(last-first)/100) {
-			gp_Pnt pt = C->Value(j);
-			if (betweenCuts) {
-				fprintf(outG,"G00 X%f Y%f\nG01 Z%f\n",pt.X(),pt.Y(),pt.Z());
-				betweenCuts = false;
+	printf("Number of passes %i\n Pass width %f\n", numPasses, passWidth);
+
+
+	for (int j=0;j<numPasses;j++) {
+		lineY = aYmin + j*passWidth;
+	//    printf("ly %f j %i\n",lineY,j);
+		TopoDS_Edge aLine = BRepBuilderAPI_MakeEdge( gp_Pnt(aXmin,lineY,aZmax+1), gp_Pnt(aXmax,lineY,aZmax+1) );
+	//    if (!aLine.IsNull()) {puts ("good line");}
+		//BRepProj_Projection projector;// = new BRepProj_Projection();
+		TopoDS_Shape projL;
+		BRepProj_Projection projector( aLine, faces, gp_Dir(0,0,-1));
+		if (projector.IsDone()) {
+			projL = projector.Shape();
+			if (theProjLines.IsNull()) {
+				theProjLines = projL;
 			} else {
-				fprintf(outG,"G01 X%f Y%f Z%f (curve %i parm %f)\n",pt.X(),pt.Y(),pt.Z(),i,j);
+				theProjLines = BRepAlgoAPI_Fuse(theProjLines,projL);
 			}
+		} else {
+			projL.Nullify();
+	//		puts ("bad proj");
 		}
-		fprintf(outG,"G01 Z#101 G4 P0\n");  //feedrate move to safe height (var #101)
 	}
-
-	/*TODO:
-	*  create struct for motion type, origin, and destination
-	*  motion type -- rapid, linear, arc, ... (only makes sense if not outputting g-code directly)
-	*/
-
-	//is it possible to recognize lines and arcs, to make better g-code?  Dump equation coefficients, see if it's a line or circle?
-
-	fprintf(outG,"M5\n%%\n");
-	fclose (outG);
+	proj.P=theProjLines;
+	proj.displayed=false;
+	projectedPasses.push_back(proj);
+	emit showPath();
 }
+
+//project lines onto faces, 
+/*void pathAlgo::projLine(TopoDS_Shape& result, TopoDS_Shape& faces, TopoDS_Shape& lines, gp_Dir pDir)
+{
+	//TopoDS_Edge lineToProject = BRepBuilderAPI_MakeEdge( pnt1,pnt2 );
+	TopoDS_Shape projShape = BRepProj_Projection( lines, faces, pDir).Shape();
+	if (!projShape.IsNull()) {
+		if (result.IsNull()) {
+			result = projShape;
+		} else {
+			result = BRepAlgoAPI_Fuse(lines,projShape);
+		}
+	}
+}*/
+

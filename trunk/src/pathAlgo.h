@@ -18,11 +18,13 @@
 #include <qfiledialog.h>
 #include <vector>
 
+//#include <Standard_Failure.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Iterator.hxx>
 #include <TopoDS_Face.hxx>
-#include <TopoDS_Edge.hxx>
+#include <TopoDS_Shape.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepAlgoAPI_Fuse.hxx>
 #include <TopTools_SequenceOfShape.hxx>
 #include <BRepProj_Projection.hxx>
 #include <Bnd_Box.hxx>
@@ -43,34 +45,48 @@ class pathAlgo : public QObject
 public:
     pathAlgo();
     virtual ~pathAlgo();
-    vector<TopoDS_Face> listOfFaces;
-    vector<TopoDS_Edge> projectedLines;
+    void init();
 
 
 protected:
-    TopoDS_Face F;
-    bool continue_compute;
-    bool canBeComputed;
-    bool computed;
-    //Handle_AIS_InteractiveContext Context;
+    //TopoDS_Face F;
+    //bool continue_compute;
+    //bool canBeComputed;
+    //bool computed;
     Standard_Real safeHeight;	//height for rapids
     bool safeHeightSet;
 
+    typedef struct {
+	bool computed;
+	uint faceNumber;
+	TopoDS_Face F;	
+    } mFace;  //machinable face - i.e. a face in listOfFaces
+
+    typedef struct {
+	bool displayed;
+	vector<uint> facesUsed;  //when computed, store each faceNumber (from mFace)
+	TopoDS_Shape P;
+    } pPass;  //set of lines that were projected at one time, onto one or more faces
+
+
 public:
-    void SetFace(TopoDS_Face &aFace);
-    TopoDS_Shape& GetFace() {return F;};
-    void init();
+    void AddFace(TopoDS_Face &aFace, TopoDS_Shape &theShape);
+    vector<mFace> listOfFaces;
+    vector<pPass> projectedPasses;   //now, one shape per pass.
+
+    //TopoDS_Shape& GetFace() {return F;};
     //void FreeA_Coord();
     //void SetContext(Handle_AIS_InteractiveContext &C) {Context=C;};
-    void outputProtoCode();
+    //void outputProtoCode();
 
 public slots:
-    void slotCancel();
+    //void slotCancel();
     void slotComputeSimplePathOnFace();
-    void slotOutputProtoCode();
+    //void slotOutputProtoCode();
 signals:
     void showPath();
-
+private:
+    //void projLine(TopoDS_Shape& lines, TopoDS_Face face, gp_Pnt pnt1, gp_Pnt pnt2, gp_Dir pDir);
 
 };
 
