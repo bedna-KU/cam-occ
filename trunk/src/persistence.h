@@ -26,8 +26,8 @@
 #include "pathAlgo.h"
 
 
-#include <sys>
-#include <time>
+//#include <syscall.h>
+#include <time.h>
 
 
 
@@ -41,8 +41,8 @@ public:
 protected:
     time_t last_saved;
     time_t model_modified;
-    char[41] sha1OfModel = "";  //sha1sum for model's file
+    char sha1OfModel[41];  //sha1sum for model's file
 
-}
+};
 
-#endif PERSISTENCE_H
+#endif //PERSISTENCE_H

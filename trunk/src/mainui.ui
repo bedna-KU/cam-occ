@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>802</width>
-            <height>473</height>
+            <width>921</width>
+            <height>808</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,10 +21,10 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>0</x>
+                <x>140</x>
                 <y>0</y>
-                <width>800</width>
-                <height>360</height>
+                <width>780</width>
+                <height>720</height>
             </rect>
         </property>
         <property name="sizePolicy">
@@ -123,7 +123,7 @@
             <action name="selectionModeEdgeAction"/>
             <action name="selectionModeFaceAction"/>
         </item>
-        <action name="selectionPosition_WorkpieceAction"/>
+        <action name="orientationPosition_WorkpieceAction"/>
     </item>
     <item text="&amp;Help" name="helpMenu">
         <action name="helpContentsAction"/>
@@ -1525,7 +1525,7 @@
         <property name="label">
             <string>Orientation Tools</string>
         </property>
-        <action name="selectionPosition_WorkpieceAction"/>
+        <action name="orientationPosition_WorkpieceAction"/>
     </toolbar>
     <toolbar dock="2">
         <property name="name">
@@ -2331,7 +2331,7 @@
     </action>
     <action>
         <property name="name">
-            <cstring>selectionPosition_WorkpieceAction</cstring>
+            <cstring>orientationPosition_WorkpieceAction</cstring>
         </property>
         <property name="iconSet">
             <iconset>image37</iconset>

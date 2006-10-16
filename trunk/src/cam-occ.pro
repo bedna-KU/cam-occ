@@ -13,16 +13,21 @@ HEADERS	+= occview.h \
 	interactive.h \
 	occObject.h \
 	ImportExport.h \
-	pathAlgo.h
+	pathAlgo.h \
+	persistence.h \
+	rs274emc.h
 
 SOURCES	+= main.cpp \
 	occview.cpp \
 	interactive.cpp \
 	occObject.cpp \
 	ImportExport.cpp \
-	pathAlgo.cpp
+	pathAlgo.cpp \
+	persistence.cpp \
+	rs274emc.cpp
 
-FORMS	= mainui.ui
+FORMS	= mainui.ui \
+	positionWorkpieceDlg.ui
 
 unix {
   UI_DIR = .ui

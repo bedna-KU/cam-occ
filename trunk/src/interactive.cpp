@@ -13,6 +13,9 @@
 
 #include "interactive.h"
 #include "occview.h"
+#include "positionWorkpieceDlg.h"
+
+extern QApplication* pA;
 
 interactive::interactive(mainui *mui, QSplitter *qs, pathAlgo *pAlg)
 {
@@ -37,17 +40,12 @@ void interactive::setupFrame()
       tabWidget = new QTabWidget(leftFrame);
         faceView = new QListView(tabWidget);
 	pathView = new QListView(tabWidget);
-	//passView = new QListView(tabWidget);   //add to pathview?
 	toolView = new QListView(tabWidget);
 	tabWidget->addTab(faceView,"Faces");
 	tabWidget->addTab(pathView,"Paths");
-	//tabWidget->addTab(passView,"Passes");
 	tabWidget->addTab(toolView,"Tools");
       pBar = new QProgressBar(leftFrame);
         pBar->setMaximumHeight(20);
-	//pBar->setProgress(5);
-
-
 }
 
 void interactive::loadPart(const QString& filename)
@@ -57,6 +55,7 @@ void interactive::loadPart(const QString& filename)
 	for (uint i=0;i < displayedPaths.size();i++) {
 		occObject X = displayedPaths.at(i);
 		X.Erase();
+		X.~occObject();
 	}  //this for loop erases these lines from the display
 	displayedPaths.clear();	//erase displayable path data
 
@@ -73,16 +72,14 @@ void interactive::loadPart(const QString& filename)
 bool interactive::newInteract()
 {
     slotNeutral();
-    //initMachine();
     initPart();
     initPath();
-    //mySimFile="";
-    myGeomFile = QFileDialog::getOpenFileName( QString::null, "File (*.brep *.step *.stp)");
+    myGeomFile = QFileDialog::getOpenFileName( "../models", "File (*.brep *.step *.stp)");
+    QPaintEvent *evt = 0;
+    mainIntf->paintEvent(evt);
+    pA->processEvents();
     if (!myGeomFile.isEmpty())
     {
-	//TODO: need to allow ui to update here.
-
-	//Machine.ResetLocation();
 	loadPart(myGeomFile);
 	emit documentChanged(false,true);
 	//emit clearTree();
@@ -105,13 +102,12 @@ void interactive::initContext(occview* v)
 void interactive::initPath()
 {
     connect (Path, SIGNAL(showPath()), this, SLOT(slotShowPath()));
-    //computed=false;
+    connect (Path, SIGNAL(setProgress(int,char*)), this, SLOT(slotSetProgress(int,char*)));
 }
 
 void interactive::initPart()
 {
 	Path->init();
-	//Path.SetMachine(&Machine);
 	opened=false;
 }
 
@@ -121,7 +117,47 @@ void interactive::getFaceEdges()
 	emit getFace(F);
 	TopTools_SequenceOfShape edges;
 	emit getEdges(edges);
-	//Path.SetPath(F, edges);
+}
+
+//pop up a dialog box for rotating, translating, and scaling the part.
+//to make it easier, trihedron should be visible (i.e. scaled to match part)
+//can trihedron be placed in display corner?
+void interactive::slotOrientWorkpiece() 
+{
+	static double rx=0,ry=0,rz=0,tx=0,ty=0,tz=0;
+	static double mult=1,ratio = 1;  //when mult=1, uncheck the checkbox
+	static uint cadU=2,camU=2;
+	static bool mCheck = false;
+	gp_Trsf T1,T2;
+
+	positionWorkpieceDlg orientDlg(0,"Workpiece setup", true);
+	T1 = Part.GetTrsf();
+	orientDlg.setValues(rx,ry,rz,tx,ty,tz,cadU,camU,mult,mCheck);
+
+	if (orientDlg.exec()==1)
+	{
+		orientDlg.getValues(rx,ry,rz,tx,ty,tz,cadU,camU,mult,mCheck,ratio);
+		T1.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(1,0,0)),PI/180*rx);
+		T2.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,1,0)),PI/180*ry);
+		T1=T1*T2;
+		T2.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),PI/180*rz);
+		T1=T1*T2;
+		T1.SetTranslationPart(gp_Vec((Standard_Real)tx,(Standard_Real)ty,(Standard_Real)tz));
+		T1.SetScaleFactor((Standard_Real)ratio);
+		Part.SetTrsf(T1);
+	}
+}
+
+void interactive::slotSetProgress(int p,char* status)//, char* status)
+{
+	if (p<0) {
+		pBar->reset();
+	} else {
+		pBar->setProgress(p);
+	}
+	if (status != "")
+		mainIntf->statusBar()->message(status);
+	pA->processEvents();
 }
 
 void interactive::slotSelectionChanged()

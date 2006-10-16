@@ -14,7 +14,8 @@
 
 extern QApplication* pA;
 
-pathAlgo::pathAlgo() {
+pathAlgo::pathAlgo() 
+{
     //??
     //computed = false;
     //canBeComputed = false;
@@ -22,10 +23,12 @@ pathAlgo::pathAlgo() {
     safeHeight = 0;
 }
 
-pathAlgo::~pathAlgo() {
+pathAlgo::~pathAlgo() 
+{
 }
 
-void pathAlgo::init() {
+void pathAlgo::init() 
+{
 	//clear selected face, vector,...
 	//F.Nullify();
 	//computed = false;
@@ -41,32 +44,31 @@ void pathAlgo::slotCancel()
 }
 */
 
-void pathAlgo::AddFace(TopoDS_Face &aFace, TopoDS_Shape &theShape) {
-	TopoDS_Iterator faceFinder;
+void pathAlgo::AddFace(TopoDS_Face &aFace, TopoDS_Shape &theShape) 
+{
+	//TopoDS_Iterator faceFinder;
 	uint f = 0;
 	bool keepGoing = true;
 		//assign a number to this face
-	for(faceFinder.Initialize(theShape); (faceFinder.More() && keepGoing); faceFinder.Next()) {
-		TopoDS_Shape S = faceFinder.Value();
-		if (S.ShapeType()==TopAbs_FACE) {
-			if (TopoDS::Face(S) == aFace) {
-				//get out of loop, preserving f.
-				keepGoing = false;
-			}
-		}
-		if (keepGoing)
-			f++;
-	}
+	TopExp_Explorer Ex;
+	for (Ex.Init(theShape,TopAbs_FACE); (Ex.More() && keepGoing); Ex.Next()) {
+		if (Ex.Current() == aFace) {
+			//get out of loop, preserving f.
+			keepGoing = false;
+		} else {f++;}
+	} 
 	if (keepGoing) {
-		printf("This face not in the shape!");
+		printf("This face not in the shape!\n");
 		return;
 	}
 
 		//check the face's number against others in listOfFaces
 	bool duplicate = false;
 	for (uint i=0;i<listOfFaces.size();i++) {
-		if (listOfFaces.at(i).faceNumber == f)
+		if (listOfFaces.at(i).faceNumber == f) {
 			duplicate = true;
+			puts("Duplicate");
+		}
 	}
 
 	if (!duplicate) {
@@ -76,15 +78,12 @@ void pathAlgo::AddFace(TopoDS_Face &aFace, TopoDS_Shape &theShape) {
 		mf.computed=false;
 		listOfFaces.push_back(mf);
 	}
-	//TODO: automatically check for - and remove - duplicate faces.
-	//computed = false;
-	//canBeComputed = true;
-	//puts("pathAlgo face set.\n");
 }
 
 
 //simple, as in don't check if the tool is gouging/assume ball nose...
-void pathAlgo::slotComputeSimplePathOnFace() {
+void pathAlgo::slotComputeSimplePathOnFace() 
+{
 	TopoDS_Shape theProjLines;	//use TopoDS_Shape, because it can hold multiple edges
 	Standard_Real bboxWidth;	//width (y) of bounding box
 	Standard_Real lineY;		//for computing line to project
@@ -112,7 +111,9 @@ void pathAlgo::slotComputeSimplePathOnFace() {
 		BRepAdaptor_Surface aSurf(curFace);
 		BndLib_AddSurface::Add(aSurf,(Standard_Real) 0.0,aBox);
 		proj.facesUsed.push_back(listOfFaces.at(i).faceNumber);  //keep face number associated with the toolpath
+		emit setProgress(int(round(100.0*(float)i/(float) listOfFaces.size())),"Adding faces");
 	}
+	emit setProgress(-1,"Done");
 
 	aBox.Get(aXmin,aYmin,aZmin, aXmax,aYmax,aZmax);
 	//printf("%f,%f,%f\n%f,%f,%f\n",aXmin,aYmin,aZmin, aXmax,aYmax,aZmax);
@@ -161,10 +162,13 @@ void pathAlgo::slotComputeSimplePathOnFace() {
 			projL.Nullify();
 	//		puts ("bad proj");
 		}
+		int prog = int(round(100*(float)j/(float)numPasses));
+		emit setProgress(prog,"Calculating cuts");
 	}
 	proj.P=theProjLines;
 	proj.displayed=false;
 	projectedPasses.push_back(proj);
+	emit setProgress(-1,"Done");
 	emit showPath();
 }
 

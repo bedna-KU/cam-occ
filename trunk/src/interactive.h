@@ -10,6 +10,7 @@
 #define INTERACTIVE_H
 
 //qt includes
+#include <qapplication.h>
 #include <qobject.h>
 #include <qsplitter.h>
 #include <qlistview.h>
@@ -27,6 +28,7 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
 #include <Graphic3d_NameOfMaterial.hxx>
+#include <gp_Trsf.hxx>
 
 //app includes
 #include "occObject.h"
@@ -81,6 +83,8 @@ public slots:
     void slotSelectionChanged();
     //void slotEditTool();
     void slotShowPath();
+    void slotOrientWorkpiece();
+    void slotSetProgress(int,char*); //progress bar, statusbar
     ////////////////////////////local context
     void slotNeutral();
     void slotVertexSelection();

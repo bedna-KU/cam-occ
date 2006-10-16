@@ -20,7 +20,8 @@
 
 //#include <Standard_Failure.hxx>
 #include <TopoDS.hxx>
-#include <TopoDS_Iterator.hxx>
+//#include <TopoDS_Iterator.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
@@ -74,17 +75,13 @@ public:
     vector<mFace> listOfFaces;
     vector<pPass> projectedPasses;   //now, one shape per pass.
 
-    //TopoDS_Shape& GetFace() {return F;};
-    //void FreeA_Coord();
-    //void SetContext(Handle_AIS_InteractiveContext &C) {Context=C;};
-    //void outputProtoCode();
-
 public slots:
     //void slotCancel();
     void slotComputeSimplePathOnFace();
-    //void slotOutputProtoCode();
+
 signals:
     void showPath();
+    void setProgress(int p=-1, char* status="Ready");
 private:
     //void projLine(TopoDS_Shape& lines, TopoDS_Face face, gp_Pnt pnt1, gp_Pnt pnt2, gp_Dir pDir);
 
