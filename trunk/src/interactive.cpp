@@ -13,7 +13,8 @@
 
 #include "interactive.h"
 #include "occview.h"
-#include "positionWorkpieceDlg.h"
+#include "treeView.h"
+//#include "positionWorkpieceDlg.h"
 
 extern QApplication* pA;
 
@@ -35,15 +36,9 @@ interactive::~interactive()
 void interactive::setupFrame()
 {
     leftFrame = new QVBox(splitter);
-      leftFrame->setMaximumWidth(210);  //default to all tabs visible
-      leftFrame->setMinimumWidth(100);
-      tabWidget = new QTabWidget(leftFrame);
-        faceView = new QListView(tabWidget);
-	pathView = new QListView(tabWidget);
-	toolView = new QListView(tabWidget);
-	tabWidget->addTab(faceView,"Faces");
-	tabWidget->addTab(pathView,"Paths");
-	tabWidget->addTab(toolView,"Tools");
+      leftFrame->setMaximumWidth(290);  //default to all tabs visible
+      //leftFrame->setMinimumWidth(310);
+      treeV = new treeView(leftFrame);
       pBar = new QProgressBar(leftFrame);
         pBar->setMaximumHeight(20);
 }
@@ -55,7 +50,7 @@ void interactive::loadPart(const QString& filename)
 	for (uint i=0;i < displayedPaths.size();i++) {
 		occObject X = displayedPaths.at(i);
 		X.Erase();
-		X.~occObject();
+		//delete &X;
 	}  //this for loop erases these lines from the display
 	displayedPaths.clear();	//erase displayable path data
 
@@ -65,7 +60,7 @@ void interactive::loadPart(const QString& filename)
 	Part.SetShape(myShape);
 	Part.SetColor(Quantity_NOC_RED);
 	Part.SetMaterial(Graphic3d_NOM_PLASTIC);
-	Part.Display(true);
+	Part.Display(false);
 
 }
 
@@ -101,16 +96,18 @@ void interactive::initContext(occview* v)
 
 void interactive::initPath()
 {
+    Path->init();
     connect (Path, SIGNAL(showPath()), this, SLOT(slotShowPath()));
     connect (Path, SIGNAL(setProgress(int,char*)), this, SLOT(slotSetProgress(int,char*)));
 }
 
 void interactive::initPart()
 {
-	Path->init();
+	Part.Init();
 	opened=false;
 }
 
+//unused?
 void interactive::getFaceEdges()
 {
 	TopoDS_Face F;
@@ -124,28 +121,7 @@ void interactive::getFaceEdges()
 //can trihedron be placed in display corner?
 void interactive::slotOrientWorkpiece() 
 {
-	static double rx=0,ry=0,rz=0,tx=0,ty=0,tz=0;
-	static double mult=1,ratio = 1;  //when mult=1, uncheck the checkbox
-	static uint cadU=2,camU=2;
-	static bool mCheck = false;
-	gp_Trsf T1,T2;
-
-	positionWorkpieceDlg orientDlg(0,"Workpiece setup", true);
-	T1 = Part.GetTrsf();
-	orientDlg.setValues(rx,ry,rz,tx,ty,tz,cadU,camU,mult,mCheck);
-
-	if (orientDlg.exec()==1)
-	{
-		orientDlg.getValues(rx,ry,rz,tx,ty,tz,cadU,camU,mult,mCheck,ratio);
-		T1.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(1,0,0)),PI/180*rx);
-		T2.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,1,0)),PI/180*ry);
-		T1=T1*T2;
-		T2.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),PI/180*rz);
-		T1=T1*T2;
-		T1.SetTranslationPart(gp_Vec((Standard_Real)tx,(Standard_Real)ty,(Standard_Real)tz));
-		T1.SetScaleFactor((Standard_Real)ratio);
-		Part.SetTrsf(T1);
-	}
+	Part.trsfDlg();
 }
 
 void interactive::slotSetProgress(int p,char* status)//, char* status)
@@ -177,19 +153,49 @@ void interactive::slotSelectionChanged()
 		msg=true;
 		//l'object selectionne (= une face) devient un object topologique S puis F
 		TopoDS_Shape S = myContext->SelectedShape();
-		if (S.ShapeType()==TopAbs_FACE)
-		{
+		if (S.ShapeType()==TopAbs_FACE) {
 			TopoDS_Face F=TopoDS::Face(S);
 			Path->AddFace(F,Part.GetShape());
-		}
-		else if (S.ShapeType()==TopAbs_EDGE )
-		{
+			puts("add face");
+		} else if (S.ShapeType()==TopAbs_EDGE ) {
 			TopoDS_Edge E=TopoDS::Edge(S);
+			usrRadiusMessage(E);
 		}
 		break;
 	}
 
 	emit hasSelected(msg);
+}
+
+
+//there are two ways to go from  a TopoDS entity to a form where basics like center of a circle can be extracted.  We mix&match since BRepTool does not test shape type and the entity types returned by BRepAdaptor do not provide a method to turn parameters into points.
+void interactive::usrRadiusMessage(TopoDS_Edge E) 
+{
+	Standard_Real first, last;
+	gp_Pnt p1,p2,c;
+
+	BRepBuilderAPI_Transform trsf(E,Part.GetAxis());
+	TopoDS_Edge Et=TopoDS::Edge(trsf.Shape());
+
+	Handle(Geom_Curve) C = BRep_Tool::Curve(E,first,last);
+	BRepAdaptor_Curve adaptor = BRepAdaptor_Curve(E);
+	QString m="",n="";
+	if (adaptor.GetType()==GeomAbs_Circle) {
+
+		gp_Circ circ = adaptor.Circle();
+		c = circ.Location();
+		Standard_Real R = circ.Radius();
+		m.sprintf("Center of that arc: %f %f %f\nRadius %f",c.X(),c.Y(),c.Z(),R);
+	} else if (adaptor.GetType()==GeomAbs_Line) {
+		gp_Lin line = adaptor.Line();
+		m.sprintf("Line");
+	}
+	if (m != "") {
+		p1=C->Value(first);
+		p2=C->Value(last);
+		n.sprintf("%s\nFirst point %f %f %f\nLast Point %f %f %f", (const char *)m,p1.X(),p1.Y(),p1.Z(),p2.X(),p2.Y(),p2.Z());
+		QMessageBox::information(mainIntf,"Selection",n);
+	}
 }
 
 /*
@@ -249,14 +255,11 @@ void interactive::slotFaceSelection()
 void interactive::slotCasColor()
 {
 	QColor color=QColorDialog::getColor(QColor(0,0,0));
-	if (color.isValid())
-	{
-		myContext->InitCurrent();
+	if (color.isValid()) {
 		int r,g,b;
 		color.rgb(&r,&g,&b);
-	  Quantity_Color CSFColor = Quantity_Color (r/255.,g/255.,b/255.,Quantity_TOC_RGB);
-	  for (;myContext->MoreCurrent ();myContext->NextCurrent ())
-		  myContext->SetColor (myContext->Current(),CSFColor.Name());
+		Quantity_Color CSFColor = Quantity_Color (r/255.,g/255.,b/255.,Quantity_TOC_RGB);
+		Part.SetColor(CSFColor.Name());
 	}
 }
 
@@ -269,9 +272,8 @@ void interactive::slotCasRMat()
 	//there is no way to retrieve enum names in gnu C++ 
 	char NoM[21][14] = {"BRASS","BRONZE","COPPER","GOLD","PEWTER","PLASTER","PLASTIC","SILVER","STEEL","STONE","SHINY_PLASTIC","SATIN","METALIZED","NEON_GNC","CHROME","ALUMINIUM","OBSIDIAN","NEON_PHC","JADE","DEFAULT","UserDefined"};
 
-	static int theMaterial = 0;
-	for ( myContext->InitCurrent(); myContext->MoreCurrent (); myContext->NextCurrent () )
-		myContext->SetMaterial( myContext->Current(), (Graphic3d_NameOfMaterial)theMaterial );
+	static uint theMaterial = 0;
+	Part.SetMaterial((Graphic3d_NameOfMaterial)theMaterial);
 	char matStr[25];
 	sprintf(matStr,"Cycle through materials (currently: %s)", NoM[theMaterial]);
 
@@ -288,13 +290,14 @@ void interactive::slotCasRMat()
 void interactive::slotCasTransparency()
 {
 	//TODO: fix crash when in face selection mode (and possibly others)
+	//fix by simply changing properties on Part?  also for material, above?
+//fixed here
     static bool transparencyOff = true;
-    for( myContext->InitCurrent(); myContext->MoreCurrent(); myContext->NextSelected() )
 	if (transparencyOff) {
-		myContext->SetTransparency( myContext->Current(), .4);
+		Part.SetTransparency(.4);
 		transparencyOff = false;
 	} else {
-		myContext->UnsetTransparency( myContext->Current(), 1);
+		Part.SetTransparency(-1.0);
 		transparencyOff = true;
 	}
 }
@@ -322,17 +325,16 @@ void interactive::slotShowPath()
 	//TopoDS_Edge anEdge;
 	//TopoDS_Shape linesOnThisFace;
 	myContext->CloseAllContexts();  //otherwise, lines will disapear if you click on certain buttons!
+	gp_Trsf T = Part.GetAxis();  //GetAxis vs GetTrsf...?!
 
-	
 	for(uint i=0;i < Path->projectedPasses.size(); i++) {
-//	puts("show one");
-	//TODO: check projectedPasses.at(i).displayed - only display new ones.
 		if (!Path->projectedPasses.at(i).displayed) {
 			occObject tracedPath;
 			tracedPath.Erase();
 			tracedPath.SetContext(myContext);
 			tracedPath.SetShape(Path->projectedPasses.at(i).P);
 			tracedPath.SetColor(Quantity_NOC_BLUE1);
+			tracedPath.SetTrsf(T);  //apply the same transform as is used on the Part.  Don't understand why it isn't automatically applied...@$#%#
 			tracedPath.Display();
 			displayedPaths.push_back(tracedPath);
 			Path->projectedPasses.at(i).displayed = true;

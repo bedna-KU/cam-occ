@@ -131,3 +131,9 @@ void positionWorkpieceDlg::multiplierChanged()
     }
     updateRatio();
 }
+
+
+void positionWorkpieceDlg::slotResetToDefaults()
+{
+    setValues(0,0,0,0,0,0,2,2,1,false);
+}

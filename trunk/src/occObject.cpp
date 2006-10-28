@@ -49,6 +49,15 @@ void occObject::SetMaterial(Graphic3d_NameOfMaterial aName)
 	Context->SetMaterial(AisShape, aName);
 }
 
+void occObject::SetTransparency(float trans)
+{
+	if (trans < 0.0) {
+		Context->UnsetTransparency(AisShape);
+	} else {
+		Context->SetTransparency(AisShape, trans);
+	}
+}
+
 void occObject::Display(bool t)
 {
 	if (!AisShape.IsNull())
@@ -86,7 +95,8 @@ void occObject::SetTrsf(double r11, double r12, double r13, double t1, \
 
 void occObject::SetTrsf(const gp_Trsf &T)
 {
-	Axis=Trsf=T;
+	Axis=T;
+	Trsf=T;
 	Context->SetLocation(AisShape, Trsf);
 	Context->SetLocation(Trihedron, Trsf);
 }
@@ -128,6 +138,38 @@ void occObject::SetShape(TopoDS_Shape S)
 
 void occObject::Init()
 {
-	gp_Trsf T;
-	Transform(T);
+	gp_Trsf T = gp_Trsf(); //set to identity transformation
+	SetTrsf(T);
+
+//	rx=ry=rz=tx=ty=tz=0;
+//	mult=ratio=1;
+//	cadU=camU=2;
+//	mCheck = false;	
+	rx=0;ry=0;rz=0;tx=0;ty=0;tz=0;
+	mult=1;ratio = 1;  //when mult=1, uncheck the checkbox
+	cadU=2;camU=2;
+	mCheck = false;
+}
+
+void occObject::trsfDlg()
+{
+
+	gp_Trsf T1,T2;
+
+	positionWorkpieceDlg orientDlg(0,"Workpiece setup", true);
+	T1 = GetTrsf();
+	orientDlg.setValues(rx,ry,rz,tx,ty,tz,cadU,camU,mult,mCheck);
+
+	if (orientDlg.exec()==1)
+	{
+		orientDlg.getValues(rx,ry,rz,tx,ty,tz,cadU,camU,mult,mCheck,ratio);
+		T1.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(1,0,0)),PI/180*rx);
+		T2.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,1,0)),PI/180*ry);
+		T1=T1*T2;
+		T2.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),PI/180*rz);
+		T1=T1*T2;
+		T1.SetTranslationPart(gp_Vec((Standard_Real)tx,(Standard_Real)ty,(Standard_Real)tz));
+		T1.SetScaleFactor((Standard_Real)ratio);
+		SetTrsf(T1);
+	}
 }

@@ -42,16 +42,19 @@
             </property>
             <widget class="QPushButton">
                 <property name="name">
-                    <cstring>buttonHelp</cstring>
+                    <cstring>buttonReset</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Help</string>
+                    <string>&amp;Reset</string>
                 </property>
                 <property name="accel">
-                    <string>F1</string>
+                    <string>Alt+R</string>
                 </property>
                 <property name="autoDefault">
                     <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Reset values to their defaults</string>
                 </property>
             </widget>
             <spacer>
@@ -103,109 +106,6 @@
                 </property>
             </widget>
         </hbox>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>position</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>160</x>
-                <y>0</y>
-                <width>350</width>
-                <height>50</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Position</string>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel7</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>250</x>
-                    <y>20</y>
-                    <width>20</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Z</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel6</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>130</x>
-                    <y>20</y>
-                    <width>20</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Y</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel5</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>21</y>
-                    <width>20</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>X</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>pxEdit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>30</x>
-                    <y>20</y>
-                    <width>70</width>
-                    <height>23</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>pzEdit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>270</x>
-                    <y>20</y>
-                    <width>70</width>
-                    <height>23</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>pyEdit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>150</x>
-                    <y>20</y>
-                    <width>70</width>
-                    <height>23</height>
-                </rect>
-            </property>
-        </widget>
     </widget>
     <widget class="QGroupBox">
         <property name="name">
@@ -562,6 +462,109 @@
             </property>
         </widget>
     </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>position</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>0</y>
+                <width>350</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Position Offset</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel7</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>250</x>
+                    <y>20</y>
+                    <width>20</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Z</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel6</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>130</x>
+                    <y>20</y>
+                    <width>20</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Y</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel5</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>21</y>
+                    <width>20</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>X</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pxEdit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>30</x>
+                    <y>20</y>
+                    <width>70</width>
+                    <height>23</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pzEdit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>270</x>
+                    <y>20</y>
+                    <width>70</width>
+                    <height>23</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pyEdit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>20</y>
+                    <width>70</width>
+                    <height>23</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -600,6 +603,12 @@
         <receiver>positionWorkpieceDlg</receiver>
         <slot>updateRatio()</slot>
     </connection>
+    <connection>
+        <sender>buttonReset</sender>
+        <signal>clicked()</signal>
+        <receiver>positionWorkpieceDlg</receiver>
+        <slot>slotResetToDefaults()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">positionWorkpieceDlg.ui.h</include>
@@ -609,6 +618,7 @@
     <slot>setValues( double rx, double ry, double rz, double tx, double ty, double tz, uint cadU, uint camU, double mult, bool mCheck )</slot>
     <slot>getValues( double &amp; rx, double &amp; ry, double &amp; rz, double &amp; tx, double &amp; ty, double &amp; tz, uint &amp; cadU, uint &amp; camU, double &amp; mult, bool &amp; mCheck, double &amp; ratio )</slot>
     <slot>multiplierChanged()</slot>
+    <slot>slotResetToDefaults()</slot>
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>

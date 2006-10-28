@@ -15,7 +15,8 @@ HEADERS	+= occview.h \
 	ImportExport.h \
 	pathAlgo.h \
 	persistence.h \
-	rs274emc.h
+	rs274emc.h \
+	treeView.h
 
 SOURCES	+= main.cpp \
 	occview.cpp \
@@ -24,7 +25,8 @@ SOURCES	+= main.cpp \
 	ImportExport.cpp \
 	pathAlgo.cpp \
 	persistence.cpp \
-	rs274emc.cpp
+	rs274emc.cpp \
+	treeView.cpp
 
 FORMS	= mainui.ui \
 	positionWorkpieceDlg.ui

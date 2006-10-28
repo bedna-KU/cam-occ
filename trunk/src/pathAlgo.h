@@ -24,10 +24,12 @@
 #include <TopExp_Explorer.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
-#include <BRepBuilderAPI_MakeEdge.hxx>
+//#include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
-#include <TopTools_SequenceOfShape.hxx>
-#include <BRepProj_Projection.hxx>
+#include <BRepAlgoAPI_Section.hxx>
+#include <gp_Pln.hxx>
+//#include <TopTools_SequenceOfShape.hxx>
+//#include <BRepProj_Projection.hxx>
 #include <Bnd_Box.hxx>
 #include <BndLib_AddSurface.hxx>
 #include <Geom_Curve.hxx>

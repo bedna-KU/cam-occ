@@ -96,21 +96,23 @@ void pathAlgo::slotComputeSimplePathOnFace()
 	pPass proj;
 
 	for (uint i=0;i<listOfFaces.size();i++) {
-		//printf ("i %i\n",i);
 		//add each face to listOfFaces
-		TopoDS_Face curFace = listOfFaces.at(i).F; 
-		if (faces.IsNull()) {
-			faces=curFace;
-		} else {
-			//wtf pita
-			if (BRepAlgoAPI_Fuse(faces,curFace).BuilderCanWork()) //not sure if this has any effect...
-				faces=BRepAlgoAPI_Fuse(faces,curFace);
+		if (!listOfFaces.at(i).computed) {
+			TopoDS_Face curFace = listOfFaces.at(i).F; 
+			if (faces.IsNull()) {
+				faces=curFace;
+			} else {
+				//wtf pita
+				if (BRepAlgoAPI_Fuse(faces,curFace).BuilderCanWork()) { //not sure if this has any effect...
+					faces=BRepAlgoAPI_Fuse(faces,curFace);
+				} else {puts ("brepalgoapi.fuse builder failure");}
+			}
+			//bounding box
+			BRepAdaptor_Surface aSurf(curFace);
+			BndLib_AddSurface::Add(aSurf,(Standard_Real) 0.0,aBox);
+			proj.facesUsed.push_back(listOfFaces.at(i).faceNumber);  //keep face number associated with the toolpath
+			listOfFaces.at(i).computed = true;
 		}
-		//bounding box
-		//puts("bbox");
-		BRepAdaptor_Surface aSurf(curFace);
-		BndLib_AddSurface::Add(aSurf,(Standard_Real) 0.0,aBox);
-		proj.facesUsed.push_back(listOfFaces.at(i).faceNumber);  //keep face number associated with the toolpath
 		emit setProgress(int(round(100.0*(float)i/(float) listOfFaces.size())),"Adding faces");
 	}
 	emit setProgress(-1,"Done");
@@ -122,7 +124,7 @@ void pathAlgo::slotComputeSimplePathOnFace()
 		puts("bad face, possibly vertical. ignoring it.");
 		return;
 	}
-	Standard_Real H = aZmax + 1 + (aZmax-aZmin)/10;  //max + 10% + a bit (yes, needs fixed)
+	Standard_Real H = aZmax + 1 + (aZmax-aZmin)/10;  //max + 10% + a bit (TODO: needs fixed)
 	if ((!safeHeightSet)||(H>safeHeight))
 		safeHeight = H;
 
@@ -142,25 +144,16 @@ void pathAlgo::slotComputeSimplePathOnFace()
 
 	printf("Number of passes %i\n Pass width %f\n", numPasses, passWidth);
 
-
+	///STILL skipping some faces! -- bottom.brep
 	for (int j=0;j<numPasses;j++) {
 		lineY = aYmin + j*passWidth;
-	//    printf("ly %f j %i\n",lineY,j);
-		TopoDS_Edge aLine = BRepBuilderAPI_MakeEdge( gp_Pnt(aXmin,lineY,aZmax+1), gp_Pnt(aXmax,lineY,aZmax+1) );
-	//    if (!aLine.IsNull()) {puts ("good line");}
-		//BRepProj_Projection projector;// = new BRepProj_Projection();
-		TopoDS_Shape projL;
-		BRepProj_Projection projector( aLine, faces, gp_Dir(0,0,-1));
-		if (projector.IsDone()) {
-			projL = projector.Shape();
-			if (theProjLines.IsNull()) {
-				theProjLines = projL;
-			} else {
-				theProjLines = BRepAlgoAPI_Fuse(theProjLines,projL);
-			}
+		gp_Dir N(0,1,0);  //Normal for plane Pl
+		gp_Pln Pl(gp_Pnt(aXmin,lineY,aZmax+1),N);
+		TopoDS_Shape section = BRepAlgoAPI_Section (faces,Pl);
+		if (theProjLines.IsNull()) {
+			theProjLines = section;
 		} else {
-			projL.Nullify();
-	//		puts ("bad proj");
+			theProjLines = BRepAlgoAPI_Fuse(theProjLines,section);
 		}
 		int prog = int(round(100*(float)j/(float)numPasses));
 		emit setProgress(prog,"Calculating cuts");
@@ -171,18 +164,4 @@ void pathAlgo::slotComputeSimplePathOnFace()
 	emit setProgress(-1,"Done");
 	emit showPath();
 }
-
-//project lines onto faces, 
-/*void pathAlgo::projLine(TopoDS_Shape& result, TopoDS_Shape& faces, TopoDS_Shape& lines, gp_Dir pDir)
-{
-	//TopoDS_Edge lineToProject = BRepBuilderAPI_MakeEdge( pnt1,pnt2 );
-	TopoDS_Shape projShape = BRepProj_Projection( lines, faces, pDir).Shape();
-	if (!projShape.IsNull()) {
-		if (result.IsNull()) {
-			result = projShape;
-		} else {
-			result = BRepAlgoAPI_Fuse(lines,projShape);
-		}
-	}
-}*/
 

@@ -15,6 +15,9 @@
 #include <qsplitter.h>
 #include <qlistview.h>
 #include <qvbox.h>
+#include <qhgroupbox.h>
+//#include <qpushbutton.h>
+#include <qtoolbutton.h>
 #include <qprogressbar.h>
 #include <qtabwidget.h>
 #include <qstatusbar.h>
@@ -23,7 +26,12 @@
 
 //occ includes
 #include <AIS_InteractiveContext.hxx>
-//#include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepAdaptor_Curve.hxx>
+//#include <BRepTools_Modifier.hxx>
+//#include <BRepTools_TrsfModification.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
+#include <gp_Circ.hxx>
+#include <gp_Lin.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
@@ -48,14 +56,12 @@ public:
     QString myGeomFile;
     bool computed;
     bool opened;
+
     QSplitter *splitter;
     QVBox *leftFrame;
     QProgressBar *pBar;
-    QTabWidget *tabWidget;
-    QListView *faceView;
-    QListView *pathView;
-    QListView *passView;
-    QListView *toolView;
+    treeView *treeV;
+
     mainui *mainIntf;
     pathAlgo *Path;
 
@@ -100,6 +106,7 @@ public slots:
 protected:
     bool modified;
 private:
+    void usrRadiusMessage(TopoDS_Edge E);
     vector<occObject> displayedPaths;
 };
 

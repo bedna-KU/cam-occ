@@ -37,9 +37,17 @@ void occview::init()
 	myViewer->SetDefaultLights();
 	myViewer->SetLightOn();
 	myView = myViewer->CreateView();
+
 	myView->SetWindow(myWindow);
-	myView->SetBackgroundColor(Quantity_NOC_BLACK); //TODO: fancy background
+	//myView->SetBackgroundColor(Quantity_NOC_GAINSBORO); //TODO: fancy background via SetBackgroundImage
+	myView->SetBackgroundImage("x.rgb", Aspect_FM_STRETCH,true);
+//	myView->SetBackgroundImage("/home/mark/Desktop/bgpic-1.rgb", Aspect_FM_STRETCH, true);
+//	myView->SetBackgroundImage("back_fade.rgb", Aspect_FM_STRETCH, true);
+
+	
 	myView->SetDegenerateModeOn();
+	//myView->SetAntialiasingOn();  //don't use, makes gaps between face triangles visible. $%@#%#$^%$%^#$^%$%^$
+	myView->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_BLACK, 0.08, V3d_ZBUFFER);
 	if (!myWindow->IsMapped())
    		myWindow->Map();
 	QWidget::setMouseTracking(true);
@@ -51,11 +59,9 @@ void occview::init()
 void occview::slotDocumentChanged(bool erase, bool axo)
 {
 	if (erase)
-	{
 	  interact->myContext->EraseAll();
- 	}
-	if (axo)
-	{
+
+	if (axo) {
 		slotCasAxo();
 		slotCasZoomAll();
 	}
