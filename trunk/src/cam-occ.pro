@@ -16,7 +16,7 @@ HEADERS	+= occview.h \
 	pathAlgo.h \
 	persistence.h \
 	rs274emc.h \
-	treeView.h
+	camTabs.h
 
 SOURCES	+= main.cpp \
 	occview.cpp \
@@ -26,7 +26,7 @@ SOURCES	+= main.cpp \
 	pathAlgo.cpp \
 	persistence.cpp \
 	rs274emc.cpp \
-	treeView.cpp
+	camTabs.cpp
 
 FORMS	= mainui.ui \
 	positionWorkpieceDlg.ui
