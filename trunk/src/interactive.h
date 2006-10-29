@@ -42,6 +42,7 @@
 #include "occObject.h"
 #include "ImportExport.h"
 #include "pathAlgo.h"
+#include "camTabs.h"
 
 class occview;
 
@@ -60,7 +61,7 @@ public:
     QSplitter *splitter;
     QVBox *leftFrame;
     QProgressBar *pBar;
-    treeView *treeV;
+    camTabs *camT;
 
     mainui *mainIntf;
     pathAlgo *Path;

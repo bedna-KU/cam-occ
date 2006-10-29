@@ -1,12 +1,20 @@
  
 
-treeView::treeView(QVBox *leftFrame) {
+camTabs::camTabs(QVBox *lf) {
+    frame = lf;
+    toolTypeName = {"Finish","Special","Rough"};
+    opTypeName = {"Finish","Special/Other","Intermediate","Rough"};
+    setupTabsAndTrees();
+}
+
+void camTabs::setupTabsAndTrees(){
+
       tabControl = new QHGroupBox(leftFrame);
 	//tabControl->setMaximumHeight(40);
 	buttonAdd = new QToolButton(tabControl,"Add");
 	  buttonAdd->setText("Add");
 	buttonDelete = new QToolButton(tabControl);
-	  buttonDelete->setText("Delete");
+	  buttonDelete->setText("Delete Selected");
 	buttonProperties= new QToolButton(tabControl);
 	  buttonProperties->setText("Properties");
       tabWidget = new QTabWidget(leftFrame);
@@ -44,9 +52,27 @@ treeView::treeView(QVBox *leftFrame) {
 	  QListViewItem exTool = new QListViewItem(finishTlHeader,"","Ball","5","10");
 }
 
-treeView::~treeView() 
+camTabs::~camTabs() 
 {
 
 }
 
-treeView::
+camTabs::addOperation()
+{
+
+}
+
+camTabs::addTool()
+{
+
+}
+
+camTabs::addFeature(TopoDS_Edge E)
+{
+
+}
+
+camTabs::addFeature(TopoDS_Face F)
+{
+
+}

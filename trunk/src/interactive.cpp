@@ -13,8 +13,6 @@
 
 #include "interactive.h"
 #include "occview.h"
-#include "treeView.h"
-//#include "positionWorkpieceDlg.h"
 
 extern QApplication* pA;
 
@@ -38,7 +36,7 @@ void interactive::setupFrame()
     leftFrame = new QVBox(splitter);
       leftFrame->setMaximumWidth(290);  //default to all tabs visible
       //leftFrame->setMinimumWidth(310);
-      treeV = new treeView(leftFrame);
+      camT = new camTabs(leftFrame);
       pBar = new QProgressBar(leftFrame);
         pBar->setMaximumHeight(20);
 }

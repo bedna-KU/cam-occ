@@ -1,20 +1,22 @@
 
-#ifndef TREEVIEW_H
-#define TREEVIEW_H
+#ifndef CAMTABS_H
+#define CAMTABS_H
 
-class treeView : public QObject
+class camTabs : public QObject
 {
 public:
-    treeView();
-    ~treeView();
+    camTabs();
+    ~camTabs();
     void init();
 protected:
-    enum {Finish,Special,Rough} toolType;
-    static char* toolTypeName[3] = {"Finish","Special","Rough"}; 
-    enum {Finish,Special_Other,Intermediate,Rough} opType;
-    static char* opTypeName[4] = {"Finish","Special/Other","Intermediate","Rough"};
+    enum {FinishTl,SpecialTl,RoughTl} toolType;
+    const char* toolTypeName[3];
+    enum {FinishOp,Special_OtherOp,IntermediateOp,RoughOp} opType;
+    const char* opTypeName[4];
 	
 private:
+    QVBox *frame;
+
     QTabWidget *tabWidget;
       QListView *featureTab;
         QListViewItem *faceFeatHeader;
@@ -36,4 +38,4 @@ private:
  
 };
 
-#endif //TREEVIEW_H
+#endif //CAMTABS_H
