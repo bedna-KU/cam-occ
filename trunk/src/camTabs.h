@@ -1,41 +1,74 @@
+/*************************************************************
+** License: GPL.  
+** Copyright (C) 2006 Mark Pictor
+*************************************************************/
 
 #ifndef CAMTABS_H
 #define CAMTABS_H
 
-class camTabs : public QObject
+#include <qobject.h>
+#include <qlistview.h>
+#include <qvbox.h>
+#include <qhgroupbox.h>
+#include <qtoolbutton.h>
+#include <qtabwidget.h>
+
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
+
+class myListView : public QListView
 {
 public:
-    camTabs();
+    myListView ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+    void setSorting ( int column, bool ascending = TRUE );
+};
+
+class camTabs : public QObject
+{
+    Q_OBJECT
+public:
+    camTabs(QVBox *lf);
     ~camTabs();
     void init();
+public slots:
+    void clickedAddButton();
+    void clickedDelButton();
+    void clickedPropButton();
+
+
 protected:
     enum {FinishTl,SpecialTl,RoughTl} toolType;
-    const char* toolTypeName[3];
+    static const char * toolTypeName[];
     enum {FinishOp,Special_OtherOp,IntermediateOp,RoughOp} opType;
-    const char* opTypeName[4];
+    static const char * opTypeName[];
 	
 private:
     QVBox *frame;
 
     QTabWidget *tabWidget;
-      QListView *featureTab;
+      myListView *featureTab;
         QListViewItem *faceFeatHeader;
         QListViewItem *edgeFeatHeader;
-      QListView *opTab;
+      myListView *opTab;
         QListViewItem *roughOpHeader;
         QListViewItem *intermediateOpHeader;
         QListViewItem *specialOpHeader;
         QListViewItem *finishOpHeader;
-      QListView *toolTab;
+      myListView *toolTab;
         QListViewItem *finishTlHeader;
         QListViewItem *specTlHeader;
         QListViewItem *roughTlHeader;
 
     QHGroupBox *tabControl;
       QToolButton *buttonAdd;
-      QToolButton *buttonDelete;
-      QToolButton *buttonProperties;
- 
+      QToolButton *buttonDel;
+      QToolButton *buttonProp;
+    void setupTabsAndTrees();
+    void addOperation();
+    void addTool();
+    void addFeature(TopoDS_Edge E);
+    void addFeature(TopoDS_Face F);
 };
+
 
 #endif //CAMTABS_H
