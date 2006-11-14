@@ -36,7 +36,6 @@
 #include <BRepAdaptor_Surface.hxx>
 #include <BRep_Tool.hxx>
 
-
 //#include <BRepAdaptor_Curve.hxx>
 //#include <BRepAdaptor_Curve2d.hxx>
 //class interactive;
@@ -52,10 +51,6 @@ public:
 
 
 protected:
-    //TopoDS_Face F;
-    //bool continue_compute;
-    //bool canBeComputed;
-    //bool computed;
     Standard_Real safeHeight;	//height for rapids
     bool safeHeightSet;
 
@@ -71,21 +66,28 @@ protected:
 	TopoDS_Shape P;
     } pPass;  //set of lines that were projected at one time, onto one or more faces
 
+    typedef struct {
+	bool noErrors;
+	TopoDS_Shape O1,O2;
+    } offsetPair;  //a pair of offsets as returned by CLOffsetFromWire
+
 
 public:
     void AddFace(TopoDS_Face &aFace, TopoDS_Shape &theShape);
     vector<mFace> listOfFaces;
     vector<pPass> projectedPasses;   //now, one shape per pass.
+    void edgePoints(TopoDS_Edge E, gp_Pnt &c, gp_Pnt &a, gp_Pnt &b, bool &isLine, Standard_Real &circRad);
 
 public slots:
     //void slotCancel();
     void slotComputeSimplePathOnFace();
-
+    void slotSelectFaceFromList(int f);
 signals:
     void showPath();
     void setProgress(int p=-1, char* status="Ready");
+    void addFaceToList(uint f);
 private:
-    //void projLine(TopoDS_Shape& lines, TopoDS_Face face, gp_Pnt pnt1, gp_Pnt pnt2, gp_Dir pDir);
+    void CLOffsetFromWire(TopoDS_Wire theWire, Standard_Real Dist, offsetPair &theResult);
 
 };
 

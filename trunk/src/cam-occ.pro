@@ -3,7 +3,7 @@ LANGUAGE	= C++
 
 CONFIG	+= qt warn_on release
 
-LIBS	+= -L/opt/occ61/lib -lTKernel -lTKV3d -lTKService -lTKSTEP -lTKSTEPBase -lTKBool
+LIBS	+= -L/opt/occ61/lib -lTKernel -lTKV3d -lTKService -lTKSTEP -lTKSTEPBase -lTKBool -lTKOffset
 
 DEFINES	+= HAVE_IOSTREAM HAVE_LIMITS
 
@@ -29,7 +29,8 @@ SOURCES	+= main.cpp \
 	camTabs.cpp
 
 FORMS	= mainui.ui \
-	positionWorkpieceDlg.ui
+	positionWorkpieceDlg.ui \
+	mill_tools.ui
 
 unix {
   UI_DIR = .ui

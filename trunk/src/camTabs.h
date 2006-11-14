@@ -34,7 +34,9 @@ public slots:
     void clickedAddButton();
     void clickedDelButton();
     void clickedPropButton();
-
+    void slotAddFace(uint);
+signals:
+    void setProgress(int p=-1, char* status="Ready");
 
 protected:
     enum {FinishTl,SpecialTl,RoughTl} toolType;
@@ -67,7 +69,7 @@ private:
     void addOperation();
     void addTool();
     void addFeature(TopoDS_Edge E);
-    void addFeature(TopoDS_Face F);
+    //void addFeature(TopoDS_Face F);
 };
 
 

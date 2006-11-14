@@ -24,6 +24,8 @@ interactive::interactive(mainui *mui, QSplitter *qs, pathAlgo *pAlg)
     modified = false;	//unused?
     displayedPaths.clear();
     setupFrame();
+    connect (Path, SIGNAL(addFaceToList(uint)), camT, SLOT(slotAddFace(uint)));
+    //connect (camT, SIGNAL(selectFace(int)), Path, SLOT(slotSelectFaceFromList(int)));
 }
 
 interactive::~interactive()
@@ -39,6 +41,8 @@ void interactive::setupFrame()
       camT = new camTabs(leftFrame);
       pBar = new QProgressBar(leftFrame);
         pBar->setMaximumHeight(20);
+
+    connect (camT, SIGNAL(setProgress(int,char*)), this, SLOT(slotSetProgress(int,char*)));
 }
 
 void interactive::loadPart(const QString& filename)
@@ -154,7 +158,7 @@ void interactive::slotSelectionChanged()
 		if (S.ShapeType()==TopAbs_FACE) {
 			TopoDS_Face F=TopoDS::Face(S);
 			Path->AddFace(F,Part.GetShape());
-			puts("add face");
+			//puts("add face");
 		} else if (S.ShapeType()==TopAbs_EDGE ) {
 			TopoDS_Edge E=TopoDS::Edge(S);
 			usrRadiusMessage(E);
@@ -167,6 +171,8 @@ void interactive::slotSelectionChanged()
 
 
 //there are two ways to go from  a TopoDS entity to a form where basics like center of a circle can be extracted.  We mix&match since BRepTool does not test shape type and the entity types returned by BRepAdaptor do not provide a method to turn parameters into points.
+
+//E or Et for curve and adaptor???
 void interactive::usrRadiusMessage(TopoDS_Edge E) 
 {
 	Standard_Real first, last;
@@ -175,8 +181,8 @@ void interactive::usrRadiusMessage(TopoDS_Edge E)
 	BRepBuilderAPI_Transform trsf(E,Part.GetAxis());
 	TopoDS_Edge Et=TopoDS::Edge(trsf.Shape());
 
-	Handle(Geom_Curve) C = BRep_Tool::Curve(E,first,last);
-	BRepAdaptor_Curve adaptor = BRepAdaptor_Curve(E);
+	Handle(Geom_Curve) C = BRep_Tool::Curve(Et,first,last);
+	BRepAdaptor_Curve adaptor = BRepAdaptor_Curve(Et);
 	QString m="",n="";
 	if (adaptor.GetType()==GeomAbs_Circle) {
 
@@ -188,12 +194,11 @@ void interactive::usrRadiusMessage(TopoDS_Edge E)
 		gp_Lin line = adaptor.Line();
 		m.sprintf("Line");
 	}
-	if (m != "") {
-		p1=C->Value(first);
-		p2=C->Value(last);
-		n.sprintf("%s\nFirst point %f %f %f\nLast Point %f %f %f", (const char *)m,p1.X(),p1.Y(),p1.Z(),p2.X(),p2.Y(),p2.Z());
-		QMessageBox::information(mainIntf,"Selection",n);
-	}
+	if (m == "") m = "Edge";
+	p1=C->Value(first);
+	p2=C->Value(last);
+	n.sprintf("%s\nFirst point %f %f %f\nLast Point %f %f %f", (const char *)m,p1.X(),p1.Y(),p1.Z(),p2.X(),p2.Y(),p2.Z());
+	QMessageBox::information(mainIntf,"Selection",n);
 }
 
 /*

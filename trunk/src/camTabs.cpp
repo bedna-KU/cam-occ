@@ -6,11 +6,9 @@
 *************************************************************/
  
 #include "camTabs.h"
-//#include <string>
 #include <qmessagebox.h>
 
 
-//QListView ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 )
 myListView::myListView(QWidget * parent, const char * name, WFlags f):QListView(parent, name, f) 
 {
 }
@@ -33,6 +31,9 @@ camTabs::~camTabs()
 
 }
 
+void camTabs::init() {
+	//clear face list, clear op list, tools ??
+}
 
 void camTabs::setupTabsAndTrees()
 {
@@ -90,21 +91,11 @@ void camTabs::setupTabsAndTrees()
 
 }
 
-// void featureTab::setSorting ( int column, bool ascending = TRUE )
-// {
-//     if ( column > 0 )  QListView::setSorting (  column,  ascending );
-// }
-
-
-
-
 void camTabs::clickedAddButton()
 {
     if (tabWidget->currentPage() == featureTab) {
-	    QMessageBox::information(frame,"Feature Selection","Click on the Face or Edge button on the\nSelection Mode toolbar, then choose a face or edge in the display.");
+	QMessageBox::information(frame,"Feature Selection","Click on the Face or Edge button on the Selection\nMode toolbar, then choose a face or edge in the display.");
     } else if (tabWidget->currentPage() == opTab) {
-	//if ((opTab->selectedItem()) && (selectedItem()->parent()))
-	    //opTab->setSelected(opTab->selectedItem()->parent(),true);
 	addOperation();
     } else if (tabWidget->currentPage() == toolTab) {
 	addTool();
@@ -114,19 +105,26 @@ void camTabs::clickedAddButton()
 void camTabs::clickedDelButton()
 {
     myListView* lv=(myListView*)tabWidget->currentPage();
-    if(lv->selectedItem()->parent()) {
+    if((lv->selectedItem()) && (lv->selectedItem()->parent())) {
 	delete lv->selectedItem();
+    } else {
+	emit setProgress(-1,"Can't delete: bad or no selection.");
     }
 }
 
 void camTabs::clickedPropButton()
 {
-    if (tabWidget->currentPage() == featureTab) {
+    myListView* lv=(myListView*)tabWidget->currentPage();
+    if((lv->selectedItem()) && (lv->selectedItem()->parent())) {
+	if (lv == featureTab) {
 
-    } else if (tabWidget->currentPage() == opTab) {
+	} else if (lv == opTab) {
 
-    } else if (tabWidget->currentPage() == toolTab) {
+	} else if (lv == toolTab) {
 
+	}
+    } else {
+	emit setProgress(-1,"No properties: bad or no selection.");
     }
 }
 
@@ -145,7 +143,8 @@ void camTabs::addFeature(TopoDS_Edge E)
 
 }
 
-void camTabs::addFeature(TopoDS_Face F)
+void camTabs::slotAddFace(uint f)
 {
-
+    QString s; s.sprintf("%u",f);
+    (void) new QListViewItem(faceFeatHeader,"",s,"");
 }
