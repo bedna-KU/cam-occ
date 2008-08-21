@@ -1,13 +1,14 @@
 TEMPLATE	= app
 LANGUAGE	= C++
 
-CONFIG	+= qt warn_on release
+#CONFIG	+= qt warn_on release
+CONFIG	+= qt warn_on debug
 
-LIBS	+= -L/opt/occ61/lib -lTKernel -lTKV3d -lTKService -lTKSTEP -lTKSTEPBase -lTKBool -lTKOffset
+LIBS	+= -L/usr/lib -lTKernel -lTKV3d -lTKService -lTKSTEP -lTKSTEPBase -lTKBool -lTKOffset -lTKShHealing
 
 DEFINES	+= HAVE_IOSTREAM HAVE_LIMITS
 
-INCLUDEPATH	+= /opt/occ61/inc
+INCLUDEPATH	+= /usr/include/opencascade
 
 HEADERS	+= occview.h \
 	interactive.h \
