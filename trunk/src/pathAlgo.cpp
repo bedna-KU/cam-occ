@@ -17,6 +17,7 @@
 #include <TopTools_ListOfShape.hxx>
 #include <TopExp.hxx>
 #include <BRepTools_WireExplorer.hxx>
+#include <ShapeFix_Wire.hxx>
 
 extern QApplication* pA;
 
@@ -150,6 +151,8 @@ void pathAlgo::slotComputeSimplePathOnFace()
 	}
 
 	printf("Number of passes %i\n Pass width %f\n", numPasses, passWidth);
+    ///   ************remove 3 refs to var 't' and if/else**************
+    int t = 0;
 
 	///STILL skipping some faces! -- bottom.brep
 	for (int j=0;j<numPasses;j++) {
@@ -157,22 +160,31 @@ void pathAlgo::slotComputeSimplePathOnFace()
 		gp_Dir N(0,1,0);  //Normal for plane Pl
 		gp_Pln Pl(gp_Pnt(aXmin,lineY,aZmax+1),N);
 		TopoDS_Shape section = BRepAlgoAPI_Section (faces,Pl);
+	puts("algoapi section");
 	///offset line here.
 	//section is a COMPOUND shape - explore for wires (and edges?)
 		TopExp_Explorer Ex;
 		for (Ex.Init(section,TopAbs_EDGE); Ex.More(); Ex.Next()) {
+    t++;
+	    TopoDS_Shape O;
+    if (t < 5) {
+	O.Nullify();
+	puts("lt5");
+    } else {
+	puts("ge5");
 			TopoDS_Wire W = BRepBuilderAPI_MakeWire(TopoDS::Edge(Ex.Current()));
 			offsetPair offsets;
 			CLOffsetFromWire(W,passWidth*2,offsets);
-			TopoDS_Shape O;
+    //		TopoDS_Shape O;
 			if (!offsets.O1.IsNull())
 				O = offsets.O1;
 			else
 				O = offsets.O2;
+    }
 	///ShapeFix_Wire::FixSelfIntersection
 			if (theProjLines.IsNull()) {
 				theProjLines = O;
-				puts("null");
+				puts("prl null");
 			} else {
 				puts("prl fuse");
 				theProjLines = BRepAlgoAPI_Fuse(theProjLines,O);
@@ -198,18 +210,28 @@ void pathAlgo::CLOffsetFromWire(	TopoDS_Wire theWire,
 					Standard_Real Dist,
 					offsetPair &theResult)
 {
+	///ShapeFix_Wire::FixReorder() -- what if edges aren't in order???
 	Standard_Real LinTol = .1; //for gp_Pnt::IsEqual()
 	theResult.noErrors = true;
+
+	ShapeFix_Wire fix;
+	fix.Load(theWire);
+	fix.FixReorder();
+	theWire=fix.Wire();
+	//or reorder().WireAPIMake()
+
 	BRepOffsetAPI_MakeOffset offsetMaker;
 	offsetMaker.Init();
 	offsetMaker.AddWire(theWire);
 	offsetMaker.Perform(Dist);  //second parm ???
 	TopoDS_Shape Loop;
 	Loop.Nullify();
-	if (offsetMaker.IsDone())
+	if (offsetMaker.IsDone()) {
 		Loop = offsetMaker.Shape();
-	else
+	} else {
+		puts("offsetmaker NOTdone");
 		return;
+	}
 
 	if (Loop.IsNull()) puts("loop null");
 	if (theWire.IsNull()) puts("wire null");
@@ -262,7 +284,7 @@ void pathAlgo::CLOffsetFromWire(	TopoDS_Wire theWire,
 		//find edges in between E1,E2
 		BRepBuilderAPI_MakeWire makeW[2];
 		bool wireTwo = false;
-		BRepTools_WireExplorer wEx;// = BRepTools_WireExplorer(TopoDS::Wire(Loop));
+		BRepTools_WireExplorer wEx;
 		wEx.Init(TopoDS::Wire(Loop));
 		for ( ; wEx.More(); wEx.Next()) {
 			//TopExp::Vertices(wEx.Current(),&V1,&V2);
