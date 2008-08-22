@@ -1,0 +1,345 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>Mill_tools</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>Mill_tools</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>958</width>
+            <height>640</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Milling Tool</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>10</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Tool Name</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>50</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Diameter</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>90</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Length</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>170</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Tool Shape</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>130</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Operation Type</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel6</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>210</y>
+                <width>140</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Shape Parameter</string>
+        </property>
+    </widget>
+    <widget class="QComboBox">
+        <item>
+            <property name="text">
+                <string>Rough</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Finish</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Other</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Drill</string>
+            </property>
+        </item>
+        <property name="name">
+            <cstring>comboBox2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>130</y>
+                <width>260</width>
+                <height>30</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QComboBox">
+        <item>
+            <property name="text">
+                <string>Square-end</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Ball-end</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Corner-rounding</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>V (Drill Bit/Engraver)</string>
+            </property>
+        </item>
+        <property name="name">
+            <cstring>comboBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>170</y>
+                <width>260</width>
+                <height>30</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>toolName</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>10</y>
+                <width>260</width>
+                <height>30</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>toolLength</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>90</y>
+                <width>260</width>
+                <height>30</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>editShapeParm</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>170</x>
+                <y>210</y>
+                <width>160</width>
+                <height>30</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>toolDiamter</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>50</y>
+                <width>260</width>
+                <height>30</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>260</y>
+                <width>410</width>
+                <height>34</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>buttonHelp</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;Help</string>
+                </property>
+                <property name="accel">
+                    <string>F1</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>Horizontal Spacing2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>buttonOk</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;OK</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>buttonCancel</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>Mill_tools</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>Mill_tools</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">mill_tools.ui.h</include>
+</includes>
+<slots>
+    <slot>enableDisableShapeParm( QString shape )</slot>
+    <slot>setValue( double toolDiameter )</slot>
+    <slot>getValue( double toolDiameter )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

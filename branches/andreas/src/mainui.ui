@@ -1,0 +1,2745 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>mainui</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>mainui</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>850</width>
+            <height>849</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>cam-occ</string>
+    </property>
+    <property name="icon">
+        <pixmap>image0</pixmap>
+    </property>
+    <widget class="QFrame">
+        <property name="name">
+            <cstring>occView</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>140</x>
+                <y>0</y>
+                <width>780</width>
+                <height>720</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="paletteBackgroundPixmap">
+            <pixmap>image1</pixmap>
+        </property>
+        <property name="frameShape">
+            <enum>StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+    </widget>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>MenuBar</cstring>
+    </property>
+    <item text="&amp;File" name="fileMenu">
+        <action name="fileNewAction"/>
+        <action name="fileOpenAction"/>
+        <action name="fileSaveAction"/>
+        <action name="fileSaveAsAction"/>
+        <separator/>
+        <action name="fileExitAction"/>
+    </item>
+    <item text="&amp;Edit" name="editMenu">
+        <action name="editUndoAction"/>
+        <action name="editRedoAction"/>
+        <separator/>
+        <action name="editCutAction"/>
+        <action name="editCopyAction"/>
+        <action name="editPasteAction"/>
+        <separator/>
+        <action name="editFindAction"/>
+    </item>
+    <item text="View" name="View">
+        <action name="viewPerspectiveAction"/>
+        <item text="Perspective" name="popupMenu_15" accel="">
+            <action name="viewPerspectiveAxonometericAction"/>
+            <separator/>
+            <action name="viewPerspectiveTopAction"/>
+            <action name="viewPerspectiveBottomAction"/>
+            <action name="viewPerspectiveFrontAction"/>
+            <action name="viewPerspectiveBackAction"/>
+            <action name="viewPerspectiveLeftAction"/>
+            <action name="viewPerspectiveRightAction"/>
+        </item>
+        <action name="viewZoomAction"/>
+        <item text="Zoom - Pan" name="popupMenu_24" accel="">
+            <action name="viewZoomFit_AllAction"/>
+            <action name="viewZoomDynamic_ZoomAction"/>
+            <action name="viewZoomZoom_BoxAction"/>
+            <separator/>
+            <action name="viewZoomDynamic_PanningAction"/>
+            <action name="viewZoomGlobal_PanningAction"/>
+            <separator/>
+            <action name="viewZoomDynamic_RotationAction"/>
+            <separator/>
+            <action name="viewZoomResetAction"/>
+        </item>
+        <action name="viewRenderAction"/>
+        <item text="Render" name="popupMenu_35" accel="">
+            <action name="viewRenderWireframeAction"/>
+            <action name="viewRenderShadedAction"/>
+            <separator/>
+            <action name="viewRenderTransparencyAction"/>
+            <action name="viewRenderColorAction"/>
+            <action name="viewRenderMaterialAction"/>
+            <separator/>
+            <action name="viewRenderHidden_Lines_OnAction"/>
+            <action name="viewRenderHidden_Lines_OffAction"/>
+        </item>
+        <separator/>
+        <action name="viewToolbarsAction"/>
+        <item text="Toolbars" name="popupMenu_46" accel="">
+            <action name="viewToolbarsGenericAction"/>
+            <action name="viewToolbarsPerspectiveAction"/>
+            <action name="viewToolbarsZoom_PanAction"/>
+            <action name="viewToolbarsRenderAction"/>
+        </item>
+        <action name="viewStatusbarAction"/>
+    </item>
+    <item text="Selection" name="Selection">
+        <action name="selectionModeAction"/>
+        <item text="Mode" name="popupMenu_52" accel="">
+            <action name="selectionModeNeutralAction"/>
+            <action name="selectionModeVertexAction"/>
+            <action name="selectionModeEdgeAction"/>
+            <action name="selectionModeFaceAction"/>
+        </item>
+        <action name="orientationPosition_WorkpieceAction"/>
+    </item>
+    <item text="CAD" name="CAD">
+        <action name="createCube"/>
+    </item>
+    <item text="CAM" name="CAM">
+        <action name="toggleXzYz"/>
+        <action name="SimpleToolpathOnFace"/>
+        <action name="outputProtoCode"/>
+    </item>
+    <item text="&amp;Help" name="helpMenu">
+        <action name="helpContentsAction"/>
+        <action name="helpIndexAction"/>
+        <separator/>
+        <action name="helpAboutAction"/>
+    </item>
+    <item text="AutoSelect" name="AutoSelect">
+        <action name="featureRecognition"/>
+        <action name="assisSelect"/>
+    </item>
+</menubar>
+<toolbars>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>GenericTools</cstring>
+        </property>
+        <property name="offset">
+            <number>0</number>
+        </property>
+        <property name="label">
+            <string>GenericTools</string>
+        </property>
+        <action name="fileNewAction"/>
+        <action name="fileOpenAction"/>
+        <action name="fileSaveAction"/>
+        <action name="fileSaveAsAction"/>
+        <separator/>
+        <action name="editUndoAction"/>
+        <action name="editRedoAction"/>
+        <separator/>
+        <action name="helpContentsAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>ZoomPanTools</cstring>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>206</red>
+                <green>249</green>
+                <blue>203</blue>
+            </color>
+        </property>
+        <property name="palette">
+            <palette>
+                <active>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>206</red>
+                        <green>249</green>
+                        <blue>203</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>230</red>
+                        <green>252</green>
+                        <blue>229</blue>
+                    </color>
+                    <color>
+                        <red>103</red>
+                        <green>124</green>
+                        <blue>101</blue>
+                    </color>
+                    <color>
+                        <red>137</red>
+                        <green>166</green>
+                        <blue>135</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                </active>
+                <disabled>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>206</red>
+                        <green>249</green>
+                        <blue>203</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>240</red>
+                        <green>255</green>
+                        <blue>239</blue>
+                    </color>
+                    <color>
+                        <red>103</red>
+                        <green>124</green>
+                        <blue>101</blue>
+                    </color>
+                    <color>
+                        <red>137</red>
+                        <green>166</green>
+                        <blue>135</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </disabled>
+                <inactive>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>206</red>
+                        <green>249</green>
+                        <blue>203</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>240</red>
+                        <green>255</green>
+                        <blue>239</blue>
+                    </color>
+                    <color>
+                        <red>103</red>
+                        <green>124</green>
+                        <blue>101</blue>
+                    </color>
+                    <color>
+                        <red>137</red>
+                        <green>166</green>
+                        <blue>135</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </inactive>
+            </palette>
+        </property>
+        <property name="horizontallyStretchable">
+            <bool>true</bool>
+        </property>
+        <property name="offset">
+            <number>0</number>
+        </property>
+        <property name="label">
+            <string>Zoom-PanTools</string>
+        </property>
+        <action name="viewZoomFit_AllAction"/>
+        <action name="viewZoomZoom_BoxAction"/>
+        <action name="viewZoomDynamic_ZoomAction"/>
+        <action name="viewZoomDynamic_PanningAction"/>
+        <action name="viewZoomGlobal_PanningAction"/>
+        <action name="viewZoomDynamic_RotationAction"/>
+        <action name="viewZoomResetAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>RenderTools</cstring>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>240</red>
+                <green>238</green>
+                <blue>183</blue>
+            </color>
+        </property>
+        <property name="palette">
+            <palette>
+                <active>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>240</red>
+                        <green>238</green>
+                        <blue>183</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>247</red>
+                        <green>246</green>
+                        <blue>219</blue>
+                    </color>
+                    <color>
+                        <red>120</red>
+                        <green>119</green>
+                        <blue>91</blue>
+                    </color>
+                    <color>
+                        <red>160</red>
+                        <green>159</green>
+                        <blue>122</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                </active>
+                <disabled>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>240</red>
+                        <green>238</green>
+                        <blue>183</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>254</green>
+                        <blue>215</blue>
+                    </color>
+                    <color>
+                        <red>120</red>
+                        <green>119</green>
+                        <blue>91</blue>
+                    </color>
+                    <color>
+                        <red>160</red>
+                        <green>159</green>
+                        <blue>122</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </disabled>
+                <inactive>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>240</red>
+                        <green>238</green>
+                        <blue>183</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>254</green>
+                        <blue>215</blue>
+                    </color>
+                    <color>
+                        <red>120</red>
+                        <green>119</green>
+                        <blue>91</blue>
+                    </color>
+                    <color>
+                        <red>160</red>
+                        <green>159</green>
+                        <blue>122</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </inactive>
+            </palette>
+        </property>
+        <property name="horizontallyStretchable">
+            <bool>true</bool>
+        </property>
+        <property name="label">
+            <string>RenderTools</string>
+        </property>
+        <action name="viewRenderWireframeAction"/>
+        <action name="viewRenderShadedAction"/>
+        <separator/>
+        <action name="viewRenderTransparencyAction"/>
+        <action name="viewRenderColorAction"/>
+        <action name="viewRenderMaterialAction"/>
+        <separator/>
+        <action name="viewRenderHidden_Lines_OnAction"/>
+        <action name="viewRenderHidden_Lines_OffAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>PerspTools</cstring>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>200</red>
+                <green>240</green>
+                <blue>249</blue>
+            </color>
+        </property>
+        <property name="palette">
+            <palette>
+                <active>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>200</red>
+                        <green>240</green>
+                        <blue>249</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>227</red>
+                        <green>247</green>
+                        <blue>252</blue>
+                    </color>
+                    <color>
+                        <red>100</red>
+                        <green>120</green>
+                        <blue>124</blue>
+                    </color>
+                    <color>
+                        <red>133</red>
+                        <green>160</green>
+                        <blue>166</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                </active>
+                <disabled>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>200</red>
+                        <green>240</green>
+                        <blue>249</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>236</red>
+                        <green>252</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>100</red>
+                        <green>120</green>
+                        <blue>124</blue>
+                    </color>
+                    <color>
+                        <red>133</red>
+                        <green>160</green>
+                        <blue>166</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </disabled>
+                <inactive>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>200</red>
+                        <green>240</green>
+                        <blue>249</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>236</red>
+                        <green>252</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>100</red>
+                        <green>120</green>
+                        <blue>124</blue>
+                    </color>
+                    <color>
+                        <red>133</red>
+                        <green>160</green>
+                        <blue>166</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </inactive>
+            </palette>
+        </property>
+        <property name="horizontallyStretchable">
+            <bool>true</bool>
+        </property>
+        <property name="offset">
+            <number>0</number>
+        </property>
+        <property name="label">
+            <string>PerspTools</string>
+        </property>
+        <action name="viewPerspectiveAxonometericAction"/>
+        <action name="viewPerspectiveFrontAction"/>
+        <action name="viewPerspectiveBackAction"/>
+        <action name="viewPerspectiveTopAction"/>
+        <action name="viewPerspectiveBottomAction"/>
+        <action name="viewPerspectiveLeftAction"/>
+        <action name="viewPerspectiveRightAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>SelectModeTools</cstring>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>230</red>
+                <green>210</green>
+                <blue>249</blue>
+            </color>
+        </property>
+        <property name="palette">
+            <palette>
+                <active>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>230</red>
+                        <green>210</green>
+                        <blue>249</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>242</red>
+                        <green>232</green>
+                        <blue>252</blue>
+                    </color>
+                    <color>
+                        <red>115</red>
+                        <green>105</green>
+                        <blue>124</blue>
+                    </color>
+                    <color>
+                        <red>153</red>
+                        <green>140</green>
+                        <blue>166</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                </active>
+                <disabled>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>230</red>
+                        <green>210</green>
+                        <blue>249</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>251</red>
+                        <green>246</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>115</red>
+                        <green>105</green>
+                        <blue>124</blue>
+                    </color>
+                    <color>
+                        <red>153</red>
+                        <green>140</green>
+                        <blue>166</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </disabled>
+                <inactive>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>230</red>
+                        <green>210</green>
+                        <blue>249</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>251</red>
+                        <green>246</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>115</red>
+                        <green>105</green>
+                        <blue>124</blue>
+                    </color>
+                    <color>
+                        <red>153</red>
+                        <green>140</green>
+                        <blue>166</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </inactive>
+            </palette>
+        </property>
+        <property name="horizontallyStretchable">
+            <bool>true</bool>
+        </property>
+        <property name="label">
+            <string>Selection Mode</string>
+        </property>
+        <action name="selectionModeNeutralAction"/>
+        <action name="selectionModeVertexAction"/>
+        <action name="selectionModeEdgeAction"/>
+        <action name="selectionModeFaceAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>OrientationTools</cstring>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>249</red>
+                <green>217</green>
+                <blue>162</blue>
+            </color>
+        </property>
+        <property name="palette">
+            <palette>
+                <active>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>249</red>
+                        <green>217</green>
+                        <blue>162</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>252</red>
+                        <green>222</green>
+                        <blue>195</blue>
+                    </color>
+                    <color>
+                        <red>124</red>
+                        <green>95</green>
+                        <blue>68</blue>
+                    </color>
+                    <color>
+                        <red>166</red>
+                        <green>127</green>
+                        <blue>90</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                </active>
+                <disabled>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>249</red>
+                        <green>217</green>
+                        <blue>162</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>211</green>
+                        <blue>170</blue>
+                    </color>
+                    <color>
+                        <red>124</red>
+                        <green>95</green>
+                        <blue>68</blue>
+                    </color>
+                    <color>
+                        <red>166</red>
+                        <green>127</green>
+                        <blue>90</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </disabled>
+                <inactive>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>249</red>
+                        <green>217</green>
+                        <blue>162</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>211</green>
+                        <blue>170</blue>
+                    </color>
+                    <color>
+                        <red>124</red>
+                        <green>95</green>
+                        <blue>68</blue>
+                    </color>
+                    <color>
+                        <red>166</red>
+                        <green>127</green>
+                        <blue>90</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>170</red>
+                        <green>169</green>
+                        <blue>169</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>192</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                </inactive>
+            </palette>
+        </property>
+        <property name="horizontallyStretchable">
+            <bool>true</bool>
+        </property>
+        <property name="label">
+            <string>Orientation Tools</string>
+        </property>
+        <action name="orientationPosition_WorkpieceAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>Toolbar_2</cstring>
+        </property>
+        <property name="label">
+            <string>Toolbar_2</string>
+        </property>
+        <action name="justDis"/>
+        <action name="pocketXneg"/>
+        <action name="pocketXpos"/>
+        <action name="pocketYneg"/>
+        <action name="pocketYpos"/>
+        <action name="SimpleToolpathOnFace"/>
+        <action name="outputProtoCode"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>Toolbar</cstring>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>85</red>
+                <green>255</green>
+                <blue>0</blue>
+            </color>
+        </property>
+        <property name="label">
+            <string>Toolbar</string>
+        </property>
+        <action name="createCube"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>Toolbar_3</cstring>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>255</red>
+                <green>0</green>
+                <blue>0</blue>
+            </color>
+        </property>
+        <property name="label">
+            <string>Toolbar_3</string>
+        </property>
+        <action name="featureRecognition"/>
+        <action name="assisSelect"/>
+    </toolbar>
+</toolbars>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>fileNewAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image2</iconset>
+        </property>
+        <property name="text">
+            <string>New</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;New</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+N</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileOpenAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image3</iconset>
+        </property>
+        <property name="text">
+            <string>Open</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Open...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+O</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSaveAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image4</iconset>
+        </property>
+        <property name="text">
+            <string>Save</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Save</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+S</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSaveAsAction</cstring>
+        </property>
+        <property name="text">
+            <string>Save As</string>
+        </property>
+        <property name="menuText">
+            <string>Save &amp;As...</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>filePrintAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image5</iconset>
+        </property>
+        <property name="text">
+            <string>Print</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Print...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+P</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileExitAction</cstring>
+        </property>
+        <property name="text">
+            <string>Exit</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;xit</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editUndoAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image6</iconset>
+        </property>
+        <property name="text">
+            <string>Undo</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Undo</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Z</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editRedoAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image7</iconset>
+        </property>
+        <property name="text">
+            <string>Redo</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Redo</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Y</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCutAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image8</iconset>
+        </property>
+        <property name="text">
+            <string>Cut</string>
+        </property>
+        <property name="menuText">
+            <string>Cu&amp;t</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+X</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCopyAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image9</iconset>
+        </property>
+        <property name="text">
+            <string>Copy</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Copy</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+C</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editPasteAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image10</iconset>
+        </property>
+        <property name="text">
+            <string>Paste</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Paste</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+V</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editFindAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image11</iconset>
+        </property>
+        <property name="text">
+            <string>Find</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Find...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+F</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpContentsAction</cstring>
+        </property>
+        <property name="text">
+            <string>Contents</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Contents...</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpIndexAction</cstring>
+        </property>
+        <property name="text">
+            <string>Index</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Index...</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutAction</cstring>
+        </property>
+        <property name="text">
+            <string>About</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;About</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewnew_itemAction</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>new item</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewStatusbarAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Statusbar</string>
+        </property>
+        <property name="menuText">
+            <string>Statusbar</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image12</iconset>
+        </property>
+        <property name="text">
+            <string>Perspective</string>
+        </property>
+        <property name="menuText">
+            <string>Perspective</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveTopAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image13</iconset>
+        </property>
+        <property name="text">
+            <string>Top</string>
+        </property>
+        <property name="menuText">
+            <string>Top</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveBottomAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image14</iconset>
+        </property>
+        <property name="text">
+            <string>Bottom</string>
+        </property>
+        <property name="menuText">
+            <string>Bottom</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveFrontAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image15</iconset>
+        </property>
+        <property name="text">
+            <string>Front</string>
+        </property>
+        <property name="menuText">
+            <string>Front</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveBackAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image16</iconset>
+        </property>
+        <property name="text">
+            <string>Back</string>
+        </property>
+        <property name="menuText">
+            <string>Back</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveLeftAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image17</iconset>
+        </property>
+        <property name="text">
+            <string>Left</string>
+        </property>
+        <property name="menuText">
+            <string>Left</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveRightAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image18</iconset>
+        </property>
+        <property name="text">
+            <string>Right</string>
+        </property>
+        <property name="menuText">
+            <string>Right</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPerspectiveAxonometericAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image12</iconset>
+        </property>
+        <property name="text">
+            <string>Axonometeric</string>
+        </property>
+        <property name="menuText">
+            <string>Axonometeric</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image19</iconset>
+        </property>
+        <property name="text">
+            <string>Zoom - Pan</string>
+        </property>
+        <property name="menuText">
+            <string>Zoom - Pan</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomFit_AllAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image20</iconset>
+        </property>
+        <property name="text">
+            <string>Fit All</string>
+        </property>
+        <property name="menuText">
+            <string>Fit All</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomDynamic_ZoomAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image19</iconset>
+        </property>
+        <property name="text">
+            <string>Dynamic Zoom</string>
+        </property>
+        <property name="menuText">
+            <string>Dynamic Zoom</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomZoom_BoxAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image21</iconset>
+        </property>
+        <property name="text">
+            <string>Zoom Box</string>
+        </property>
+        <property name="menuText">
+            <string>Zoom Box</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPanAction</cstring>
+        </property>
+        <property name="text">
+            <string>Pan</string>
+        </property>
+        <property name="menuText">
+            <string>Pan</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomDynamic_PanningAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image22</iconset>
+        </property>
+        <property name="text">
+            <string>Dynamic Panning</string>
+        </property>
+        <property name="menuText">
+            <string>Dynamic Panning</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomGlobal_PanningAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image23</iconset>
+        </property>
+        <property name="text">
+            <string>Global Panning</string>
+        </property>
+        <property name="menuText">
+            <string>Global Panning</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image24</iconset>
+        </property>
+        <property name="text">
+            <string>Render</string>
+        </property>
+        <property name="menuText">
+            <string>Render</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewMaterialAction</cstring>
+        </property>
+        <property name="text">
+            <string>Material</string>
+        </property>
+        <property name="menuText">
+            <string>Material</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomDynamic_RotationAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image25</iconset>
+        </property>
+        <property name="text">
+            <string>Dynamic Rotation</string>
+        </property>
+        <property name="menuText">
+            <string>Dynamic Rotation</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewZoomResetAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image26</iconset>
+        </property>
+        <property name="text">
+            <string>Reset</string>
+        </property>
+        <property name="menuText">
+            <string>Reset</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderWireframeAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image27</iconset>
+        </property>
+        <property name="text">
+            <string>Wireframe</string>
+        </property>
+        <property name="menuText">
+            <string>Wireframe</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderShadedAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image28</iconset>
+        </property>
+        <property name="text">
+            <string>Shaded</string>
+        </property>
+        <property name="menuText">
+            <string>Shaded</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderTransparencyAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image24</iconset>
+        </property>
+        <property name="text">
+            <string>Transparency</string>
+        </property>
+        <property name="menuText">
+            <string>Transparency</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderColorAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image29</iconset>
+        </property>
+        <property name="text">
+            <string>Color</string>
+        </property>
+        <property name="menuText">
+            <string>Color</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderMaterialAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image30</iconset>
+        </property>
+        <property name="text">
+            <string>Material</string>
+        </property>
+        <property name="menuText">
+            <string>Material</string>
+        </property>
+        <property name="toolTip">
+            <string>Cycle through materials</string>
+        </property>
+        <property name="statusTip">
+            <string>Cycle through materials</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderHidden_Lines_OnAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image31</iconset>
+        </property>
+        <property name="text">
+            <string>Hidden Lines On</string>
+        </property>
+        <property name="menuText">
+            <string>Hidden Lines On</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewRenderHidden_Lines_OffAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image32</iconset>
+        </property>
+        <property name="text">
+            <string>Hidden Lines Off</string>
+        </property>
+        <property name="menuText">
+            <string>Hidden Lines Off</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolbarsAction</cstring>
+        </property>
+        <property name="text">
+            <string>Toolbars</string>
+        </property>
+        <property name="menuText">
+            <string>Toolbars</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolbarsGenericAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image33</iconset>
+        </property>
+        <property name="text">
+            <string>Generic</string>
+        </property>
+        <property name="menuText">
+            <string>Generic</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolbarsPerspectiveAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image12</iconset>
+        </property>
+        <property name="text">
+            <string>Perspective</string>
+        </property>
+        <property name="menuText">
+            <string>Perspective</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolbarsZoom_PanAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image19</iconset>
+        </property>
+        <property name="text">
+            <string>Zoom-Pan</string>
+        </property>
+        <property name="menuText">
+            <string>Zoom-Pan</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolbarsRenderAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image24</iconset>
+        </property>
+        <property name="text">
+            <string>Render</string>
+        </property>
+        <property name="menuText">
+            <string>Render</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>selectionModeAction</cstring>
+        </property>
+        <property name="text">
+            <string>Mode</string>
+        </property>
+        <property name="menuText">
+            <string>Mode</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>selectionModeNeutralAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image34</iconset>
+        </property>
+        <property name="text">
+            <string>Neutral</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>selectionModeVertexAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image35</iconset>
+        </property>
+        <property name="text">
+            <string>Vertices</string>
+        </property>
+        <property name="menuText">
+            <string>Vertices</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>selectionModeEdgeAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image36</iconset>
+        </property>
+        <property name="text">
+            <string>Edges</string>
+        </property>
+        <property name="menuText">
+            <string>Edges</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>selectionModeFaceAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image37</iconset>
+        </property>
+        <property name="text">
+            <string>Faces</string>
+        </property>
+        <property name="menuText">
+            <string>Faces</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>orientationPosition_WorkpieceAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image38</iconset>
+        </property>
+        <property name="text">
+            <string>Position Workpiece</string>
+        </property>
+        <property name="menuText">
+            <string>Position Workpiece</string>
+        </property>
+        <property name="toolTip">
+            <string>(Vice) Position Workpiece for machining operations</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>SimpleToolpathOnFace</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image39</iconset>
+        </property>
+        <property name="text">
+            <string>Simple Toolpath on Face</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>outputProtoCode</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image40</iconset>
+        </property>
+        <property name="text">
+            <string>Output Proto Code</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>createCube</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image41</iconset>
+        </property>
+        <property name="text">
+            <string>Random Maze Generation</string>
+        </property>
+        <property name="menuText">
+            <string>create Cube</string>
+        </property>
+        <property name="whatsThis">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>toggleXzYz</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>false</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image42</iconset>
+        </property>
+        <property name="text">
+            <string>toggle xz yz</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>pocketXpos</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image43</iconset>
+        </property>
+        <property name="text">
+            <string>pocketXpos</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>pocketXneg</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image44</iconset>
+        </property>
+        <property name="text">
+            <string>pocketXneg</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>pocketYpos</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image45</iconset>
+        </property>
+        <property name="text">
+            <string>pocketYpos</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>pocketYneg</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>image46</iconset>
+        </property>
+        <property name="text">
+            <string>pocketYneg</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>justDis</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image47</iconset>
+        </property>
+        <property name="text">
+            <string>Action</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>assisSelect</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image48</iconset>
+        </property>
+        <property name="text">
+            <string>Automated Manufacturing</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>featureRecognition</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image49</iconset>
+        </property>
+        <property name="text">
+            <string>Pocket Feature Recognition</string>
+        </property>
+    </action>
+</actions>
+<images>
+    <image name="image0">
+        <data format="PNG" length="425">89504e470d0a1a0a0000000d4948445200000016000000140806000000897ccd300000017049444154789cad95216fc33014840f04180c040614e4af4f2a9aa282292a88e482480ea8948249a585030305050121df80e3d4d9daad516ac9b29f135fee9dcf2f0228b72500c7c311ce400d00b6b27e32c4ae7637e3b07f7cde2085c0ee2cf4d01eda0968787e6f0cefd9ca4237e0009a30db013d981783a4c77a729d67590617ff518534da7d3b3297f42fd35ba3a4511601146f05f148354f636a9fa9241f7fc0a8b124b255f6b804510f199bc478c63d888b5f94049fcc6e2631b8c6c1d99f0d80dd5ae41a277a30c62fd2cf039634ba293e1b9f4713e933b349823dd045e42ad0e8bb25c0fd55cee02e01b8c62d028e0d403f58ef298c81f2bd244dd3f1063e47e31a0f16301af41cc61d9c4e2724855aa1c51aa769ea35fef29e1ef0963336c678d0a170852a293ae0f003b89b019c18ef63ae25937d542bc2759cdb621fc7e0beba6d0a2491aff25f05c624e6cf315fe5149bc26739b863528f277f02c0eddc84c1bd78fdba9eeeab1d74f00dae7a9bf296428ca30000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="XPM.GZ" length="24455">789cdd5c597322bb927e3fbfa2e3e8edc4842eab0d31310f5e012f3436182f13f3a0028c370cc6b8ddf6c4fcf7f972914a5514dd7dce3df7e55a2155a596547eca544a2aaafc8f3fbe5cf54ebffcf18fdf5e576e753ffa32ba73cb2f7f8cdf66b38ffffe9ffffadfdf7e2f974a5fcaa5ea974ab9f2a5f2fb7ffcf6bb197c197d31a552b5b49d307da174a35125da5e095d6f4a79f2c27423d46f2adda839a2dda3a7ebc27fe8696dbff4b4f077df941e6d49fb37a16b2569ef5e03cde5e69ba7b7847fdfd32a6f55e98696af02cdedadca5b2f295df3f4b6c853f774b3c6f226811e71fd8ad24de9cfa8bc5b65c5731e68199f99d275a19391a795dfa7d24de9cfeaf86e97b57ce16927e5c74a3785363a3e8d7a32e6f267a5c7a33acbc3fa2b972a8d6a99e94ba1aba51ad3c9b3d235d5675d69d59f6b7b5af14d85f6fa707d4fcb7827734f2bbf4b4f0b7ee79456fd24b781667ec99dd223d187bd16daeb2b79f0b48eff42e9baf6b754ba29ed8d157a6bace3d9133a8ca7d6dfae3b29df51ba9948b9e269f8f25d4f6bf92cd032fe4f4237eb32fec6049acb5d87e960af6e1868199f63a575beb891a7d59e847f0378a57dcbd3c22f319e167b325da1bd7dda86d26a8fee4e69b5272bfa24fb12bcaf4a8f15efb9d08db1e2fdea69c16b1f856e96953e525af15bc5db6c8ea55cc7a33956ba1de809e3617ba9a4f6b3afb41f8f734f2bde2da1eb5adf5c29adf3cd25426fe9f8d895d01e6f72cf74d3f34fc69e567f3015daf377479e96726794f6fad9525ae7b769049afb3315a1b7547faee669d1872b0b1decf14d686f6feebbd27efcbb4283bd8c774b691d5fa3785c5dc7774274b51ce4af2aadf2ba6ea065fc96427bffe60e3dadf8ce022df5179e567f75aa7453db8f3dadfd9d055ac667dbd33a1ea5400bff27a1b7bd3ccf9e567e8acffb4bfb20b49f9feeded36a7f1f423ba5cd28d03c5ee6c0d3932da6df959e08ed787da906fdba6ba1fd7898aaa715cfa7d21eff45a0a5be6feffd7d4f68f82f29774afbf5a42c74f04f7b4aebfc350f9e567bf926b41f0f7ba9b4b71719bfa69b087e77e269c5cbf65b0bfa750f4a7bfc034f6bf94da0a57c47683fffdc87a755fe6da11b7e7e2e9456f9cdb3d0cdb1dafba1d0aeacf2df2aadf29bb2a7557ef65f35e7d703d70bb4c8f3a2b497ff34d032fe379ed6f12d09edc7df28ff4653e6abd917dadb93bd577aa2f24e3d2df2254f42275b2a2fdb5bbde2fb737b4287fe8e032dfd3d2aedf57f146819af1ba1c37c98075aca2f847665a54f95f6f3e34ee8644bfdc9a3a7555ef6aff5301e6e37d0225f476995c7b43dadf21c08ddf4ebeb99d24db5d777a5bd3dd4022df527423bc563763dadf3fd4e696f1ff7427bf90dfbcfad747c664afbf13cf1b4ca53123af4f7e169ed6f2c7452d1fee64aabbe0ddbef562aff96d081dfa7a795dfadd2132dffee692d1f090dfd087d1068b1bf13a5fdfcbef5b4cac3f373bb1afadff3b4f2ab2bededf725d0c27f2ab4efdf248196724ffbfaec2fb69350ee94f6f2594febfc98093d527d59c6dfa8264eea9fad840ee526d0c29fe76323e5cfeb73b336f2fcb93f2ca65adfb13f72354f9fadfe3d828ccdbf4710bd5823c8fe35574a438eb3891dd931c204616c6f4139ebb2b5ffdaf55f6f63766aefecbd7db08ff6c9ceecb3c6b95dd8170d4b50af7665dfec37fb0e74eeafdbd8bf04c1778cff9dfd0082e7c2b0541c9f883bc0b60b3c1216285bd93da0fa5398ecbeda98b3dfffae14f1c01eda966ddb0ec211b45184c5ebe513387c8d1963d9415cda632e5d4153ac27e2fbb354fc26d322c73f777f624f6d17523d713c623429a219dbd773903cc522f5bf4688084f4ff112a271dc135fc76c936769efb266fc0d28481b1f192dcc349c23d25ce9b0cc334544f1dcf6393c72c993b6fdcaa5af8a48f02c70151d49af037bc17ce7c8fb2ebec3ba088b4ffffc9570b45896af110e3f035ed56ee6e87d682f617f13f8ae41340a14a6e071cab6e931cdb4ade021ab5bda2b7b0d4c0fc87fd6f118a75c148b03ef188f50831c5d9c7f00f98e2224b36025318e377b837ea7a1e79423d131b2812dd932e4f69c76a039c2738cb462abb686abd7ecb3ada75c14cbe02fc77b8cf5538464aef6b1839450900d7db35b997188e3f742be0e326edb06e44ff5d3672c4d5b3596717c223ec65c64cfc5c1e9357f1fd3d9fcb16d19fcb1568e101e11cec3488a5ebe41178382e07ea1afba71aa05efdf3e116a0884a581d88d5b2916f4679234feca9d1d9b9119234cccad999a3b73cfe1cedcf228229a07cc55e6fd97a3338fe609da9807edbc9a19ecec455628f31cd7172c2c9b8c5fcce907772cf59d22b8532c73a158376f98e1d3f551da343e85a325edb7cc027635533c3bc050850f20cd546c296e2fe700f38256f5b558944f798284e49ec0ef1cd90f6099321244e4cce0698a5b6fe2faa3fc01b4dbc73ca961fe936e76cdd2360d79b205f60683d04ef592e396e79acd2fb1e453d812cdfa16ae5d5a41444b58639ea1f998c3af71dd9c4fd7b13d374bb3326fbc8636cd379ef9aff02932b61ce5fc064dd6410b2fba8be85cfe05cf91b1990249877190ef3a823f6b412f23a0bb28e2f243fa577abf401f57b0b595ad2156cd92bdd894cba5959e45b54d3dbd4be9f41ed7534532825d8db0b2c9cee409c8482f23f4575a6b532fe29fbf1653997bec2a68de339215d267fb90adedb1fc52b830ef84041a9862a65ceafafc04ed3c724e1bf6f7fd97b9fdc9603e686787b5a5aa61699eb335048bf944dc09d75bbef7579fb70b24e28547668e5192bd0659d711fcf214f91fa8b5a72d7ece71d3b5b877dcdb4b8ce310fe58b0bcd849a6f58e3c7fa19c8274cf7c373bb887848404bcde592bf78ae42b5bd711af2f6368edbbb6e3beb99d6ffda99c7c69611d29252e9ceee52592b94aba31df30fb973c7669eb5bc192f610dd6b604e1f9077a27a996005d17d2d66488b68c4fdb4bdb6de49e5c8e40b95cabae365494ba3fe53b928bf4558107ad0cb5cf3eabea63ca74afbf3ad32f1134808cb0163b9032fde8369ee94af9bdae77304d59639342dd3361d73648e716d9b137388dccd3248c4e948d1cc4d375fae7ac9a38952f8f053959a663ead8543da85e17e0ebe97bcd67c14b6cea339345f4dcf9c9973d3e73030178803be0e415f9a2b736d6e502fc70928c54626a60b3f3366199e356fcbd7d1f9b245217b0dd40723a17040296b85d696297b8129e6cedea6d641032520b864e9d37011d261848a421f686fa0a9cf027e97f064626917f91ee5592c8fc461e6fa11aeb7687f6bca8c66aea7f80eb444f6466515b28f7c7bbeef619409c33a02af090a298a610e5115b617f323cd4eb11634d89bd6b00264fa95e7cc9c530aad4e520ef61076598795def20e6c4ada0512a0602487d879bffbbe721c3a19f92f028e2db38d516f435b2d9e332dcc989e69a8d67cbda1e2e9e94cd2d1b565c8d0b57df49e4aa9fd2a161f4e72f735acb14d04c23277567c22b0608de7d5f2da7e2b6c77c85ac98f3549d6a23296edd0dff1f85228c1b60691cd099e4b600db59d81566ee99c1cf5a87d2a969382486997912816e8650c1b6bb3efc26ae39c4b2047515b8a573ace173cabfbb0b7d6869a712cb9d1da7ca231d01a6e6c9a76656edd64bdb5fc36c2f39372b2a943bb9aa9339689a3f9422be598f690189b869bc2976c6a7be2eeec9ba3e7952bb45e70e8c20bed991aca37b592f42c8346b4a323e11e200dd9fc87f28838299696724aaf87a60359df088b7bc47e9bf4722be7487b82f8069c0d962bdff6047b84297cde047680b9e6a6eec9cd7006d976cf189d8a7be2a743876e6edf43bb3c97eb8023cc33b7a012f762af21d793bdc9d4e7fb0c964c74f404077b1ff78a535013fe6a0ef9c6bcaacc615f53acbcabf556badec0db907da2d7853db3dfe974e89e81e5149aa99a27d3c53df60c8c889e23b5727c5a903cf67ea29b9e4adf722b5e5d73bdcbef7305a18313cfccbe605471c2864c134240bb189cc1a7d048d35eb1cda62d4ecc3e90bec32f94615dcebdb96fec773b79ced0ce937972cff01d6d3943c083ac4b70bee6012fdcbbf67852507f231637c6b837ed2750ac28050e3a171f402b77b09d3a10da48ca36562e9a4fef94baef8a03e3e93ed4f39e8454e80af456c1aebdc5fee4262af3358ed54b0fa3b9d3575f9eaf5d8c45eb9255024d852d6c81bbc370a2bfc5983edaa64bd236cec00bdcf2330c9c345de23ed536cec23a92e5cfa3e50ce6ce072cec1958e232bdb29da55a192ac7025e72af58da51242e2fee953552e327207462289327265fa65a99b99d3046e4b99f79bf4cb6887d804ad177bbf1f864470b119ac1bc99d835147aed845d4fea032edcde5a4de5186189528cd82b4e087ce6812fa3e76b2b96939e8575a1952a2cec58fac3dc592a1642baa279e9f6831ff57d75a2aba41db7073e158ccd7e5412d715ef9cee7ae4da084863b93baa17b9ef843e70a2260ba353353ffba055a62b7b7b78b037f161ee8091acf88942936d8c4a316ad0c685da76e0591c619b5df8d7fb30f3f2e5efb97526d54c0137790f827b0dd17db2f75a0183043993d20e734a2b24e6d0156c0e7531e32d3f4fe0b51858680e77607de241737cd7fad97387f6da9cba16acb18dbdc125f4d083fc71adcbcc2e6da02b4d2147d54b477338250be3e71df47cad09cd7c239aac0c78e08b617d57384391f7b9356f8ca5ceabe9be72e8994bd781763a79ce21edb9234889bd32f86ebb63730eabec075bbac2ded3d73c8be6fd50776997396e7a55bd48cf9cba5d1ef92a23a9f13a59252d61e7b0c25eb249bf1bc0328ea195b23bb17de808bb0a2a358fc245391d87bbf5d4ef21af9c0396536d7513762f7dd7d59abd9c56640fb05bc45fb008068d5f696ef3ef1c35c84969553c01ef3267983f98b1b09067fb86ddf739ea54e0f39ab0fd0c9f1cd738beb30efa8eacf0c93c664a6f606d22f51573b959db390fd9ab14f097f7883279158c313f1f84945719cd505e857c813b830f6ad839b02ce1c7e00ddc23fcf82e8f5747aefe2e683beda12748b8d629ef483aa1c50ad2fb73c219f2f6a2b374aa9fab22fe8285daf8945742b1308c78aa195e356b4861636e07ebc28c4eabee1c683e698fc56d8fc9ce707dccf2cca66c4955957f4f91ef91cd2895eec5805767ff30b632372ae21cb0f8dc3dd7776f8ae48ab570454f70090bc223fbb026acc4422f0becfd67f6989ef0c0f7ed66f86cbedf8367d8cf95c6b5767126f3bab804bd1f21f178faee7dbda5da584971ec62b6bc61268b850109b054bc9549c04c7f723bf605287af06cf4dbce12bb8053e5f0aeda2d691a511261437d3788f37c2db4554acf71a299fd709f3ee718625eadf197f70449022e7d7717bc43612c8484b1b066c833cb3a69166ec258dee8290c6ba6cf72a45c76e3fbdcf59d66ca8632bd626e7bd9af18d730b7fa5fd03a946f29ef4046322cf9dcd6d459fec97e4b35033453f66715d8d72722fd3ef961698559e5e5f981ac348a6b72e44622581366c6fe9a56445f6b2d050bee68bc4882169d8965b62896999f338486bc3556eb2bcc157a0381de23e8da1ece59ef2a5fe015dfebf53d68a63037aadd0b92f7dd308782ef60a5efbe1fcf47f51268f8fb26cf97aba01704f567fa6b81218a7ed195775a96f6117e8d3944d265eed3ab2f49a9a2ab62917899b12dbf5a0ed6fb93f77a3d656e706ea17d4a3360b1aa998aec6778c7d985ce66fc86518fdfef58c612fef391f5320c7a698735d2cf9921e965bd5d84e594c60358aedca5cefc198fbee0513be3d0e59567a168e093b1e2d1089da67c8a694e7b69aebf23e9e3fbb073216bea44be38f866b231953bb4542c3dcdedb94bc65265bd089617c6e3ed8cf7ff3c9f8e15cbd2f699574ff8a8dc3d19df988e7359e2e83e9bba74b6f773cf33fdbebf271ca291eac9bbe69adfc3ea72e5b1a85efc1b6b291ac152d1b28562e9e563feeecfa458f987aa89cbcca9dfeba5bfdece2816840f4e078ce50aab486a63fa26a1f701d8dd6fc99e403533b7cc59c3c7df71e53545e6f87eee598ca0ba2c6a15b048ce83e8052b0c6331f2be5a2fa0810f300b53d1bdda27fbb11e56970fd773eb78fe224de79f68ad4c11a488ce615b792edec63c2d58ae80a5c66bbee865c1412c0d085d6296eae7168ca7ef39043e839fe66ca4e93e5d5dc2893f7b4e3ea3fad28a3171eb482f03c6c2739f9f23a758d857793438259f857de72797c4a33388d2e29caea9e6cae2bb815a98c8dd887663f12f06d7f936412f03a628252c1ce8f90bcd17c405cf6f0a8c061efa1af65591fd1abf3d286d532e9c9a5e4cb95ea8d1c6e96390c98b4ba9a5df25f7f93e7faaa4d5658db309588ce47e385e2939be8a4fe619d3e3f7b7e4edba1763517f26bb4ec6bbb4c7f07fca23701aa4215342fe743f57ef266ea1e7677ae6d975e913e5e859f97a7ba1825e3ca73a6171f28c62a6b37fa1485e496ec6a2bb01f575735732bd984b16454ce30c4672558b6b19b240af8786a3676145bf689e15f5558085f6638c063366a65eb9a7efd5bdf29b6174fa38f3bb4e77ce4fd0cbc5dc0b42d7c8199729fb665f73a55e62ae91d98bf967977d57f9452c1618f8b7307ace1a66cc92b13c98b93db56fa875cdd63653cde1e4bf89ff9aa6d482dc116be915fedc975582755d38d69bea7090d109a1fc31960ab45b8177a8c0965e300fea8c67c95aa9e81bf773db95e7e3ee2b6ad6c8f6d4d608f13573b9d67e2a6c2f15cf39bd62a487ba925f623cfa76057bbb862d9dfbe7f9980dd784c30d823f8b7f3dbff0a56b9ce57b55918169bbe27591d0d4dd23ae96f7f70b9e2de7c0726fc764dfd00c7b024478697a8ea17cafdd11fd3e4ffc589e2adf117fc17904c9ab98d5fbae4ebe31f39b781fb95d9113f19a77c817193cb40fa88651f33d3c08cd7b4b503c3a945be253099db4aafaa4a21659d907fd328efd2e6adb1b7ea2f4c2f5e197c1ed9a25eff01aa73c415fc8bd5072457acd16d0735b90ee0af10cf85836e642f1c864f7fa72553973d70aa58ac58fdbb55bd90433927cd7a759f2b38a6ab0b2be7d3423736f4adc6260efcc1df02c782d9d61163347591d528e3c42d711368977bc2bb23e2fba3e688bec3b267eae3c047e81b7bff3589817859edb760dfb0dd22d7876af78ff2f7e9902bd97f455c7ae47ef30d87b9c95e754c39d71aed8c2f50f434d7678d80d5583449990fa814827fd1f73e5f942774d1e2d9afdfb8c6622b6a6bb649919affc4efea5bd093d6eebd7075df972c5d59cfa1e58888c4ea520ad85bdf759c8cdd669e6ce2b7eeddcc4318b251d911db79d58b76d1ddb9aee91751fc3de0ce7fbb47e49bf9cd0ef5660357d99a35ade5c4bef941fcd96eb0db5fc33e5d8879d6fe4d85cd34b57733fa015fa8ae5806d4dbe72100df9af0d5a81035a61169f67be495826869ec629bf6e5cd7d554c3b2bfeb473dc772ede7f6c6b26fc9d6ea46c85472c5922269c22f3b95ecd1de01d537de0b2f39edf3e83fba454e86b27ebfe3bf7a99bb3b77070b5a704f0b841abcfd0ebf872bdfed50ad15da3623a432367ea6447a5124180bd772d5d06f2435dd052c29b7aa79085fb1ec62ccbfd9435ce5fb13d99761ffa575033fc85dd66f72e22f79e6e19b9c39bf8f6df81b255aed4b902bed334895b86053e9ba73e9aadc079d67ab7cf6cbe2d07bc6d225049c77847bb284f8eba25d96a3ef71b0665ea3fa556d5de5964bd4fd1abe339230d4f0887d5b8d57922ed796d4f78d343cd38ff65fd089f6446f8c637d78c628f8fa8db46dc0520d725d137f79ef38b29bddf05d4e5fbe765039822cc255df95b8309749928c30cb9790be6cb6cdb64ade0cb199a1a8ef237d129639db63ee34b4169dcb9bf44d421885b87555b154739cab6afffcd66ee61bbb57af19f2be5cb31aae94ee073bf7cf7eda3999abe14a6933d0fbd9bd8aac27c938706e62075b85669e741c53ae81b762a1c0fd2413ba9ab39c9d3c673c15215af17805b9b4d7f69aadf32e4b4b8f54fea31457324159110e9aefa11ea4dae2b7abe7d8213e455cd2f141102cc98424430b6d691a9097dedad5bff00dd54cbf6a031a1a1d412e29e109cfe586394ca49f7dac10547bcca88e0843f8f538bb571962b61f65c737b9e5ef11b0d7c50e4ea5c73868ff144c83b11ce9f854439c40338cc476242a9ed8efaea4a68c3952c8c77bf27da2b0734adf0089c3058fff309717a568774e28321219eca59624917de29955cd48ab51b0b024d528450e6b66c85eb4c5efbe0e233cbc3ef008c5ed1093a9ca3055eb499f3ba66f505ee4a22fef272e99ae4b9a4c31e7775886967d2c422151f57284bec712e51e637cc6320ffdb7abfa1ed2287c01f964696e6a6d6e2badc7698ee7ab98b2efec060cf4ce05e694d41f67dac9f50ea70e95c295f3dcd394ff57c1382b4f40752756c648c6d639a0b1273671b7fc6ed52576c96771fd6c547e936c3ecd913498f34dad2329c9be1e0396dae6fa6a6353ed9353b69031cd2bfbe6b1d8b675fcce789bde1b651d8d80ef8147326a15a7118e71e8619cda00cf89b55e73f7f2e65787dff16e632728b2067e71ab542f8523b3851d8758598bbf07e3f760f95dd8b17c95e04ad4df660e3f893f2b9dc2bee8bd1cdaa5bfd269fc472d18cb34b90f21bebf273be3afa2c5ca4ef45b1e7a43b2ad9846b033976b950dd31cd769413f9bc283ff3e8c43d31dffa09dcc17879977cf1239ba0aa579f7d803089ab6bccfefbf180ba844ef9956590e3157df47b8ff414bd7d237586afce61752d7e1361b5a052c5443af94c677d06e4bedec5edf510e48f8cb9e53f2be71cb3c8798caf650544f7270126ce9ef882f908057e83ca76c8b144b118e88afda197d1f1ab0d0774a53fe62e11eba296cbbe9ee47d879fcdea2f11aebdc7fcbd7cf72112c3f0bc45b7c007df7167a79679f769f3c121a9e377f4f98baef7ebcf87f4db414cbcaebb238a85e3a2cf10f52d7819edbfc65c22d7c40aa99897e972c3eed275c7ea9a72df62907faf5a3e88442077bc68ed443ade3f52baf2f1d2fafe44979415ae3516a43f2b9a23950cd3cf19ba513f3807d4de7977815a6583fcbe0f89e6a45b19066702ec8705ebba65832883a4529767d0d4203fe897e61459a3900067aa7bccc686e21cdf9cf7915a625c89e47d252adb4ddf76c8bf5285852697dd88c87fc8bb94d66dc5f6a694003edc81bccb7e6c15ca51c7f0109f4613ff43bc128f89599e32ae656143c9610da1bd2289076ce56c1ceded9d626e2d14c59f14ccc333474463a0287b6f24923a789c3d9a0e4bed3fe37fc4f0679ced1cea2327c8ad8285d3bc2d2ded0e35aef123136a7f620d24be49f19cfade2e1f7af318bcafcdca5066c57e60c7bd66d7a0e404f0df9ff4ba4ff67e0959fc7f5ec3ca7a177f8e354ea0d91b1fc18438ac32379960869868a44b0bc7b0f0d6b031e7712104944d03cfe42327adaf31afd47983eee5b323ea8f58079524e4c32d73e7f8e8503eafe622ac10cc1e30e6bc101e318d1f770fcdf22eef4bf154c19dd0123e0abcc0839d985ff5f224f48f4e4cd4fd18001babc830e2fb37dfabb62b9044bf20cb9989698529bf3e5ca9cf6312ff91b32b6b27bb134f6d353f57384e45dbf6b1aa7e7543da9cab9fb0916d7852d9530c7689c74bca807dfdb26b9522c5eaa6c48f3b2a59ef23c425ffb38272dec21694570401bfedb8c83701d45bbd20eebe8117a79b37dac8423e194edd1f7f133b99267fefd65980d843a4ea95e5c92bffa72a96b2e1303cb2b9b078cff65f8fe77e2fd35cea3141ef8296023316447eb9cd72589cbb2fdfa20589297f518a503e550508beb0ce2d25c9b65b294af2810fba64f54e87de06bd17513f71fc896938bb10c7cef2a43fe0ed70d25a90ce15d7b8fc3f716954575a35a837cddbc2c9b244b7b9334d8d81aff4c0f1939d6e5cfea25d3aea8fe2604c3a21a455cd674c479bfffdf7ffef6ff45d727d1</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="205">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000009449444154789ced953d0a843010855fc4cb04d2cc1d6541bc8d97b0b411b55a8ff2b65a119dfc10b110f2419a19e6cb4b52047808a3d4786376a7d28a24bd0b00c44934802a8e2122b0ce06e55962eb2ce67e0e2657eff87f6475c0189044f369b0ad1b8671c0322d3ed745ece5d8efda8efc92e284e7e4598903eccd3a165fd93569c3acc74ba1888bb88803dcf941527d2fe107185464f3a5d055600000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="231">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000ae49444154789ced94b10ec3200c449f2386fe70a77689d28fee10c91d0809014201b95b6fb980c3f9e14881bf36c9c019fd92a123b96968d8d3f47984b8a5a94c3f0805c05d147a6e521a0f02a86aa80ba08834e75ebee88ea6b2bbef24d97e4ff32902eff4baa612719bd7559cf1c0ac3315671c872e333c1dbc56b83978aff5f5fd7184ab2aeae57deba0cbec6bad1ece45a33025958cd88234f978b6a43bb125e989d89af4143c28cbdf6e9b3e81b0e7f18d9921c20000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="289">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000e849444154789cb5944d0e8320148487c6856732e9b1ba6a37feadbc4f0f80815d97bd4b1726d30562806881aa2f21f022337c4e08c04925e69947fb5eec8a04dadaac955420094a8264b4377ad387c5b606d983660fa9a44a9e012c7df8f7248d390052d213c7fad9cc1d3ef1b042fc7abe93885dfd26714866cdb7c843fda119bbfa4333fe49bc96710e7176c6b13e2963e763f218fa848cf7ced65838c4280be033018f02e8a6fffadb1daeaf7f726e146b192f8f50d7cc2737482afb1029a93c7d58d9c4b17bec119719c47ad4a8ae15f4a83dfd21c4a7dce3d85b215cf3b410a225e25b76d41747acf05dc2d638190000000049454e44ae426082</data>
+    </image>
+    <image name="image5">
+        <data format="PNG" length="699">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000028249444154789cad94214c1b511cc63f164497202a9fbc2533c5954cc032b126a8656ac9c440315005962c01d5a048d5a553d7a916d5a2ae9d614cc1144551076649712599e826c83841f29b78ef6e6d69b792ec995fbff7cf7dfddeffffeea4310be0e8f80800da16e7ed73fba36591d48f619ccf9d153fd4ebf600e876bb03bad7b3ec743ac03d8cfb939db5ce069227baaf3eb1f1c1e1c1c0718719d7c3663879e23b4987f5f1a0be571bc6258d79d23a49924f6c9c4c7bc4f4479de4bf26eeeff5c4c6074d3b18be5bd0f93bc3fa3f060850a95660f3cfd4cfda672319dfdfa014b0f47a89dcf31cf9cdfcdd130004e50a0085ed5df80585edc248eeeef800f8c5007ab0309f83c7608c078b50abd7184c0a74dd9bd5b9b089ce87d9b65c6a2f0150abd6c82de6f08c87673c4cdab0309fc39986dc6765c8902245868c4dbe13907d92c5188f743a8d673c14377ed2d5a307e4c992a54021d92fbc2f608c87246b0cc085abba7b99e8989d31fbf157af65bf7a266d9084311e0fca1fca52466a7cfa2c5d4af5fd8674dac7bd86f455aaefd79db66cecd97af96355b3a7b35a7fbbaec85d84543cb883a6fde79aeb75e858abd60674c5e9782615778bfc62005d4827890d0aca01549d69d53d3cccb2bb356567d6c7a0144011f22bf9a4152f5ebeb23daed5c3a16495814477b463500a5c621f7a36b13186b019dac47ed1158be0971c8b3e94dc318be097022839b33efafd898d21280748d214c0d6bb2d35be1c2ababed1d5cca51eddceeae1b4a45be962fa42b3d3734a39dd9e696beef669a25bd32dcd5dcf493329adae2c6b637d634a92a6e2573a6c86343f1deaeadba5242952a428b2bfe215d90ddd445214fdb07b3f23659f65b5fc66596bab6b89df6fd4c38797d552f4ae0000000049454e44ae426082</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="182">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000007d49444154789ced91bd0e80200c840f271fdac508130f7d0e6020408b8da37c4b43fa77f480c55f88042e02cc31bd1948a5494bd6c3b4a836b7cb8ab2d94f04e5ede6a912a13fb1958407b0e74896b773ef063ff5aa628bd2b1e28ade6ddb70b1deecb6aa58b8f181fee6b3a11e310c6f6ce73abf78a2527bb258ccb801f4eb83257ee429f80000000049454e44ae426082</data>
+    </image>
+    <image name="image7">
+        <data format="PNG" length="191">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000008649444154789ced92bd0e80200c843f8c830fad0381cd87ae03e22f54c1cd704bd3e47ab95e0b0dff81b34e40049cc0bcd6d8d7cb1e44b4aacdab4e73b86e9232951d2add2cd543bf933d30bcd365328004be1318b5f99a03a56e9025d5881ebfe79363ed6b02ba8d6a63464fe2d74c3d0f199f9d8894c472477f6ef76b1be3bfe8363424b00004d07d113eec7d640000000049454e44ae426082</data>
+    </image>
+    <image name="image8">
+        <data format="PNG" length="186">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000008149444154789ccdd2410e8030080440ead7f1df78699b86605910a37b319a30ae58a28f22c1e7334771917fc2ee1a50d882da53d805b2f088a8ab1bb4d10a4233af9d8a48e03510c18db9a302e3003cb14674f67b0eb537a29bae601a1703d15818bf03ac1dc3f86ed842e01fea0da7d7e17deeee25db208d387be4588ace6b7d2e379d44aca20a65360000000049454e44ae426082</data>
+    </image>
+    <image name="image9">
+        <data format="PNG" length="253">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c449444154789cd594410e83201444674c8fe5a607e88dbad35ddb334f173f28e00711d24527f9c1c0f01cbf28f06f22003578fac092cf2619fb2ee9e64000bbdb3692d455f8062ea5ee854fe1826452fb3c40aeb057b10890d2b12c9564b4a5b25e874790b4c2666fdde61669f6e153443f946975d783de0fe03e3fe1c1c7124b7a7de4262ff630de5cef71a81dbe7d20f9390e8f4f9abd74ce73998d1ceef151e6ef4eec29f887129ff91bfe6eea4ecc7af5273ecf31d2e3b2fa123728ff9bb58c3fd417a3ccba198b2e7eb60000000049454e44ae426082</data>
+    </image>
+    <image name="image10">
+        <data format="PNG" length="348">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000012349444154789cb594418e83300c459f2b16dca7bbb917abd24a145871ab91da5defc302e9cf22930e81a4c0d05a8a2cc7cef7f75712f890d9425eff38332b8a81a0d1aea5216719bfb108ba15fce041255157ce4f81fc0a9bceea83830700b5a2b91a79d6616648e2f67d039c8fc566aebeb91a6aa303a3ba4292545708d0e3fe9024e9ee5c2c8e9d1b8366c0b373998933c6f1eb9814726c65f637291441ee00d00f05e545348305da2df96630ca8be88762d6d400a9754579d6b926d9f6d84ee6f1e21a4fbdbb74f50a1f6a6c80baf6159306a94cea6ce6f2660d70dec6585294a9dff7f6cb7c9dc6c5a95fc5781c7be66f633c66fe168d21077aa0047cbc9371cc9e8cf7681c9f62e7ad88f9e9ed507ad5e999935274f1ef2eb4b52f6ff6123f633f0c0452470a1ed0410000000049454e44ae426082</data>
+    </image>
+    <image name="image11">
+        <data format="PNG" length="610">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000022949444154789cd594b14fdb4014879fb7744ba5fe01742b6337c846e852b6163a946e7873a6d665684d26279395cdde9c2de964cc6265b399b0ba40a73255ee462484a2aa43c480f4757887422510294595fa96a7b3e44fdffddedd89fcd7c50800bcb6075370b65d00e27e0cc09da0499a401bfc7e0840521d021016094edbc3fbe0fd393c4b33a8201caad965e53fb527a7da5db383b9a07991431be22203e0603a51e8b1c206a34acd8f73dc5e40d00be603c36cfb18c3ac30a647dae3487b586630816c94dd0ef7ba3e00874c15660ce3937c661c819f0e0070ba1ef4e788030093617caa038b2bb33efa0a80dfbd620cf85dff76b06ba69d4d1412566a1a17ba0e228579851abb5100dd398d936373b4ccc0822385053d5d7ba59e16bf48ccf7390618f402cdb23ad09fca840008d21c86e016312ee08e74c09b6f9df98e1c80dbd638fc7260b69d982cd5dc4915ea443e4c81e276b02522420f5ab2230fdf7544f687d2597923ef3ff5457ed8228f23198f5b22d291dae7efd2586a88bd65cbeedeaeacbf5817cbb2ac1be979a10373da7ab3fc91311fc566603e54fa668898eb7f029baf376f8cc5ba0a6f7e698afdad25b5470f446a3589a423f6594b6a1722cd95a66cbcdcb02ee3dbf9b823e95e2af57a5dca57a5144f0b596daede6c0fb3d72c8ccc8d2cafb71a0c07f00c169f2cc2049234b9db0b785de5450edbb0b0b0c0f2d2326114f25b147f5b008de5868ccfc6b2f67cedfec097707bcb96f38bf3fbc4fea3fa051254868f22af4b0a0000000049454e44ae426082</data>
+    </image>
+    <image name="image12">
+        <data format="PNG" length="245">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000bc49444154789cad944112c5200843934eef7fe5fc8532523f200bb3a933d5870484927053cf555a174852245ba91c81242589905ae0b7059bb2b541fdbf2370877955e030e5ae5f91520f25b1f22ccba0f4704f0db3672b3b1c9002e24d1ee403457a16cc7f6d4d71e0288068bcaa09b488dfc8842060b5cd5c736c0ce979db6c302f0f4e6ef8419961592cb7957f7e6e371c8531abaa226495e6777c453d37fad1c0a74a339f87065f073b6d9314257e1d15e8003c1fcc747d62ff004e127e2b7500e1780000000049454e44ae426082</data>
+    </image>
+    <image name="image13">
+        <data format="PNG" length="263">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000ce49444154789c85916d0e832010449f3d968937334d2c9cab4d3070ade90f952e1f5213b22c0bb3b34f24a120241143c4e6121ad56388e4c37e44e3ba1877ae63c749a3e8408e53e75cf98cdfbe7070293b387a8d1880dce6d43038ba1e8a7733e7ce9b4a07d6de2866a7a783ccc06dae50ec39b0b6ebfb45d132a8fe8e7a62f466fae7a0656067329d2a275d068fb42700d29e6001807999739ef6c4bcccf897cf7971bfc7a0b764f6b70cacfd3b06050bcb60403f33a81f2b882986c8fbf316c0ca8ac7737d4dfe5ca78bc915bf8d3c7970cdc711bc0000000049454e44ae426082</data>
+    </image>
+    <image name="image14">
+        <data format="PNG" length="285">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000e449444154789cad93516e84300c441f3d56243ebae742956838172b0539d79a7eb0869090d57e1429b286d899f1c441124a4212960c498a73d407114b861761c9887314928ac39a18e728cd92e30bb3d2fec3372b6538b34725315832d6e72a8089898505ff1afc330d79cbaccf558fefc710c6c0e5644b062f2525f30bab56727a50f5d4eddd71ed41d9d31b0f0e6565fe57de320079cb30eebd86311c386f99300696dfe5c097fc7ff72082048ac5bac3b71ec49dff64d605efca8a6225714ce07db1af53597d3b8dec77f1ee763a33efc9756ce7e3ceed9e07edbe7bd07f7d7d668f7f989577952d9353660000000049454e44ae426082</data>
+    </image>
+    <image name="image15">
+        <data format="PNG" length="239">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000b649444154789ca593610e83200c461f3bd6160f47ba9361e45adf7e385cab60dcf6c33405d2be3e0149a808492c65e1db7c5bfc35f62acbb2e94244453b82acb5c24947cb26cba640d03a2f650149a3995be7163f0e40e6be51ee490341db545917baf6417b92cd8141a8d89ddd111c1cf8cda103d7a4eb603bac77101a119c3a08452e38b8d5b90250e70a1340122801a40925d063baebe9f2703e1028920c1ce8f81638cedcfb0bde7ebc897297e524f6c8fe7e8d2f1eb6856915de0c8f0000000049454e44ae426082</data>
+    </image>
+    <image name="image16">
+        <data format="PNG" length="254">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000c549444154789c9d926b0a83400c84c76b09bdd95258e2b92ca4acd79afe58a3d9576b15969884643e670549500992489a70292768f951bc1afd3049dc56b67ea32000edd0bdd77941604a12259734ab0d94f3b2da03894223f0437e58a2e4a535c13e4c23c8f92e6e759207a9899807c7e686e03c469834a1f1c0374f0f9adb68444e0f62bf59dc4e25d225a0b2685624ff79f08de0a707fea719c69e0770468d080a314f00f78d230fea612a31254d585f2b01202060c1027b9afc19a6edbd617eccb0f801e45c81d262acd1dd0000000049454e44ae426082</data>
+    </image>
+    <image name="image17">
+        <data format="PNG" length="270">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000d549444154789cad93616e842010461f3d968d3d99d90d1dcee52618b8d6b73f106a5771b3ed9290715498c70b8324148524524cbc9ab7977f8dfd4a20f32649a7f170670319e8acb27993bc7458595108d473b01260dee4524c0ce3405e32f3d7a7f0c6c444b83af006507202754c97c9e52533dfe6edce0fd89564ef485b92df672b4e0b5ec741c54f31b13aa88b2ac13afb0e1a9979d3475e9203b912eb900bd0dc30425e32c33810be43cbcbafef76d03ec2e6703fd3bcb5e7dd3da8048f023b0eb4eb85576ee0612fac8b9ff6c096ecdfdd7807884c839308ff81d90000000049454e44ae426082</data>
+    </image>
+    <image name="image18">
+        <data format="PNG" length="234">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000b149444154789c9d93510e832010441fd722f166368dc193d1e0b5a61f886105acd540d67583f3181624a128249162e2dffcf8f8349a242c41927419413589598ca44b4550003504bb422e8df65c944175dd852568666665a53c4dfe7eb1c5e4fce4012790db3e1b7ef259b4c6e9b95db0f3387950f0534c8c3cc83fe8cf2cba2b8d3c3813983eb84360b0d59ec27d0fead31879d09d70bcf7fa408a32f8230f0c49edc1930e34043fef4047b9b90b4fe31747179a56aae9d0de0000000049454e44ae426082</data>
+    </image>
+    <image name="image19">
+        <data format="PNG" length="199">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000008e49444154789c9d93490ec0200845ffd50d3733e9b95e1756e3001abb204405fe1011203202f4e447b7e77639674b460d12253b75a20c2bf14daec533f23c84ccca20428ade3d8d1c3c18e40c08968cd6f4c97299241818ec349e3c5a269f3d103dd35f1e6cff812543f2b5af1e4d1e48ea9bab9c962b72ef4bd41c7ae032989baf76e116d9d9057e2187bb709b5fffa0b02284ca76620000000049454e44ae426082</data>
+    </image>
+    <image name="image20">
+        <data format="PNG" length="256">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000c749444154789c95934d0e84200c853faf65e2623cd76c089ecb4930f55a6f168a02e2df82145adaf7fa2848282e0bb66cc2e2383d27398d8400e6c99ab66b99a79968c7df28802f5f060600fa4fdfb45d0b34026047460552798e4c56f485c9168c452c18de79e5fedca6f15a8ff2ceeb4a83352e0bc601a14c3eb3f15eb5c787af2105d5193cd1206370d2e39d065435b060c84940558bb2f8a147604b8e6a1736bf9f22a4c977af5099833df95afd7c62178793bc7b83bc8f7ff2b31efcc292495ee01d83b8fe56e19f4568bf0c6f0000000049454e44ae426082</data>
+    </image>
+    <image name="image21">
+        <data format="PNG" length="267">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000d249444154789c9d93518ec3200c441f7bac4ab919da2ac1e76a25aae45ad38fe09652d86c8b84acc19819c6802424248935af484259fc17070951862d098048c430e26f0cb6981cfb8844c2392029502b6899d29c7aca54b094056b5e4973f2c561711dd39ce4f9eee68235f2a0ceef8bb35e15b4b813bb0a9ca9c5032552163fdb6d0360bb6d309508d862727c9a4e2ff9cbf5225b0c26fa1e346e7fe141d9040cbbf3a7078000b912676c943edf41cde0c51f7561c07cf4172a0f3e607e1c529eff5b5f6bdcdcfd11f7e27d1e321d29b803d1fe8ba2bc0925e00000000049454e44ae426082</data>
+    </image>
+    <image name="image22">
+        <data format="PNG" length="166">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000006d49444154789cbd93c10dc0200c03bdff584899ebfa28ad508a491f889705b192c30a02444380a285c63388553d5ae8bdcccad3a33771bef5e4ac1312dbf956b1ae77822d19ccdffa25c8bedf931c594adba7ee7c53ac9264f017193892620f9cf9e01e984d3cf717366650eb05ec46c34fe6cba6ad0000000049454e44ae426082</data>
+    </image>
+    <image name="image23">
+        <data format="PNG" length="195">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000008a49444154789cb5934b0ec0200844e7ea849b9978aee902abe2afdab40b434002c31341120c0449c41071eae7e0d882eb7b62d1c9427591919287cead9d2898cd680a0e19a82829a48a16f9c957d14e899fd92a9799930257bc61d2d1b6a4097561c7c4d1f6a79db9cfa918ec29280c9c824f185454814cfc4ecebe70fc0a9feec1ab4dfce12fecffc60b35b7b989c2ac25180000000049454e44ae426082</data>
+    </image>
+    <image name="image24">
+        <data format="PNG" length="211">89504e470d0a1a0a0000000d49484452000000100000000f0806000000ed734f2f0000009a49444154789ca552ed0a0331088b638f2d856bf3ded98fddddd07e31ae50826d0c1a35497872dec3d70a11bc43878320bcb8755c49f95e808ced68cafc987ccc932f4a160902e7e7ae822030f0c0802a1014d000508e6fecc58d95f2e2630f7ee5adda8815fce9416fe4e30a5e030f04c866c8cac01e08c8582940c8085834b05ba443e79c272ddcff4b0fd626aea7b011d9af72dac88c23ee078bb5116a7f9128980000000049454e44ae426082</data>
+    </image>
+    <image name="image25">
+        <data format="PNG" length="280">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000df49444154789c8d535b0e8320101c2dd7d08390d09f269e4b8217ab06ae616f32fd501416acfd22bb2b3b0f079004678224fcec4192a296f3ac3e9a7ef670d6d159c7f4e3bb3343063602fb92bf983c86d7006d349aa6196989e93d010054ab9afed953b56a5c3feba85a653bd3212c01da688425a0331dc06d2949306e8e0c842787bcc884c485367b5cce6a20829ca0358d949a0572362f18c8bfb0219d7d39afb95b78223c603507a9aec2831dd95957f4938b8566a635802264550fa4fb11f92aa1b759afe4e2fa2dd4dcafe6e2e22d64094bbca922df7a9031f8717e01855daea1487e904c0000000049454e44ae426082</data>
+    </image>
+    <image name="image26">
+        <data format="PNG" length="178">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000007949444154789cad93510ec02008437bff6399ec5cdd87a98271b32cfb30080a94170549b0112471b50b557f04df2c003e9d1f3b01a0d6d6ffa260149082d3ccbaac64292933d8b1b068c799a3229b412c922066067d4bce4e16931e54f22c642b8b495989f722ff55b0162bfd8504d1e85c7a070603bfe36a6fcdd29004d61c8ec70000000049454e44ae426082</data>
+    </image>
+    <image name="image27">
+        <data format="PNG" length="148">89504e470d0a1a0a0000000d49484452000000100000000f0806000000ed734f2f0000005b49444154789cc552cb0e002008cad6ffff329d6a63a1bd0e724443681880f283a669735461070206b5e8cdeaf9e3e180ddd575c9b33f0f102322ac5778c60ace2746311822c21df205528a448c88b02d5224107540bb7b2912a10382f1242771bd60430000000049454e44ae426082</data>
+    </image>
+    <image name="image28">
+        <data format="PNG" length="181">89504e470d0a1a0a0000000d49484452000000100000000f0806000000ed734f2f0000007c49444154789cc592d10ac02008456f639fed0699ffed1e1a03cd8a186381847a353b9854156fce1e46192a90c7251004023a29355a55f51684aa955c9aa455e47e71af89c9dec959b111040c12c08a98c10161804e8a19d417c65ff0137cc1606d826d757184c5f8cb0d0c400ff117068d62d464beca6e23fd1d692f800cf6af58cc81580000000049454e44ae426082</data>
+    </image>
+    <image name="image29">
+        <data format="PNG" length="200">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000008f49444154789ccd93410ec3200c0467ab7e3ce2e1d303d4454e2f15975a4209cb6a82971095937a0224f999a2a600003b21c0beb104dc1c21f5fef8f5cbbd8e01d542da429a909ba3016e2174a187b2ea8f32b8b7d843f89e41ed4060b075ae708dea5ddfa3fd734b70591d9321d790cbf99c361547cda7500037083057afb15c1f80359f42d4a3bb90d3db787c8c2f69d66dfcd8ca78260000000049454e44ae426082</data>
+    </image>
+    <image name="image30">
+        <data format="PNG" length="176">89504e470d0a1a0a0000000d49484452000000100000000f0806000000ed734f2f0000007749444154789ca5924b0e00210843db89f7bf726731124994cfc46ed1472950126e34f23203bad80050fe61547bfe7f36079fbb006090dadd3e0229c83a04100298957306a4a0f9b0d0008b2e0524c9a0a7f1cdeb3b4f47ed114eb210a33d38f00ed0da71780b5ab925195c1d9277715276482dc872f7028c88322defa537ee0000000049454e44ae426082</data>
+    </image>
+    <image name="image31">
+        <data format="PNG" length="198">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000008d49444154789ca593410ec5200844e7eac69b9978aed74d69c0c2efb75d1822283379a8003110a039a676f757f26d4c3b4be269d9f97b4789de3aa5e2d92038f0ca807aeb54ce7c0c0cfeb53dc7d4cd81254dc91c04daae9e32f00a19839f0e188464c6205caa185c971a7b0e0a06f868e33dc7503358edaff5e0746590d1f775affce91d3cfe859dfde7df780059505bf6552469e30000000049454e44ae426082</data>
+    </image>
+    <image name="image32">
+        <data format="PNG" length="171">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000007249444154789cbd535b0ac03008cbfd8f2578aeeca71dedd43a1deca3888fc6181424412148424551f5ef60d7bac80098bd596f114732ec380036066be7d3cc33bf3631c8196d158561308347b597bcabc19bd94306146e418fc9f629d2a0cde0570d9e75250dbc3d69ed417a0b15fff3355e0eab592cf57f575c0000000049454e44ae426082</data>
+    </image>
+    <image name="image33">
+        <data format="PNG" length="158">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000006549444154789ced93410ac0300804f7ffcf127cd7f450524c2241736e4016252ce382028421406eae6eff0ddd5c92385534193a37efa7f46526183bc1c920e84c3076aa10ac246582d5ac9d41b24e2f83234125838ce0cfe0e21662a519dc5ce5765d5d7d005386d9ad2e826b9b0000000049454e44ae426082</data>
+    </image>
+    <image name="image34">
+        <data format="PNG" length="175">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000007649444154789ced94410e80200c04f7ffff825bdf341e0c4609c58278d243d3141a18868000911120cba6a7b5524e0296e56564a57e87b0de691f8c47d7a18028d1b1a0e770864c80eb504094cc3bd1c56199bcbbcdd267d9d475b88cb0b5738ff47c928f396cf54f3bacc95c87d1187acbff7f389437c8fa4d4b67e59a1e0000000049454e44ae426082</data>
+    </image>
+    <image name="image35">
+        <data format="PNG" length="215">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000009e49444154789cd5943112c3200c04efffffb23adeb429308c9cc88a62685230c058632debc302842140cd9a56f73aec10b06dde4636f6612701bf107d105e1c007348f970b5a1c3f99202a1af0d1d3e2593c4adc3aa3b4fa66e3176381e7efb9aa3ae59ebebbb1c4a2a134ea28830ea9c91fa93e40e77112e39847d0e7d7c62872ef1a9c3337f585f870ecbc17ebb6ee10df29d4b0e9393fce9ff70657e011863f8ec178e2f580000000049454e44ae426082</data>
+    </image>
+    <image name="image36">
+        <data format="PNG" length="178">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000007949444154789ced94410e80200c04e7ffffa2b7be693d28460960513ce9a1691a1a980e012421139270739ed6244b489a96a791e5fa1dc2f2244023d17508284ab46fd872b8e206632303d47408284ad69ae8e4302f5edd66ee7373ba0ea711d64eee911e27f998c35aff6d872559d3613486def2ff1f0ee505dae6e5a4111ca7440000000049454e44ae426082</data>
+    </image>
+    <image name="image37">
+        <data format="PNG" length="179">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000007a49444154789ced94410e80200cc0faff7fc98d37d583628c0a198a273d2ccb92857525808a495472ca3cad99d2843a2c0f232bf53b84c749803dd174081825da0eac395c7083b19201561da286c8767d9784c5016ae4364b5f4e99a6c3618457935ba4fb4d3ee61038f5df767824ab3a8c46d75bfeffc3ae3c031d731b7d180891b80000000049454e44ae426082</data>
+    </image>
+    <image name="image38">
+        <data format="PNG" length="257">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000c849444154789c95924b0e83300c4427d74ac5a21743a217ab64e45c6b5804079b06422dc1c8103bcf1f900485200915c5bf7e7d99118480cdad8708802a4a9fc434069bed492855ecb9f063904fd6302b41f0eb6fba60c377ea30e9838de428bf130c89413d92218175dbd7ec885c0f06043e49686298c2c9eef6c008da1ef4e6fb548fd190c4c288bd90d86ff224f69d422415c5eb9b6f8a01382395b5204f19652ded3c67a490f14a7f7ae0c8928a224f19e953b74fdf259d6fba23eb767b44e4b511f46a7c621b091bdad23d4eb77f0000000049454e44ae426082</data>
+    </image>
+    <image name="image39">
+        <data format="PNG" length="207">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000009649444154789cbd93510ec3200c439fa7deff50489ccbfb58a0907568acd2fa4301db71c00830bf7f7adc2003708c6a1bbceefa48eb8b76d40a4c98dd1646b216029211465159eae4525f464bed623e95edd646fc78c2141bdb941a63c72e05825c1339c6af0572e536ff8783db67301ff6e820eeb2817406494a6434631bf77390e2f273bcc7b9e12dcaf366625cc6fcc2c1ce9b8227e46ab5c238f35a190000000049454e44ae426082</data>
+    </image>
+    <image name="image40">
+        <data format="PNG" length="287">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000e649444154789ca5543112832010dccb58e42d7ecc17a44b875d6a8a3c4cdf92c2994d212892034eb3330ce270cb1e7b87a00d1af698c19384bc35c8247c30f9c938c79106950899cdc803b19e26120e8de82a0ad38d144034d21cb594b5130e6acea47cc0e80992749e0419c8b98dfd3acb30389b139068b87c0945539c9f78ef7a7c9619cfaec7b8cc48d732545815f7fe4fd952126dd2e0b2681d115cdddc55219213abc52a87c9a2321283b54e3110014795b2ab884a43fa747e52dd8debc790932549292d74c220fec659cac6f989af771a9cb7db5a36a58bdfde42a3b20029065d7ef6bf6897933bc897dab40000000049454e44ae426082</data>
+    </image>
+    <image name="image41">
+        <data format="XPM.GZ" length="1235">789c9dd14d6f9b401006e0bb7f053237ab4a6c02c8a8ea21716c0727967aac54f5b01fb336eb80838d094ed5ffde9d9da16a255755c3b25a1eedbc1a58ae47c197cfeb60743d3836a22954a0b6e2108cf4a92ccf5fbf7dfa3e184651e0ee78124c861f06c3ab4005e1786ccc788c5c23a737d3647a83dc7a4a47897c6166c467a6262a64164f75162335319b1037cc84f8e4a91c15523033a2646a62881471a685cf96443121ee3c9548842f3e32817840ca5880f4c50d5146c43b664a5c7a6a478dac9982f8ca04e202a912092a41ae882a22ce9929113cb512ca671f99403c2175a240fbe28aa823e2033325e69ee00848c314c47b2610674870a590225b2244c48e9912f79eae147cb6600ae22dd2b83de38bdf8826229e3d8d11c6202dd310af2e5eefde094528fdfc6dd08e54ee54fd000366e3d66dc819dd670a5bd89d5b9ffb8c0e4b19ba5956fb6a8feb4bf9cf4c581fea635d37f5a93db58d7bdcf47d5e6d675b7b7eb3b716537b7bc799b099c13dcc66954b801bf376d7f759fc99e9ecb2efd360f1430e39a6e6f92a2ffb3e2b57f678f1dd965dd52d2e7d8f5cfc2d2396aeb4c673ab8aaa7872eb9afbb8a391a51fe1aff9fe3ff7bf3b3f3e0e7e0233b634e8</data>
+    </image>
+    <image name="image42">
+        <data format="XPM.GZ" length="1363">789c55d15b6fda301407f0773e4584dfaac9255788a63d945bbb12aea5946ada832f490c21dc099469df7d39c79660b614e9a7f38f7d6c3f3e58f351df7a78ac1c8eecb81096506c6f3dc8539e7ffdfafde34fa5ea389653b37cd7b2abdf2ad5c81216a9e100ce0c3dcd4f640326706828349f81760d267060e869be221b308185a1d06c029d1a4ce0c9d0d3bc2243a7e184c0aea1d0ec035ddbadb97884a3a1a7f9820cdd868be1dc50687e013ddbab7918fe30f434b748e6353c06dc017dc7aff90ef0cdd0d71c23991ffa185e194acd033070023bc0f093a1af3942b2200c30bc36949a1b60ddaddb7517d831f435a7485e0feb1cf8d3506ace810db7bc750c4f0c7dcd1e9237c206862f8652b3050cbdd00e3de0d9d0d77c478a300c05b06d2835f740e6319b617869e86bc648c118c37066186b2640ee71876338350c34155272c6255018c69a0c287ce1081f480d034d8e9482090c13c3585302a52f1d89e18561a04909619450ce0817520ac271e0327142a548d5629925cb2c65b78a5ae5eb64b3dded0fc7d3a9c8cfb70abf7c5d9f9ac756d2ee6cbbcf2fea5661ece7ebeb738753911d5e5f7af46e1f72be46dd58907453f4cffcae039e1eba83e13a1197e3609465771d884b31dee7c524cb87c5e9fab6bcabb47a71daea4c93cd6ebd5ebfabf27c9412bc07a5c8822ad11c46e59845f89de11d704ea1a155c2cafb570cda26cc54ca07a47496b4848a2f6ada9bb414aec6e107ca49946d47fbd5a13dfd283edaba6b56364a199da971b7d79dd064d7ef087d526892521ab1739137db629a6fdb94de3a203c22ea3818ab2c2ff2f9123be066448cbd35cf3c9d7436f3bdb8af7c0a35da2ecbff55aa18b9afcc04dbbfc3bab031fd6fb5f2c9a964fad8bcfaf77be51fd3db5589</data>
+    </image>
+    <image name="image43">
+        <data format="XPM.GZ" length="1043">789c55d14b6fdb300c00e07b7e8511dd8281b5e54712143bb44d8f03761c30ec20915223a76ed2bcea74d87f9f48a9404201493e939628e66e56fcfaf9a398dd4d0e47730c58e0daec8b199d86e1f2fbcff7bf93a9ae0a5d16755d54d36f936928b050a504b3cf6c1237c2052fe6251313d7ccaae4c51c329bc417e1a2c24a8a5f99bae4c57c102ef5422f996326267e32ebaa2e6b69f223b3493c0b97f5a296e2c74c4c7c62b6ba2d5bcd3c66b6893ba16997ad61ee3329f19dd9e9aeeda4f82034ddb293ec9639afe7edbc66be314d632ad330574234ce20d3306d63b5952c6676895e48d65862aa4c97084c6c5163cba4cc2ed109090d4ab1cd74892726b5a4498a9f33bb4450c6022029700a217e29b05efab3a89c725e290531141022c8e1ea651d421f57081bfee837af4aae0083f12e561328020f8ede86f4060472ce03c6ddd3763648c2aba01c82b771772007f177905939ea3da205b5ddbdeff787fd71b7ed0fd2ae0f27efc8fb73d8c4e3a589b30c0c02f70ef8c14fb9bb4d18af1327e3f974f2c6a4aebe12f12102b76d21dc26bcb5e09128b67993a033df3a1e7de9c3e7cde163b8f03c62faf670da8d311ec6f1f1233c5d27e298e2d5d101f9204384382b05de418e38993c2bbf5ec59bcb04253c0e32ab93e98770153c14f907bd5d298a17fe7a6145ce3f4fffdd4ffe034ab6ff65</data>
+    </image>
+    <image name="image44">
+        <data format="XPM.GZ" length="1153">789c55d3dd6fda301000f077fe8a08bf55535a020944d31ea0df5493f63869dac37dc4843aa14d311d65eaff3edfd95a37db3cfc38273edfc1f959f6fddbd7ecec7cb4f7e0b794510b2fd9191ffafeedc7cf2fbf47e3a2c88a8b6c5a6793f1a7d1d86594990b1dc22e7116d92b173285c7448a7c164e2e640a7789b3c807e542a6f02991221f85455d2c8a5a78292ca1ac4b105e2572e44a5815d5a42a84cbc432f24609555de9e6d7448e3c09e7d379399f0adf9438e7390aef858b69c851a36b252eea85460f891c792dac677559cf84b74aaaeb9a8477891cf92284194c4037ff4a2c23374a0200dd9c2736915688332c50379bc42a92948c802cc4c4269285545241a51012ab48af6402d2cd436213d908b9e48275f336b18adc2b1b066e846d6213991b40227931128665206fec46336a2db6f9d6008781c80d586eb5a0408fce75bdeb9deb3bd775ceed9e502b809b67c2e1654f3985c7005a9f7731476edd80cc7608b54363730b83f3da697fe88db77e20b476d8378325705e9fc99fe404279fddeb260fcfb263a36d095f85939d3bbafecd7b1f9277a8b96d4e6eb95c5d5e5daeae56d718ee45e85823843d12877f1703820fb930a4080e0ea49c68c23d437be06f24bced66b95aaec25ade020fa10c2972170e0f4bf33b85c67c44f2aeef8e92de73c80d2c7ebc8d4fbbfbfbf5f5fa7058afed7f1950e3b6a1c2e48d1fac61ff9175b85848d76a13e2f08eb53ac6ee721aa4357130990763f5f790f73bf7cf388664cc5e3b37987041e9741c3634a381f1fbe7d11f74713ec6</data>
+    </image>
+    <image name="image45">
+        <data format="XPM.GZ" length="1108">789c55d2cd6edb300c00e07b9ec2886ec1e0c68eec241876e8ef7219b0e380610752549aa48d2b3a6e9a74d8bb4fa4b42d932efe409a94685f4d8a6f5fbf1493abd1618061eb0ab781be98d0eb7e7ffefee3d3cfd1b8ae8b7a5accdaa21a7f188db9708599ea12864c9b78562e640bfb4c9778105653d9c253a64d7c512e2a5769f25e584f650bef336de29d7259bb7a297c16ce96b3c54c792db4959d5a3df39069138f4ab00b0bc2f74c97f82a6cea66dad4c24d669378a384861a4dbe15b6d052ab7c12ce67f36a3e136e339bc447e1d22eaba5153e08c14203ca95d20180137ecef4894e88166bd4e42eb34d344a42401262a64f04a16b5ced1a2165b6895e490e9c2697993e7127a4866ad2e475669bf8a6f404e4f55d03182f6028d642202430e0518f8f1e70ed1e375bdcb9a7e77d873be37464b8362f8103f77107e643cfdcef35029d3b00c1c07d9cc92bb329c1718a10301a1a98639b230720e3f94dfb7808867038317414df41033155fb78737680efcc1ecd359f88085304d0845867e0804831ee7cac96ce56760c881201b88ed50021473c4ab674403a5e46e2b5257b08214ee5bf08c53e48e6594e154f70be8c6088a3bbe183a1f2f6eefea20f5230a67ca087d250a75ff84f0428d6f1bea4389d58f6e20468e21d113b1fef8c25fe8b388fec3bb8589d4f33f06517e2bfe630af3847173afd0fa1eb4fcc67ce2b3e9c7a8dec0cac287ed6bf0b3cad60fcebe3e8378aaf31a2</data>
+    </image>
+    <image name="image46">
+        <data format="XPM.GZ" length="1033">789c55d14b8fda301000e03bbf22c2375479431e3c54ed81ddf34a3d56aa7ab067c6e084001b02bb6cd5ff5ecfd850b0a5285f26e3b1c74f93ece78fb76cf2343a0e66f090c1c6f4d9044f5d77f9f5fbf9cf685c14599167e5349b8ebf8dc63e834ce532984d6215b9172e7832db4488dc30a7394f669758450ec2054fe63a11223f9945ce93b94dac22cfc265b12896cc3e11224fcc725ae6a51ce1285c968b52a2efcc6a5a5595442fccbaa8f3ba607e084dbdac0df325112357ccb99de3dc32bf98068c31c0dc2552a461daca16b66242e22c9284688d45a64aa448cd841a0aa89998388b74420403f2b34da4c803136b2c507e7e4d9c456a65acd6803a0d428da465831694538e541a1a8dd21241b5de78dff8ffa3dd6a27a7d09d21a7f435c7e16e8f3bc9d11e9da36b19bd43f44e9a48ca2b07fa56c759e59dace6b021007bcb09fbd993f452933f90c35b8e05179697c6691faadbf7fe188af57ed0f241729023786c064578f2dd5d24bc8450efbb10efef234a792edcfb75f8767e582dec5aebb04e584d9d259e22e1a429129e8f3952479ffc3a34b9f79bbb3ad7c840a41e764da16fe19871bfe7a6537c8c78cdaa35e1824e7e1bba790c11820ea43b406db89cd6efc36cf73e3c1b4f87b8b79001f4f17941fc5abdac76e8e815c67fbf8ffe0181bffdc9</data>
+    </image>
+    <image name="image47">
+        <data format="XPM.GZ" length="1138">789c4dd24b6fdb300c00e07b7e8511dd8a418d1ddbb531ecd0f70318b0e38061075294aab871db38699a76d87f1f4909582438c0075212a9e8f4a4f8f9e37b71723adbee60b772858b301527f4368e1fbf7e7ffb339b5755512d8a655794f32fb3792c5c61163a8463669d38283b99c275a64b3c17960b99c27b652753f89ce9123f84555f75552fbc132ecbe562a9655c65d6896fc2baac17b572ab84baab41f8296caaa6692ae1a3129abed1e82e93122f856dd596ad263f29a1a556a32be1199ef567287c1076cbaee996c25b25767da7d117615ff7655f0b2f329bc4bdd2f5d43be1b5106a2841a39bcc26f15de90040930f993e3108b1c60a35d964b689a42404242164fa4414bac655ae11dacc36d12bc981d36497e913272135549126df64b689af4a2f5377366091f7f1189cf18069684596d0225963814300ff23488e90931dc783f54711be09ff68bc09102dd8e88f77f3abe1099057468c648f23b81e9f5f1cbc6ed610a77014718fdbb87b4330fcfca33d5a63cdb019c2f39e3c98d1031dad097b88f87e40ae3e728fe6954bd74e916b8ddc2e00f9a83f88143562c173bd885388c15aee287266ae8dcb05b4c1a3b5bc14fd08e90fe25b8bfca1b19e388d0079538d70da8808e49026e0bea56197ee0d60e03df8a4b0f9f8e44b9a7caa800fb7e7fc219a092f2e8715bf04b269cd74b88a69ac631ce2f69ad7eb9a03de706bbcdfc487dd9eef2eb80fadc01b7e56fcae820bc1deddef8dbc2a8df0c952b3bb3180e1818c956261fef7ebec1f60c22f54</data>
+    </image>
+    <image name="image48">
+        <data format="XPM.GZ" length="1085">789ccdd14d6b83401080e1bbbf628937299b6a3e9a507a48722ef458283decaeaedfae261a634aff7b7726ec40a1c71e320cc2b3af22e83c60ef6faf2c987ba75ef4b9622a134716c4435d4f1f9f2f5fde2c8a98dd45c8c2d983371b9962fe230eb0476e1c0530a49a20a956c0886a8ddc3a66c045e8784452ed804baa67a4703c005791630b5c137748ba59029f168e7ba4741c801baa1392ea09b85d3a5e90cab1000aaa25926a0c94541b64eca8806ae59823a9fac0986a8a4c1cafc064ed689054355053e5484dfc73eebff842ba0315ff2a52249cebd4aecea4e6694e4514a2e445c58bba11552e93ba32b7520ad376f618f678327dceb3e156cea39db4acf8c596e93a1a7ede613163a375bd6ffaa2ab787748b3c3641fc33fb9b72f8c273e497b51ad6f8656ddcf77fbb7f2fdecfd0047d0e10c</data>
+    </image>
+    <image name="image49">
+        <data format="XPM.GZ" length="1100">789ca5d04b6fa3301486e17d7e054a76d1c89d90b6d36a340b13b6237559a9eac2363886708909578ffadfcb39954fa22aab0c62c1c30b481f77ebe0f5e56fb0be5b9c5ad1662a504634c13ae9ca727a7bfff36fb10cc3603eb761b059fe582c9b4005ab9f78003be493a7006ea8d648aa0330a49a209f3d73e076e3b942526d81f7542ba4f09c800fa1e7014975043e52ed915477c05f5bcf14293d25f0892a47528d80cff79e315279664041d521a9164049d522134f03540f9e2592ea0998503d22534f0d4c1f3df748aa0aa8a932a4265e3d6e2e2b21843cdf53924a926aadd8de28c6b4d12c13da97fc5014ac14557db4a26a4e6dd7d33b439eeb7132ad54c689cc8af3d7f87c55b552167c88842bbe952871b999a6accb4ce7eceeab700b0fc563cc74cfe382a5b2e4b72f65b0b59eae9679abeddcd75865f465d99d6c63cb7a1e7b145567cf25af4517b3b1326dda1f5879bc7887ab6164138c1d47a6f79785d9a68807975b27a22435bd2fdccc3f2162d93c96b99eb3ff5b7aad7cfc5e7c02a72ff5e0</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>fileNewAction</sender>
+        <signal>activated()</signal>
+        <receiver>mainui</receiver>
+        <slot>slotFileNew()</slot>
+    </connection>
+    <connection>
+        <sender>fileExitAction</sender>
+        <signal>activated()</signal>
+        <receiver>mainui</receiver>
+        <slot>fileExitAction_activated()</slot>
+    </connection>
+    <connection>
+        <sender>helpAboutAction</sender>
+        <signal>activated()</signal>
+        <receiver>mainui</receiver>
+        <slot>helpabout()</slot>
+    </connection>
+    <connection>
+        <sender>fileOpenAction</sender>
+        <signal>activated()</signal>
+        <receiver>mainui</receiver>
+        <slot>slotFileOpen()</slot>
+    </connection>
+    <connection>
+        <sender>fileSaveAction</sender>
+        <signal>activated()</signal>
+        <receiver>mainui</receiver>
+        <slot>slotFileSave()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">mainui.ui.h</include>
+</includes>
+<slots>
+    <slot>initActions()</slot>
+    <slot>slotFileNew()</slot>
+    <slot>slotFileOpen()</slot>
+    <slot>paintEvent( QPaintEvent * event )</slot>
+    <slot>fileExitAction_activated()</slot>
+    <slot>helpabout()</slot>
+    <slot>slotFileSave()</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+</functions>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
