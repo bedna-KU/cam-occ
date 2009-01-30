@@ -1,5 +1,5 @@
 #summary Main page
-
+http://code.google.com/p/cam-occ/source/browse/wiki/images/cam-occ1.png
 = Introduction =
 
 == cam-occ ==
