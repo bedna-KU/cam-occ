@@ -1,0 +1,45 @@
+NOTE - if you are hoping for more CAM functionality than the older version of cam-occ, you will be dissapointed.  At this time, there is less functionality.  However, I think the code is a lot less tangled.  I think I will have quite a bit of time to work on this.  I hope to add more functionality fairly quickly, but I will be focusing on low-level stuff.  I doubt it will spit out much g-code any time soon...
+
+The reason this is labelled as version 2 is that the code is almost completely different.
+
+===================================================================================
+
+I assume you are using Linux - if not, I can't give much help.
+
+This was built with OpenCASCADE 6.3.0 (opencascade.org) and qt4, on Debian Lenny/AMD64.  It may work with older versions of OCC, but will not work with qt3.
+
+$ qmake --version      will tell you what version of qmake is the default on your system. For me:
+QMake version 2.01a
+Using Qt version 4.4.3 in /usr/lib
+
+On my system, qmake-qt3 was the default.  I changed the symlink at /etc/alternatives/qmake to point to qmake-qt4 instead of qmake-qt3.  Rather than doing that, you can substitute 'qmake-qt4' for 'qmake' below.
+
+
+If your system is not 64 bit, open the src/src.pro and remove these two lines:
+QMAKE_CXXFLAGS_DEBUG += -m64
+QMAKE_CXXFLAGS_RELEASE += -m64
+And change 
+DEFINES += _OCC64 \
+LIN \
+to
+DEFINES += LIN \
+
+My OCC libs are in /opt/occ63/lib, and the includes are at /opt/occ63/inc.  If yours are different, you will need to change these two lines in src/src.pro:
+INCLUDEPATH += /opt/occ63/inc/ \
+LIBS += -L/opt/occ63/lib/ \
+
+===================================================================================
+
+To compile:
+$ qmake && make
+
+I guess the qmake file isn't set up too well.  If you get strange compile or runtime errors after modifying something, try:
+$ make clean  && qmake && make
+You can also try 'distclean' instead of 'clean'.
+
+===================================================================================
+
+If you want to make changes, I suggest doing so in src/aSample.cpp, and the header inc/aSample.h.  It should be fairly easy to make changes there without having to become familiar with the rest of the program - you won't have to worry about the learning curve of GUIs, visualization, etc.
+
+
+The first version of cam-occ was based on a program by Olivier Coma.  This version is based on an old version (v 0.1?) of QtOCC by Peter Dolbey.  See http://qtocc.sourceforge.net/

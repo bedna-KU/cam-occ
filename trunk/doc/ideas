@@ -1,0 +1,10 @@
+
+-find faces accessible from the top (or from an arbitrary direction)
+-analyze faces (planar,cylindrical,???)
+-analyze faces II ("exterior" face, "interior" face (i.e. pocket), hybrid, rib, wall/vertical)
+-unify analysis for automated decision making
+-path for a single face
+-analyze clearance
+-minimum rough material size (rectangular solid)
+-load "rough" shape and "finish" shape, find material that must be removed, ensure that no toolpaths intersect the finish shape, modify any paths that extend past rough shape (that portion should either be rapid, or trimmed)
+
