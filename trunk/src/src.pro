@@ -49,7 +49,8 @@ qoccviewwidget.cpp \
  shapeInfo.cpp \
  cam.cpp \
  uiStuff.cpp \
- aSample.cpp
+ aSample.cpp \
+ shapeOffset.cpp
 
 DESTDIR = ../bin
 
@@ -64,7 +65,8 @@ HEADERS += qoccinternal.h \
  ../inc/shapeInfo.h \
  ../inc/cam.h \
  ../inc/uiStuff.h \
- ../inc/aSample.h
+ ../inc/aSample.h \
+ ../inc/shapeOffset.h
 
 
 

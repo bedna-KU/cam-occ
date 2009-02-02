@@ -17,34 +17,37 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef SHAPEOFFSET_H
+#define SHAPEOFFSET_H
 
-#include <assert.h>
+#include <limits.h>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Solid.hxx>
+#include <TopoDS_Vertex.hxx>
 
-#include "cam.h"
+
+#include <QAction>
+#include <QMenuBar>
+#include <QObject>
+
 #include "uiStuff.h"
-#include "shapeInfo.h"
-#include "aSample.h"
-#include "shapeOffset.h"
 
-cam::cam(QoccHarnessWindow* window) {
-	assert(window != 0);
+class shapeOffset : public uiStuff
+{
+	Q_OBJECT
 
-	uiStuff *ui;
-	ui = new uiStuff();
-	ui->init(window);
+public:
+	shapeOffset();
+	void init(QoccHarnessWindow *window);
+private slots:
+	void offsetButton();
 
-	shapeInfo *shapeI;
-	shapeI = new shapeInfo();
-	shapeI->init(window);
+private:
+	void faceOffset(TopoDS_Face F);
 
-	aSample *sample;
-	sample = new aSample();
-	sample->init(window);
-	
-	shapeOffset *shapeO;
-	shapeO = new shapeOffset();
-	shapeO->init(window);
-}
 
-cam::~cam() {
-}
+	QMenu *myMenu;
+	QAction *offsetAction;
+};
+#endif //SHAPEINFO_H
