@@ -19,78 +19,63 @@
  ***************************************************************************/
 
 
-/****************************************************************************
-aSample - a fairly simple class to make it easier to modify/experiment with
-camocc.
-
-If you wish to copy this class, there are four lines in cam.cpp that must
-be copied, along with this file and ../inc/aSample.h.  Of course, you
-will need to change the class name, string used with #ifndef and #define,
-and the class header file name used with #include below.
-
-This class inherits from uiStuff, so those functions can be used. If you
-need to do something when the app starts up, put it at the bottom of the
-init() function.
-
-For ideas, take a look at the OCC samples, including the java app.
-Where Context or myContext is used, you will need to use
-theWindow->getContext()-> instead. Replace View or myView with
-theWindow->getView()->
-
-theWindow->getContext() is a pointer to an AIS_InteractiveContext.  If you
-downloaded the Doxygen documentation for OCC, this is documented at
-ReferenceDocumentation/Visualization/html/classAIS__InteractiveContext.html
-
-Another useful resource is Google's Code Search. For example,
-http://google.com/codesearch?q=BRepAlgoAPI_Section&hl=en&btnG=Search+Code
-****************************************************************************/
 
 
-#include "aSample.h"	//note - this is in ../inc/
+#include "gcode2Model.h"
 #include <ostream>
 
 #include <QKeySequence>
 #include <QtGui>
 #include <AIS_InteractiveContext.hxx>
 
-//You may not need the following headers - depends on what you are doing.
 #include <AIS_Shape.hxx>
 #include <BRepPrimAPI_MakeBox.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
 #include <gp_Pnt.hxx>
 #include <TopoDS_Shape.hxx>
+#include <Handle_Geom_TrimmedCurve.hxx>
+#include <GC_MakeArcOfCircle.hxx>
 
 
 
-aSample::aSample()
+gcode2Model::gcode2Model()
 {
 	theWindow = 0;
 }
 
-void aSample::init ( QoccHarnessWindow* window )
+void gcode2Model::init ( QoccHarnessWindow* window )
 {
 	theWindow = window;
 
-	myMenu = new QMenu ( "aSample" );
-	theWindow->menuBar()->insertMenu ( theWindow->getHelpMenu(),myMenu );
+///	commented out because this is incomplete.
+///	myMenu = new QMenu("gcode2Model");
+///	theWindow->menuBar()->insertMenu(theWindow->getHelpMenu(),myMenu);
 
 	//these five lines set up a menu item.  Uncomment the second one to have a shortcut.
-	myAction = new QAction ( "aSample", this );
+	myAction = new QAction ( "gcode2Model", this );
 	//myAction->setShortcut(QString("Ctrl+A"));
-	myAction->setStatusTip ( "aSample" );
+	myAction->setStatusTip ( "gcode2Model" );
 	connect ( myAction, SIGNAL ( triggered() ), this, SLOT ( myMenuItem() ) );
-	myMenu->addAction ( myAction );
+///	myMenu->addAction( myAction );
 
 };
 
-void aSample::myMenuItem()
+void gcode2Model::myMenuItem()
 {
+//open file, read, convert to arcs and lines
+//sweep 2d wire
+//detect non-tangencies and use 3d wire revolved there
+//compute solid
+//then subtract
+//display
 	Standard_Real aXmin = 0, aYmin = 0, aZmin = 0, aXmax = 20, aYmax = 30, aZmax = 10;
 	gp_Pnt corner1 = gp_Pnt ( aXmin, aYmin, aZmin );
 	gp_Pnt corner2 = gp_Pnt ( aXmax, aYmax, aZmax );
 
 	slotNeutralSelection();		//Close any local contexts.  Any objects created while a local context is open will dissappear when that context is closed and they won't be shaded.
 
-	infoMsg ( "Ready to create a box between " + toString ( corner1 ) + " and " + toString ( corner2 ) + "." );
+	TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge ( gp_Pnt ( 0,0,0 ), gp_Pnt ( 1,1,1 ) );
+
 
 	//create a shape
 	TopoDS_Shape Shape = BRepPrimAPI_MakeBox ( corner1,corner2 ).Shape();
@@ -103,3 +88,28 @@ void aSample::myMenuItem()
 	//redraw();	//not necessary, Display() automatically redraws the screen.
 }
 
+//3 points
+TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c )
+{
+	Handle ( Geom_TrimmedCurve ) Tc = GC_MakeArcOfCircle ( a, b, c );
+	return BRepBuilderAPI_MakeEdge ( Tc );
+}
+
+//begin, direction at begin, end
+TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Vec V, gp_Pnt b )
+{
+	Handle ( Geom_TrimmedCurve ) Tc = GC_MakeArcOfCircle ( a, V, b );
+	return BRepBuilderAPI_MakeEdge ( Tc );
+}
+
+/* don't bother unless its actually necessary
+//begin, end, center
+TopoDS_Edge gcode2Model::arc(gp_Pnt a, gp_Pnt b, gp_XYZ c) {
+ //gp_Circ &Circ, const gp_Pnt &P1, const gp_Pnt &P2, const Standard_Boolean Sense
+//   gp_Circ (const gp_Ax2 &A2, const Standard_Real Radius)
+//get plane for a,b,c
+//get dist a,c - that's radius
+	gp_Circ circle = gp_Circ();
+	Handle(Geom_TrimmedCurve) Tc = GC_MakeArcOfCircle (circle,a,b,true); //last param affects the arc, but not sure how - experiment w it
+	return BRepBuilderAPI_MakeEdge(Tc);
+}*/

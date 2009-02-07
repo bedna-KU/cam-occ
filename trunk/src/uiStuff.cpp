@@ -83,7 +83,7 @@ void uiStuff::infoMsg( QString title, QString message ) {
 }
 
 void uiStuff::infoMsg( QString message ) {
-	QMessageBox::information(theWindow,"Camocc2",message);
+	QMessageBox::information(theWindow,"Cam-occ2",message);
 }
 
 QString uiStuff::toString(float a,float b, float c) {
@@ -92,6 +92,23 @@ QString uiStuff::toString(float a,float b, float c) {
 
 QString uiStuff::toString(gp_Pnt p) {
 	return QString("%1, %2, %3").arg(p.X()).arg(p.Y()).arg(p.Z());
+}
+
+QString uiStuff::toString(gp_Dir d) {
+	QString str;
+	Standard_Real angTol = 0.000175;	//approx .01 degrees
+	if(d.IsParallel( gp_Dir(0,0,1), angTol ) ){
+		str = "Z axis";
+	} else if (d.IsParallel( gp_Dir(0,1,0), angTol ) ) {
+		str = "Y axis";
+	} else if (d.IsParallel( gp_Dir(1,0,0), angTol ) ) {
+		str = "X axis";
+	} else if (d.IsNormal( gp_Dir(0,0,1), angTol ) ) {
+		str = QString("horizontal, (%1, %2, %3)").arg(d.X()).arg(d.Y()).arg(d.Z());
+	} else {
+		str = QString("(%1, %2, %3)").arg(d.X()).arg(d.Y()).arg(d.Z());
+	}
+	return str;
 }
 
 void uiStuff::slotNeutralSelection()

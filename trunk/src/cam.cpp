@@ -25,6 +25,7 @@
 #include "shapeInfo.h"
 #include "aSample.h"
 #include "shapeOffset.h"
+#include "gcode2Model.h"
 
 cam::cam(QoccHarnessWindow* window) {
 	assert(window != 0);
@@ -44,6 +45,11 @@ cam::cam(QoccHarnessWindow* window) {
 	shapeOffset *shapeO;
 	shapeO = new shapeOffset();
 	shapeO->init(window);
+
+	gcode2Model *gToM;
+	gToM = new gcode2Model();
+	gToM->init(window);
+
 }
 
 cam::~cam() {

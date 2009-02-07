@@ -21,6 +21,10 @@
 #define SHAPEINFO_H
 
 #include <limits.h>
+#include <vector>
+
+#include <gp_Ax1.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Solid.hxx>
@@ -42,14 +46,66 @@ public:
 	void init(QoccHarnessWindow *window);
 private slots:
 	void infoButton();
+	void countButton();
 
 private:
 	void edgeInfo(TopoDS_Edge E);
 	void faceInfo(TopoDS_Face F);
 	void solidInfo(TopoDS_Solid S);
 	void vertexInfo(TopoDS_Vertex V);
+	void arcCount(TopoDS_Solid S);
+
+/*********************************************************************
+*****  
+*****  Data and functions for binning arcs
+*****  Note that which arcs are binned together may depend on the
+*****  order in which they are analyzed, if the difference between
+*****  them is near one of the tolerance values.  this, as well as
+*****  binning in general, could cause headaches when using models
+*****  that are imprecise or very complex.
+*****  
+*****  There is a caveat with using gp_Pnt for arcsByCenter: two arcs
+*****  may have the same center, but not be in the same plane.  They
+*****  would still be binned together.  It is necessary to use 
+*****  gp_Ax2.  gp_Ax2 may also have a drawback: two arcs in the
+*****  same plane and with the same center might have different
+*****  gp_Ax2's, with one being upside down. (need to verify this)
+*****  
+*********************************************************************/
+	void storeArcByRadius(Standard_Real r);
+	void storeArcByAxis(gp_Ax1 axis);
+	void printBinningResults();
+
+	Standard_Real pointTol;		//tolerance for determining equality of points
+	Standard_Real radiusTol;	//tolerance for arc radius
+	Standard_Real ax1AngTol;	//angular tolerance for arc gp_Ax1 isCoaxial()
+	Standard_Real ax1LinTol;	//linear tolerance for arc gp_Ax1 isCoaxial()
+
+/* Skip this for now, using radius and axis may be enough.  May not need to find arcs w/common center.
+** Or maybe use gp_Pnt center and gp_Ax1 axis - easier to compare than gp_Ax2 which contains unnecessary data.
+
+	typedef struct {
+		gp_Ax2 l;			//location
+		uint i;		//count of arcs in this bin
+	} arcCenterBin;
+	vector<arcCenterBin> arcsByCenter;
+*/
+
+	typedef struct {
+		Standard_Real r;		//radius
+		uint i;
+	} arcRadiusBin;
+	std::vector<arcRadiusBin> arcsByRadius;
+
+	typedef struct {
+		gp_Ax1 a;			//arc's axis
+		uint i;
+	} arcAxisBin;
+	std::vector<arcAxisBin> arcsByAxis;
+
 
 	QMenu *myMenu;
 	QAction *infoAction;
+	QAction *countAction;
 };
 #endif //SHAPEINFO_H

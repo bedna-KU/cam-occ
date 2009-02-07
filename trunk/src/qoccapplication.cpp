@@ -35,9 +35,9 @@
 #include "qoccinternal.h"
 #include "qoccapplication.h"
 
-QoccApplication::QoccApplication(int &argc, char **argv, int _internal ) :
-	QApplication (argc, argv, _internal),
-	mySplash (NULL)
+QoccApplication::QoccApplication ( int &argc, char **argv, int _internal ) :
+		QApplication ( argc, argv, _internal ),
+		mySplash ( NULL )
 {
 	//splashScreen(NULL);
 	//splashFinish(mySplash,1000);
@@ -55,24 +55,24 @@ QoccApplication::~QoccApplication()
 
 void QoccApplication::splashScreen ( const QPixmap &pixmap )
 {
-	QPixmap* p = (QPixmap*) &pixmap;
+	QPixmap* p = ( QPixmap* ) &pixmap;
 	if ( p->isNull() )
 	{
-		p = new QPixmap( "images/qoccsplash.png" );
+		p = new QPixmap ( "images/qoccsplash.png" );
 	}
-	mySplash = new QSplashScreen( *p, Qt::WindowStaysOnTopHint );
+	mySplash = new QSplashScreen ( *p, Qt::WindowStaysOnTopHint );
 	if ( mySplash )
 	{
 		mySplash->show();
-		splashMessage( tr( "Initializing Application..." ), Qt::AlignRight | Qt::AlignTop );
+		splashMessage ( tr ( "Initializing Application..." ), Qt::AlignRight | Qt::AlignTop );
 	}
 }
 
-void QoccApplication::splashMessage(const QString &message, int alignment, const QColor &color)
+void QoccApplication::splashMessage ( const QString &message, int alignment, const QColor &color )
 {
 	if ( mySplash )
 	{
-		mySplash->showMessage( message, alignment, color );
+		mySplash->showMessage ( message, alignment, color );
 	}
 }
 
@@ -81,17 +81,17 @@ void QoccApplication::splashFinish ( QWidget* widget, long millisecs )
 	if ( mySplash )
 	{
 		msleep ( millisecs );
-		mySplash->finish( widget );
+		mySplash->finish ( widget );
 		delete mySplash;
 		mySplash = NULL;
 	}
 }
 
-void QoccApplication::msleep(unsigned long millisecs)
+void QoccApplication::msleep ( unsigned long millisecs )
 {
 	QMutex mutex;
 	QWaitCondition waitCondition;
 	mutex.lock();
-	waitCondition.wait( &mutex, millisecs );
+	waitCondition.wait ( &mutex, millisecs );
 	mutex.unlock();
 }

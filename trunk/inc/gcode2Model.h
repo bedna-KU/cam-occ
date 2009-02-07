@@ -17,53 +17,35 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef CAMFRAMEWORK_H
-#define CAMFRAMEWORK_H
+#ifndef GCODE2MODEL_H
+#define GCODE2MODEL_H
 
+#include <limits.h>
+
+#include <QAction>
+#include <QMenuBar>
 #include <QObject>
-#include <QMenu>
-#include <QToolBar>
-
 
 #include <gp_Pnt.hxx>
-#include <TopoDS_Shape.hxx>
+#include <gp_Vec.hxx>
+#include <TopoDS_Edge.hxx>
 
-#include "qoccharnesswindow.h"
+#include "uiStuff.h"
 
-class uiStuff : public QObject {
+class gcode2Model : public uiStuff
+{
 	Q_OBJECT
 
 public:
-	uiStuff();
-	~uiStuff();
-	void init(QoccHarnessWindow* window);
-
-protected slots:
-	void slotNeutralSelection();
-	void slotVertexSelection();
-	void slotEdgeSelection();
-	void slotFaceSelection();
-	void slotSolidSelection();
-
-protected:
-	QoccHarnessWindow* theWindow;
-	std::vector<TopoDS_Shape> selectedShapes;
-	void getSelection();
-	void redraw();
-	void debugMsg( QString s, QString f, int l );
-	void infoMsg( QString title, QString message );
-	void infoMsg( QString message );
-	QString toString( float a,float b, float c );
-	QString toString( gp_Pnt p );
-	QString toString( gp_Dir d );
-	void addSelectionWidgets();
-
-	int errors;
-//	bool needsRedraw;
+	gcode2Model();
+	void init(QoccHarnessWindow *window);
+private slots:
+	void myMenuItem();
 
 private:
-
-
+	TopoDS_Edge arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c );
+	TopoDS_Edge arc ( gp_Pnt a, gp_Vec V, gp_Pnt c );
+	QMenu *myMenu;
+	QAction *myAction;
 };
-
-#endif //CAMFRAMEWORK_H
+#endif //GCODE2MODEL_H
