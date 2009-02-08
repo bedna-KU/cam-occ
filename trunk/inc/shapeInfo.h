@@ -55,7 +55,8 @@ private:
 	void solidInfo(TopoDS_Solid S);
 	void vertexInfo(TopoDS_Vertex V);
 	void arcCount(TopoDS_Solid S);
-	QString toNC(char letter, Standard_Real number, Standard_Real last = NaN);
+	QString toNC(char *letter, Standard_Real number, 
+			Standard_Real last = std::numeric_limits<double>::quiet_NaN());
 	QString toNC(gp_Pnt p);
 
 
@@ -118,5 +119,7 @@ private:
 	QMenu *myMenu;
 	QAction *infoAction;
 	QAction *countAction;
+	QAction *canAction;
+
 };
 #endif //SHAPEINFO_H

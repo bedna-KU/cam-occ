@@ -116,7 +116,8 @@ void shapeInfo::canFace()
 		}
 
 		//now compare arcs, must have at least 2 arcs
-		bool foundMatch = multipleMatch = false;
+		bool foundMatch = false;
+		bool multipleMatch = false;
 		anArc a,b;
 		for ( uint j = 0; j < arcsV.size()-1; j++)
 		{
@@ -126,11 +127,11 @@ void shapeInfo::canFace()
 				anArc arc2 = arcsV[k];
 				if (	//(arc1.c.IsEqual(arc2.c, pointTol)) && //wtf don't compare this!!! no matches!
 					(arc1.r == arc2.r) && 
-					(arc1.ax.IsCoaxial(arc2.ax, angTol, linTol)) )
-				{
-					if ( foundMatch ) 
-					{
-						multipleMatch || infoMsg("Warning - more than 2 arcs are coaxial."); //tell user once
+					(arc1.ax.IsCoaxial(arc2.ax, ax1AngTol, ax1LinTol)) )
+				{ //we have a match
+					if ( foundMatch )
+					{ //not the first match
+						if(!multipleMatch) infoMsg("Warning - more than 2 arcs are coaxial."); //tell user once
 						multipleMatch = true;
 					} else {
 						foundMatch = true;
@@ -157,32 +158,26 @@ void shapeInfo::canFace()
 			}
 			block = "G90 G81 G98 ";
 			block += toNC(bottom); //adds XYZ
-			if ( !a.ax.IsCoaxial( gp_Dir(0,0,1), ax1AngTol, ax1LinTol ) )
+			if ( !a.ax.Direction().IsEqual( gp_Dir(0,0,1), ax1AngTol ) )
 			{
-				//TODO: figure out ABC and print them
-				comment += "Angles are in radians --INCOMPLETE!!!--";
-			} else comment += "Omitting ABC: hole is vertical";
+				//print coords for A,B
+				//TODO: not sure if this is correct
+				Standard_Real A,B;
+				gp_Dir d;
+				d = a.ax.Direction();
+				A = atan2l(d.Z(),d.Y());
+				B = atan2l(d.Z(),d.X());
+				block += toNC("A", A) + toNC("B", B);
+				comment += "Angles are in radians; ";
+			} else comment += "Omitting AB: hole is vertical; ";
 			block += toNC("R",top.Z());
+			comment += QString("Tool diameter %1").arg( a.r * 2.0 );
 			infoMsg("Canned cycle G81\n"+block+" ("+comment+")");
 		} else {
-			infoMsg("Must select a face that is a section of a\n" +
-				"cylinder.  Could not find a pair of arcs that\n" +
+			infoMsg("Must select a face that is a section of a\n" 
+				"cylinder.  Could not find a pair of arcs that\n" 
 				"were coaxial and had the same radius.");
 		}
-
-
-/*
-		arcCount(cylFace);  
-		//arcsByAxis should now contain one bin with two arcs
-		for( int n = 0; n < arcsByAxis.size(); n++ )
-		{
-			if (arcsByAxis[n].i == 2)
-			{
-				arcsByAxis[n].a.Location()
-				arcsByAxis[n].a.Direction()
-			}
-		}
-*/
 	}
 
 }
@@ -198,10 +193,10 @@ QString shapeInfo::toNC(gp_Pnt p)
 
 //Formats number for part of a RS274NGC block, preceding it with letter.
 //if number == last, don't print anything
-QString shapeInfo::toNC(char letter, Standard_Real number, Standard_Real last = NaN)
+QString shapeInfo::toNC(char *letter, Standard_Real number, Standard_Real last)
 {
 	QString s = "";
-	(number == last) || s.sprintf("%c%#.7f",letter, number);
+	if(number != last) s.sprintf("%c%#.7f ",*letter, number);
 	return s;
 
 }
