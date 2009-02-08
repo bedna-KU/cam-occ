@@ -4,6 +4,7 @@ OldScreenShots
 
 = v2 =
 
+http://cam-occ.googlecode.com/svn/wiki/images/G81.png
 http://cam-occ.googlecode.com/svn/wiki/images/camocc2.png
 http://cam-occ.googlecode.com/svn/wiki/images/camocc-offset.png
 http://cam-occ.googlecode.com/svn/wiki/images/camocc-offset1.png
