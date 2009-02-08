@@ -74,65 +74,164 @@ void shapeInfo::init ( QoccHarnessWindow* window )
 	countAction = new QAction ( "Arc Count", this );
 	//countAction->setShortcut(QString("Ctrl+I"));
 	countAction->setStatusTip ( "Counts the number of arcs in a solid, groups them based on radius and centerpoint" );
-	connect ( countAction, SIGNAL ( triggered() ), this, SLOT ( countButton() ) );
+	connect ( countAction, SIGNAL ( triggered() ), this, SLOT ( countArcs() ) );
 	myMenu->addAction ( countAction );
+
+	canAction = new QAction ( "Canned cycle from hole face", this );
+	//countAction->setShortcut(QString("Ctrl+I"));
+	countAction->setStatusTip ( "Generates a line of g-code for a canned cycle for a hole,\nfrom a selected cylindrical face" );
+	connect ( canAction, SIGNAL ( triggered() ), this, SLOT ( canFace() ) );
+	myMenu->addAction ( canAction );
 
 };
 
-void shapeInfo::countButton()
+void shapeInfo::canFace()
+{
+	TopExp_Explorer Ex;
+	BRepAdaptor_Curve adaptor;
+	TopoDS_Edge e;
+	gp_Pnt p1, p2, c;
+	gp_Ax1 axis;
+	Standard_Real r;
+	std::vector<anArc> arcsV;
+
+	getSelection();
+	for ( uint i=0;i < uiStuff::selectedShapes.size();i++ )
+	{
+		TopoDS_Shape S = uiStuff::selectedShapes[i];
+		TopoDS_Face cylFace = TopoDS::Face ( S );
+		for ( Ex.Init ( cylFace, TopAbs_EDGE ) ; Ex.More() ; Ex.Next() )
+		{
+			e = TopoDS::Edge(Ex.Current());
+			adaptor.Initialize ( e );
+			if ( adaptor.GetType() ==GeomAbs_Circle )
+			{
+				anArc thisArc;
+				gp_Circ circ = adaptor.Circle();
+				thisArc.c = circ.Location();
+				thisArc.r = circ.Radius();
+				thisArc.ax = circ.Axis();
+				arcsV.push_back(thisArc);
+			}
+		}
+
+		//now compare arcs, must have at least 2 arcs
+		bool foundMatch = multipleMatch = false;
+		anArc a,b;
+		for ( uint j = 0; j < arcsV.size()-1; j++)
+		{
+			anArc arc1 = arcsV[j];
+			for ( uint k = j+1; k < arcsV.size(); k++)
+			{
+				anArc arc2 = arcsV[k];
+				if (	//(arc1.c.IsEqual(arc2.c, pointTol)) && //wtf don't compare this!!! no matches!
+					(arc1.r == arc2.r) && 
+					(arc1.ax.IsCoaxial(arc2.ax, angTol, linTol)) )
+				{
+					if ( foundMatch ) 
+					{
+						multipleMatch || infoMsg("Warning - more than 2 arcs are coaxial."); //tell user once
+						multipleMatch = true;
+					} else {
+						foundMatch = true;
+						a = arc1; b = arc2;
+					}
+				}
+				
+			}
+		}
+		if (foundMatch) 
+		{
+			//a, b contain the data
+			//G81 X- Y- Z- A- B- C- R- L-
+			//G90 G81 G98 X4 Y5 Z1.5 R2.8
+			//http://www.linuxcnc.org/docs/html/gcode_main.html#sub:G81:-Drilling-Cycle
+			QString block, comment;
+			gp_Pnt top, bottom;
+			if (a.c.Z() > b.c.Z()) {
+				top = a.c;	//top of the hole
+				bottom = b.c;
+			} else {
+				top = b.c;
+				bottom = a.c;
+			}
+			block = "G90 G81 G98 ";
+			block += toNC(bottom); //adds XYZ
+			if ( !a.ax.IsCoaxial( gp_Dir(0,0,1), ax1AngTol, ax1LinTol ) )
+			{
+				//TODO: figure out ABC and print them
+				comment += "Angles are in radians --INCOMPLETE!!!--";
+			} else comment += "Omitting ABC: hole is vertical";
+			block += toNC("R",top.Z());
+			infoMsg("Canned cycle G81\n"+block+" ("+comment+")");
+		} else {
+			infoMsg("Must select a face that is a section of a\n" +
+				"cylinder.  Could not find a pair of arcs that\n" +
+				"were coaxial and had the same radius.");
+		}
+
+
+/*
+		arcCount(cylFace);  
+		//arcsByAxis should now contain one bin with two arcs
+		for( int n = 0; n < arcsByAxis.size(); n++ )
+		{
+			if (arcsByAxis[n].i == 2)
+			{
+				arcsByAxis[n].a.Location()
+				arcsByAxis[n].a.Direction()
+			}
+		}
+*/
+	}
+
+}
+
+//formats X,Y,Z for a RS274NGC block
+QString shapeInfo::toNC(gp_Pnt p)
+{
+	QString s;
+	s = toNC("X",p.X()) + toNC("Y",p.Y()) + toNC("Z",p.Z());
+	//s.sprintf("X%#.7f Y%#.7f Z%#.7f",p.X(),p.Y(),p.Z());
+	return s;
+}
+
+//Formats number for part of a RS274NGC block, preceding it with letter.
+//if number == last, don't print anything
+QString shapeInfo::toNC(char letter, Standard_Real number, Standard_Real last = NaN)
+{
+	QString s = "";
+	(number == last) || s.sprintf("%c%#.7f",letter, number);
+	return s;
+
+}
+
+void shapeInfo::countArcs()
 {
 	getSelection();  //puts selection into the vector uiStuff::selectedShapes
 	for ( uint i=0;i < uiStuff::selectedShapes.size();i++ )
 	{
-		infoMsg("solid");
+//		infoMsg("solid");
 		TopoDS_Shape S = uiStuff::selectedShapes[i];
+//		checkShapeType(S);
 		arcCount ( TopoDS::Solid ( S ) );
 	}
+	printBinningResults(); //message user or save text file? either?
 }
 
 
 //use "bins" to group arcs
 //when comparing values to determine the bin, use Precision::Confusion or other value, so that these truly are the bins used in sadistics.
-
-/*  OCC Doxygen: ReferenceDocumentation/FoundationClasses/html/classPrecision.html
-
-Note : As a rule, coordinate values in Cas.Cade are not
-dimensioned, so 1. represents one user unit, whatever
-value the unit may have : the millimeter, the meter, the
-inch, or any other unit. Let's say that Cas.Cade
-algorithms are written to be tuned essentially with
-mechanical design applications, on the basis of the
-millimeter. However, these algorithms may be used with
-any other unit but the tolerance criterion does no longer
-have the same signification.
-So pay particular attention to the type of your application,
-in relation with the impact of your unit on the precision criterion.
-- For example in mechanical design, if the unit is the
-millimeter, the tolerance of confusion corresponds to a
-distance of 1 / 10000 micron, which is rather difficult to measure.
-- However in other types of applications, such as
-cartography, where the kilometer is frequently used,
-the tolerance of confusion corresponds to a greater
-distance (1 / 10 millimeter). This distance
-becomes easily measurable, but only within a restricted
-space which contains some small objects of the complete scene.
-*/
-
+//  OCC Doxygen: ReferenceDocumentation/FoundationClasses/html/classPrecision.html
 void shapeInfo::arcCount ( TopoDS_Solid theShape )
 {
 	TopExp_Explorer Ex;
 	BRepAdaptor_Curve adaptor;
 	TopoDS_Edge e;
-//        Handle(Geom_Curve) C;
 	gp_Pnt p1, p2;
 	gp_Ax1 axis;
-//	gp_Ax2 c;
 	Standard_Real r;
 
-
-	//pA.IsEqual (pB, Precision::Confusion())
-	//for gp_Pnt: p.IsEqual (const gp_Pnt &Other, const Standard_Real LinearTolerance)
-	//for gp_Ax1: a.IsCoaxial (const gp_Ax1 &Other, const Standard_Real AngularTolerance, const Standard_Real LinearTolerance)
 
 
 
@@ -153,7 +252,6 @@ void shapeInfo::arcCount ( TopoDS_Solid theShape )
 			storeArcByAxis ( axis );
 		}
 	}
-	printBinningResults(); //message user or save text file? either?
 }
 
 //sorts an arc into a bin, based on its radius and radiusTol
@@ -218,8 +316,10 @@ void shapeInfo::printBinningResults()
 		str += toString(arcsByAxis[n].a.Direction());
 		str += ".<br>";
 	}
+	arcsByRadius.clear();
+	arcsByAxis.clear();
 	cout << str.toStdString() << endl;
-	//infoMsg(str);
+	//longMsg(str);
 }
 
 //this fails silently on at least one solid, an imported STEP file.  Not sure why. Don't get the warning, so ?!

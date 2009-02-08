@@ -68,7 +68,8 @@ HEADERS += qoccinternal.h \
  ../inc/uiStuff.h \
  ../inc/aSample.h \
  ../inc/shapeOffset.h \
- ../inc/gcode2Model.h
+ ../inc/gcode2Model.h \
+ .moc/ui_longMsgDlg.h
 
 
 
@@ -81,4 +82,6 @@ OBJECTS_DIR = .obj/
 UI_DIR = .moc/
 
 MOC_DIR = .moc/
+
+FORMS += longMsgDlg.ui
 

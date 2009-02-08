@@ -21,6 +21,7 @@
 
 #include "uiStuff.h"
 #include "cam.h"
+#include "ui_longMsgDlg.h"    //for our custom dialog box longMsgDlg.ui
 
 #include <string>
 #include <ostream>
@@ -61,10 +62,17 @@ void uiStuff::getSelection() {
 	selectedShapes.clear();
 	for ( theWindow->getContext()->InitSelected(); theWindow->getContext()->MoreSelected(); theWindow->getContext()->NextSelected() ) {
                 Handle_AIS_InteractiveObject IO = theWindow->getContext()->Interactive();
-                if (IO->IsKind(STANDARD_TYPE(AIS_Trihedron)) || !theWindow->getContext()->HasSelectedShape())
+                if ( !theWindow->getContext()->HasSelectedShape() )
                 {
-                        theWindow->getContext()->ClearSelected();
-                        break;
+			infoMsg("no selection");
+//                        theWindow->getContext()->ClearSelected();
+//                        break;
+                }
+                if ( IO->IsKind(STANDARD_TYPE(AIS_Trihedron)) )
+                {
+			//we don't want to save the trihedron
+			//clearSelected apparently clears EVERYTHING, rather than deselecting one thing...
+			continue;
                 }
                 selectedShapes.push_back(theWindow->getContext()->SelectedShape());
 	}
@@ -84,6 +92,27 @@ void uiStuff::infoMsg( QString title, QString message ) {
 
 void uiStuff::infoMsg( QString message ) {
 	QMessageBox::information(theWindow,"Cam-occ2",message);
+}
+
+void uiStuff::longMsg( QString message ) {
+//	QWidget *dialog = new QWidget;
+//     	Ui::longMsgDlg dlg;
+//	connect(this, SIGNAL(theLongMsg(QString)), dlg.textBrowser, SLOT(setText(QString)));
+//	emit(theLongMsg(message));
+	//dlg.textBrowser->setText(message);
+  //   	dlg.setupUi(dialog);
+//	dialog->show();
+
+	QMessageBox msg(theWindow);
+	msg.setIcon(QMessageBox::Information);
+	msg.addButton("OK",QMessageBox::AcceptRole);
+	msg.setText(message);
+	msg.setTextFormat(Qt::RichText);
+	msg.setWindowTitle("Cam-occ2");
+	msg.adjustSize();
+	msg.exec();
+	//msg.show();
+
 }
 
 QString uiStuff::toString(float a,float b, float c) {
@@ -109,6 +138,35 @@ QString uiStuff::toString(gp_Dir d) {
 		str = QString("(%1, %2, %3)").arg(d.X()).arg(d.Y()).arg(d.Z());
 	}
 	return str;
+}
+
+void uiStuff::checkShapeType(TopoDS_Shape Shape)
+{
+	QString str;
+	if (Shape.IsNull()) {
+		str = "null";
+	} else if (Shape.ShapeType()==TopAbs_EDGE) {
+		str = "edge";
+	} else if (Shape.ShapeType()==TopAbs_FACE) {
+		str = "face";
+	} else if (Shape.ShapeType()==TopAbs_WIRE) {
+		str = "wire";
+	} else if (Shape.ShapeType()==TopAbs_SHAPE) {
+		str = "shape";
+	} else if (Shape.ShapeType()==TopAbs_COMPOUND) {
+		str = "compound";
+	} else if (Shape.ShapeType()==TopAbs_COMPSOLID) {
+		str = "compsolid";
+	} else if (Shape.ShapeType()==TopAbs_SOLID) {
+		str = "solid";
+	} else if (Shape.ShapeType()==TopAbs_SHELL) {
+		str = "shell";
+	} else if (Shape.ShapeType()==TopAbs_VERTEX) {
+		str = "vertex";
+	} else {
+		str = "borked";
+	}
+	infoMsg("The shape is: " + str + ".");
 }
 
 void uiStuff::slotNeutralSelection()

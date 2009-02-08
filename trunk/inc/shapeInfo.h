@@ -46,7 +46,8 @@ public:
 	void init(QoccHarnessWindow *window);
 private slots:
 	void infoButton();
-	void countButton();
+	void countArcs();
+	void canFace();
 
 private:
 	void edgeInfo(TopoDS_Edge E);
@@ -54,6 +55,9 @@ private:
 	void solidInfo(TopoDS_Solid S);
 	void vertexInfo(TopoDS_Vertex V);
 	void arcCount(TopoDS_Solid S);
+	QString toNC(char letter, Standard_Real number, Standard_Real last = NaN);
+	QString toNC(gp_Pnt p);
+
 
 /*********************************************************************
 *****  
@@ -75,6 +79,7 @@ private:
 	void storeArcByRadius(Standard_Real r);
 	void storeArcByAxis(gp_Ax1 axis);
 	void printBinningResults();
+
 
 	Standard_Real pointTol;		//tolerance for determining equality of points
 	Standard_Real radiusTol;	//tolerance for arc radius
@@ -102,6 +107,12 @@ private:
 		uint i;
 	} arcAxisBin;
 	std::vector<arcAxisBin> arcsByAxis;
+
+	typedef struct {
+		gp_Pnt c;
+		gp_Ax1 ax;
+		Standard_Real r;
+	} anArc;
 
 
 	QMenu *myMenu;

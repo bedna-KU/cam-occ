@@ -38,6 +38,9 @@ public:
 	~uiStuff();
 	void init(QoccHarnessWindow* window);
 
+signals:
+	void theLongMsg(QString);  //for longMsgDlg
+
 protected slots:
 	void slotNeutralSelection();
 	void slotVertexSelection();
@@ -57,6 +60,8 @@ protected:
 	QString toString( gp_Pnt p );
 	QString toString( gp_Dir d );
 	void addSelectionWidgets();
+	void checkShapeType(TopoDS_Shape Shape);
+	void longMsg( QString message );
 
 	int errors;
 //	bool needsRedraw;
