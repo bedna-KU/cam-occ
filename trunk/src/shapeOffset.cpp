@@ -82,6 +82,8 @@ void shapeOffset::offsetButton(){
 
 void shapeOffset::faceOffset(TopoDS_Face F) {
 	TopoDS_Shape S = BRepOffsetAPI_MakeOffsetShape(F,5,0.0001);
+	//offset face info
+
 	slotNeutralSelection();
 	Handle_AIS_Shape AisShape = new AIS_Shape (S);
 	theWindow->getContext()->SetMaterial(AisShape,Graphic3d_NOM_PLASTIC);

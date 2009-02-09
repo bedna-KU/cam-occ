@@ -55,9 +55,11 @@ private:
 	void solidInfo(TopoDS_Solid S);
 	void vertexInfo(TopoDS_Vertex V);
 	void arcCount(TopoDS_Solid S);
-	QString toNC(char *letter, Standard_Real number, 
+	QString toNC(const char *letter, Standard_Real number, 
 			Standard_Real last = std::numeric_limits<double>::quiet_NaN());
 	QString toNC(gp_Pnt p);
+	Standard_Real fixAngle(Standard_Real a);
+
 
 
 /*********************************************************************

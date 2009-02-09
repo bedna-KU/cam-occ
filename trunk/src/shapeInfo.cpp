@@ -33,11 +33,16 @@
 #include <BRep_Tool.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Lin.hxx>
+#include <gp_Pln.hxx>
+#include <gp_Cylinder.hxx>
+#include <gp_Cone.hxx>
+#include <gp_Sphere.hxx>
+#include <gp_Ax3.hxx>
 #include <TopoDS_Edge.hxx>
 #include <Bnd_Box.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BndLib_AddSurface.hxx>
-
+#include <GeomAbs_SurfaceType.hxx>
 
 #include <QKeySequence>
 #include <QtGui>
@@ -85,14 +90,17 @@ void shapeInfo::init ( QoccHarnessWindow* window )
 
 };
 
+
+//looks like BRepAdaptor_Surface can do this stuff
+// too bad I didn't notice BEFORE writing a 100-line function...
 void shapeInfo::canFace()
 {
 	TopExp_Explorer Ex;
 	BRepAdaptor_Curve adaptor;
 	TopoDS_Edge e;
-	gp_Pnt p1, p2, c;
-	gp_Ax1 axis;
-	Standard_Real r;
+//	gp_Pnt p1, p2, c;
+//	gp_Ax1 axis;
+//	Standard_Real r;
 	std::vector<anArc> arcsV;
 
 	getSelection();
@@ -114,25 +122,30 @@ void shapeInfo::canFace()
 				arcsV.push_back(thisArc);
 			}
 		}
-
+		infoMsg(QString("Number of arcs: %1").arg(arcsV.size()));
 		//now compare arcs, must have at least 2 arcs
 		bool foundMatch = false;
-		bool multipleMatch = false;
+		uint multipleMatch = 0;
 		anArc a,b;
-		for ( uint j = 0; j < arcsV.size()-1; j++)
+		for ( int j = 0; j < int(arcsV.size())-1; j++) //wtf not the same as uintj=0;j<arcsV.size()-1
 		{
 			anArc arc1 = arcsV[j];
 			for ( uint k = j+1; k < arcsV.size(); k++)
 			{
 				anArc arc2 = arcsV[k];
-				if (	//(arc1.c.IsEqual(arc2.c, pointTol)) && //wtf don't compare this!!! no matches!
-					(arc1.r == arc2.r) && 
-					(arc1.ax.IsCoaxial(arc2.ax, ax1AngTol, ax1LinTol)) )
+				if (	(arc1.ax.IsCoaxial(arc2.ax, ax1AngTol, ax1LinTol)) && 
+					(abs(arc1.r - arc2.r) < radiusTol) )
 				{ //we have a match
 					if ( foundMatch )
 					{ //not the first match
-						if(!multipleMatch) infoMsg("Warning - more than 2 arcs are coaxial."); //tell user once
-						multipleMatch = true;
+						if( !( a.ax.IsCoaxial(arc2.ax, ax1AngTol, ax1LinTol) && (abs(a.r - arc2.r) < radiusTol) ) ) 
+						{ //not on same cylinder as a,b
+							if(!multipleMatch)  //tell user only once
+								infoMsg("Warning - more than 2 arcs are coaxial.");
+							multipleMatch++;
+						} else {
+							//TODO: check against a,b; if arc1 or arc2 is outside a,b then replace a,b
+						}
 					} else {
 						foundMatch = true;
 						a = arc1; b = arc2;
@@ -141,6 +154,8 @@ void shapeInfo::canFace()
 				
 			}
 		}
+		if (multipleMatch)
+			cout << "multipleMatch: " << multipleMatch << endl;
 		if (foundMatch) 
 		{
 			//a, b contain the data
@@ -158,17 +173,17 @@ void shapeInfo::canFace()
 			}
 			block = "G90 G81 G98 ";
 			block += toNC(bottom); //adds XYZ
-			if ( !a.ax.Direction().IsEqual( gp_Dir(0,0,1), ax1AngTol ) )
+			if ( !a.ax.Direction().IsEqual( gp_Dir(0,0,1), ax1AngTol ))
 			{
 				//print coords for A,B
 				//TODO: not sure if this is correct
 				Standard_Real A,B;
 				gp_Dir d;
 				d = a.ax.Direction();
-				A = atan2l(d.Z(),d.Y());
-				B = atan2l(d.Z(),d.X());
+				A = (180.0/M_PI) * fixAngle( atan2l( d.Y(), d.Z() ));
+				B = (180.0/M_PI) * fixAngle( atan2l( d.X(), d.Z() ));
 				block += toNC("A", A) + toNC("B", B);
-				comment += "Angles are in radians; ";
+				comment += "Angles are in degrees; ";
 			} else comment += "Omitting AB: hole is vertical; ";
 			block += toNC("R",top.Z());
 			comment += QString("Tool diameter %1").arg( a.r * 2.0 );
@@ -182,6 +197,23 @@ void shapeInfo::canFace()
 
 }
 
+/**********************************************************************************
+**  "Fix" an angle:
+**  put it in 1st or 4th quadrant if it is in 3rd or 2nd quadrant, respectively
+**  make the angle zero if it is close to a multiple of pi.
+**********************************************************************************/
+Standard_Real shapeInfo::fixAngle(Standard_Real a) 
+{
+	Standard_Real sign = signbit(a) ? -1 : 1;
+	a = fabs(a);			//makes it soooo much easier
+	if ( fmod(a, M_PI) < ax1AngTol)  //very close to a multiple of pi
+		a = 0.0; 
+	while (a > M_PI/2.0 + ax1AngTol)  //result should be in quadrant 1 or 4
+		a = a - M_PI;
+	
+	return (a*sign);		//restore sign bit
+}
+
 //formats X,Y,Z for a RS274NGC block
 QString shapeInfo::toNC(gp_Pnt p)
 {
@@ -193,10 +225,10 @@ QString shapeInfo::toNC(gp_Pnt p)
 
 //Formats number for part of a RS274NGC block, preceding it with letter.
 //if number == last, don't print anything
-QString shapeInfo::toNC(char *letter, Standard_Real number, Standard_Real last)
+QString shapeInfo::toNC(const char *letter, Standard_Real number, Standard_Real last)
 {
 	QString s = "";
-	if(number != last) s.sprintf("%c%#.7f ",*letter, number);
+	if(number != last) s.sprintf("%c%#5f ",*letter, number);
 	return s;
 
 }
@@ -389,9 +421,80 @@ void shapeInfo::faceInfo ( TopoDS_Face F )
 	BRepAdaptor_Surface aSurf ( F );
 	BndLib_AddSurface::Add ( aSurf, ( Standard_Real ) 0.0,aBox );
 	aBox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
-	QString s = QString ( "Selected a face. X extents %1, %2.\n" ).arg ( aXmin ).arg ( aXmax );
-	s += QString ( "Y extents %1, %2. " ).arg ( aYmin ).arg ( aYmax );
-	s += QString ( "Z extents %1, %2." ).arg ( aZmin ).arg ( aZmax );
+	QString s = QString( "Selected a face. X extents %1, %2.\n" ).arg( aXmin ).arg( aXmax );
+	s += QString( "Y extents %1, %2. " ).arg( aYmin ).arg( aYmax );
+	s += QString( "Z extents %1, %2." ).arg( aZmin ).arg( aZmax );
+	QString surf = "\nSurface Type: ";
+
+	gp_Cylinder cyl;
+	gp_Ax3 ax;
+	gp_Cone cone;
+	gp_Sphere sphere;
+	switch (aSurf.GetType())
+	{
+        case GeomAbs_Plane:
+                surf += "plane. Passes through ";
+		ax = aSurf.Plane().Position();
+		surf += toString(ax.Location());
+		surf += ", normal to direction ";
+		surf += toString(ax.Direction());
+                break;
+
+        case GeomAbs_Cylinder:
+                surf += "cylinder with symmetry axis ";
+		cyl = aSurf.Cylinder();
+		surf += toString(cyl.Axis().Direction());
+		surf += "\nand location ";
+		surf += toString(cyl.Axis().Location());
+		surf += QString(". Radius %1").arg(cyl.Radius());
+                break;
+
+        case GeomAbs_Cone:
+                surf += "cone with symmetry axis ";
+		cone = aSurf.Cone();
+		surf += toString(cone.Axis().Direction());
+		surf += QString("\nand radius %1").arg(cone.RefRadius());
+		surf += " at location: ";
+		surf += toString(cone.Location());
+		surf += QString(". Angle %1").arg((180.0/M_PI) * cone.SemiAngle());
+                break;
+
+        case GeomAbs_Sphere:
+                surf += "sphere with radius ";
+		sphere = aSurf.Sphere();
+		surf += QString(". Centered on %1").arg(sphere.Radius()) + toString(sphere.Location());
+                break;
+
+        case GeomAbs_Torus:
+                surf += "torus";
+		///gp_Torus tor = aSurf.Torus();
+                break;
+
+        case GeomAbs_BezierSurface:
+                surf += "bezier";
+                break;
+
+        case GeomAbs_BSplineSurface:
+                surf += "bspline";
+                break;
+
+        case GeomAbs_SurfaceOfRevolution:
+                surf += "revolution";
+		///gp_Ax1 ax = AxeOfRevolution();
+                break;
+
+        case GeomAbs_SurfaceOfExtrusion:
+                surf += "extrusion";
+                break;
+
+        case GeomAbs_OffsetSurface:
+                surf += "offset";
+                break;
+	default:
+		surf += "Unknown type (!)";
+	}
+
+	s += surf + ".";
 	infoMsg ( s );
 }
 

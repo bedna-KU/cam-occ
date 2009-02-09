@@ -3,7 +3,7 @@
   <general>
     <author>Mark Pictor</author>
     <email>mpictor@gmail.com</email>
-    <version>0.1</version>
+    <version>0.2</version>
     <projectmanagement>KDevTrollProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -11,6 +11,11 @@
     </keywords>
     <ignoreparts/>
     <projectname>camocc2</projectname>
+    <projectdirectory>.</projectdirectory>
+    <absoluteprojectpath>false</absoluteprojectpath>
+    <description/>
+    <defaultencoding/>
+    <versioncontrol>kdevsubversion</versioncontrol>
   </general>
   <kdevfileview>
     <groups>
@@ -24,6 +29,7 @@
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+      <showvcsfields>false</showvcsfields>
     </tree>
   </kdevfileview>
   <kdevcppsupport>
@@ -61,6 +67,19 @@
       <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
       <includePaths>.;</includePaths>
     </codecompletion>
+    <creategettersetter>
+      <prefixGet/>
+      <prefixSet>set</prefixSet>
+      <prefixVariable>m_,_</prefixVariable>
+      <parameterName>theValue</parameterName>
+      <inlineGet>true</inlineGet>
+      <inlineSet>true</inlineSet>
+    </creategettersetter>
+    <splitheadersource>
+      <enabled>false</enabled>
+      <synchronize>true</synchronize>
+      <orientation>Vertical</orientation>
+    </splitheadersource>
   </kdevcppsupport>
   <kdevdoctreeview>
     <ignoretocs>
@@ -109,16 +128,21 @@
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
+      <raiseGDBOnStart>false</raiseGDBOnStart>
     </general>
     <display>
       <staticmembers>false</staticmembers>
       <demanglenames>true</demanglenames>
+      <outputradix>10</outputradix>
     </display>
     <breakpoints/>
   </kdevdebugger>
   <kdevtrollproject>
     <run>
-      <mainprogram>./bin/camocc2</mainprogram>
+      <mainprogram>/home/mark/projects/cam/cam-occ/trunk/./bin/camocc2</mainprogram>
       <programargs/>
       <directoryradio>executable</directoryradio>
       <runarguments>
@@ -136,27 +160,52 @@
         <camocc2/>
         <qop/>
       </debugarguments>
+      <globaldebugarguments/>
+      <globalcwd>/home/mark/projects/cam/cam-occ/trunk</globalcwd>
+      <useglobalprogram>false</useglobalprogram>
+      <terminal>false</terminal>
+      <autocompile>false</autocompile>
+      <autoinstall>false</autoinstall>
+      <autokdesu>false</autokdesu>
+      <envvars/>
     </run>
     <general>
       <activedir>src</activedir>
     </general>
+    <make>
+      <abortonerror>true</abortonerror>
+      <runmultiplejobs>false</runmultiplejobs>
+      <numberofjobs>1</numberofjobs>
+      <dontact>false</dontact>
+      <makebin/>
+      <prio>0</prio>
+      <envvars/>
+    </make>
+    <qmake>
+      <savebehaviour>2</savebehaviour>
+      <replacePaths>false</replacePaths>
+      <disableDefaultOpts>true</disableDefaultOpts>
+      <enableFilenamesOnly>false</enableFilenamesOnly>
+    </qmake>
   </kdevtrollproject>
   <workspace>
     <openfiles/>
   </workspace>
   <kdevfilecreate>
+    <filetypes/>
     <useglobaltypes>
       <type ext="ui" />
+      <type ext="qrc" />
       <type ext="cpp" />
       <type ext="h" />
       <type ext="ts" />
-      <type ext="qrc" />
     </useglobaltypes>
   </kdevfilecreate>
   <kdevdocumentation>
     <projectdoc>
       <docsystem>Doxygen Documentation Collection</docsystem>
       <docurl>camocc2.tag</docurl>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <substmap>
@@ -174,4 +223,34 @@
     <YEAR>2009</YEAR>
     <dest>/home/mark/projects/camocc2</dest>
   </substmap>
+  <cppsupportpart>
+    <filetemplates>
+      <interfacesuffix>.h</interfacesuffix>
+      <implementationsuffix>.cpp</implementationsuffix>
+    </filetemplates>
+  </cppsupportpart>
+  <dist>
+    <custom>false</custom>
+    <bzip>false</bzip>
+    <archname/>
+    <appname>cam-occ</appname>
+    <version>0.2</version>
+    <release/>
+    <vendor/>
+    <licence/>
+    <summary/>
+    <group/>
+    <packager/>
+    <description/>
+    <changelog/>
+    <devpackage>false</devpackage>
+    <docspackage>false</docspackage>
+    <appicon>false</appicon>
+    <arch>0</arch>
+    <genHTML>false</genHTML>
+    <useRPM>false</useRPM>
+    <ftpkde>false</ftpkde>
+    <appskde>false</appskde>
+    <url/>
+  </dist>
 </kdevelop>

@@ -76,6 +76,7 @@ void uiStuff::getSelection() {
                 }
                 selectedShapes.push_back(theWindow->getContext()->SelectedShape());
 	}
+	cout << "selectedShapes.size(): " << selectedShapes.size() << endl;
 }
 
 
