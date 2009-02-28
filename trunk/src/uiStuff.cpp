@@ -18,36 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
+//app includes
 #include "uiStuff.h"
 #include "cam.h"
-#include "ui_longMsgDlg.h"    //for our custom dialog box longMsgDlg.ui
+//#include "ui_longMsgDlg.h"    //for our custom dialog box longMsgDlg.ui
 
+//system includes
 #include <string>
 #include <ostream>
 
+//qt includes
 #include <QMessageBox>
 #include <QIcon>
 #include <QAction>
 #include <QMenuBar>
 
-
+//occ includes
 #include <V3d_View.hxx>
 #include <AIS_InteractiveContext.hxx>
 #include <AIS_InteractiveObject.hxx>
 #include <Handle_AIS_InteractiveObject.hxx>
 #include <AIS_Trihedron.hxx>
 
+QoccHarnessWindow* uiStuff::theWindow = 0;
+std::vector<TopoDS_Shape> uiStuff::selectedShapes;
+int uiStuff::errors = 0;
 
-uiStuff::uiStuff() {
-	errors = 0;
-	theWindow = 0;
-}
-
-uiStuff::~uiStuff() {
-}
-
-void uiStuff::init(QoccHarnessWindow* window) {
+uiStuff::uiStuff(QoccHarnessWindow* window) {
 	theWindow = window;
 	slotNeutralSelection();
 	addSelectionWidgets();

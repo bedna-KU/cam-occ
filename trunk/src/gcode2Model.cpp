@@ -40,12 +40,12 @@
 
 gcode2Model::gcode2Model()
 {
-	theWindow = 0;
-}
-
-void gcode2Model::init ( QoccHarnessWindow* window )
-{
-	theWindow = window;
+// 	theWindow = 0;
+// }
+//
+// void gcode2Model::init ( QoccHarnessWindow* window )
+// {
+// 	theWindow = window;
 
 ///	commented out because this is incomplete.
 ///	myMenu = new QMenu("gcode2Model");
@@ -57,35 +57,56 @@ void gcode2Model::init ( QoccHarnessWindow* window )
 	myAction->setStatusTip ( "gcode2Model" );
 	connect ( myAction, SIGNAL ( triggered() ), this, SLOT ( myMenuItem() ) );
 ///	myMenu->addAction( myAction );
-
 };
 
 void gcode2Model::myMenuItem()
 {
+	slotNeutralSelection();		//Close any local contexts.  Any objects created while a local context is open will dissappear when that context is closed, and they won't be shaded.
+
 //open file, read, convert to arcs and lines
+	//open dlg
+	//open file
+	struc = readLines ( file );
 //sweep 2d wire
 //detect non-tangencies and use 3d wire revolved there
 //compute solid
 //then subtract
 //display
-	Standard_Real aXmin = 0, aYmin = 0, aZmin = 0, aXmax = 20, aYmax = 30, aZmax = 10;
-	gp_Pnt corner1 = gp_Pnt ( aXmin, aYmin, aZmin );
-	gp_Pnt corner2 = gp_Pnt ( aXmax, aYmax, aZmax );
-
-	slotNeutralSelection();		//Close any local contexts.  Any objects created while a local context is open will dissappear when that context is closed and they won't be shaded.
-
-	TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge ( gp_Pnt ( 0,0,0 ), gp_Pnt ( 1,1,1 ) );
-
-
-	//create a shape
-	TopoDS_Shape Shape = BRepPrimAPI_MakeBox ( corner1,corner2 ).Shape();
-
-	//convert it to an AIS_Shape and display it
 	Handle_AIS_Shape AisShape = new AIS_Shape ( Shape );
 	theWindow->getContext()->SetMaterial ( AisShape,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
 	theWindow->getContext()->SetDisplayMode ( AisShape,1,Standard_False );  //shaded
 	theWindow->getContext()->Display ( AisShape );
 	//redraw();	//not necessary, Display() automatically redraws the screen.
+}
+
+void gcode2Model::readLines ( QString filename )
+{
+	//loop, read each line, call getCanonCode
+	//depending on the code, read numbers from the line
+}
+
+//returns the part of the line up to the first parenthesis. parPos is the index of '('.
+QString gcode2Model::getCanonCode ( QString canon_line, int &parPos )
+{
+	//find first '(' (should be the only one)
+	/*int*/
+	parPos = line.indexof ( '(' );
+	if ( parPos < 0 ) cout << "Error reading canon file. No '\(' found." << endl;
+
+	//everything before that '(' goes into a string
+	return line.left ( parPos ); //parPos is the index of '(', and also the count of chars before it.
+}
+
+//read first three numbers from canon_line
+gp_Pnt gcode2Model::readXYZ ( QString canon_line )
+{
+
+}
+
+//read nth number from canon_line
+Standard_Real gcode2Model::readOne ( QString canon_line, uint n )
+{
+
 }
 
 //3 points

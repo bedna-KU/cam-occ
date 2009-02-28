@@ -34,7 +34,6 @@ class aSample : public uiStuff
 
 public:
 	aSample();
-	void init(QoccHarnessWindow *window);
 private slots:
 	void myMenuItem();
 

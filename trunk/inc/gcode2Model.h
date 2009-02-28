@@ -38,7 +38,7 @@ class gcode2Model : public uiStuff
 
 public:
 	gcode2Model();
-	void init(QoccHarnessWindow *window);
+//	void init(QoccHarnessWindow *window);
 private slots:
 	void myMenuItem();
 

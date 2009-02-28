@@ -17,26 +17,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef CAMFRAMEWORK_H
-#define CAMFRAMEWORK_H
+#ifndef UISTUFF_H
+#define UISTUFF_H
 
+//app includes
+#include "qoccharnesswindow.h"
+
+//system includes
+#include <limits.h>
+
+//qt includes
 #include <QObject>
 #include <QMenu>
 #include <QToolBar>
 
-
+//occ includes
 #include <gp_Pnt.hxx>
 #include <TopoDS_Shape.hxx>
 
-#include "qoccharnesswindow.h"
 
 class uiStuff : public QObject {
 	Q_OBJECT
 
 public:
-	uiStuff();
-	~uiStuff();
-	void init(QoccHarnessWindow* window);
+	uiStuff(QoccHarnessWindow* window);
+	uiStuff(){};  //for classes that inherit from this one
+	~uiStuff(){};
+	//void init(QoccHarnessWindow* window);
 
 signals:
 	void theLongMsg(QString);  //for longMsgDlg
@@ -49,8 +56,10 @@ protected slots:
 	void slotSolidSelection();
 
 protected:
-	QoccHarnessWindow* theWindow;
-	std::vector<TopoDS_Shape> selectedShapes;
+	static QoccHarnessWindow* theWindow;
+	static std::vector<TopoDS_Shape> selectedShapes;
+	static int errors;
+	
 	void getSelection();
 	void redraw();
 	void debugMsg( QString s, QString f, int l );
@@ -59,16 +68,18 @@ protected:
 	QString toString( float a,float b, float c );
 	QString toString( gp_Pnt p );
 	QString toString( gp_Dir d );
-	void addSelectionWidgets();
 	void checkShapeType(TopoDS_Shape Shape);
 	void longMsg( QString message );
 
-	int errors;
-//	bool needsRedraw;
-
 private:
+	void addSelectionWidgets();
 
 
 };
 
-#endif //CAMFRAMEWORK_H
+// QoccHarnessWindow* uiStuff::theWindow = 0;
+// std::vector<TopoDS_Shape> uiStuff::selectedShapes;
+// int uiStuff::errors = 0;
+
+
+#endif //UISTUFF_H

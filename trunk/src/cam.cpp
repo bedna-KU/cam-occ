@@ -25,31 +25,18 @@
 #include "shapeInfo.h"
 #include "aSample.h"
 #include "shapeOffset.h"
-#include "gcode2Model.h"
+//#include "gcode2Model.h"
 
 cam::cam(QoccHarnessWindow* window) {
 	assert(window != 0);
 
-	uiStuff *ui;
-	ui = new uiStuff();
-	ui->init(window);
-
-	shapeInfo *shapeI;
-	shapeI = new shapeInfo();
-	shapeI->init(window);
-
-	aSample *sample;
-	sample = new aSample();
-	sample->init(window);
-	
-	shapeOffset *shapeO;
-	shapeO = new shapeOffset();
-	shapeO->init(window);
-
-	gcode2Model *gToM;
-	gToM = new gcode2Model();
-	gToM->init(window);
-
+	uiStuff *ui = new uiStuff(window);
+	/* the rest of these inherit from uiStuff, where   **
+	** theWindow is declared static - they inherit it. */
+	shapeInfo *shapeI = new shapeInfo();
+	aSample *sample = new aSample();
+	shapeOffset *shapeO = new shapeOffset();
+//	gcode2Model *gToM = new gcode2Model();
 }
 
 cam::~cam() {

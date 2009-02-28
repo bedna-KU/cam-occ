@@ -60,16 +60,15 @@ http://google.com/codesearch?q=BRepAlgoAPI_Section&hl=en&btnG=Search+Code
 #include <TopoDS_Shape.hxx>
 
 
+/*
+**
+**  QoccHarnessWindow* theWindow, std::vector<TopoDS_Shape> selectedShapes, and int errors
+**  are inherited from class uiStuff.
+**
+*/
 
 aSample::aSample()
 {
-	theWindow = 0;
-}
-
-void aSample::init ( QoccHarnessWindow* window )
-{
-	theWindow = window;
-
 	myMenu = new QMenu ( "aSample" );
 	theWindow->menuBar()->insertMenu ( theWindow->getHelpMenu(),myMenu );
 

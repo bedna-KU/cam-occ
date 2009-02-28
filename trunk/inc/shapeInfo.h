@@ -43,7 +43,7 @@ class shapeInfo : public uiStuff
 
 public:
 	shapeInfo();
-	void init(QoccHarnessWindow *window);
+//	void init(QoccHarnessWindow *window);
 private slots:
 	void infoButton();
 	void countArcs();
@@ -96,7 +96,7 @@ private:
 		gp_Ax2 l;			//location
 		uint i;		//count of arcs in this bin
 	} arcCenterBin;
-	vector<arcCenterBin> arcsByCenter;
+	std::vector<arcCenterBin> arcsByCenter;
 */
 
 	typedef struct {

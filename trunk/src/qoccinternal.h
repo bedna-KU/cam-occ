@@ -16,6 +16,7 @@
 
 #ifndef QOCCINTERNAL_H
 #define QOCCINTERNAL_H
+#include <limits.h>
 
 #include <AIS_Drawer.hxx>
 #include <AIS_InteractiveContext.hxx>

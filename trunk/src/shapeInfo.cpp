@@ -52,19 +52,19 @@
 
 shapeInfo::shapeInfo()
 {
-	theWindow = 0;
+//	theWindow = 0;
 
 	//tolerances for grouping (binning) arcs
 	pointTol = Precision::Confusion();
 	radiusTol = Precision::Confusion();
 	ax1AngTol = Precision::Angular();
 	ax1LinTol = Precision::Confusion();
-}
+//}
 
-void shapeInfo::init ( QoccHarnessWindow* window )
-{
+//void shapeInfo::init ( QoccHarnessWindow* window )
+//{
 
-	theWindow = window;
+//	theWindow = window;
 
 	//set up menus, signals
 	myMenu = new QMenu ( "Shape" );
@@ -104,9 +104,9 @@ void shapeInfo::canFace()
 	std::vector<anArc> arcsV;
 
 	getSelection();
-	for ( uint i=0;i < uiStuff::selectedShapes.size();i++ )
+	for ( uint i=0;i < selectedShapes.size();i++ )
 	{
-		TopoDS_Shape S = uiStuff::selectedShapes[i];
+		TopoDS_Shape S = selectedShapes[i];
 		TopoDS_Face cylFace = TopoDS::Face ( S );
 		for ( Ex.Init ( cylFace, TopAbs_EDGE ) ; Ex.More() ; Ex.Next() )
 		{
@@ -236,10 +236,10 @@ QString shapeInfo::toNC(const char *letter, Standard_Real number, Standard_Real 
 void shapeInfo::countArcs()
 {
 	getSelection();  //puts selection into the vector uiStuff::selectedShapes
-	for ( uint i=0;i < uiStuff::selectedShapes.size();i++ )
+	for ( uint i=0;i < selectedShapes.size();i++ )
 	{
 //		infoMsg("solid");
-		TopoDS_Shape S = uiStuff::selectedShapes[i];
+		TopoDS_Shape S = selectedShapes[i];
 //		checkShapeType(S);
 		arcCount ( TopoDS::Solid ( S ) );
 	}
@@ -349,13 +349,13 @@ void shapeInfo::printBinningResults()
 	//longMsg(str);
 }
 
-//this fails silently on at least one solid, an imported STEP file.  Not sure why. Don't get the warning, so ?!
+
 void shapeInfo::infoButton()
 {
 	getSelection();
-	for ( uint i=0;i < uiStuff::selectedShapes.size();i++ )
+	for ( uint i=0;i < selectedShapes.size();i++ )
 	{
-		TopoDS_Shape S = uiStuff::selectedShapes[i];
+		TopoDS_Shape S = selectedShapes[i];
 		switch ( S.ShapeType() )
 		{
 			case TopAbs_VERTEX :
@@ -414,6 +414,7 @@ void shapeInfo::faceInfo ( TopoDS_Face F )
 	**  from forum: "Developing the idea of Rob, I suggest that you compute
 	**  principal axes of inertia of your shape using BRepGProp functions,
 	**  and transform the shape from that system before computing bnd box."
+	**  VolumeProperties (const TopoDS_Shape &S, GProp_GProps &VProps, const Standard_Boolean OnlyClosed=Standard_False)
 	*/
 
 	Bnd_Box aBox;

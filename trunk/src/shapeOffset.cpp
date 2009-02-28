@@ -35,12 +35,12 @@
 
 
 shapeOffset::shapeOffset(){
-	theWindow = 0;
-}
-
-void shapeOffset::init(QoccHarnessWindow* window) {
-
-	theWindow = window;
+// 	theWindow = 0;
+// }
+// 
+// void shapeOffset::init(QoccHarnessWindow* window) {
+// 
+// 	theWindow = window;
 
 	//set up menus, signals
 	myMenu = new QMenu("Offset");
@@ -57,8 +57,8 @@ void shapeOffset::init(QoccHarnessWindow* window) {
 //this fails silently on at least one solid, an imported STEP file.  Not sure why.
 void shapeOffset::offsetButton(){
 	getSelection();
-	for (uint i=0;i < uiStuff::selectedShapes.size();i++) {
-		TopoDS_Shape S = uiStuff::selectedShapes[i];
+	for (uint i=0;i < selectedShapes.size();i++) {
+		TopoDS_Shape S = selectedShapes[i];
 		switch (S.ShapeType()) {
 		case TopAbs_VERTEX :
                     //    vertexInfo(TopoDS::Vertex(S));

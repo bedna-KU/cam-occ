@@ -43,6 +43,7 @@
 
 #ifndef QOCC_H
 #define QOCC_H
+#include <limits.h>
 
 #include <AIS_StatusOfDetection.hxx>
 #include <AIS_StatusOfPick.hxx>

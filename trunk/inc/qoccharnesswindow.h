@@ -24,7 +24,7 @@
 #include <QMainWindow>
 #include <QPluginLoader>
 
-#include <vector>
+//#include <vector>
 
 #include "qoccviewercontext.h"
 #include "qoccviewwidget.h"

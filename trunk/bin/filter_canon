@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#This script uses the rs274ngc interpreter (from code.google.com)
+#to parse g-code into canonical commands.  It filters out certain
+#commands, then pipes the rest to a file.  
+
+current=$PWD
+infile=$current/$1
+outfile=$current/$2
+rs274=./rs274   #executable
+cd ..
+echo 1 | \
+$rs274 $infile 2>/dev/null | \
+sed -e 's/^.....\ N..... //;' \
+    -e '/COMMENT/d;' \
+    -e '/SPINDLE/d;' \
+    -e '/MIST/d;' \
+    -e '/ENABLE/d;' \
+    -e '/FLOOD/d;' \
+    -e '/DWELL/d;' \
+    -e '/FEEDRATE/d;' \
+    >$outfile
+cd $current

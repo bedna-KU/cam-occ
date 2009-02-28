@@ -50,8 +50,7 @@ qoccviewwidget.cpp \
  cam.cpp \
  uiStuff.cpp \
  aSample.cpp \
- shapeOffset.cpp \
- gcode2Model.cpp
+ shapeOffset.cpp
 
 DESTDIR = ../bin
 
@@ -68,7 +67,6 @@ HEADERS += qoccinternal.h \
  ../inc/uiStuff.h \
  ../inc/aSample.h \
  ../inc/shapeOffset.h \
- ../inc/gcode2Model.h \
  .moc/ui_longMsgDlg.h
 
 
