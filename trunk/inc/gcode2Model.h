@@ -21,6 +21,7 @@
 #define GCODE2MODEL_H
 
 #include <limits.h>
+#include <vector>
 
 #include <QAction>
 #include <QMenuBar>
@@ -29,7 +30,8 @@
 #include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
 #include <TopoDS_Edge.hxx>
-
+#include <TopoDS_Wire.hxx>
+#include <TopoDS_Shape.hxx>
 #include "uiStuff.h"
 
 class gcode2Model : public uiStuff
@@ -38,13 +40,28 @@ class gcode2Model : public uiStuff
 
 public:
 	gcode2Model();
-//	void init(QoccHarnessWindow *window);
 private slots:
 	void myMenuItem();
 
 private:
+	typedef struct {
+		gp_Pnt start,end;
+		TopoDS_Edge e;
+		//saving vector directions would make the solid easier / faster to make... how to calc?
+	} myEdgeType;
+	std::vector<myEdgeType> traverseEdges;
+	std::vector<myEdgeType> feedEdges;
+	std::vector<TopoDS_Shape> traverseSweeps;
+	std::vector<TopoDS_Shape> feedSweeps;
+	
+	void readLines ( QString filename );
+	void processCanonLine ( QString canon_line );
+	void sweepEm();
+	TopoDS_Wire create2dTool(Standard_Real diam, Standard_Real shape);
+
 	TopoDS_Edge arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c );
 	TopoDS_Edge arc ( gp_Pnt a, gp_Vec V, gp_Pnt c );
+	
 	QMenu *myMenu;
 	QAction *myAction;
 };

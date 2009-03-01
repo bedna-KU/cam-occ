@@ -43,7 +43,6 @@ public:
 	uiStuff(QoccHarnessWindow* window);
 	uiStuff(){};  //for classes that inherit from this one
 	~uiStuff(){};
-	//void init(QoccHarnessWindow* window);
 
 signals:
 	void theLongMsg(QString);  //for longMsgDlg
@@ -76,10 +75,5 @@ private:
 
 
 };
-
-// QoccHarnessWindow* uiStuff::theWindow = 0;
-// std::vector<TopoDS_Shape> uiStuff::selectedShapes;
-// int uiStuff::errors = 0;
-
 
 #endif //UISTUFF_H

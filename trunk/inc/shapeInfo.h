@@ -43,7 +43,6 @@ class shapeInfo : public uiStuff
 
 public:
 	shapeInfo();
-//	void init(QoccHarnessWindow *window);
 private slots:
 	void infoButton();
 	void countArcs();

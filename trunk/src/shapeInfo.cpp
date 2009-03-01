@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "shapeInfo.h"
 #include <ostream>
+
 #include <AIS_Trihedron.hxx>
 #include <AIS_InteractiveObject.hxx>
 #include <AIS_InteractiveContext.hxx>
@@ -52,19 +53,12 @@
 
 shapeInfo::shapeInfo()
 {
-//	theWindow = 0;
 
 	//tolerances for grouping (binning) arcs
 	pointTol = Precision::Confusion();
 	radiusTol = Precision::Confusion();
 	ax1AngTol = Precision::Angular();
 	ax1LinTol = Precision::Confusion();
-//}
-
-//void shapeInfo::init ( QoccHarnessWindow* window )
-//{
-
-//	theWindow = window;
 
 	//set up menus, signals
 	myMenu = new QMenu ( "Shape" );
@@ -194,7 +188,6 @@ void shapeInfo::canFace()
 				"were coaxial and had the same radius.");
 		}
 	}
-
 }
 
 /**********************************************************************************

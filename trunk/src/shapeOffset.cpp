@@ -35,13 +35,6 @@
 
 
 shapeOffset::shapeOffset(){
-// 	theWindow = 0;
-// }
-// 
-// void shapeOffset::init(QoccHarnessWindow* window) {
-// 
-// 	theWindow = window;
-
 	//set up menus, signals
 	myMenu = new QMenu("Offset");
 	theWindow->menuBar()->insertMenu(theWindow->getHelpMenu(),myMenu);

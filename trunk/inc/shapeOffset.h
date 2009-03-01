@@ -39,7 +39,6 @@ class shapeOffset : public uiStuff
 
 public:
 	shapeOffset();
-//	void init(QoccHarnessWindow *window);
 private slots:
 	void offsetButton();
 

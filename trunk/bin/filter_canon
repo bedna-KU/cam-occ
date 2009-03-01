@@ -4,13 +4,13 @@
 #to parse g-code into canonical commands.  It filters out certain
 #commands, then pipes the rest to a file.  
 
-current=$PWD
-infile=$current/$1
-outfile=$current/$2
-rs274=./rs274   #executable
-cd ..
+current=`pwd`
+infile=$1
+outfile=$current/output
+rs274dir=~/projects/nist/rs274ngc   #path to rs274 executable
+cd $rs274dir
 echo 1 | \
-$rs274 $infile 2>/dev/null | \
+rs274 $infile 2>/dev/null | \
 sed -e 's/^.....\ N..... //;' \
     -e '/COMMENT/d;' \
     -e '/SPINDLE/d;' \
