@@ -23,6 +23,7 @@
 
 #include "gcode2Model.h"
 #include <ostream>
+#include <assert.h>
 
 #include <QKeySequence>
 #include <QtGui>
@@ -34,11 +35,13 @@
 #include <BRepPrimAPI_MakeBox.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
-#include <BRepPrimAPI_MakeRevol.hxx>
+///#include <BRepPrimAPI_MakeRevol.hxx>
+///#include <BRepSweep_Revol.hxx>
 #include <GeomLProp_CurveTool.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepOffsetAPI_MakePipe.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Ax1.hxx>
@@ -52,23 +55,16 @@
 
 gcode2Model::gcode2Model()
 {
-// 	theWindow = 0;
-// }
-//
-// void gcode2Model::init ( QoccHarnessWindow* window )
-// {
-// 	theWindow = window;
 
-///	commented out because this is incomplete.
-///	myMenu = new QMenu("gcode2Model");
-///	theWindow->menuBar()->insertMenu(theWindow->getHelpMenu(),myMenu);
+	myMenu = new QMenu("gcode2Model");
+	theWindow->menuBar()->insertMenu(theWindow->getHelpMenu(),myMenu);
 
 	//these five lines set up a menu item.  Uncomment the second one to have a shortcut.
 	myAction = new QAction ( "gcode2Model", this );
 	//myAction->setShortcut(QString("Ctrl+A"));
 	myAction->setStatusTip ( "gcode2Model" );
 	connect ( myAction, SIGNAL ( triggered() ), this, SLOT ( myMenuItem() ) );
-///	myMenu->addAction( myAction );
+	myMenu->addAction( myAction );
 };
 
 void gcode2Model::myMenuItem()
@@ -76,21 +72,43 @@ void gcode2Model::myMenuItem()
 	slotNeutralSelection();
 	
 	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", ".", "*.ngc" );
-	
-	system((const char *)QString("bin/filter_canon " + file).constData()); //script that runs rs274 interp and filters some stuff out
-	readLines ( "output" ); //stuff vectors with points
+	QString script = "./bin/filter_canon";
+	cout << "Command line --> " << script.constData() << " <--" << endl;
+	//system((const char *)f.constData()); //script that runs rs274 interp and filters some stuff out
+	QProcess toCanon;
+	toCanon.start(script,QStringList(file));
+	cout << "Starting..." << endl;
+	if (!toCanon.waitForStarted())
+		return;
+	cout << "Finishing..." << endl;
+	if (!toCanon.waitForFinished())
+		return;
+
+	qint64 lineLength;
+	char line[260];
+	do {
+		lineLength = toCanon.readLine(line, sizeof(line));
+		if (lineLength != -1) {
+			processCanonLine(line);
+		}
+	} while (toCanon.canReadLine());//lineLength != -1);
+
+
+	//readLines ( "output.canon" ); //stuff vectors with points
+	cout << "sweeping..." << endl;
 	sweepEm();
-//sweep 2d wire
-//detect non-tangencies and use 3d wire revolved there
-//compute solid
-//then subtract
-//display
-	TopoDS_Shape Shape;
-	Handle_AIS_Shape AisShape = new AIS_Shape ( Shape );
-	theWindow->getContext()->SetMaterial ( AisShape,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
-	theWindow->getContext()->SetDisplayMode ( AisShape,1,Standard_False );  //shaded
-	theWindow->getContext()->Display ( AisShape );
-	//redraw();	//not necessary, Display() automatically redraws the screen.
+	/**
+	//TopoDS_Shape Shape;
+	Handle_AIS_Shape feedAis = new AIS_Shape ( feedSweeps );
+	theWindow->getContext()->SetMaterial ( feedAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
+	theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
+	theWindow->getContext()->Display ( feedAis );
+	
+	Handle_AIS_Shape traverseAis = new AIS_Shape ( traverseSweeps );
+	theWindow->getContext()->SetMaterial ( traverseAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
+	theWindow->getContext()->SetDisplayMode ( traverseAis,1,Standard_False );  //shaded
+	theWindow->getContext()->Display ( traverseAis );
+	*/
 }
 
 void gcode2Model::sweepEm()
@@ -103,35 +121,71 @@ void gcode2Model::sweepEm()
 	Standard_Real shape = 0;
 	TopoDS_Wire toolwire = create2dTool(diam,shape);
 	TopoDS_Face tool2d = BRepBuilderAPI_MakeFace(gp_Pln(gp::ZOX()),toolwire);
-	TopoDS_Solid solidTool = TopoDS::Solid(BRepPrimAPI_MakeRevol(tool2d,zAxis).Shape());
+
 	
+//	TopoDS_Shape solidTool = BRepSweep_Revol(toolwire,zAxis,M_PI).Shape();
+	//TopoDS_Shape solidTool = BRepPrimAPI_MakeRevol(tool2d,zAxis,M_PI).Shape(); //half circle - result is tool2d plus cylindrical shell
+	//TopoDS_Solid solidTool = TopoDS::Solid(BRepPrimAPI_MakeRevol(tool2d,zAxis).Shape()); //FIXME: hollow cylinder
+	feedSweeps.Nullify();
+	traverseSweeps.Nullify();
+
+	BRepBuilderAPI_MakeWire makeW;
+
 	for ( uint i=0;i < feedEdges.size();i++ )
 	{
-		//find vector direction of start of 'curve'
-		GeomAdaptor_Curve curve = BRepAdaptor_Curve( feedEdges[i].e ).Curve();
+/// uint i =0;
+		//find vector direction of start of the line
+/**		GeomAdaptor_Curve curve = BRepAdaptor_Curve( feedEdges[i].e ).Curve();
 		curve.D1(0,p,V);
-		//GeomLProp_CurveTool::D1( curve, 0, p, V );
-		
-		 dir = gp_Dir(V);	//convert vector to direction
+		dir = gp_Dir(V);	//convert vector to direction
 
 		//Rotate the face to be perpendicular to beginning of the path.
 		gp_Trsf faceTransform;
 		faceTransform.SetRotation(zAxis,
 					  -atan(dir.X()/dir.Y()));	//rotate about Z, angle is -atan(x/y)
 		TopoDS_Shape orientedFace = BRepBuilderAPI_Transform(tool2d,faceTransform).Shape();
-		TopoDS_Shape S = BRepOffsetAPI_MakePipe( TopoDS::Wire(feedEdges[i].e) , orientedFace ).Shape();
+*/		//FIXME: Standard_TypeMismatch
+		//FIXME: Standard_Failure
+		//cout << "start " << toString(feedEdges[i].start).toStdString() << " end " << toString(feedEdges[i].end).toStdString() <<endl;
+		
+		makeW.Add(feedEdges[i].e);
+		assert(makeW.IsDone());
+//		TopoDS_Wire W = makeW->Wire();
+		//TopoDS_Wire W = BRepBuilderAPI_MakeWire(feedEdges[i].e);
+		
+		///----------------------------------------------------------------
+		
+	
+///		feedSweeps = BRepAlgoAPI_Fuse(feedSweeps,W);
+		///traverseSweeps = BRepAlgoAPI_Fuse( traverseSweeps, orientedFace);
+		
+		
+		//BRepOffsetAPI_MakePipe *pipe = new BRepOffsetAPI_MakePipe( W , orientedFace );
+		//TopoDS_Shape S = pipe->Shape();
 		
 		//solids
-		gp_Trsf t;
+/**		gp_Trsf t;
 		t.SetTranslation(gp_Pnt(0,0,0),feedEdges[i].start);
 		TopoDS_Shape T1 = BRepBuilderAPI_Transform(solidTool,t).Shape();
 		t.SetTranslation(gp_Pnt(0,0,0),feedEdges[i].end);
 		TopoDS_Shape T2 = BRepBuilderAPI_Transform(solidTool,t).Shape();
 		T1 = BRepAlgoAPI_Fuse(T1,T2);
 		S = BRepAlgoAPI_Fuse(T1,S);
-		feedSweeps.push_back(S);
+		feedSweeps = BRepAlgoAPI_Fuse(feedSweeps,S);
+*/
 	}
-	
+	if (makeW.IsDone()) {
+		Handle_AIS_Shape feedAis = new AIS_Shape ( makeW.Wire() );
+		theWindow->getContext()->SetMaterial ( feedAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
+		theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
+		theWindow->getContext()->Display ( feedAis );
+	}
+// 	Handle_AIS_Shape traverseAis = new AIS_Shape ( solidTool );//orientedFace );
+// 	theWindow->getContext()->SetMaterial ( traverseAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
+// 	theWindow->getContext()->SetDisplayMode ( traverseAis,1,Standard_False );  //shaded
+// 	theWindow->getContext()->Display ( traverseAis );
+
+/**	
 	for ( uint i=0;i < traverseEdges.size();i++ )
 	{
 		//find vector direction of start of 'curve'
@@ -156,8 +210,9 @@ void gcode2Model::sweepEm()
 		TopoDS_Shape T2 = BRepBuilderAPI_Transform(solidTool,t).Shape();
 		T1 = BRepAlgoAPI_Fuse(T1,T2);
 		S = BRepAlgoAPI_Fuse(T1,S);
-		traverseSweeps.push_back(S);
+		traverseSweeps = BRepAlgoAPI_Fuse( traverseSweeps, S);
 	}
+*/
 
 }
 
@@ -214,62 +269,83 @@ void gcode2Model::readLines ( QString filename )
 {
 	QFile file(filename);
 	if (file.open(QFile::ReadOnly)) {
+		cout << "Reading file." << endl;
 		char line[260];
-		qint64 lineLength = file.readLine(line, sizeof(line));
-		if (lineLength != -1) {
-			processCanonLine(line);
-		}
-	}
+		qint64 lineLength;
+		do {
+			lineLength = file.readLine(line, sizeof(line));
+			if (lineLength != -1) {
+				processCanonLine(line);
+			}
+		} while (lineLength != -1);
+	} else cout << "Cannot read file." << endl;
 }
 
 
 void gcode2Model::processCanonLine ( QString canon_line )
 {
 	//bool match = true;
-	float x,y,z,ep,a1,a2;
-	int r=0;
-	x=y=z=ep=a1=a2=0;
 	static gp_Pnt last;	//this holds the coordinates of the end of the last move, no matter what that move was (STRAIGHT_FEED,STRAIGHT_TRAVERSE,ARC_FEED)
 	static bool firstPoint = true;
 	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;
 	static CANONPLANE CANON_PLANE = CANON_PLANE_XY;	//only for arcs
 	
 	if (canon_line.startsWith( "STRAIGHT_" )) {
-		if (canon_line.startsWith( "STRAIGHT_FEED(" )) {
-			sscanf((char *)canon_line.data(),"STRAIGHT_FEED(%f, %f, %f",&x,&y,&z);
+		gp_Pnt p = readXYZ(canon_line);
+		///if (canon_line.startsWith( "STRAIGHT_FEED(" )) {
+			//cout << "straight feed..." << endl;
+			//sscanf((char *)canon_line.data(),"STRAIGHT_FEED(%f, %f, %f",&x,&y,&z);
 			if (firstPoint) {
-				last.SetCoord(x,y,z);
+				last = p;//.SetCoord(x,y,z);
 				firstPoint = false;
+			} else if (last.IsEqual(p,Precision::Confusion()*100)) {
+				//do nothing
 			} else {
 				myEdgeType edge;
-				edge.e = BRepBuilderAPI_MakeEdge( last, gp_Pnt(x,y,z) );
+				edge.e = BRepBuilderAPI_MakeEdge( last, p );//gp_Pnt(x,y,z) );
 				edge.start = last;
-				last.SetCoord(x,y,z);
-				edge.end = last;
+				edge.end = last = p;
 				feedEdges.push_back( edge );
 			}
+/**
 		} else if (canon_line.startsWith( "STRAIGHT_TRAVERSE(" )) {
-			sscanf((char *)canon_line.data(),"STRAIGHT_TRAVERSE(%f, %f, %f",&x,&y,&z);
+			//puts( "straight traverse..." );
+			//puts ((char *)canon_line.data());
+			//sscanf((char *)canon_line.data(),"STRAIGHT_TRAVERSE(%f, %f, %f",&x,&y,&z);
 			if (firstPoint) {
-				last.SetCoord(x,y,z);
+				last = p;
+						//.SetCoord(x,y,z);
 				firstPoint = false;
+			} else if (last.IsEqual(p,Precision::Confusion())) {
+				//do nothing
 			} else {
 				myEdgeType edge;
-				edge.e = BRepBuilderAPI_MakeEdge( last, gp_Pnt(x,y,z) );
-						edge.start = last;
-				last.SetCoord(x,y,z);
-				edge.end = last;
+				//FIXME: SIGABRT here!
+				edge.e = BRepBuilderAPI_MakeEdge( last, p );//gp_Pnt(x,y,z) );
+				edge.start = last;
+				edge.end = last = p;
 				traverseEdges.push_back( edge );
 			}
-		} //else 
+		//} //else 
 			//cout << "STRAIGHT_PROBE encountered. It is not handled." <<endl;
-			//how would it be handled? If probe is used to control the program, the model is not predictable!
+			//how WOULD it be handled? If probe is used to control the program, the model may not be predictable!
+*/
 	} else if (canon_line.startsWith( "ARC_FEED(" )) {
-		sscanf((char *)canon_line.data(),"ARC_FEED(%f, %f, %f, %f, %d, %f",&x,&y,&a1,&a2,&r,&ep);
+		float x,y,z,ep,a1,a2,e1,e2;
+		int rot=0;
+		x=y=z=ep=a1=a2=e1=e2=0;
+		//sscanf((char *)canon_line.data(),"ARC_FEED(%f, %f, %f, %f, %d, %f",&x,&y,&a1,&a2,&r,&ep);
 		//canon_pre.cc:473: first_end, second_end, first_axis, second_axis, rotation, axis_end_point
+		e1  = readOne(canon_line, 0);
+		e2  = readOne(canon_line, 1);
+		a1 = readOne(canon_line, 2);
+		a2 = readOne(canon_line, 3);
+		rot  = readOne(canon_line, 4);
+		ep = readOne(canon_line, 5);
 		//must take into account CANON_PLANE
 		//TODO: complete this
-		cout << "Does not handle " << canon_line.toStdString() << endl;
+		cout << "Does not handle " << canon_line.toStdString() << "completely." << endl;
+		cout << "e1"<< e1 <<" e2" << e2 <<" a1"<< a1 <<" a2"<< a2 <<" rot" << rot <<" ep" << ep << endl;
 	} else if (canon_line.startsWith( "SELECT_PLANE(" )) {
 		if (canon_line.contains( "XZ)" )) {
 			CANON_PLANE=CANON_PLANE_XZ;
@@ -285,16 +361,16 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	}
 }
 
-/*
+
 //read first three numbers from canon_line
 gp_Pnt gcode2Model::readXYZ ( QString canon_line )
 {
 	gp_Pnt p;
 	QString t = canon_line.section( '(',1,1 ).section( ')',0,0 );
 	//t = t.section( ')',0,0 );
-	p.X() = t.section(',',0,0).toFloat();
-	p.Y() = t.section(',',1,1).toFloat();
-	p.Z() = t.section(',',2,2).toFloat();
+	p.SetCoord( t.section(',',0,0).toFloat(),
+	            t.section(',',1,1).toFloat(),
+	            t.section(',',2,2).toFloat() );
 	return p;
 }
 
@@ -305,7 +381,7 @@ Standard_Real gcode2Model::readOne ( QString canon_line, uint n )
 	QString t = canon_line.section( '(',1,1 ).section( ')',0,0 );
 	return t.section(',',n,n).toFloat();
 }
-*/
+
 
 //3 points
 TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c )

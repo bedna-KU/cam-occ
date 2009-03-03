@@ -6,11 +6,11 @@
 
 current=`pwd`
 infile=$1
-outfile=$current/output
+outfile=$current/output.canon
 rs274dir=~/projects/nist/rs274ngc   #path to rs274 executable
 cd $rs274dir
 echo 1 | \
-rs274 $infile 2>/dev/null | \
+./rs274 $infile 2>/dev/null | \
 sed -e 's/^.....\ N..... //;' \
     -e '/COMMENT/d;' \
     -e '/SPINDLE/d;' \
@@ -18,6 +18,5 @@ sed -e 's/^.....\ N..... //;' \
     -e '/ENABLE/d;' \
     -e '/FLOOD/d;' \
     -e '/DWELL/d;' \
-    -e '/FEEDRATE/d;' \
-    >$outfile
+    -e '/FEEDRATE/d;'
 cd $current

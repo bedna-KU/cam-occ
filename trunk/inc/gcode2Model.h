@@ -51,14 +51,17 @@ private:
 	} myEdgeType;
 	std::vector<myEdgeType> traverseEdges;
 	std::vector<myEdgeType> feedEdges;
-	std::vector<TopoDS_Shape> traverseSweeps;
-	std::vector<TopoDS_Shape> feedSweeps;
+	//std::vector<TopoDS_Shape> 
+	TopoDS_Shape traverseSweeps;
+	//std::vector<TopoDS_Shape> 
+	TopoDS_Shape feedSweeps;
 	
 	void readLines ( QString filename );
 	void processCanonLine ( QString canon_line );
 	void sweepEm();
+	gp_Pnt readXYZ ( QString canon_line );
+	Standard_Real readOne ( QString canon_line, uint n );
 	TopoDS_Wire create2dTool(Standard_Real diam, Standard_Real shape);
-
 	TopoDS_Edge arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c );
 	TopoDS_Edge arc ( gp_Pnt a, gp_Vec V, gp_Pnt c );
 	

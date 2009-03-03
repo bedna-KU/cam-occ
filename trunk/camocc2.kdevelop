@@ -147,17 +147,17 @@
       <directoryradio>executable</directoryradio>
       <runarguments>
         <src/>
-        <camocc2/>
+        <camocc2></camocc2>
         <qop/>
       </runarguments>
       <cwd>
         <src>/home/mark/projects/camocc2</src>
-        <camocc2>/home/mark/projects/camocc2/</camocc2>
+        <camocc2>/home/mark/projects/cam/cam-occ/trunk/</camocc2>
         <qop>/home/mark/projects/camocc2/..</qop>
       </cwd>
       <debugarguments>
         <src/>
-        <camocc2/>
+        <camocc2></camocc2>
         <qop/>
       </debugarguments>
       <globaldebugarguments/>
