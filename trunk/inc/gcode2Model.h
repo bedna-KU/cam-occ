@@ -62,9 +62,10 @@ private:
 	gp_Pnt readXYZ ( QString canon_line );
 	Standard_Real readOne ( QString canon_line, uint n );
 	TopoDS_Wire create2dTool(Standard_Real diam, Standard_Real shape);
-	TopoDS_Edge arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c );
-	TopoDS_Edge arc ( gp_Pnt a, gp_Vec V, gp_Pnt c );
-	
+	//TopoDS_Edge arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c );
+	//TopoDS_Edge arc ( gp_Pnt a, gp_Vec V, gp_Pnt c );
+	TopoDS_Edge helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);
+
 	QMenu *myMenu;
 	QAction *myAction;
 };

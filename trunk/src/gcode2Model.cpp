@@ -37,18 +37,24 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 ///#include <BRepPrimAPI_MakeRevol.hxx>
 ///#include <BRepSweep_Revol.hxx>
+#include <GCE2d_MakeSegment.hxx>
 #include <GeomLProp_CurveTool.hxx>
+#include <GeomAPI_ProjectPointOnSurf.hxx>
+#include <Geom2d_TrimmedCurve.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepOffsetAPI_MakePipe.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <Geom_CylindricalSurface.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Ax1.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Solid.hxx>
+#include <Handle_Geom2d_TrimmedCurve.hxx>
 #include <Handle_Geom_TrimmedCurve.hxx>
+#include <Handle_Geom_CylindricalSurface.hxx>
 #include <GC_MakeArcOfCircle.hxx>
 
 
@@ -72,8 +78,9 @@ void gcode2Model::myMenuItem()
 	slotNeutralSelection();
 	
 	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", ".", "*.ngc" );
+	if (file == "") return;  //because it's a Really Bad Thing to call the script with no file. Gobbles CPU and RAM like craaaazy.  Found out the hard way.
 	QString script = "./bin/filter_canon";
-	cout << "Command line --> " << script.constData() << " <--" << endl;
+	//cout << "Command line --> " << script.constData() << " <--" << endl;
 	//system((const char *)f.constData()); //script that runs rs274 interp and filters some stuff out
 	QProcess toCanon;
 	toCanon.start(script,QStringList(file));
@@ -97,6 +104,7 @@ void gcode2Model::myMenuItem()
 	//readLines ( "output.canon" ); //stuff vectors with points
 	cout << "sweeping..." << endl;
 	sweepEm();
+	feedEdges.clear(); ///this erases it so when you load a new file, the old data gets erased.
 	/**
 	//TopoDS_Shape Shape;
 	Handle_AIS_Shape feedAis = new AIS_Shape ( feedSweeps );
@@ -265,6 +273,7 @@ TopoDS_Wire gcode2Model::create2dTool(Standard_Real diam, Standard_Real shape)
 }
 
 
+/**
 void gcode2Model::readLines ( QString filename )
 {
 	QFile file(filename);
@@ -280,6 +289,7 @@ void gcode2Model::readLines ( QString filename )
 		} while (lineLength != -1);
 	} else cout << "Cannot read file." << endl;
 }
+*/
 
 
 void gcode2Model::processCanonLine ( QString canon_line )
@@ -287,8 +297,8 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	//bool match = true;
 	static gp_Pnt last;	//this holds the coordinates of the end of the last move, no matter what that move was (STRAIGHT_FEED,STRAIGHT_TRAVERSE,ARC_FEED)
 	static bool firstPoint = true;
-	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;
-	static CANONPLANE CANON_PLANE = CANON_PLANE_XY;	//only for arcs
+	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;   //for arcs
+	static CANONPLANE CANON_PLANE = CANON_PLANE_XY;	   //initialize to "normal"
 	
 	if (canon_line.startsWith( "STRAIGHT_" )) {
 		gp_Pnt p = readXYZ(canon_line);
@@ -321,31 +331,58 @@ void gcode2Model::processCanonLine ( QString canon_line )
 			} else {
 				myEdgeType edge;
 				//FIXME: SIGABRT here!
-				edge.e = BRepBuilderAPI_MakeEdge( last, p );//gp_Pnt(x,y,z) );
+				edge.e = BRepBuilderAPI_MakeEdge( last, p );
 				edge.start = last;
 				edge.end = last = p;
 				traverseEdges.push_back( edge );
 			}
 		//} //else 
 			//cout << "STRAIGHT_PROBE encountered. It is not handled." <<endl;
-			//how WOULD it be handled? If probe is used to control the program, the model may not be predictable!
+			//how WOULD it be handled? If probe is used to affect the program, the model may not be predictable!
 */
 	} else if (canon_line.startsWith( "ARC_FEED(" )) {
+		gp_Dir arcDir;
+//		gp_Pnt start, end,
+		gp_Pnt c;
+		myEdgeType edge;
 		float x,y,z,ep,a1,a2,e1,e2;
 		int rot=0;
 		x=y=z=ep=a1=a2=e1=e2=0;
-		//sscanf((char *)canon_line.data(),"ARC_FEED(%f, %f, %f, %f, %d, %f",&x,&y,&a1,&a2,&r,&ep);
-		//canon_pre.cc:473: first_end, second_end, first_axis, second_axis, rotation, axis_end_point
+		
+		edge.start = last;
+		c = gp_Pnt(a1,a2,edge.start.Z());
+		
+		///canon_pre.cc:473: first_end, second_end
 		e1  = readOne(canon_line, 0);
 		e2  = readOne(canon_line, 1);
+		///canon_pre.cc:473: first_axis, second_axis
 		a1 = readOne(canon_line, 2);
 		a2 = readOne(canon_line, 3);
+		///canon_pre.cc:473: rotation, axis_end_point
 		rot  = readOne(canon_line, 4);
 		ep = readOne(canon_line, 5);
-		//must take into account CANON_PLANE
-		//TODO: complete this
-		cout << "Does not handle " << canon_line.toStdString() << "completely." << endl;
-		cout << "e1"<< e1 <<" e2" << e2 <<" a1"<< a1 <<" a2"<< a2 <<" rot" << rot <<" ep" << ep << endl;
+		
+		switch (CANON_PLANE) {
+			case CANON_PLANE_XZ:
+				edge.end = gp_Pnt(e2,ep,e1);
+				arcDir = gp_Dir(0,1,0);
+				break;
+			case CANON_PLANE_YZ:
+				edge.end = gp_Pnt(ep,e1,e2);
+				arcDir = gp_Dir(1,0,0);
+				break;
+			case CANON_PLANE_XY:
+			default:
+				edge.end = gp_Pnt(e1,e2,ep);
+				arcDir = gp_Dir(0,0,1);
+		}
+		last = edge.end;
+		
+		edge.e = helix(edge.start, edge.end, c, arcDir,rot);
+		edge.start = last;
+		feedEdges.push_back( edge );
+		cout << "Arc " << canon_line.toStdString() << "params:" << endl;
+		cout << "e1:"<< e1 <<" e2:" << e2 <<" a1:"<< a1 <<" a2:"<< a2 <<" rot:" << rot <<" ep:" << ep << endl;
 	} else if (canon_line.startsWith( "SELECT_PLANE(" )) {
 		if (canon_line.contains( "XZ)" )) {
 			CANON_PLANE=CANON_PLANE_XZ;
@@ -361,6 +398,47 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	}
 }
 
+		//helixes - how??!
+		//possible solution - create all arcs as lines on a cylindrical face
+		//that is probably expensive though...
+//Create an arc or helix.  axis MUST be parallel to X, Y, or Z.
+TopoDS_Edge gcode2Model::helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot)
+{
+	Standard_Real pU,pV, radius = start.Distance(c);
+	gp_Pnt2d p1,p2;
+	Handle(Geom_CylindricalSurface) cyl = new Geom_CylindricalSurface(gp_Ax2(c,dir) , radius);
+	GeomAPI_ProjectPointOnSurf proj;
+	TopoDS_Edge h;
+	
+	h.Nullify();
+	cout << "Radius " << radius << "   Rot has the value " << rot << " but is NOT USED." << endl;
+	proj.Init(start,cyl);
+	if(proj.NbPoints() > 0)
+	{
+		proj.LowerDistanceParameters(pU, pV);
+		if(proj.LowerDistance() > Precision::Confusion() )
+		{
+			cout << "Arc point fitting distance " << float(proj.LowerDistance()) << endl;
+		}
+	} else return h;
+	p1 = gp_Pnt2d(pU,pV);
+	
+	proj.Init(end,cyl);
+	if(proj.NbPoints() > 0)
+	{
+		proj.LowerDistanceParameters(pU, pV);
+		if(proj.LowerDistance() > Precision::Confusion() )
+		{
+			cout << "Arc point fitting distance " << float(proj.LowerDistance()) << endl;
+		}
+	} else return h;
+	p2 = gp_Pnt2d(pU,pV);
+	
+	Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
+	h = BRepBuilderAPI_MakeEdge(segment , cyl);
+	
+	return h;
+}
 
 //read first three numbers from canon_line
 gp_Pnt gcode2Model::readXYZ ( QString canon_line )
@@ -383,6 +461,7 @@ Standard_Real gcode2Model::readOne ( QString canon_line, uint n )
 }
 
 
+/*
 //3 points
 TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c )
 {
@@ -397,7 +476,6 @@ TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Vec V, gp_Pnt b )
 	return BRepBuilderAPI_MakeEdge ( Tc );
 }
 
-/* don't bother unless its actually necessary
 //begin, end, center
 TopoDS_Edge gcode2Model::arc(gp_Pnt a, gp_Pnt b, gp_XYZ c) {
  //gp_Circ &Circ, const gp_Pnt &P1, const gp_Pnt &P2, const Standard_Boolean Sense
@@ -407,4 +485,5 @@ TopoDS_Edge gcode2Model::arc(gp_Pnt a, gp_Pnt b, gp_XYZ c) {
 	gp_Circ circle = gp_Circ();
 	Handle(Geom_TrimmedCurve) Tc = GC_MakeArcOfCircle (circle,a,b,true); //last param affects the arc, but not sure how - experiment w it
 	return BRepBuilderAPI_MakeEdge(Tc);
-}*/
+}
+*/

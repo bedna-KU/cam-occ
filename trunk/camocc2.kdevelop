@@ -147,7 +147,7 @@
       <directoryradio>executable</directoryradio>
       <runarguments>
         <src/>
-        <camocc2></camocc2>
+        <camocc2/>
         <qop/>
       </runarguments>
       <cwd>
@@ -157,7 +157,7 @@
       </cwd>
       <debugarguments>
         <src/>
-        <camocc2></camocc2>
+        <camocc2/>
         <qop/>
       </debugarguments>
       <globaldebugarguments/>

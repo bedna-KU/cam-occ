@@ -4,6 +4,8 @@
 #to parse g-code into canonical commands.  It filters out certain
 #commands, then pipes the rest to a file.  
 
+#NEVER EVER call this script without a file name!!!!  rs274 will gobble processor time.  Once it's killed, sed will gobble memory.  Probably oughta just do away with the script...
+
 current=`pwd`
 infile=$1
 outfile=$current/output.canon
