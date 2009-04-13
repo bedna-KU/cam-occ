@@ -80,8 +80,7 @@ void gcode2Model::myMenuItem()
 	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", ".", "*.ngc" );
 	if (file == "") return;  //because it's a Really Bad Thing to call the script with no file. Gobbles CPU and RAM like craaaazy.  Found out the hard way.
 	QString script = "./bin/filter_canon";
-	//cout << "Command line --> " << script.constData() << " <--" << endl;
-	//system((const char *)f.constData()); //script that runs rs274 interp and filters some stuff out
+
 	QProcess toCanon;
 	toCanon.start(script,QStringList(file));
 	cout << "Starting..." << endl;
@@ -100,23 +99,9 @@ void gcode2Model::myMenuItem()
 		}
 	} while (toCanon.canReadLine());//lineLength != -1);
 
-
-	//readLines ( "output.canon" ); //stuff vectors with points
 	cout << "sweeping..." << endl;
 	sweepEm();
 	feedEdges.clear(); ///this erases it so when you load a new file, the old data gets erased.
-	/**
-	//TopoDS_Shape Shape;
-	Handle_AIS_Shape feedAis = new AIS_Shape ( feedSweeps );
-	theWindow->getContext()->SetMaterial ( feedAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
-	theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
-	theWindow->getContext()->Display ( feedAis );
-	
-	Handle_AIS_Shape traverseAis = new AIS_Shape ( traverseSweeps );
-	theWindow->getContext()->SetMaterial ( traverseAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
-	theWindow->getContext()->SetDisplayMode ( traverseAis,1,Standard_False );  //shaded
-	theWindow->getContext()->Display ( traverseAis );
-	*/
 }
 
 void gcode2Model::sweepEm()
@@ -130,10 +115,6 @@ void gcode2Model::sweepEm()
 	TopoDS_Wire toolwire = create2dTool(diam,shape);
 	TopoDS_Face tool2d = BRepBuilderAPI_MakeFace(gp_Pln(gp::ZOX()),toolwire);
 
-	
-//	TopoDS_Shape solidTool = BRepSweep_Revol(toolwire,zAxis,M_PI).Shape();
-	//TopoDS_Shape solidTool = BRepPrimAPI_MakeRevol(tool2d,zAxis,M_PI).Shape(); //half circle - result is tool2d plus cylindrical shell
-	//TopoDS_Solid solidTool = TopoDS::Solid(BRepPrimAPI_MakeRevol(tool2d,zAxis).Shape()); //FIXME: hollow cylinder
 	feedSweeps.Nullify();
 	traverseSweeps.Nullify();
 
@@ -141,46 +122,10 @@ void gcode2Model::sweepEm()
 
 	for ( uint i=0;i < feedEdges.size();i++ )
 	{
-/// uint i =0;
-		//find vector direction of start of the line
-/**		GeomAdaptor_Curve curve = BRepAdaptor_Curve( feedEdges[i].e ).Curve();
-		curve.D1(0,p,V);
-		dir = gp_Dir(V);	//convert vector to direction
 
-		//Rotate the face to be perpendicular to beginning of the path.
-		gp_Trsf faceTransform;
-		faceTransform.SetRotation(zAxis,
-					  -atan(dir.X()/dir.Y()));	//rotate about Z, angle is -atan(x/y)
-		TopoDS_Shape orientedFace = BRepBuilderAPI_Transform(tool2d,faceTransform).Shape();
-*/		//FIXME: Standard_TypeMismatch
-		//FIXME: Standard_Failure
-		//cout << "start " << toString(feedEdges[i].start).toStdString() << " end " << toString(feedEdges[i].end).toStdString() <<endl;
-		
 		makeW.Add(feedEdges[i].e);
 		assert(makeW.IsDone());
-//		TopoDS_Wire W = makeW->Wire();
-		//TopoDS_Wire W = BRepBuilderAPI_MakeWire(feedEdges[i].e);
-		
-		///----------------------------------------------------------------
-		
-	
-///		feedSweeps = BRepAlgoAPI_Fuse(feedSweeps,W);
-		///traverseSweeps = BRepAlgoAPI_Fuse( traverseSweeps, orientedFace);
-		
-		
-		//BRepOffsetAPI_MakePipe *pipe = new BRepOffsetAPI_MakePipe( W , orientedFace );
-		//TopoDS_Shape S = pipe->Shape();
-		
-		//solids
-/**		gp_Trsf t;
-		t.SetTranslation(gp_Pnt(0,0,0),feedEdges[i].start);
-		TopoDS_Shape T1 = BRepBuilderAPI_Transform(solidTool,t).Shape();
-		t.SetTranslation(gp_Pnt(0,0,0),feedEdges[i].end);
-		TopoDS_Shape T2 = BRepBuilderAPI_Transform(solidTool,t).Shape();
-		T1 = BRepAlgoAPI_Fuse(T1,T2);
-		S = BRepAlgoAPI_Fuse(T1,S);
-		feedSweeps = BRepAlgoAPI_Fuse(feedSweeps,S);
-*/
+
 	}
 	if (makeW.IsDone()) {
 		Handle_AIS_Shape feedAis = new AIS_Shape ( makeW.Wire() );
@@ -188,39 +133,8 @@ void gcode2Model::sweepEm()
 		theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
 		theWindow->getContext()->Display ( feedAis );
 	}
-// 	Handle_AIS_Shape traverseAis = new AIS_Shape ( solidTool );//orientedFace );
-// 	theWindow->getContext()->SetMaterial ( traverseAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
-// 	theWindow->getContext()->SetDisplayMode ( traverseAis,1,Standard_False );  //shaded
-// 	theWindow->getContext()->Display ( traverseAis );
 
-/**	
-	for ( uint i=0;i < traverseEdges.size();i++ )
-	{
-		//find vector direction of start of 'curve'
-		GeomAdaptor_Curve curve = BRepAdaptor_Curve( traverseEdges[i].e ).Curve();
-		curve.D1(0,p,V);
-		//GeomLProp_CurveTool::D1( curve, 0, p, V );
-		
-		dir = gp_Dir(V);	//convert vector to direction
 
-		//Rotate the face to be perpendicular to beginning of the path.
-		gp_Trsf faceTransform;
-		faceTransform.SetRotation(zAxis,
-					  -atan(dir.X()/dir.Y()));	//rotate about Z, angle is -atan(x/y)
-		TopoDS_Shape orientedFace = BRepBuilderAPI_Transform(tool2d,faceTransform).Shape();
-		TopoDS_Shape S = BRepOffsetAPI_MakePipe( TopoDS::Wire(traverseEdges[i].e) , orientedFace ).Shape();
-		
-		//solids
-		gp_Trsf t;
-		t.SetTranslation(gp_Pnt(0,0,0),traverseEdges[i].start);
-		TopoDS_Shape T1 = BRepBuilderAPI_Transform(solidTool,t).Shape();
-		t.SetTranslation(gp_Pnt(0,0,0),traverseEdges[i].end);
-		TopoDS_Shape T2 = BRepBuilderAPI_Transform(solidTool,t).Shape();
-		T1 = BRepAlgoAPI_Fuse(T1,T2);
-		S = BRepAlgoAPI_Fuse(T1,S);
-		traverseSweeps = BRepAlgoAPI_Fuse( traverseSweeps, S);
-	}
-*/
 
 }
 
@@ -273,28 +187,9 @@ TopoDS_Wire gcode2Model::create2dTool(Standard_Real diam, Standard_Real shape)
 }
 
 
-/**
-void gcode2Model::readLines ( QString filename )
-{
-	QFile file(filename);
-	if (file.open(QFile::ReadOnly)) {
-		cout << "Reading file." << endl;
-		char line[260];
-		qint64 lineLength;
-		do {
-			lineLength = file.readLine(line, sizeof(line));
-			if (lineLength != -1) {
-				processCanonLine(line);
-			}
-		} while (lineLength != -1);
-	} else cout << "Cannot read file." << endl;
-}
-*/
-
 
 void gcode2Model::processCanonLine ( QString canon_line )
 {
-	//bool match = true;
 	static gp_Pnt last;	//this holds the coordinates of the end of the last move, no matter what that move was (STRAIGHT_FEED,STRAIGHT_TRAVERSE,ARC_FEED)
 	static bool firstPoint = true;
 	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;   //for arcs
@@ -303,8 +198,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	if (canon_line.startsWith( "STRAIGHT_" )) {
 		gp_Pnt p = readXYZ(canon_line);
 		///if (canon_line.startsWith( "STRAIGHT_FEED(" )) {
-			//cout << "straight feed..." << endl;
-			//sscanf((char *)canon_line.data(),"STRAIGHT_FEED(%f, %f, %f",&x,&y,&z);
+
 			if (firstPoint) {
 				last = p;//.SetCoord(x,y,z);
 				firstPoint = false;
@@ -317,32 +211,9 @@ void gcode2Model::processCanonLine ( QString canon_line )
 				edge.end = last = p;
 				feedEdges.push_back( edge );
 			}
-/**
-		} else if (canon_line.startsWith( "STRAIGHT_TRAVERSE(" )) {
-			//puts( "straight traverse..." );
-			//puts ((char *)canon_line.data());
-			//sscanf((char *)canon_line.data(),"STRAIGHT_TRAVERSE(%f, %f, %f",&x,&y,&z);
-			if (firstPoint) {
-				last = p;
-						//.SetCoord(x,y,z);
-				firstPoint = false;
-			} else if (last.IsEqual(p,Precision::Confusion())) {
-				//do nothing
-			} else {
-				myEdgeType edge;
-				//FIXME: SIGABRT here!
-				edge.e = BRepBuilderAPI_MakeEdge( last, p );
-				edge.start = last;
-				edge.end = last = p;
-				traverseEdges.push_back( edge );
-			}
-		//} //else 
-			//cout << "STRAIGHT_PROBE encountered. It is not handled." <<endl;
-			//how WOULD it be handled? If probe is used to affect the program, the model may not be predictable!
-*/
+
 	} else if (canon_line.startsWith( "ARC_FEED(" )) {
 		gp_Dir arcDir;
-//		gp_Pnt start, end,
 		gp_Pnt c;
 		myEdgeType edge;
 		float x,y,z,ep,a1,a2,e1,e2;
@@ -460,30 +331,3 @@ Standard_Real gcode2Model::readOne ( QString canon_line, uint n )
 	return t.section(',',n,n).toFloat();
 }
 
-
-/*
-//3 points
-TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c )
-{
-	Handle ( Geom_TrimmedCurve ) Tc = GC_MakeArcOfCircle ( a, b, c );
-	return BRepBuilderAPI_MakeEdge ( Tc );
-}
-
-//begin, direction at begin, end
-TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Vec V, gp_Pnt b )
-{
-	Handle ( Geom_TrimmedCurve ) Tc = GC_MakeArcOfCircle ( a, V, b );
-	return BRepBuilderAPI_MakeEdge ( Tc );
-}
-
-//begin, end, center
-TopoDS_Edge gcode2Model::arc(gp_Pnt a, gp_Pnt b, gp_XYZ c) {
- //gp_Circ &Circ, const gp_Pnt &P1, const gp_Pnt &P2, const Standard_Boolean Sense
-//   gp_Circ (const gp_Ax2 &A2, const Standard_Real Radius)
-//get plane for a,b,c
-//get dist a,c - that's radius
-	gp_Circ circle = gp_Circ();
-	Handle(Geom_TrimmedCurve) Tc = GC_MakeArcOfCircle (circle,a,b,true); //last param affects the arc, but not sure how - experiment w it
-	return BRepBuilderAPI_MakeEdge(Tc);
-}
-*/
