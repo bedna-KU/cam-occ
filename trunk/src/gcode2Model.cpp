@@ -84,6 +84,8 @@ void gcode2Model::myMenuItem()
 	QProcess toCanon;
 	toCanon.start(script,QStringList(file));
 	cout << "Starting..." << endl;
+
+///reorganize this so the interp and this prog can run in parallel...
 	if (!toCanon.waitForStarted())
 		return;
 	cout << "Finishing..." << endl;
@@ -104,6 +106,7 @@ void gcode2Model::myMenuItem()
 	feedEdges.clear(); ///this erases it so when you load a new file, the old data gets erased.
 }
 
+//doesn't really sweep right now, just displays the wire
 void gcode2Model::sweepEm()
 {
 	gp_Pnt p;
@@ -133,8 +136,6 @@ void gcode2Model::sweepEm()
 		theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
 		theWindow->getContext()->Display ( feedAis );
 	}
-
-
 
 }
 
@@ -194,34 +195,32 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	static bool firstPoint = true;
 	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;   //for arcs
 	static CANONPLANE CANON_PLANE = CANON_PLANE_XY;	   //initialize to "normal"
-	
+	//ideally, handle rapids (STRAIGHT_TRAVERSE) separately from STRAIGHT_FEED
+	//for now, handle together
 	if (canon_line.startsWith( "STRAIGHT_" )) {
 		gp_Pnt p = readXYZ(canon_line);
-		///if (canon_line.startsWith( "STRAIGHT_FEED(" )) {
-
-			if (firstPoint) {
-				last = p;//.SetCoord(x,y,z);
-				firstPoint = false;
-			} else if (last.IsEqual(p,Precision::Confusion()*100)) {
-				//do nothing
-			} else {
-				myEdgeType edge;
-				edge.e = BRepBuilderAPI_MakeEdge( last, p );//gp_Pnt(x,y,z) );
-				edge.start = last;
-				edge.end = last = p;
-				feedEdges.push_back( edge );
-			}
-
+		if (firstPoint) {
+		  last = p;//.SetCoord(x,y,z);
+			firstPoint = false;
+		} else if (last.IsEqual(p,Precision::Confusion()*100)) {
+			//do nothing
+		} else {
+			myEdgeType edge;
+			edge.e = BRepBuilderAPI_MakeEdge( last, p );//gp_Pnt(x,y,z) );
+			edge.start = last;
+			edge.end = last = p;
+			feedEdges.push_back( edge );
+		}
 	} else if (canon_line.startsWith( "ARC_FEED(" )) {
 		gp_Dir arcDir;
 		gp_Pnt c;
 		myEdgeType edge;
-		float x,y,z,ep,a1,a2,e1,e2;
+		float x,y,z,ep,a1,a2,e1,e2,dist;
 		int rot=0;
+		//bool isHelix = false;
 		x=y=z=ep=a1=a2=e1=e2=0;
 		
 		edge.start = last;
-		c = gp_Pnt(a1,a2,edge.start.Z());
 		
 		///canon_pre.cc:473: first_end, second_end
 		e1  = readOne(canon_line, 0);
@@ -234,23 +233,37 @@ void gcode2Model::processCanonLine ( QString canon_line )
 		ep = readOne(canon_line, 5);
 		
 		switch (CANON_PLANE) {
-			case CANON_PLANE_XZ:
-				edge.end = gp_Pnt(e2,ep,e1);
-				arcDir = gp_Dir(0,1,0);
-				break;
-			case CANON_PLANE_YZ:
-				edge.end = gp_Pnt(ep,e1,e2);
-				arcDir = gp_Dir(1,0,0);
-				break;
-			case CANON_PLANE_XY:
-			default:
-				edge.end = gp_Pnt(e1,e2,ep);
-				arcDir = gp_Dir(0,0,1);
+		case CANON_PLANE_XZ:
+			edge.end = gp_Pnt(e2,ep,e1);
+			arcDir = gp_Dir(0,1,0);
+			c = gp_Pnt(a2,edge.start.Y(),a1);
+			dist = edge.start.Y() - ep;
+			break;
+		case CANON_PLANE_YZ:
+			edge.end = gp_Pnt(ep,e1,e2);
+			arcDir = gp_Dir(1,0,0);
+			c = gp_Pnt(edge.start.X(),a1,a2);
+			dist = edge.start.X() - ep;
+			break;
+		case CANON_PLANE_XY:
+		default:
+			edge.end = gp_Pnt(e1,e2,ep);
+			arcDir = gp_Dir(0,0,1);
+			c = gp_Pnt(a1,a2,edge.start.Z());
+			dist = edge.start.Z() - ep;
 		}
 		last = edge.end;
 		
-		edge.e = helix(edge.start, edge.end, c, arcDir,rot);
-		edge.start = last;
+		if (dist > 0.000001) {
+			edge.e = helix(edge.start, edge.end, c, arcDir,rot);
+		} else {
+			//arc center is c; ends are edge.start, edge.last
+			gp_Vec Vr = gp_Vec(c,edge.start);	//vector from center to start
+			gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
+			gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
+			//how to apply 'rot' ?
+			edge.e = arc(edge.start, startVec, edge.end);
+		}
 		feedEdges.push_back( edge );
 		cout << "Arc " << canon_line.toStdString() << "params:" << endl;
 		cout << "e1:"<< e1 <<" e2:" << e2 <<" a1:"<< a1 <<" a2:"<< a2 <<" rot:" << rot <<" ep:" << ep << endl;
@@ -269,10 +282,20 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	}
 }
 
-		//helixes - how??!
-		//possible solution - create all arcs as lines on a cylindrical face
-		//that is probably expensive though...
+//begin, direction at begin, end
+TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Vec V, gp_Pnt b )
+{
+        Handle ( Geom_TrimmedCurve ) Tc = GC_MakeArcOfCircle ( a, V, b );
+        return BRepBuilderAPI_MakeEdge ( Tc );
+}
+
+
+
+	//helixes - how??!
+	//possible solution - create all arcs as lines on a cylindrical face (like the makebottle demo)
+	//that is probably expensive though...
 //Create an arc or helix.  axis MUST be parallel to X, Y, or Z.
+///this crashes.
 TopoDS_Edge gcode2Model::helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot)
 {
 	Standard_Real pU,pV, radius = start.Distance(c);
