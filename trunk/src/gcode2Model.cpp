@@ -103,7 +103,7 @@ void gcode2Model::myMenuItem()
 
 	cout << "sweeping..." << endl;
 	sweepEm();
-	feedEdges.clear(); ///this erases it so when you load a new file, the old data gets erased.
+	feedEdges.clear(); //this erases it so when you load a new file, the old data gets erased.
 }
 
 //doesn't really sweep right now, just displays the wire
@@ -125,16 +125,17 @@ void gcode2Model::sweepEm()
 
 	for ( uint i=0;i < feedEdges.size();i++ )
 	{
-
+		checkEdge( feedEdges, i );	//check that edges are connected
 		makeW.Add(feedEdges[i].e);
 		assert(makeW.IsDone());
-
 	}
 	if (makeW.IsDone()) {
 		Handle_AIS_Shape feedAis = new AIS_Shape ( makeW.Wire() );
 		theWindow->getContext()->SetMaterial ( feedAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
 		theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
 		theWindow->getContext()->Display ( feedAis );
+	} else {
+	  cout << "Failed to build wire!" << endl;
 	}
 
 }
@@ -200,13 +201,13 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	if (canon_line.startsWith( "STRAIGHT_" )) {
 		gp_Pnt p = readXYZ(canon_line);
 		if (firstPoint) {
-		  last = p;//.SetCoord(x,y,z);
+		  last = p;
 			firstPoint = false;
 		} else if (last.IsEqual(p,Precision::Confusion()*100)) {
 			//do nothing
 		} else {
 			myEdgeType edge;
-			edge.e = BRepBuilderAPI_MakeEdge( last, p );//gp_Pnt(x,y,z) );
+			edge.e = BRepBuilderAPI_MakeEdge( last, p );
 			edge.start = last;
 			edge.end = last = p;
 			feedEdges.push_back( edge );
@@ -229,7 +230,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 		a1 = readOne(canon_line, 2);
 		a2 = readOne(canon_line, 3);
 		///canon_pre.cc:473: rotation, axis_end_point
-		rot  = readOne(canon_line, 4);
+		rot  = readOne(canon_line, 4); //if rot is 1, arc is ccw
 		ep = readOne(canon_line, 5);
 		
 		switch (CANON_PLANE) {
@@ -237,36 +238,38 @@ void gcode2Model::processCanonLine ( QString canon_line )
 			edge.end = gp_Pnt(e2,ep,e1);
 			arcDir = gp_Dir(0,1,0);
 			c = gp_Pnt(a2,edge.start.Y(),a1);
-			dist = edge.start.Y() - ep;
+			dist = ep - edge.start.Y();
 			break;
 		case CANON_PLANE_YZ:
 			edge.end = gp_Pnt(ep,e1,e2);
 			arcDir = gp_Dir(1,0,0);
 			c = gp_Pnt(edge.start.X(),a1,a2);
-			dist = edge.start.X() - ep;
+			dist = ep - edge.start.X();
 			break;
 		case CANON_PLANE_XY:
 		default:
 			edge.end = gp_Pnt(e1,e2,ep);
 			arcDir = gp_Dir(0,0,1);
 			c = gp_Pnt(a1,a2,edge.start.Z());
-			dist = edge.start.Z() - ep;
+			dist = ep - edge.start.Z();
 		}
 		last = edge.end;
-		
-		if (dist > 0.000001) {
+		//cout << "Dist " << dist << endl;
+		if (fabs(dist) > 0.000001) {
 			edge.e = helix(edge.start, edge.end, c, arcDir,rot);
+			//cout << "Helix with center " << toString(c).toStdString() << " and arcDir " << toString(arcDir).toStdString() << endl;
 		} else {
 			//arc center is c; ends are edge.start, edge.last
 			gp_Vec Vr = gp_Vec(c,edge.start);	//vector from center to start
 			gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
 			gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
-			//how to apply 'rot' ?
+			if (rot==1) startVec *= -1;
 			edge.e = arc(edge.start, startVec, edge.end);
 		}
 		feedEdges.push_back( edge );
-		cout << "Arc " << canon_line.toStdString() << "params:" << endl;
-		cout << "e1:"<< e1 <<" e2:" << e2 <<" a1:"<< a1 <<" a2:"<< a2 <<" rot:" << rot <<" ep:" << ep << endl;
+		//<< canon_line.toStdString() <<
+		cout << "Arc from " << toString(edge.start).toStdString() << " to " << toString(edge.end).toStdString() << endl;
+		cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
 	} else if (canon_line.startsWith( "SELECT_PLANE(" )) {
 		if (canon_line.contains( "XZ)" )) {
 			CANON_PLANE=CANON_PLANE_XZ;
@@ -275,9 +278,18 @@ void gcode2Model::processCanonLine ( QString canon_line )
 		} else {// XY)
 			CANON_PLANE=CANON_PLANE_XY;
 		}
-//	} else if (canon_line.startsWith( "(" )) {
-	} else {
-		//match = false;
+	} else if (canon_line.startsWith( "MESSAGE" )) {
+		cout << canon_line.toStdString() << endl;
+	}
+	//the else if's below are to silently ignore certain canonical commands, that either have no use in this context, or are defaults
+	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000, 0.0000, 0.0000)" )) {}
+	else if (canon_line.startsWith( "PROGRAM_STOP" )) {}
+	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_MM)" )) {}
+	else if (canon_line.startsWith( "SET_FEED_REFERENCE(CANON_XYZ)" )) {}
+	else if (canon_line.startsWith( "SET_FEED_RATE")) {}
+	//else if (canon_line.startsWith( "" )) {}
+	//else if (canon_line.startsWith( "" )) {}
+	else {
 		cout << "Does not handle " << canon_line.toStdString() << endl;
 	}
 }
@@ -291,42 +303,49 @@ TopoDS_Edge gcode2Model::arc ( gp_Pnt a, gp_Vec V, gp_Pnt b )
 
 
 
-	//helixes - how??!
-	//possible solution - create all arcs as lines on a cylindrical face (like the makebottle demo)
-	//that is probably expensive though...
-//Create an arc or helix.  axis MUST be parallel to X, Y, or Z.
-///this crashes.
+//Create a helix.  Axis MUST be parallel to X, Y, or Z. Create as lines on a cylindrical face (like the makebottle demo)
+
 TopoDS_Edge gcode2Model::helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot)
 {
-	Standard_Real pU,pV, radius = start.Distance(c);
+	Standard_Real pU,pV;
+	Standard_Real radius = start.Distance(c);
 	gp_Pnt2d p1,p2;
 	Handle(Geom_CylindricalSurface) cyl = new Geom_CylindricalSurface(gp_Ax2(c,dir) , radius);
 	GeomAPI_ProjectPointOnSurf proj;
 	TopoDS_Edge h;
+	int success = 0;
 	
 	h.Nullify();
-	cout << "Radius " << radius << "   Rot has the value " << rot << " but is NOT USED." << endl;
+	//cout << "Radius " << radius << "   Rot has the value " << rot << " but is NOT USED." << endl;
 	proj.Init(start,cyl);
-	if(proj.NbPoints() > 0)
-	{
+	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
-		if(proj.LowerDistance() > Precision::Confusion() )
-		{
+		if(proj.LowerDistance() > 1.0e-6 ) {
 			cout << "Arc point fitting distance " << float(proj.LowerDistance()) << endl;
 		}
-	} else return h;
-	p1 = gp_Pnt2d(pU,pV);
+		success++;
+		p1 = gp_Pnt2d(pU,pV);
+	}
 	
 	proj.Init(end,cyl);
-	if(proj.NbPoints() > 0)
-	{
+	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
-		if(proj.LowerDistance() > Precision::Confusion() )
-		{
+		if(proj.LowerDistance() > 1.0e-6 ) {
 			cout << "Arc point fitting distance " << float(proj.LowerDistance()) << endl;
 		}
-	} else return h;
-	p2 = gp_Pnt2d(pU,pV);
+		success++;
+		p2 = gp_Pnt2d(pU,pV);
+	}
+	
+	if (success != 2) {
+	  cout << "Couldn't create the helix. Replacing with a line." <<endl;
+	  h = BRepBuilderAPI_MakeEdge( start, end );
+	  return h;
+	}
+
+	//for the 2d points, x axis is about the circumference.  Units are radians.
+	//to change direction, find the difference in x, then subtract from 2 PI.
+	if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI);
 	
 	Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
 	h = BRepBuilderAPI_MakeEdge(segment , cyl);
@@ -354,3 +373,11 @@ Standard_Real gcode2Model::readOne ( QString canon_line, uint n )
 	return t.section(',',n,n).toFloat();
 }
 
+void gcode2Model::checkEdge( std::vector<myEdgeType> edges, int n )
+{
+  if (n < 2) return;
+  float d = 0;
+  d = edges[n].start.Distance(edges[n-1].end);
+  if (d > Precision::Confusion())
+    cout << "Found gap of " << d << " before edge " << n << endl;
+}
