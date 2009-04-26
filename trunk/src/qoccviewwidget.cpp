@@ -323,26 +323,29 @@ void QoccViewWidget::leaveEvent ( QEvent* /* e */ )
 
 /*!
 \brief	The QWheelEvent class contains parameters that describe a wheel event. 
+Modification from bytecolor on #cam : shift while zooming in
 */
-void QoccViewWidget::wheelEvent ( QWheelEvent* e )
-{
-	if ( !myView.IsNull() )
-	{
-		Standard_Real currentScale = myView->Scale();
-		if (e->delta() > 0)
-		{
-			currentScale *= 1.10; // +10%
-		}
-		else
-		{
-			currentScale /= 1.10; // -10%
-		}
-		myView->SetScale( currentScale );
-	}
-	else
-	{
-		e->ignore();
-	}
+void QoccViewWidget::wheelEvent(QWheelEvent* e) {
+    if (!myView.IsNull()) {
+	if (e->delta() > 0) {
+            // zoom out, with no shift                                          
+            Quantity_Factor wheelZoomOutFactor = .7; // config setting [.1,.9]  
+            myView->Panning(0, 0, wheelZoomOutFactor);
+        }
+        else {
+            // shift what is under the cursor towards the center of             
+            // the screen and zoom in                                           
+            Quantity_Length dx, dy;
+            Quantity_Factor scale = myView->Scale();
+            Quantity_Factor wheelShiftFactor = 20.; // config setting [1.,20.]  
+            dx = 2. * myCurrentPoint.x() / width() - 1.;
+            dy = 2. * myCurrentPoint.y() / height() - 1.;
+            myView->Panning(wheelShiftFactor * -dx / scale,
+                            wheelShiftFactor * dy / scale, 1.1);
+        }
+    }
+    else
+        e->ignore();
 }
 
 /*!
