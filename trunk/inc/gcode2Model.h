@@ -26,6 +26,7 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QObject>
+#include <QProcess>
 
 #include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
@@ -44,13 +45,18 @@ private slots:
 	void myMenuItem();
 
 private:
+	typedef enum { TRAVERSE, ARC, LINEAR } MOTION_TYPE;
 	typedef struct {
 		gp_Pnt start,end;
 		TopoDS_Edge e;
-		//saving vector directions would make the solid easier / faster to make... how to calc?
+		//MOTION_TYPE motion;
+		//int N,S,F;
+		//saving vector directions would make the solid easier / faster to make maybe... how to calc?
 	} myEdgeType;
 	std::vector<myEdgeType> traverseEdges;
 	std::vector<myEdgeType> feedEdges;
+	bool waitRead(QProcess &canon);
+	void sleepSecond();
 	//std::vector<TopoDS_Shape> 
 	TopoDS_Shape traverseSweeps;
 	//std::vector<TopoDS_Shape> 
