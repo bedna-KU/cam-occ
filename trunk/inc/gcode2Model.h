@@ -43,6 +43,7 @@ public:
 	gcode2Model();
 private slots:
 	void myMenuItem();
+	void myNextMenuItem();
 
 private:
 	typedef enum { TRAVERSE, ARC, LINEAR } MOTION_TYPE;
@@ -55,7 +56,7 @@ private:
 	} myEdgeType;
 	std::vector<myEdgeType> traverseEdges;
 	std::vector<myEdgeType> feedEdges;
-	bool waitRead(QProcess &canon);
+	//bool waitRead(QProcess &canon);
 	void sleepSecond();
 	//std::vector<TopoDS_Shape> 
 	TopoDS_Shape traverseSweeps;
@@ -75,5 +76,7 @@ private:
 
 	QMenu *myMenu;
 	QAction *myAction;
+	QAction *nextAction;
+	bool hasProcessedNgc;
 };
 #endif //GCODE2MODEL_H

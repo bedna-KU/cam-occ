@@ -63,16 +63,24 @@
 using std::cout;
 gcode2Model::gcode2Model()
 {
-
 	myMenu = new QMenu("gcode2Model");
 	theWindow->menuBar()->insertMenu(theWindow->getHelpMenu(),myMenu);
 
 	//these five lines set up a menu item.  Uncomment the second one to have a shortcut.
 	myAction = new QAction ( "gcode2Model", this );
-	//myAction->setShortcut(QString("Ctrl+A"));
+	myAction->setShortcut(QString("Ctrl+M"));
 	myAction->setStatusTip ( "gcode2Model" );
 	connect ( myAction, SIGNAL ( triggered() ), this, SLOT ( myMenuItem() ) );
 	myMenu->addAction( myAction );
+
+// do next: show segments one at a time
+	nextAction = new QAction ( "Do next", this );
+	nextAction->setShortcut(QString("Ctrl+."));
+	nextAction->setStatusTip ( "Do next" );
+	connect ( nextAction, SIGNAL ( triggered() ), this, SLOT ( myNextMenuItem() ) );
+	myMenu->addAction( nextAction );
+
+	hasProcessedNgc = false;
 };
 
 void gcode2Model::myMenuItem()
@@ -90,33 +98,21 @@ void gcode2Model::myMenuItem()
 	QString itool = ipath + "configs/sim/sim_mm.tbl\n";
 	QProcess toCanon;
 	toCanon.start(interp,QStringList(file));
-/**************************************************
-Apparently, QProcess::setReadChannel screws with waitForReadyRead() and canReadLine()
-So, we just fly blind and assume that there are no errors when we navigate
-the interp's "menu", and that it requires no delays.
-**************************************************/
+	/**************************************************
+	Apparently, QProcess::setReadChannel screws with waitForReadyRead() and canReadLine()
+	So, we just fly blind and assume that there are no errors when we navigate
+	the interp's "menu", and that it requires no delays.
+	**************************************************/
 
 	//now give the interpreter the data it needs
-//	toCanon.setReadChannel(QProcess::StandardError);	//because the interp uses stderr for the "menu"
-	//QByteArray arr; 	//Required for QProcess::write(). grrr.
-	//waitRead(toCanon);
 	toCanon.write("2\n");	//set parameter file
-	//waitRead(toCanon);
-	//arr.clear();
 	toCanon.write(iparm.toAscii());
-	//waitRead(toCanon);
 	toCanon.write("3\n");	//set tool table file
-	//waitRead(toCanon);
-	//arr.clear();
 	toCanon.write(itool.toAscii());
 	//can also use 4 and 5
-	
-	//waitRead(toCanon);
-	toCanon.write("1\n"); //start interpreting
-	//waitRead(toCanon);
-	//cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
 
-//	toCanon.setReadChannel(QProcess::StandardOutput);
+	toCanon.write("1\n"); //start interpreting
+	//cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
 
 	if (!toCanon.waitForReadyRead(1000) ) {
 		if ( toCanon.state() == QProcess::NotRunning ){
@@ -145,12 +141,20 @@ the interp's "menu", and that it requires no delays.
 			fails++;
 			sleepSecond();
 		}
-	} while ((fails < 100) && ((toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning )));
+	} while ( (fails < 100) && 
+		  ( (toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning ) )  );
 	//((lineLength > 0) || 	//loop until interp quits and all lines are read.
 	//toCanon.canReadLine() || 
 	cout << "sweeping..." << endl;
 	sweepEm();
 	feedEdges.clear(); //so when user loads a new file, the old data is not prepended.
+	hasProcessedNgc = true;
+}
+
+// do next: show segments one at a time
+void gcode2Model::myNextMenuItem() {
+	if (!hasProcessedNgc) return;
+	//duplicate sweepEm?
 }
 
 void gcode2Model::sleepSecond() {
@@ -162,6 +166,7 @@ void gcode2Model::sleepSecond() {
 	return;
 }
 
+/*
 bool gcode2Model::waitRead(QProcess &canon){
 	if ( ! canon.waitForReadyRead(1000) ) {
 		infoMsg("Interpreter timed out at startup.");
@@ -172,6 +177,7 @@ bool gcode2Model::waitRead(QProcess &canon){
 		return true;  
 	}
 }
+*/
 
 //doesn't really sweep right now, just displays the wire
 void gcode2Model::sweepEm()
@@ -280,8 +286,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	//cout << "Line " << canon_line.toStdString() << endl;
 
 	/***************************************************
-	CANON lines that can be ignored.
-	Those beginning with:
+	CANON lines that can be ignored are those beginning with:
 
 	COMMENT SPINDLE MIST ENABLE FLOOD DWELL FEEDRATE 
 	SET_FEED_RATE PROGRAM_STOP
@@ -294,9 +299,9 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	QStringList canonIgnore;
 	QString ign;
 	canonIgnore << "COMMENT" << "SPINDLE" << "MIST" << "ENABLE" << "FLOOD" << "DWELL" 
-		<< "FEEDRATE" << "SET_FEED_RATE" << "PROGRAM_STOP()";
+		<< "FEEDRATE" << "SET_FEED_" << "_TOOL" << "PROGRAM_STOP()";
 	foreach (ign,canonIgnore) 
-		if (canon_line.startsWith(ign))
+		if (canon_line.contains(ign))
 			return;
 	if (canon_line.startsWith( "STRAIGHT_" )) {
 		gp_Pnt p = readXYZ(canon_line);
@@ -357,7 +362,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 			//cout << "Create ";
 			if (fabs(zdist) > 0.000001) {
 				edge.e = helix(edge.start, edge.end, c, arcDir,rot);
-				//cout << "Helix with center " << toString(c).toStdString() << " and arcDir " << toString(arcDir).toStdString() << endl;
+				cout << "Helix with center " << toString(c).toStdString() << " and arcDir " << toString(arcDir).toStdString();
 			//cout << "helix." << endl;
 			} else {
 				//arc center is c; ends are edge.start, edge.last
@@ -365,13 +370,13 @@ void gcode2Model::processCanonLine ( QString canon_line )
 				gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
 				gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
 				if (rot==1) startVec *= -1;
-				//cout << "Arc from " << toString(edge.start).toStdString() << " to " << toString(edge.end).toStdString() << " with vector at start: " << toString(startVec).toStdString() << endl;
-				//cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
+				//cout << "Arc with vector at start: " << toString(startVec).toStdString();
 				edge.e = arc(edge.start, startVec, edge.end);
 				//cout << "arc." << endl;
 			}
+			cout << " from " << toString(edge.start).toStdString() << " to " << toString(edge.end).toStdString() << endl;
+			cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
 			feedEdges.push_back( edge );
-			//<< canon_line.toStdString() <<
 		} else cout << "Skipped zero-length arc." << endl;
 	} else if (canon_line.startsWith( "SELECT_PLANE(" )) {
 		if (canon_line.contains( "XZ)" )) {
@@ -384,7 +389,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	} else if (canon_line.startsWith( "MESSAGE" )) {
 		cout << canon_line.toStdString() << endl;
 	}
-	//the else if's below are to silently ignore certain canonical commands that either have no use in this context, or are defaults
+	//the else if's below are to silently ignore certain canonical commands which I don't know what to do with
 	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000)" )) {}
 	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_MM)" )) {}
 	else if (canon_line.startsWith( "SET_FEED_REFERENCE(CANON_XYZ)" )) {}
@@ -448,8 +453,9 @@ TopoDS_Edge gcode2Model::helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, i
 	}
 
 	//for the 2d points, x axis is about the circumference.  Units are radians.
-	//to change direction, find the difference in x, then subtract from 2 PI.
-	if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI);
+	//change direction if rot = 1, not if rot = -1
+	//if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); << this is wrong!
+//	if (rot==1) p2.SetX(p2.X()-2*M_PI); //only works for simple cases, should always work for G02/G03 because they don't go around more than once
 	
 	Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
 	h = BRepBuilderAPI_MakeEdge(segment , cyl);
@@ -462,7 +468,6 @@ gp_Pnt gcode2Model::readXYZ ( QString canon_line )
 {
 	gp_Pnt p;
 	QString t = canon_line.section( '(',1,1 ).section( ')',0,0 );
-	//t = t.section( ')',0,0 );
 	p.SetCoord( t.section(',',0,0).toFloat(),
 	            t.section(',',1,1).toFloat(),
 	            t.section(',',2,2).toFloat() );
