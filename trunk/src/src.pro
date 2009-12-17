@@ -51,7 +51,9 @@ qoccviewwidget.cpp \
  uiStuff.cpp \
  aSample.cpp \
  shapeOffset.cpp \
- gcode2Model.cpp
+ gcode2ModelUi.cpp \
+ gcode2ModelGc.cpp \
+ gcode2Model3d.cpp
 
 DESTDIR = ../bin
 

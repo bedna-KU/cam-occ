@@ -78,5 +78,6 @@ private:
 	QAction *myAction;
 	QAction *nextAction;
 	bool hasProcessedNgc;
+	void interpret(QString file);
 };
 #endif //GCODE2MODEL_H
