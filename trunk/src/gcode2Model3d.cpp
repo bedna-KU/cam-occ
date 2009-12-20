@@ -38,6 +38,7 @@
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepOffsetAPI_MakePipe.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRep_Tool.hxx> 
 #include <Geom_CylindricalSurface.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pln.hxx>
@@ -45,6 +46,7 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Solid.hxx>
+#include <TopExp.hxx>
 #include <Handle_Geom2d_TrimmedCurve.hxx>
 #include <Handle_Geom_TrimmedCurve.hxx>
 #include <Handle_Geom_CylindricalSurface.hxx>
@@ -81,9 +83,39 @@ void gcode2Model::sweepEm()
 		theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
 		theWindow->getContext()->Display ( feedAis );
 	} else {
-	  cout << "Failed to build wire!" << endl;
+	  	cout << "Failed to build wire from " << feedEdges.size() << " segments!" << endl;
+	 	//infoMsg( QString("Failed to build wire from ") + int(feedEdges.size()) + " segments!");
 	}
 
+}
+
+void gcode2Model::drawOne(uint j)
+{
+	if (j < feedEdges.size()) {
+		BRepBuilderAPI_MakeWire makeW;
+		uint i;
+		for ( i=0 ; i < j ; i++ ) {
+			checkEdge( feedEdges, i );	//check that edges are connected
+			makeW.Add(feedEdges[i].e);
+		}
+		if (makeW.IsDone()) {
+			Handle_AIS_Shape feedAis = new AIS_Shape ( makeW.Wire() );
+			theWindow->getContext()->SetMaterial ( feedAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
+			theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
+			theWindow->getContext()->Display ( feedAis );
+		} else {
+	  		cout << "Failed to build wire of length " << j << endl;
+			if ( j > 1 ) {
+				cout << "last edge: " << toString(feedEdges[i-1].start).toStdString() << " to ";
+				cout << toString(feedEdges[i-1].end).toStdString() << endl;
+				cout << "prev edge: " << toString(feedEdges[i-2].start).toStdString() << " to ";
+				cout << toString(feedEdges[i-2].end).toStdString() << endl;
+			}
+		}
+	} else {
+	  	cout << "past end of feedEdges: index " << j << " is too big for count " << feedEdges.size() << endl;
+//	  	infoMsg(s);
+	}
 }
 
 /****************************************************************************
@@ -158,7 +190,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
 		if(proj.LowerDistance() > 1.0e-6 ) {
-			//cout << "Point fitting distance " << float(proj.LowerDistance()) << endl;
+			cout << "Point fitting distance " << float(proj.LowerDistance()) << endl;
 		}
 		success++;
 		p1 = gp_Pnt2d(pU,pV);
@@ -168,7 +200,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
 		if(proj.LowerDistance() > 1.0e-6 ) {
-			//cout << "Point fitting distance " << float(proj.LowerDistance()) << endl;
+			cout << "Point fitting distance " << float(proj.LowerDistance()) << endl;
 		}
 		success++;
 		p2 = gp_Pnt2d(pU,pV);
@@ -183,7 +215,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	//for the 2d points, x axis is about the circumference.  Units are radians.
 	//change direction if rot = 1, not if rot = -1
 	//if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); << this is wrong!
-//	if (rot==1) p2.SetX(p2.X()-2*M_PI); //only works for simple cases, should always work for G02/G03 because they don't go around more than once
+	if (rot==1) p2.SetX(p2.X()-2*M_PI); //only works for simple cases, should always work for G02/G03 because they don't go around more than once
 	
 	Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
 	h = BRepBuilderAPI_MakeEdge(segment , cyl);
@@ -195,7 +227,42 @@ void gcode2Model::checkEdge( std::vector<myEdgeType> edges, int n )
 {
   if (n < 2) return;
   float d = 0;
+  gp_Pnt p;
+  bool nogap = true;
   d = edges[n].start.Distance(edges[n-1].end);
-  if (d > Precision::Confusion())
+  if (d > Precision::Confusion()) {
     cout << "Found gap of " << d << " before edge " << n << endl;
+    nogap = false;
+  }
+  
+  p = BRep_Tool::Pnt(TopExp::FirstVertex(edges[n].e));
+  d = edges[n].start.Distance(p);
+  if (d > Precision::Confusion()) {
+    cout << "Start data differs by " << d << " before edge " << n << " - expected: ";
+    cout << toString(feedEdges[n].start).toStdString();
+    cout << " - actual: " << toString(p).toStdString() << endl;
+    nogap = false;
+  }
+  
+  p = BRep_Tool::Pnt(TopExp::LastVertex(edges[n].e));
+  d = edges[n].end.Distance(p);
+  if (d > Precision::Confusion()) {
+    cout << "End data differs by " << d << " after edge " << n << " - expected: ";
+    cout << toString(feedEdges[n].end).toStdString();
+    cout << " - actual: " << toString(p).toStdString() << endl;
+    nogap = false;
+  }
+  
+  if (!nogap) {
+    if (edges[n].shape == HELIX) {
+	cout << "Failure is on a helical move" << endl;
+    } else if (edges[n].shape == ARC) {
+	cout << "Failure is on an arc move" << endl;
+    } else if (edges[n].shape == LINE) {
+      if (edges[n].motion == TRAVERSE)
+	cout << "Failure is on a rapid traverse" << endl;
+      else
+	cout << "Failure is on a linear move" << endl;
+    } else cout << "Failure is on a move of undefined type!" << endl; //should never get here
+  }
 }

@@ -46,11 +46,13 @@ private slots:
 	void myNextMenuItem();
 
 private:
-	typedef enum { TRAVERSE, ARC, LINEAR } MOTION_TYPE;
+	typedef enum { TRAVERSE, FEED } MOTION_TYPE;
+	typedef enum { ARC, HELIX, LINE } SHAPE_TYPE;
 	typedef struct {
 		gp_Pnt start,end;
 		TopoDS_Edge e;
-		//MOTION_TYPE motion;
+		MOTION_TYPE motion;
+		SHAPE_TYPE shape;
 		//int N,S,F;
 		//saving vector directions would make the solid easier / faster to make maybe... how to calc?
 	} myEdgeType;
@@ -66,6 +68,7 @@ private:
 	void readLines ( QString filename );
 	void processCanonLine ( QString canon_line );
 	void sweepEm();
+	void drawOne(uint i);
 	gp_Pnt readXYZ ( QString canon_line );
 	Standard_Real readOne ( QString canon_line, uint n );
 	TopoDS_Wire create2dTool(Standard_Real diam, Standard_Real shape);

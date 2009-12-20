@@ -53,9 +53,10 @@ gcode2Model::gcode2Model()
 
 void gcode2Model::myMenuItem()
 {
+  	feedEdges.clear();
 	slotNeutralSelection();
 	
-	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", ".", "*.ngc" );
+	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", "./ngc-in", "*.ngc" );
 	if ( ! file.endsWith(".ngc") ) {
 		infoMsg("You must select a file ending with .ngc!");
 		return;
@@ -63,14 +64,16 @@ void gcode2Model::myMenuItem()
 	interpret ( file );
 	cout << "sweeping..." << endl;
 	sweepEm();
-	feedEdges.clear(); //so when user loads a new file, the old data is not prepended.
+//	feedEdges.clear(); //so when user loads a new file, the old data is not prepended.
 	hasProcessedNgc = true;
 }
 
 // do next: show segments one at a time
 void gcode2Model::myNextMenuItem() {
-	if (!hasProcessedNgc) return;
-	//duplicate sweepEm?
+	static uint segment = 0;
+  	if (!hasProcessedNgc) return;
+	drawOne(segment);
+	segment++;
 }
 
 void gcode2Model::sleepSecond() {

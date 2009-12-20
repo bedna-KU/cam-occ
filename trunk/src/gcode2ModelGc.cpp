@@ -135,6 +135,11 @@ void gcode2Model::processCanonLine ( QString canon_line )
 			edge.e = BRepBuilderAPI_MakeEdge( last, p );
 			edge.start = last;
 			edge.end = last = p;
+			if (canon_line.contains("FEED"))
+			  	edge.motion = FEED;
+			else
+			  	edge.motion = TRAVERSE;
+			edge.shape = LINE;
 			feedEdges.push_back( edge );
 		}
 	} else if (canon_line.startsWith( "ARC_FEED(" )) {
@@ -183,6 +188,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 			//cout << "Create ";
 			if (fabs(zdist) > 0.000001) {
 				edge.e = helix(edge.start, edge.end, c, arcDir,rot);
+				edge.shape = HELIX;
 				cout << "Helix with center " << toString(c).toStdString() << " and arcDir " << toString(arcDir).toStdString();
 			//cout << "helix." << endl;
 			} else {
@@ -193,10 +199,12 @@ void gcode2Model::processCanonLine ( QString canon_line )
 				if (rot==1) startVec *= -1;
 				//cout << "Arc with vector at start: " << toString(startVec).toStdString();
 				edge.e = arc(edge.start, startVec, edge.end);
+				edge.shape = ARC;
 				//cout << "arc." << endl;
 			}
 			cout << " from " << toString(edge.start).toStdString() << " to " << toString(edge.end).toStdString() << endl;
 			cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
+			edge.motion = FEED;
 			feedEdges.push_back( edge );
 		} else cout << "Skipped zero-length arc." << endl;
 	} else if (canon_line.startsWith( "SELECT_PLANE(" )) {
@@ -213,6 +221,10 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	//the else if's below are to silently ignore certain canonical commands which I don't know what to do with
 	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000)" )) {}
 	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_MM)" )) {}
+	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_INCHES)" )) {}
+	else if (canon_line.startsWith( "SET_NAIVECAM_TOLERANCE(0.0000)" )) {}
+	else if (canon_line.startsWith( "SET_MOTION_CONTROL_MODE(CANON_CONTINUOUS, 0.000000)" )) {}
+	else if (canon_line.startsWith( "SET_XY_ROTATION(0.0000)" )) {}
 	else if (canon_line.startsWith( "SET_FEED_REFERENCE(CANON_XYZ)" )) {}
 	else if (canon_line.startsWith( "PROGRAM_END" )) {
 	cout <<"Program ended."<<endl;
