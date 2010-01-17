@@ -27,13 +27,14 @@
 
 using std::cout;
 
-void gcode2Model::interpret ( QString file )
+bool gcode2Model::interpret ( QString file )
 {
 	QString ipath = "/opt/src/emc2/trunk/";
 	QString interp = ipath + "bin/rs274";
 	QString iparm = ipath + "configs/sim/sim_mm.var\n";
 	QString itool = ipath + "configs/sim/sim_mm.tbl\n";
 	QProcess toCanon;
+	bool foundEOF;
 	toCanon.start(interp,QStringList(file));
 	/**************************************************
 	Apparently, QProcess::setReadChannel screws with waitForReadyRead() and canReadLine()
@@ -58,7 +59,7 @@ void gcode2Model::interpret ( QString file )
 		cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
 		cout << "stdout: " << (const char*)toCanon.readAllStandardOutput() << endl;
 		toCanon.close();
-		return;
+		return false;
 	}
 	
 	//if readLine is used at the wrong time, it is possible to pick up a line fragment! will canReadLine() fix that?
@@ -69,7 +70,7 @@ void gcode2Model::interpret ( QString file )
 		if (toCanon.canReadLine()) {
 			lineLength = toCanon.readLine(line, sizeof(line));
 			if (lineLength != -1 ) {
-				processCanonLine(line);
+				foundEOF = processCanonLine(line);
 			} else {	//shouldn't get here!
 				fails++;
 				sleepSecond();
@@ -82,14 +83,11 @@ void gcode2Model::interpret ( QString file )
 		  ( (toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning ) )  );
 	//((lineLength > 0) || 	//loop until interp quits and all lines are read.
 	//toCanon.canReadLine() ||  
+	return foundEOF;
 }
 
-void gcode2Model::processCanonLine ( QString canon_line )
+bool gcode2Model::processCanonLine ( QString canon_line )
 {
-	static gp_Pnt last;	//this holds the coordinates of the end of the last move, no matter what that move was (STRAIGHT_FEED,STRAIGHT_TRAVERSE,ARC_FEED)
-	static bool firstPoint = true;
-	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;   //for arcs
-	static CANONPLANE CANON_PLANE = CANON_PLANE_XY;	   //initialize to "normal"
 	//ideally, handle rapids (STRAIGHT_TRAVERSE) separately from STRAIGHT_FEED
 	//for now, handle together
 	if ( ! canon_line.endsWith(")\n") ) {
@@ -123,7 +121,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 		<< "FEEDRATE" << "SET_FEED_" << "_TOOL" << "PROGRAM_STOP()";
 	foreach (ign,canonIgnore) 
 		if (canon_line.contains(ign))
-			return;
+			return false;
 	if (canon_line.startsWith( "STRAIGHT_" )) {
 		gp_Pnt p = readXYZ(canon_line);
 		if (firstPoint) {
@@ -145,7 +143,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	} else if (canon_line.startsWith( "ARC_FEED(" )) {
 		gp_Dir arcDir;
 		gp_Pnt c;
-		float x,y,z,ep,a1,a2,e1,e2,zdist;
+		double x,y,z,ep,a1,a2,e1,e2,zdist;
 		int rot=0;
 		//bool isHelix = false;
 		x=y=z=ep=a1=a2=e1=e2=0;
@@ -220,6 +218,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	}
 	//the else if's below are to silently ignore certain canonical commands which I don't know what to do with
 	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000)" )) {}
+	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)" )) {}
 	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_MM)" )) {}
 	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_INCHES)" )) {}
 	else if (canon_line.startsWith( "SET_NAIVECAM_TOLERANCE(0.0000)" )) {}
@@ -227,7 +226,8 @@ void gcode2Model::processCanonLine ( QString canon_line )
 	else if (canon_line.startsWith( "SET_XY_ROTATION(0.0000)" )) {}
 	else if (canon_line.startsWith( "SET_FEED_REFERENCE(CANON_XYZ)" )) {}
 	else if (canon_line.startsWith( "PROGRAM_END" )) {
-	cout <<"Program ended."<<endl;
+	//cout <<"Program ended."<<endl;
+	return true; //true => gcode file ends correctly
 	}
 	//else if (canon_line.startsWith( "" )) {}
 	//else if (canon_line.startsWith( "" )) {}
@@ -235,6 +235,7 @@ void gcode2Model::processCanonLine ( QString canon_line )
 		cout << "Does not handle " << canon_line.toStdString() << endl;
 	}
 	//cout << "Done with line" << endl;
+	return false;
 }
 
 
@@ -243,9 +244,9 @@ gp_Pnt gcode2Model::readXYZ ( QString canon_line )
 {
 	gp_Pnt p;
 	QString t = canon_line.section( '(',1,1 ).section( ')',0,0 );
-	p.SetCoord( t.section(',',0,0).toFloat(),
-	            t.section(',',1,1).toFloat(),
-	            t.section(',',2,2).toFloat() );
+	p.SetCoord( t.section(',',0,0).toDouble(),
+	            t.section(',',1,1).toDouble(),
+	            t.section(',',2,2).toDouble() );
 	return p;
 }
 
@@ -254,5 +255,5 @@ gp_Pnt gcode2Model::readXYZ ( QString canon_line )
 Standard_Real gcode2Model::readOne ( QString canon_line, uint n )
 {
 	QString t = canon_line.section( '(',1,1 ).section( ')',0,0 );
-	return t.section(',',n,n).toFloat();
+	return t.section(',',n,n).toDouble();
 }

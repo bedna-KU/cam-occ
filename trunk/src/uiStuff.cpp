@@ -238,3 +238,14 @@ void uiStuff::addSelectionWidgets() {
 	selectMenu->addAction( selectSolidAction );
 }
 
+//getVC, getOCC
+
+void uiStuff::hideGrid() {
+  theWindow->getVC()->gridOff();
+}
+void uiStuff::fitAll() {
+  theWindow->getOCC()->fitAll();
+}
+void uiStuff::axoView() {
+  theWindow->getOCC()->viewAxo();
+}

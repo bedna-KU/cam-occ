@@ -68,7 +68,7 @@ private slots:
 
 private:
 
-	cam myCam(QoccHarnessWindow*);
+	//cam myCam(QoccHarnessWindow*); //why two?! also shows up in QOHW.cpp
 
     void createActions();
     void createMenus();
@@ -131,6 +131,10 @@ private:
 	QoccViewerContext*  myVC;
 
 	QString myLastFolder;
+	
+  public:
+    	QoccViewWidget*     getOCC() { return myOCC; };
+	QoccViewerContext*  getVC() { return myVC; };
 
 };
 

@@ -54,10 +54,29 @@
 
 using std::cout;
 
+//to create the cross-section of the tool, take a 3d model of it and project onto a plane normal to the motion vector
+//cross section would be useful for linear moves, instantaneous outline computation for helical moves in any plane, and arc moves in xz or yz plane
+//for arcs in xy plane, simply sweep the cross-section of the tool.
+//despite all the effort put into creating a wire, that really isn't useful - the MRSEVs will have to be calculated individually.
+//create a function that will create a 2d outline of an APT tool.
+
+//hard parts: any shape but ball-nose for non-xy-plane cuts
+//need to create a cut-segment ABC and subclass it for linear, arc, and helical csegs.
+
 //doesn't really sweep right now, just displays the wire
-void gcode2Model::sweepEm()
+void gcode2Model::sweep()
 {
-	gp_Pnt p;
+	drawSome(-1);
+	showWire();
+}
+
+/*void gcode2Model::showWire()
+
+  //TODO:
+  //change this function to display as much as it can, i.e.
+  //create wire. if it fails, show the wire up to the failure. if it doesn't fail,
+  //create sweep. if sweep fails, show the wire instead
+  	gp_Pnt p;
 	gp_Vec V;
 	gp_Dir dir;
 	gp_Ax1 zAxis(gp_Pnt(0,0,0),gp_Dir(0,0,1));
@@ -87,11 +106,19 @@ void gcode2Model::sweepEm()
 	 	//infoMsg( QString("Failed to build wire from ") + int(feedEdges.size()) + " segments!");
 	}
 
+}*/
+void gcode2Model::showWire() {
+	Handle_AIS_Shape feedAis = new AIS_Shape ( thePath );
+	theWindow->getContext()->SetMaterial ( feedAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
+	theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
+	theWindow->getContext()->Display ( feedAis );
 }
 
-void gcode2Model::drawOne(uint j)
+bool gcode2Model::drawSome(int j)
 {
-	if (j < feedEdges.size()) {
+  	bool success = false;
+  	if ( j == -1 ) j += feedEdges.size();
+	if (j < (int)feedEdges.size()) {
 		BRepBuilderAPI_MakeWire makeW;
 		uint i;
 		for ( i=0 ; i < j ; i++ ) {
@@ -99,10 +126,8 @@ void gcode2Model::drawOne(uint j)
 			makeW.Add(feedEdges[i].e);
 		}
 		if (makeW.IsDone()) {
-			Handle_AIS_Shape feedAis = new AIS_Shape ( makeW.Wire() );
-			theWindow->getContext()->SetMaterial ( feedAis,Graphic3d_NOM_PLASTIC );  //Supposed to look like plastic.  Try GOLD or PLASTER or ...
-			theWindow->getContext()->SetDisplayMode ( feedAis,1,Standard_False );  //shaded
-			theWindow->getContext()->Display ( feedAis );
+			thePath = makeW.Wire();
+			success = true;
 		} else {
 	  		cout << "Failed to build wire of length " << j << endl;
 			if ( j > 1 ) {
@@ -110,12 +135,14 @@ void gcode2Model::drawOne(uint j)
 				cout << toString(feedEdges[i-1].end).toStdString() << endl;
 				cout << "prev edge: " << toString(feedEdges[i-2].start).toStdString() << " to ";
 				cout << toString(feedEdges[i-2].end).toStdString() << endl;
+				return drawSome (j-1);
 			}
 		}
 	} else {
 	  	cout << "past end of feedEdges: index " << j << " is too big for count " << feedEdges.size() << endl;
 //	  	infoMsg(s);
 	}
+	return success;
 }
 
 /****************************************************************************
@@ -190,7 +217,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
 		if(proj.LowerDistance() > 1.0e-6 ) {
-			cout << "Point fitting distance " << float(proj.LowerDistance()) << endl;
+			cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
 		}
 		success++;
 		p1 = gp_Pnt2d(pU,pV);
@@ -200,7 +227,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
 		if(proj.LowerDistance() > 1.0e-6 ) {
-			cout << "Point fitting distance " << float(proj.LowerDistance()) << endl;
+			cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
 		}
 		success++;
 		p2 = gp_Pnt2d(pU,pV);
@@ -215,8 +242,14 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	//for the 2d points, x axis is about the circumference.  Units are radians.
 	//change direction if rot = 1, not if rot = -1
 	//if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); << this is wrong!
-	if (rot==1) p2.SetX(p2.X()-2*M_PI); //only works for simple cases, should always work for G02/G03 because they don't go around more than once
-	
+	cout << "p1x " << p1.X() << ", p2x " << p2.X() << endl;
+
+	//switch direction if necessary, only works for simple cases
+	//should always work for G02/G03 because they are less than 1 rotation
+	if (rot==1) {
+	  p2.SetX(p2.X()-2*M_PI);
+	  cout << "p2x now " << p2.X() << endl;
+	}
 	Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
 	h = BRepBuilderAPI_MakeEdge(segment , cyl);
 	
@@ -226,7 +259,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 void gcode2Model::checkEdge( std::vector<myEdgeType> edges, int n )
 {
   if (n < 2) return;
-  float d = 0;
+  double d = 0;
   gp_Pnt p;
   bool nogap = true;
   d = edges[n].start.Distance(edges[n-1].end);

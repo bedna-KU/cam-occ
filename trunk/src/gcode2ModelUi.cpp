@@ -49,30 +49,40 @@ gcode2Model::gcode2Model()
 	myMenu->addAction( nextAction );
 
 	hasProcessedNgc = false;
+	thePath.Nullify();
 };
 
 void gcode2Model::myMenuItem()
 {
-  	feedEdges.clear();
-	slotNeutralSelection();
+	bool success;
+	cleanUp();
+	hideGrid();
+	axoView();
 	
 	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", "./ngc-in", "*.ngc" );
 	if ( ! file.endsWith(".ngc") ) {
 		infoMsg("You must select a file ending with .ngc!");
 		return;
 	}
-	interpret ( file );
-	cout << "sweeping..." << endl;
-	sweepEm();
-//	feedEdges.clear(); //so when user loads a new file, the old data is not prepended.
-	hasProcessedNgc = true;
+	success = interpret ( file );
+	if (success) {
+		cout << "sweeping..." << endl;
+		sweep();
+		fitAll();
+		hasProcessedNgc = true;
+	} else {
+		infoMsg("Interpreter stopped without finding PROGRAM_END.");
+		drawSome(-1);
+		showWire();
+		fitAll();
+	}
 }
 
-// do next: show segments one at a time
+// show one or more segments
 void gcode2Model::myNextMenuItem() {
 	static uint segment = 0;
   	if (!hasProcessedNgc) return;
-	drawOne(segment);
+	drawSome(segment);
 	segment++;
 }
 
@@ -98,3 +108,10 @@ bool gcode2Model::waitRead(QProcess &canon){
 }
 */
 
+void gcode2Model::cleanUp() {
+	feedEdges.clear();
+	slotNeutralSelection();
+	last.SetCoord(0,0,0);
+	firstPoint = true;
+	CANON_PLANE = CANON_PLANE_XY;
+}

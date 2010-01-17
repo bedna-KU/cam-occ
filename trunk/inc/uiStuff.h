@@ -69,6 +69,9 @@ protected:
 	QString toString( gp_Dir d );
 	void checkShapeType(TopoDS_Shape Shape);
 	void longMsg( QString message );
+	void hideGrid();
+	void fitAll();
+	void axoView();
 
 private:
 	void addSelectionWidgets();

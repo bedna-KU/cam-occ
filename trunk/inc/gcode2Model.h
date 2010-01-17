@@ -56,6 +56,12 @@ private:
 		//int N,S,F;
 		//saving vector directions would make the solid easier / faster to make maybe... how to calc?
 	} myEdgeType;
+	gp_Pnt last;	//this holds the coordinates of the end of the last move, no matter what that move was (STRAIGHT_FEED,STRAIGHT_TRAVERSE,ARC_FEED)
+	bool firstPoint;
+	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;   //for arcs
+	CANONPLANE CANON_PLANE;
+
+	TopoDS_Wire thePath;
 	std::vector<myEdgeType> traverseEdges;
 	std::vector<myEdgeType> feedEdges;
 	//bool waitRead(QProcess &canon);
@@ -66,9 +72,10 @@ private:
 	TopoDS_Shape feedSweeps;
 	
 	void readLines ( QString filename );
-	void processCanonLine ( QString canon_line );
-	void sweepEm();
-	void drawOne(uint i);
+	bool processCanonLine ( QString canon_line );
+	void sweep();
+	void showWire();
+	bool drawSome(int i);
 	gp_Pnt readXYZ ( QString canon_line );
 	Standard_Real readOne ( QString canon_line, uint n );
 	TopoDS_Wire create2dTool(Standard_Real diam, Standard_Real shape);
@@ -81,6 +88,7 @@ private:
 	QAction *myAction;
 	QAction *nextAction;
 	bool hasProcessedNgc;
-	void interpret(QString file);
+	bool interpret(QString file);
+	void cleanUp();
 };
 #endif //GCODE2MODEL_H
