@@ -145,7 +145,6 @@ bool gcode2Model::processCanonLine ( QString canon_line )
 		gp_Pnt c;
 		double x,y,z,ep,a1,a2,e1,e2,zdist;
 		int rot=0;
-		//bool isHelix = false;
 		x=y=z=ep=a1=a2=e1=e2=0;
 		
 		edge.start = last;
@@ -181,16 +180,13 @@ bool gcode2Model::processCanonLine ( QString canon_line )
 			zdist = ep - edge.start.Z();
 		}
 		last = edge.end;
-		//cout << "Dist " << zdist << endl;
-		if (edge.start.Distance(edge.end) > Precision::Confusion()) { //caught this bug thanks to tort.ngc
-			//cout << "Create ";
+		//skip arc if zero length; caught this bug thanks to tort.ngc
+		if (edge.start.Distance(edge.end) > Precision::Confusion()) { 
+			//center is c; ends are edge.start, edge.last
 			if (fabs(zdist) > 0.000001) {
 				edge.e = helix(edge.start, edge.end, c, arcDir,rot);
 				edge.shape = HELIX;
-				cout << "Helix with center " << toString(c).toStdString() << " and arcDir " << toString(arcDir).toStdString();
-			//cout << "helix." << endl;
 			} else {
-				//arc center is c; ends are edge.start, edge.last
 				gp_Vec Vr = gp_Vec(c,edge.start);	//vector from center to start
 				gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
 				gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
@@ -198,12 +194,23 @@ bool gcode2Model::processCanonLine ( QString canon_line )
 				//cout << "Arc with vector at start: " << toString(startVec).toStdString();
 				edge.e = arc(edge.start, startVec, edge.end);
 				edge.shape = ARC;
-				//cout << "arc." << endl;
 			}
-			cout << " from " << toString(edge.start).toStdString() << " to " << toString(edge.end).toStdString() << endl;
-			cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
 			edge.motion = FEED;
 			feedEdges.push_back( edge );
+			chkEdgeStruct check = checkEdge ( feedEdges, feedEdges.size() - 1 );
+			if (check.startGap != 0.0) {
+				exit(-1); //what SHOULD we do here?!
+			}
+			if (check.endGap != 0.0) {
+				last = check.realEnd;
+				feedEdges.back().end = last;
+				if (check.endGap > 100.0*Precision::Confusion()) {
+					cout << " with center " << toString(c).toStdString();
+					if (edge.shape == HELIX) cout << " and arcDir " << toString(arcDir).toStdString();
+					cout << " from " << toString(edge.start).toStdString() << " to " << toString(edge.end).toStdString() << endl;
+					cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
+				}
+			}
 		} else cout << "Skipped zero-length arc." << endl;
 	} else if (canon_line.startsWith( "SELECT_PLANE(" )) {
 		if (canon_line.contains( "XZ)" )) {
@@ -217,14 +224,20 @@ bool gcode2Model::processCanonLine ( QString canon_line )
 		cout << canon_line.toStdString() << endl;
 	}
 	//the else if's below are to silently ignore certain canonical commands which I don't know what to do with
-	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000)" )) {}
 	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)" )) {}
+	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000" )) {
+	  	//this is a common canon statement. we are going to hijack it to produce a warning, because
+		//the data we're getting was produced with a format of %.4f or so
+		infoMsg(QString("Warning, input has reduced precision, expected more zeros: <br>") + canon_line );
+	}
 	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_MM)" )) {}
 	else if (canon_line.startsWith( "USE_LENGTH_UNITS(CANON_UNITS_INCHES)" )) {}
 	else if (canon_line.startsWith( "SET_NAIVECAM_TOLERANCE(0.0000)" )) {}
 	else if (canon_line.startsWith( "SET_MOTION_CONTROL_MODE(CANON_CONTINUOUS, 0.000000)" )) {}
 	else if (canon_line.startsWith( "SET_XY_ROTATION(0.0000)" )) {}
 	else if (canon_line.startsWith( "SET_FEED_REFERENCE(CANON_XYZ)" )) {}
+	else if (canon_line.startsWith( "SET_XY_ROTATION(0.000000)" )) {}
+	else if (canon_line.startsWith( "SET_NAIVECAM_TOLERANCE(0.000000)" )) {}
 	else if (canon_line.startsWith( "PROGRAM_END" )) {
 	//cout <<"Program ended."<<endl;
 	return true; //true => gcode file ends correctly

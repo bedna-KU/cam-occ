@@ -54,15 +54,20 @@
 
 using std::cout;
 
-//to create the cross-section of the tool, take a 3d model of it and project onto a plane normal to the motion vector
-//cross section would be useful for linear moves, instantaneous outline computation for helical moves in any plane, and arc moves in xz or yz plane
-//for arcs in xy plane, simply sweep the cross-section of the tool.
-//despite all the effort put into creating a wire, that really isn't useful - the MRSEVs will have to be calculated individually.
-//create a function that will create a 2d outline of an APT tool.
+/*
+*To create the cross-section of the tool, take a 3d model of it and project onto a plane normal to the motion vector.
 
-//hard parts: any shape but ball-nose for non-xy-plane cuts
-//need to create a cut-segment ABC and subclass it for linear, arc, and helical csegs.
+*Cross section would be useful for linear moves, instantaneous outline computation for helical moves in any plane, and arc moves in xz or yz plane.
 
+*For arcs in xy plane, simply sweep the cross-section of the tool.
+
+*Despite all the effort put into creating a wire, that really isn't useful - the MRSEVs will have to be calculated individually.
+
+*Create a function that will create a 2d outline of an APT tool.
+
+hard parts: any shape but ball-nose for non-xy-plane cuts
+need to create a cut-segment ABC and subclass it for linear, arc, and helical csegs.
+*/
 //doesn't really sweep right now, just displays the wire
 void gcode2Model::sweep()
 {
@@ -121,9 +126,12 @@ bool gcode2Model::drawSome(int j)
 	if (j < (int)feedEdges.size()) {
 		BRepBuilderAPI_MakeWire makeW;
 		uint i;
-		for ( i=0 ; i < j ; i++ ) {
-			checkEdge( feedEdges, i );	//check that edges are connected
-			makeW.Add(feedEdges[i].e);
+		chkEdgeStruct result;
+		for ( i=0 ; (int)i < j ; i++ ) {
+			result = checkEdge( feedEdges, i );	//check that edges are connected
+			if ((result.startGap == 0.0) && (result.endGap == 0.0))
+				makeW.Add(feedEdges[i].e);
+			else return false;
 		}
 		if (makeW.IsDone()) {
 			thePath = makeW.Wire();
@@ -217,7 +225,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
 		if(proj.LowerDistance() > 1.0e-6 ) {
-			cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
+			//cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
 		}
 		success++;
 		p1 = gp_Pnt2d(pU,pV);
@@ -227,7 +235,7 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	if(proj.NbPoints() > 0) {
 		proj.LowerDistanceParameters(pU, pV);
 		if(proj.LowerDistance() > 1.0e-6 ) {
-			cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
+			//cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
 		}
 		success++;
 		p2 = gp_Pnt2d(pU,pV);
@@ -242,13 +250,13 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	//for the 2d points, x axis is about the circumference.  Units are radians.
 	//change direction if rot = 1, not if rot = -1
 	//if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); << this is wrong!
-	cout << "p1x " << p1.X() << ", p2x " << p2.X() << endl;
+	//cout << "p1x " << p1.X() << ", p2x " << p2.X() << endl;
 
 	//switch direction if necessary, only works for simple cases
 	//should always work for G02/G03 because they are less than 1 rotation
 	if (rot==1) {
 	  p2.SetX(p2.X()-2*M_PI);
-	  cout << "p2x now " << p2.X() << endl;
+	  //cout << "p2x now " << p2.X() << endl;
 	}
 	Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
 	h = BRepBuilderAPI_MakeEdge(segment , cyl);
@@ -256,17 +264,25 @@ TopoDS_Edge gcode2Model::helix ( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir,
 	return h;
 }
 
-void gcode2Model::checkEdge( std::vector<myEdgeType> edges, int n )
+//returns a structure containing info on the start and end of the edge
+gcode2Model::chkEdgeStruct gcode2Model::checkEdge( std::vector<myEdgeType> edges, uint n )
 {
-  if (n < 2) return;
+  chkEdgeStruct eStruct;
+  eStruct.startGap = 0.0;
+  eStruct.endGap = 0.0;
+  //if (n < 1) return eStruct;
   double d = 0;
   gp_Pnt p;
   bool nogap = true;
+  /* 
+  ** should not need to check this, start should always be 
+  ** assigned the value of the previus end.
   d = edges[n].start.Distance(edges[n-1].end);
   if (d > Precision::Confusion()) {
     cout << "Found gap of " << d << " before edge " << n << endl;
     nogap = false;
   }
+  */
   
   p = BRep_Tool::Pnt(TopExp::FirstVertex(edges[n].e));
   d = edges[n].start.Distance(p);
@@ -275,27 +291,36 @@ void gcode2Model::checkEdge( std::vector<myEdgeType> edges, int n )
     cout << toString(feedEdges[n].start).toStdString();
     cout << " - actual: " << toString(p).toStdString() << endl;
     nogap = false;
+    eStruct.startGap = d;
+    eStruct.realStart = p;
   }
   
   p = BRep_Tool::Pnt(TopExp::LastVertex(edges[n].e));
   d = edges[n].end.Distance(p);
   if (d > Precision::Confusion()) {
+    //nogap = false;
+    eStruct.endGap = d;
+    eStruct.realEnd = p;
+  }
+  //stay silent unless the error is relatively large:
+  // 1/100,000 inch or 1 nanometer depending on units (inch vs mm)
+  if (d > 100.0*Precision::Confusion()) { 
+    nogap = false;
     cout << "End data differs by " << d << " after edge " << n << " - expected: ";
     cout << toString(feedEdges[n].end).toStdString();
     cout << " - actual: " << toString(p).toStdString() << endl;
-    nogap = false;
-  }
+  }  
   
   if (!nogap) {
     if (edges[n].shape == HELIX) {
-	cout << "Failure is on a helical move" << endl;
+	cout << "Failure is on a helix";
     } else if (edges[n].shape == ARC) {
-	cout << "Failure is on an arc move" << endl;
-    } else if (edges[n].shape == LINE) {
-      if (edges[n].motion == TRAVERSE)
-	cout << "Failure is on a rapid traverse" << endl;
-      else
-	cout << "Failure is on a linear move" << endl;
+	cout << "Failure is on an arc";
+    } else if ((edges[n].shape == LINE) && (edges[n].motion == TRAVERSE )) {
+	cout << "Failure is on a rapid traverse";
+    } else if ((edges[n].shape == LINE) && (edges[n].motion == FEED )) {
+	cout << "Failure is on a linear move";
     } else cout << "Failure is on a move of undefined type!" << endl; //should never get here
   }
+  return eStruct;
 }

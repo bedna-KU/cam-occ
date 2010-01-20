@@ -56,7 +56,11 @@ private:
 		//int N,S,F;
 		//saving vector directions would make the solid easier / faster to make maybe... how to calc?
 	} myEdgeType;
-	gp_Pnt last;	//this holds the coordinates of the end of the last move, no matter what that move was (STRAIGHT_FEED,STRAIGHT_TRAVERSE,ARC_FEED)
+	typedef struct {
+		double startGap, endGap;
+		gp_Pnt realStart, realEnd;
+	} chkEdgeStruct;
+	gp_Pnt last;	//this holds the coordinates of the end of the last move
 	bool firstPoint;
 	typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANONPLANE;   //for arcs
 	CANONPLANE CANON_PLANE;
@@ -80,7 +84,7 @@ private:
 	Standard_Real readOne ( QString canon_line, uint n );
 	TopoDS_Wire create2dTool(Standard_Real diam, Standard_Real shape);
 	//TopoDS_Edge arc ( gp_Pnt a, gp_Pnt b, gp_Pnt c );
-	void checkEdge( std::vector<myEdgeType> edges, int n );
+	chkEdgeStruct checkEdge( std::vector<myEdgeType> edges, uint n );
 	TopoDS_Edge arc ( gp_Pnt a, gp_Vec V, gp_Pnt c );
 	TopoDS_Edge helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);
 
