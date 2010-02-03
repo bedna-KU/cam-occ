@@ -45,7 +45,7 @@ class canonAux {
 */
 class mrsev {
   public:
-    mrsev() = 0; //child classes overload the constructor
+    mrsev();
     const bool computeEdge() = 0; //returns true on success
     //NOTE all public functions below depend on the bool goodEdge == true
     //NOTE (which is set by computeEdge)
@@ -60,13 +60,13 @@ class mrsev {
     const TopoDS_Shape getSolid(); //returns the 3d solid
     //more functions that depend on goodSolid & goodEdge?
   protected:
-    APTtool * tool;
-    machineState * state;
-    canonAux * aux;
+    APTtool tool;
+    machineState state;
+    canonAux aux;
     bool goodEdge,goodSolid;
     gp_Pnt start,end;
     TopoDS_Edge edge;
-    TopoDS_Shape shape;
+    TopoDS_Solid solid;
 };
 
 #endif //MRSEV_ABC_H
