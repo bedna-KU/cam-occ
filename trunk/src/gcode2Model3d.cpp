@@ -36,7 +36,7 @@
 #include <Geom2d_TrimmedCurve.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepAdaptor_Curve.hxx>
-#include <BRepOffsetAPI_MakePipe.hxx>
+#include <BRepOffsetAPI_MakePipeShell.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRep_Tool.hxx> 
 #include <Geom_CylindricalSurface.hxx>
@@ -55,24 +55,80 @@
 using std::cout;
 
 /*
-*To create the cross-section of the tool, take a 3d model of it and project onto a plane normal to the motion vector.
-
-*Cross section would be useful for linear moves, instantaneous outline computation for helical moves in any plane, and arc moves in xz or yz plane.
-
+*To create the cross-section of the tool, take a 3d model of it
+* and project onto a plane normal to the motion vector.
+*Cross section would be useful for linear moves, instantaneous
+* outline computation for helical moves in any plane, and arc 
+* moves in xz or yz plane.
 *For arcs in xy plane, simply sweep the cross-section of the tool.
-
-*Despite all the effort put into creating a wire, that really isn't useful - the MRSEVs will have to be calculated individually.
-
+*Despite all the effort put into creating a wire, that really isn't
+* useful - the MRSEVs will have to be calculated individually.
 *Create a function that will create a 2d outline of an APT tool.
-
-hard parts: any shape but ball-nose for non-xy-plane cuts
-need to create a cut-segment ABC and subclass it for linear, arc, and helical csegs.
+*hard parts: any shape but ball-nose for non-xy-plane cuts
+*need to create a cut-segment ABC and subclass it for linear,
+* arc, and helical csegs.
 */
 //doesn't really sweep right now, just displays the wire
+
+/*
+BRepOffsetAPI_MakePipeShell (const TopoDS_Wire &Spine)
+ ::SetMode (const TopoDS_Wire &AuxiliarySpine, const Standard_Boolean CurvilinearEquivalence, const Standard_Boolean KeepContact=Standard_False)
+ 	Sets an auxiliary spine to define the Normal 
+ 	--> does this mean what I think it means? If so, project the segment onto an xy plane, use the result as the aux spine.
+ 		--probably wouldn't work well, depends on paramaterization of the projected spine vs that of the original
+ 	--> or subclass it and just fix the section as normal to XY
+*/
 void gcode2Model::sweep()
 {
+  	bool ready = false;
+	Handle_AIS_Shape pipeAis;
+	TopoDS_Wire toolwire = create2dTool(1,0);
+	TopoDS_Face tool2d = BRepBuilderAPI_MakeFace(gp_Pln(gp::ZOX()),toolwire);
+
 	drawSome(-1);
-	showWire();
+
+	//place the tool at the start of the wire and in the correct orientation
+/*	gp_Trsf fTrsf;
+        BRepBuilderAPI_Transform brepTrsf(tool2d , fTrsf);
+        TopoDS_Shape trsfShape = brepTrsf.Shape();
+        TopoDS_Face sweepFace = TopoDS::Face(trsfShape);
+*/
+	BRepOffsetAPI_MakePipeShell pipe(thePath);
+	infoMsg("pipe");
+	pipe.Add(toolwire,false,true);
+	//pipe.Add(tool2d,false,true);
+	//pipe.SetTransitionMode()
+	//pipe.SetMode()
+	infoMsg("added tool\n");
+	if ( pipe.IsReady() ) {
+		pipe.Build();
+		BRepBuilderAPI_PipeError error = pipe.GetStatus();
+		switch (error) {
+		  case BRepBuilderAPI_PipeNotDone:
+		    infoMsg("Pipe not done");
+		    break;
+		  case BRepBuilderAPI_PlaneNotIntersectGuide:
+		    infoMsg("Pipe not intersect guide");
+		    break;
+		  case BRepBuilderAPI_ImpossibleContact:
+		    infoMsg("Pipe impossible contact");
+		    break;
+		  case BRepBuilderAPI_PipeDone:
+		    ready = true;
+		    break;
+		 default:
+		    infoMsg("Pipe switch default?!");
+		}
+	}
+	if (ready) {
+	  	pipeAis = new AIS_Shape ( pipe.Shape() );
+	}else {
+	  	infoMsg("pipe not ready!");
+	  	pipeAis = new AIS_Shape ( tool2d );
+	}
+	theWindow->getContext()->SetMaterial ( pipeAis,Graphic3d_NOM_PLASTIC );  //Try GOLD or PLASTER or ...
+	theWindow->getContext()->SetDisplayMode ( pipeAis,1,Standard_False );  //shaded
+	theWindow->getContext()->Display ( pipeAis );
 }
 
 /*void gcode2Model::showWire()
