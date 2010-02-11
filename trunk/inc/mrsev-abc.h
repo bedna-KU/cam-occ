@@ -11,6 +11,7 @@
 class machineState {
   public:
     double feedrate, spindleSpeed;
+    gp_Pnt position;
 };
 
 /*class canonAux
@@ -26,8 +27,8 @@ class canonAux {
   public:
     canonAux(int l=-1, int n=-1, string canonStr = "") {L=l;N=n;str=canonStr;};
     void setString(const string l){canonStr = l;};
-    void setCanonLine(const int n){L=n;}; //nth canon command
-    void setGcodeLine(const int n){N=n;}; //N-number from the gcode file
+    //void setCanonLine(const int n){L=n;}; //nth canon command
+    //void setGcodeLine(const int n){N=n;}; //N-number from the gcode file
     const string getString() {return canonStr;};
     const int getCanonLine() {return l;};
     const int getGcodeLine() {return N;};
@@ -46,7 +47,9 @@ class canonAux {
 class mrsev {
   public:
     mrsev();
+    mrsev(gp_Pnt end, string str, machineState &state) = 0;
     const bool computeEdge() = 0; //returns true on success
+    const machineState getState() {return myState;};
     //NOTE all public functions below depend on the bool goodEdge == true
     //NOTE (which is set by computeEdge)
     const TopoDS_Edge getEdge(); //returns the computed edge
@@ -60,13 +63,16 @@ class mrsev {
     const TopoDS_Shape getSolid(); //returns the 3d solid
     //more functions that depend on goodSolid & goodEdge?
   protected:
-    APTtool tool;
-    machineState state;
+    APTtool myTool;
+    machineState myState;
     canonAux aux;
     bool goodEdge,goodSolid;
-    gp_Pnt start,end;
-    TopoDS_Edge edge;
-    TopoDS_Solid solid;
+    gp_Pnt myStart,myEnd;
+    gp_Vec myStartV,myEndV;
+    TopoDS_Edge myEdge;
+    TopoDS_Solid mySolid;
+    typedef enum { TRAVERSE, FEED, NOM } MOTION_TYPE;
+    typedef enum { ARC, HELIX, LINE, NOS } SHAPE_TYPE;
 };
 
 #endif //MRSEV_ABC_H

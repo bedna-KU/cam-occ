@@ -49,7 +49,8 @@ private:
 	typedef enum { TRAVERSE, FEED } MOTION_TYPE;
 	typedef enum { ARC, HELIX, LINE } SHAPE_TYPE;
 	typedef struct {
-		gp_Pnt start,end;
+		gp_Ax1 start,end;
+		//gp_Pnt start,end;
 		TopoDS_Edge e;
 		MOTION_TYPE motion;
 		SHAPE_TYPE shape;

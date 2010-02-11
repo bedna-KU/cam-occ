@@ -88,6 +88,7 @@ bool gcode2Model::interpret ( QString file )
 
 bool gcode2Model::processCanonLine ( QString canon_line )
 {
+  	#error this handles 3 axis code but that is not what is produced by emc2's SAI!
 	//ideally, handle rapids (STRAIGHT_TRAVERSE) separately from STRAIGHT_FEED
 	//for now, handle together
 	if ( ! canon_line.endsWith(")\n") ) {
@@ -123,13 +124,13 @@ bool gcode2Model::processCanonLine ( QString canon_line )
 		if (canon_line.contains(ign))
 			return false;
 	if (canon_line.startsWith( "STRAIGHT_" )) {
-		gp_Pnt p = readXYZ(canon_line);
 		if (firstPoint) {
-			last = p;
+			last = readXYZ(canon_line);
 			firstPoint = false;
-		} else if (last.IsEqual(p,Precision::Confusion()*100)) {
+		//} else if (last.IsEqual(p,Precision::Confusion()*100)) {
 			//do nothing
 		} else {
+			gp_Pnt p = readXYZ(canon_line);
 			edge.e = BRepBuilderAPI_MakeEdge( last, p );
 			edge.start = last;
 			edge.end = last = p;
