@@ -1,19 +1,19 @@
 #include "canon.hh"
-//canon.cc - implementation of classes in canon.hh
+//canon.cc - implementation of canonLine
 
 canonLine::canonLine(string canonL, machineStatus prevStatus) {
   status(prevStatus);
   myLine = canonL;
   tokenize(); //splits myLine using delimiters
   myStart = prevStatus.getPose();
-  myEnd = myStart; //override in derivative classes
+  //myEnd = myStart; //override in derivative classes
   
   //getPose(); //can't use this here - need to know what type of line it is
 }
 
 //returns the number after N on the line, -1 if none
 const int canonLine::getN() {
-  if ( (tokens[1].c_str[1] == '.') && (tokens[1].c_str[2] == '.') )
+  if ( (canonTokens[1].c_str[1] == '.') && (canonTokens[1].c_str[2] == '.') )
     return -1;
   else
     return tok2i(1,1);
@@ -43,7 +43,7 @@ static gp_Ax1 canonLine::getPose() {
   z = tok2d(5);
   gp_Pnt p(x,y,z);
   
-  uint s = tokens.size();
+  uint s = canonTokens.size();
   c = tok2d(s-1);
   b = tok2d(s-2);
   a = tok2d(s-3);
@@ -55,45 +55,49 @@ static gp_Ax1 canonLine::getPose() {
   return gp_Ax1(p,d);
 }
 
-//converts tokens[n] to double
+//converts canonTokens[n] to double
 const inline double canonLine::tok2d(uint n) {
-  double d = strtod( tokens[n], &end );
+  double d = strtod( canonTokens[n], &end );
   assert ( *end == 0 );
   return d;  
 }
 
-//converts tokens[n] to int
+//converts canonTokens[n] to int
 const inline int canonLine::tok2i(uint n,uint offset=0) {
-  int i = strtoi( tokens[n].c_str()[offset], &end );
+  int i = strtoi( canonTokens[n].c_str()[offset], &end );
   assert ( *end == 0 );
   return i;  
 }
 
 const string canonLine::getCanonicalCommand() {
-  return tokens[2];
+  return canonTokens[2];
 }
 
 //from http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
 //0 is canon line
 //1 is gcode Nnnnnn line
 //2 is canonical command
-void canonLine::tokenize(const string& delimiters = "(), ") {
+void canonLine::tokenize(string str, vector<string>& tokenV, 
+			 const string& delimiters = "(), ") {
   // Skip delimiters at beginning.
-  string::size_type lastPos = myLine.find_first_not_of(delimiters, 0);
+  string::size_type lastPos = str.find_first_not_of(delimiters, 0);
   // Find first "non-delimiter".
-  string::size_type pos     = myLine.find_first_of(delimiters, lastPos);
+  string::size_type pos     = str.find_first_of(delimiters, lastPos);
   
   while (string::npos != pos || string::npos != lastPos)
   {
     // Found a token, add it to the vector.
-    tokens.push_back(myLine.substr(lastPos, pos - lastPos));
+    tokenV.push_back(str.substr(lastPos, pos - lastPos));
     // Skip delimiters.  Note the "not_of"
-    lastPos = myLine.find_first_not_of(delimiters, pos);
+    lastPos = str.find_first_not_of(delimiters, pos);
     // Find next "non-delimiter"
-    pos = myLine.find_first_of(delimiters, lastPos);
+    pos = str.find_first_of(delimiters, lastPos);
   }
 }
 
+inline void canonLine::tokenize() {
+  tokenize(myLine,canonTokens);
+}
 static canonLine * canonLine::canonLineFactory (string l, machineStatus s) {
   //check if canonical command is motion or something else
   //motion commands: LINEAR_TRAVERSE LINEAR_FEED ARC_FEED

@@ -20,15 +20,17 @@ class canonLine {
     machineStatus status; //the machine's status *after* execution of this canon line
     bool isMotion;
     static std::vector<tool> *toolVec;
-    vector<string> tokens;
+    vector<string> canonTokens;
     const inline double tok2d(uint n);
     const inline int tok2i(uint n,uint offset=0);
-    void tokenize(const string& delimiters = "(),");
+    void tokenize(string str, vector<string>& tokenV,
+		  const string& delimiters = "(), ");
+    inline void tokenize();
 }
 
 //for LINEAR_TRAVERSE, LINEAR_FEED, ARC_FEED
 typedef enum { ARC, HELIX, LINE } MOTION_TYPE;
-class canonMotion:protected canonLine {
+class canonMotion: protected canonLine {
   public:
     const MOTION_TYPE getMotionType() {return mtype;};
     const bool thisIsTraverse() {return isTraverse};
@@ -37,6 +39,7 @@ class canonMotion:protected canonLine {
     bool isTraverse;
     canonMotion(string canonL, machineStatus prevStatus): canonLine(canonL,prevStatus);
     MOTION_TYPE mtype;
+    const gp_Dir abc2dir(double a, double b, double c);
 }
 
 //for LINEAR_TRAVERSE, LINEAR_FEED

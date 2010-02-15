@@ -1,5 +1,0 @@
-arch notes
-one problem is linking one mrsev or state with a tool from the list.
---static var pointing to the tool list?
---pointer and index each time?
---other? elegant is nice...

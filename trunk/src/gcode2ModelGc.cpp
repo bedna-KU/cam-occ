@@ -88,7 +88,7 @@ bool gcode2Model::interpret ( QString file )
 
 bool gcode2Model::processCanonLine ( QString canon_line )
 {
-  	#error this handles 3 axis code but that is not what is produced by emc2's SAI!
+  	//FIXME this handles 3 axis code but that is not what is produced by emc2's SAI!
 	//ideally, handle rapids (STRAIGHT_TRAVERSE) separately from STRAIGHT_FEED
 	//for now, handle together
 	if ( ! canon_line.endsWith(")\n") ) {
@@ -226,7 +226,7 @@ bool gcode2Model::processCanonLine ( QString canon_line )
 	}
 	//the else if's below are to silently ignore certain canonical commands which I don't know what to do with
 	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)" )) {}
-	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000" )) {
+	else if (canon_line.startsWith( "SET_ORIGIN_OFFSETS(0.0000," )) {
 	  	//this is a common canon statement. we are going to hijack it to produce a warning, because
 		//the data we're getting was produced with a format of %.4f or so
 		infoMsg(QString("Warning, input has reduced precision, expected more zeros: <br>") + canon_line );
