@@ -105,21 +105,16 @@ static canonLine * canonLine::canonLineFactory (string l, machineStatus s) {
   cmnt=l.find("COMMENT");
   lin=l.find("LINEAR_");
   af=l.find("ARC_FEED");
-  if (cmnt!=string::npos) { 		//check for comments first because one
-    return new canonMotionless(l,s);	//might contain LINEAR_ or ARC_FEED
+  /*
+  ** check for comments first because it is not impossible
+  ** for one to contain the text "LINEAR_" or "ARC_FEED"
+  */
+  if (cmnt!=string::npos) { 		
+    return new canonMotionless(l,s);	
   } else if (lin!=string::npos) { //linear traverse or linear feed
     return new linearMotion(l,s);
-  } else if (af!=string::npos) { //arc feed, may be a helix
-    size_t c,p;
-    c = l.find_last_of(",");     //find last comma and the )
-    p = l.find_last_of(")");
-    //get the number between, compare to Z in state
-    double z = atod(l.substr(c+1,p-c));
-    if (abs(z-s.getPos().Location().Z()) < 10*Precision::Confusion()) {
-      return new arcMotion(l,s); //z is same, use arc
-    } else {
-      return new helicalMotion(l,s); //z is not same, need a helix
-    }
+  } else if (af!=string::npos) { //arc feed
+    return new helicalMotion(l,s); //arc or helix
   } else { //canonical command is not a motion command
     return new canonMotionless(l,s);
   }

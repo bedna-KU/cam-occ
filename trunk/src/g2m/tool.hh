@@ -5,11 +5,12 @@ class tool {
     const TOOLTYPE getType() {return type;};
     const bool isValid() {return valid;};
   protected:
+    tool();
     bool isRotaryTool;
     bool valid;
     TopoDS_Face profile;
     TOOLTYPE type; 
-}
+};
 
 typedef enum { BALLNOSE, CYLINDRICAL, TOROIDAL, ENGRAVING, TAPERED, OTHER, UNDEFINED } SHAPE_TYPE;
 class millTool: protected tool {
@@ -18,10 +19,11 @@ class millTool: protected tool {
     const SHAPE_TYPE getShape() {return shape;};
     const TopoDS_Solid getRevol();
   protected:
+    millTool();
     SHAPE_TYPE shape;
     double d,l; //diameter, length
     TopoDS_Solid revol;
-}
+};
 
 class aptTool: protected millTool {
   public:
@@ -30,11 +32,11 @@ class aptTool: protected millTool {
   private:
     double a,b; //d and l are in millTool
     degrees A,B;
-}
+};
 
 class ballnoseTool: protected millTool {
   ballnoseTool(double diameter, double length);
-}
+};
 
 class latheTool: public tool {
-}
+};

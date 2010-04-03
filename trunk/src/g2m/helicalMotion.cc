@@ -1,6 +1,6 @@
 #include "canon.hh"
 //implements helicalMotion
-TopoDS_Edge helicalMotion::helicalMotion(string canonL, machineStatus prevStatus) {
+helicalMotion::helicalMotion(string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
   //part of processCanonLine
   //} else if (canon_line.startsWith( "ARC_FEED(" )) {
  gp_Dir arcDir;
@@ -12,9 +12,9 @@ TopoDS_Edge helicalMotion::helicalMotion(string canonL, machineStatus prevStatus
  //edge.start = last;
  /* example output, starting from x0 y-1 z0 a0 b0 c0, command g02x1y0i0j1
  (names interleaved, see emc's saicannon.cc, line 497)
-   8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000, 
+ 8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000, 
  line Gline ARC_FEED(first_end, second_end, first_axis, second_axis,
-   -1,        0.000000,   0.000000, 0.000000, 0.000000)
+ -1,        0.000000,   0.000000, 0.000000, 0.000000)
  rotation, axis_end_point,   a,        b,        c)
  */
  e1  = tok2d(3); //first_end
@@ -83,57 +83,58 @@ TopoDS_Edge helicalMotion::helicalMotion(string canonL, machineStatus prevStatus
      }
    }
  } else cout << "Skipped zero-length arc." << endl;
- 
- //helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot )
- Standard_Real pU,pV;
- Standard_Real radius = start.Distance(c);
- gp_Pnt2d p1,p2;
- Handle(Geom_CylindricalSurface) cyl = new Geom_CylindricalSurface(gp_Ax2(c,dir) , radius);
- GeomAPI_ProjectPointOnSurf proj;
- TopoDS_Edge h;
- int success = 0;
- 
- h.Nullify();
- //cout << "Radius " << radius << "   Rot has the value " << rot << endl;
- proj.Init(start,cyl);
- if(proj.NbPoints() > 0) {
-   proj.LowerDistanceParameters(pU, pV);
-   if(proj.LowerDistance() > 1.0e-6 ) {
-     //cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
-   }
-   success++;
-   p1 = gp_Pnt2d(pU,pV);
- }
- 
- proj.Init(end,cyl);
- if(proj.NbPoints() > 0) {
-   proj.LowerDistanceParameters(pU, pV);
-   if(proj.LowerDistance() > 1.0e-6 ) {
-     //cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
-   }
-   success++;
-   p2 = gp_Pnt2d(pU,pV);
- }
- 
- if (success != 2) {
-   cout << "Couldn't create a helix from " << toString(start).toStdString() << " to " << toString(end).toStdString() << ". Replacing with a line." <<endl;
-   h = BRepBuilderAPI_MakeEdge( start, end );
-   return h;
- }
- 
- //for the 2d points, x axis is about the circumference.  Units are radians.
- //change direction if rot = 1, not if rot = -1
- //if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); << this is wrong!
- //cout << "p1x " << p1.X() << ", p2x " << p2.X() << endl;
- 
- //switch direction if necessary, only works for simple cases
- //should always work for G02/G03 because they are less than 1 rotation
- if (rot==1) {
-   p2.SetX(p2.X()-2*M_PI);
-   //cout << "p2x now " << p2.X() << endl;
- }
- Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
- h = BRepBuilderAPI_MakeEdge(segment , cyl);
- 
- return h;
+}
+
+helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot ) {
+  Standard_Real pU,pV;
+  Standard_Real radius = start.Distance(c);
+  gp_Pnt2d p1,p2;
+  Handle(Geom_CylindricalSurface) cyl = new Geom_CylindricalSurface(gp_Ax2(c,dir) , radius);
+  GeomAPI_ProjectPointOnSurf proj;
+  TopoDS_Edge h;
+  int success = 0;
+  
+  h.Nullify();
+  //cout << "Radius " << radius << "   Rot has the value " << rot << endl;
+  proj.Init(start,cyl);
+  if(proj.NbPoints() > 0) {
+    proj.LowerDistanceParameters(pU, pV);
+    if(proj.LowerDistance() > 1.0e-6 ) {
+      //cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
+    }
+    success++;
+    p1 = gp_Pnt2d(pU,pV);
+  }
+  
+  proj.Init(end,cyl);
+  if(proj.NbPoints() > 0) {
+    proj.LowerDistanceParameters(pU, pV);
+    if(proj.LowerDistance() > 1.0e-6 ) {
+      //cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
+    }
+    success++;
+    p2 = gp_Pnt2d(pU,pV);
+  }
+  
+  if (success != 2) {
+    cout << "Couldn't create a helix from " << toString(start).toStdString() << " to " << toString(end).toStdString() << ". Replacing with a line." <<endl;
+    h = BRepBuilderAPI_MakeEdge( start, end );
+    return h;
+  }
+  
+  //for the 2d points, x axis is about the circumference.  Units are radians.
+  //change direction if rot = 1, not if rot = -1
+  //if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); << this is wrong!
+  //cout << "p1x " << p1.X() << ", p2x " << p2.X() << endl;
+  
+  //switch direction if necessary, only works for simple cases
+  //should always work for G02/G03 because they are less than 1 rotation
+  if (rot==1) {
+    p2.SetX(p2.X()-2*M_PI);
+    //cout << "p2x now " << p2.X() << endl;
+  }
+  Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
+  h = BRepBuilderAPI_MakeEdge(segment , cyl);
+  
+  return h;
 }
