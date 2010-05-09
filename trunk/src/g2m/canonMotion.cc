@@ -1,8 +1,11 @@
 //for LINEAR_TRAVERSE, LINEAR_FEED, ARC_FEED
-#include canon.hh
+#include <string>
 
 
-canonMotion::canonMotion(string canonL, machineStatus prevStatus): canonLine(canonL,prevStatus) {
+#include "canonMotion.hh"
+#include "canonLine.hh"
+
+canonMotion::canonMotion(std::string canonL, machineStatus prevStatus): canonLine(canonL,prevStatus) {
 
 }
 

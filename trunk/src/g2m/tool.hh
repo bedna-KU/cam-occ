@@ -1,9 +1,20 @@
+#ifndef TOOL_HH
+#define TOOL_HH
+
+#include <assert.h>
+#include <limits.h>
+
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Solid.hxx>
+
+#include "canon.hh"
+
 typedef enum {ROTARY_TOOL,TURNING_TOOL, UNDEFINED} TOOLTYPE;
 class tool {
   public:
-    const TopoDS_Face getProfile() {assert (valid);return profile;};
-    const TOOLTYPE getType() {return type;};
-    const bool isValid() {return valid;};
+    const TopoDS_Face getProfile() const {assert (valid);return profile;};
+    TOOLTYPE getType() const {return type;};
+    bool isValid() const {return valid;};
   protected:
     tool();
     bool isRotaryTool;
@@ -12,11 +23,11 @@ class tool {
     TOOLTYPE type; 
 };
 
-typedef enum { BALLNOSE, CYLINDRICAL, TOROIDAL, ENGRAVING, TAPERED, OTHER, UNDEFINED } SHAPE_TYPE;
+typedef enum { BALLNOSE, CYLINDRICAL, TOROIDAL, ENGRAVING, TAPERED, OTHER, UNDEF } SHAPE_TYPE;
 class millTool: protected tool {
   public:
     //getProfile() = 0;
-    const SHAPE_TYPE getShape() {return shape;};
+    SHAPE_TYPE getShape() const {return shape;};
     const TopoDS_Solid getRevol();
   protected:
     millTool();
@@ -40,3 +51,5 @@ class ballnoseTool: protected millTool {
 
 class latheTool: public tool {
 };
+
+#endif //TOOL_HH

@@ -1,6 +1,16 @@
 #include "g2m.hh"
+#include <QProcess>
+#include <QStringList>
+#include <QString>
+#include <QTime>
+#include <QCoreApplication>
+#include <QEventLoop>
+#include <iostream>
+#include "canonLine.hh"
+
 g2m::g2m ( QString file )
 {
+  success = false;
   QString ipath = "/opt/src/emc2/trunk/";
   QString interp = ipath + "bin/rs274";
   QString iparm = ipath + "configs/sim/sim_mm.var\n";
@@ -31,7 +41,7 @@ g2m::g2m ( QString file )
     cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
     cout << "stdout: " << (const char*)toCanon.readAllStandardOutput() << endl;
     toCanon.close();
-    return false;
+    return;
   }
   
   //if readLine is used at the wrong time, it is possible to pick up a line fragment! will canReadLine() fix that?
@@ -42,7 +52,7 @@ g2m::g2m ( QString file )
     if (toCanon.canReadLine()) {
       lineLength = toCanon.readLine(line, sizeof(line));
       if (lineLength != -1 ) {
-	foundEOF = processCanonLine(line.toStdString());
+	foundEOF = processCanonLine(line);
       } else {	//shouldn't get here!
 	fails++;
 	sleepSecond();
@@ -55,18 +65,32 @@ g2m::g2m ( QString file )
   ( (toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning ) )  );
   //((lineLength > 0) || 	//loop until interp quits and all lines are read.
   //toCanon.canReadLine() ||  
-  return foundEOF;
+  success = foundEOF;
+  return;
 }
 
-bool g2m::processCanonLine ( QString canon_line )
+bool g2m::processCanonLine ( std::string l )
 {
   //need a vector to store canonLine in
   //TODO in header file?
   
   //create the object and get its pointer
-  canonLine * l = canonLineFactory (string l, machineStatus s);
+  canonLine * cl = canonLine::canonLineFactory
+  		(l,*lineVector.back()->getStatus());
   //store it
-  lineVector.push_back(&l);
-  
-  
+  lineVector.push_back(cl);
+  return cl->checkErrors();
+}
+
+void g2m::sleepSecond() {
+	//sleep 1s and process events
+	//cout << "SLEEP..." << endl;
+	QTime dieTime = QTime::currentTime().addSecs(1);
+	while( QTime::currentTime() < dieTime )
+		QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents, 100);
+	return;
+}
+
+void g2m::infoMsg(QString s) {
+  cout << s.toStdString() << endl;
 }

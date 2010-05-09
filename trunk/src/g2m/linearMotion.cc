@@ -1,6 +1,11 @@
 //linearmotion.cc
-#include "canon.hh"
+#include <string>
+#include "linearMotion.hh"
+#include "machineStatus.hh"
+#include "canonMotion.hh"
 
-linearMotion(string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
+linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
+  mtype = LINE;
+  //FIXME isTraverse =
 
 }

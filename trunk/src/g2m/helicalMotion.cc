@@ -1,6 +1,24 @@
-#include "canon.hh"
+#include <string>
+#include <climits>
+
+#include <Precision.hxx>
+#include <Handle_Geom_CylindricalSurface.hxx>
+#include <Geom_CylindricalSurface.hxx>
+#include <Geom2d_TrimmedCurve.hxx>
+#include <GC_MakeArcOfCircle.hxx>
+//#include <TopoDS.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <GCE2d_MakeSegment.hxx>
+#include <GeomAPI_ProjectPointOnSurf.hxx>
+#include <TopoDS_Edge.hxx>
+#include <gp_Ax1.hxx>
+#include <gp_Ax2.hxx>
+
+#include "helicalMotion.hh"
+#include "machineStatus.hh"
+
 //implements helicalMotion
-helicalMotion::helicalMotion(string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
+helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
   //part of processCanonLine
   //} else if (canon_line.startsWith( "ARC_FEED(" )) {
  gp_Dir arcDir;
@@ -32,43 +50,44 @@ helicalMotion::helicalMotion(string canonL, machineStatus prevStatus): canonMoti
    ** a,b,c are untouched - yay! 
    */
    case CANON_PLANE_XZ:
-     edge.end = gp_Pnt(e2,e3,e1); 
+     status.setEndPose(gp_Pnt(e2,e3,e1)); 
      arcDir = gp_Dir(0,1,0);
      c = gp_Pnt(a2,status.getStartPose().Location().Y(),a1);
      hdist = e3 - status.getStartPose().Location().Y();
      break;
    case CANON_PLANE_YZ:
-     edge.end = gp_Pnt(e3,e1,e2);
+     status.setEndPose(gp_Pnt(e3,e1,e2));
      arcDir = gp_Dir(1,0,0);
      c = gp_Pnt(status.getStartPose().Location().X(),a1,a2);
      hdist = e3 - status.getStartPose().Location().X();
      break;
    case CANON_PLANE_XY:
    default:
-     edge.end = gp_Pnt(e1,e2,e3);
+     status.setEndPose(gp_Pnt(e1,e2,e3));
      arcDir = gp_Dir(0,0,1);
      c = gp_Pnt(a1,a2,status.getStartPose().Location().Z());
      hdist = e3 - status.getStartPose().Location().Z();
  }
  //last = edge.end;
  //skip arc if zero length; caught this bug thanks to tort.ngc
- if (status.getStartPose().Location().Distance(edge.end) > Precision::Confusion()) { 
+ if (status.getStartPose().Location().Distance(status.getEndPose().Location()) > Precision::Confusion()) {
    //center is c; ends are edge.start, edge.last
    if (fabs(hdist) > 0.000001) {
-     edge.e = helix(status.getStartPose().Location(), edge.end, c, arcDir,rot);
-     edge.shape = HELIX;
+     helix(status.getStartPose().Location(), status.getEndPose().Location(), c, arcDir,rot);
+     mtype = HELIX;
    } else {
      gp_Vec Vr = gp_Vec(c,status.getStartPose().Location());	//vector from center to start
      gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
      gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
      if (rot==1) startVec *= -1;
      //cout << "Arc with vector at start: " << toString(startVec).toStdString();
-     edge.e = arc(status.getStartPose().Location(), startVec, edge.end);
-     edge.shape = ARC;
+     arc(status.getStartPose().Location(), startVec, status.getEndPose().Location());
+     mtype = ARC;
    }
-   edge.motion = FEED;
-   feedEdges.push_back( edge );
-   chkEdgeStruct check = checkEdge ( feedEdges, feedEdges.size() - 1 );
+   isTraverse = false;
+   /*
+   FIXME - rewrite or copy the old funcs into new src
+   chkEdgeStruct check = checkEdge(feedEdges, feedEdges.size()-1);
    if (check.startGap != 0.0) {
      exit(-1); //what SHOULD we do here?!
    }
@@ -77,15 +96,16 @@ helicalMotion::helicalMotion(string canonL, machineStatus prevStatus): canonMoti
      feedEdges.back().end = last;
      if (check.endGap > 100.0*Precision::Confusion()) {
        cout << " with center " << toString(c).toStdString();
-       if (edge.shape == HELIX) cout << " and arcDir " << toString(arcDir).toStdString();
-       cout << " from " << toString(status.getStartPose().Location()).toStdString() << " to " << toString(edge.end).toStdString() << endl;
+       if (mtype == HELIX) cout << " and arcDir " << toString(arcDir).toStdString();
+       cout << " from " << toString(status.getStartPose().Location()).toStdString() << " to " << toString(status.getEndPose).toStdString() << endl;
        cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
      }
    }
+   */
  } else cout << "Skipped zero-length arc." << endl;
 }
 
-helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot ) {
+void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot ) {
   Standard_Real pU,pV;
   Standard_Real radius = start.Distance(c);
   gp_Pnt2d p1,p2;
@@ -117,9 +137,12 @@ helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot ) {
   }
   
   if (success != 2) {
-    cout << "Couldn't create a helix from " << toString(start).toStdString() << " to " << toString(end).toStdString() << ". Replacing with a line." <<endl;
-    h = BRepBuilderAPI_MakeEdge( start, end );
-    return h;
+   /* FIXME
+   cout << "Couldn't create a helix from " << toString(start).toStdString() << " to " << toString(end).toStdString() << ". Replacing with a line." <<endl;
+   */
+    errors=true;
+    edge = BRepBuilderAPI_MakeEdge( start, end );
+    return;
   }
   
   //for the 2d points, x axis is about the circumference.  Units are radians.
@@ -134,7 +157,13 @@ helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot ) {
     //cout << "p2x now " << p2.X() << endl;
   }
   Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
-  h = BRepBuilderAPI_MakeEdge(segment , cyl);
+  edge = BRepBuilderAPI_MakeEdge(segment , cyl);
   
-  return h;
+  return;
+}
+
+void helicalMotion::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
+    Handle(Geom_TrimmedCurve) Tc;
+    Tc = GC_MakeArcOfCircle ( start, startVec, end );
+    edge = BRepBuilderAPI_MakeEdge ( Tc );
 }
