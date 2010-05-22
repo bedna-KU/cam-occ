@@ -8,8 +8,54 @@
 #include <iostream>
 #include "canonLine.hh"
 
-g2m::g2m ( QString file )
+g2m::g2m(QoccHarnessWindow* w) {
+	myMenu = new QMenu("gcode");
+	theWindow->menuBar()->insertMenu(theWindow->getHelpMenu(),myMenu);
+
+	myAction = new QAction ( "Create 3D Model...", this );
+	myAction->setShortcut(QString("Ctrl+M"));
+	myAction->setStatusTip ( "Load a .ngc file and create a 3d model" );
+	connect(myAction,SIGNAL(triggered()),this,SLOT(modelfromfile()));
+	myMenu->addAction( myAction );
+
+// do next: show segments one at a time
+	nextAction = new QAction ( "Do next", this );
+	nextAction->setShortcut(QString("Ctrl+."));
+	nextAction->setStatusTip ( "Do next" );
+	connect ( nextAction, SIGNAL ( triggered() ), this, SLOT ( myNextMenuItem() ) );
+	myMenu->addAction( nextAction );
+
+	hasProcessedNgc = false;
+	thePath.Nullify();
+}
+
+void g2m::modelfromfile()
 {
+	bool success;
+	cleanUp();
+	hideGrid();
+	axoView();
+	
+	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", "./ngc-in", "*.ngc" );
+	if ( ! file.endsWith(".ngc") ) {
+		uio::infoMsg("You must select a file ending with .ngc!");
+		return;
+	}
+	success = interpret ( file );
+	if (success) {
+		cout << "sweeping..." << endl;
+		sweep();
+		fitAll();
+		hasProcessedNgc = true;
+	} else {
+		infoMsg("Interpreter stopped without finding PROGRAM_END.");
+		drawSome(-1);
+		showWire();
+		fitAll();
+	}
+}
+
+g2m::interpret( QString file ) {
   success = false;
   QString ipath = "/opt/src/emc2/trunk/";
   QString interp = ipath + "bin/rs274";

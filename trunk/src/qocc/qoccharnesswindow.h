@@ -27,7 +27,7 @@
 #include "qoccviewercontext.h"
 #include "qoccviewwidget.h"
 #include "qoccinputoutput.h"
-#include "cam.h"
+#include "lnk.hh"
 
 class QAction;
 class QLabel;

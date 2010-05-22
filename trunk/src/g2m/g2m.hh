@@ -5,7 +5,8 @@
 
 class g2m {
   public:
-    g2m(QString file);
+    g2m (QoccHarnessWindow* w);
+    void start (QString file);
     bool isOK() {return success;};
   protected:
     bool processCanonLine(std::string l);

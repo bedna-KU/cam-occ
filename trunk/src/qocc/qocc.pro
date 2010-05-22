@@ -12,26 +12,13 @@ DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 QMAKE_CXXFLAGS_DEBUG += -m64
 QMAKE_CXXFLAGS_RELEASE += -m64
 
-INCLUDEPATH += /opt/occ63/inc/ ../inc/
-LIBS += -L/opt/occ63/lib/ \
--L../../bin \
--lTKShHealing \
--lTKOffset \
--lTKBool \
--lTKSTEPBase \
--lTKSTEP \
--lTKService \
--lTKV3d \
--lTKernel \
--lTKIGES \
--lPTKernel \
--lTKSTL \
--lTKVRML \
--lTKTopAlgo \
--lTKBRep \
--lTKPShape \
--lTKShapeSchema \
--lCamOcc
+INCLUDEPATH += /opt/occ63/inc/ ../intf/
+LIBS += -L/opt/occ63/lib/ -L../../bin \
+-lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
+-lTKSTEP -lTKService -lTKV3d -lTKernel -lTKIGES \
+-lPTKernel -lTKSTL -lTKVRML -lTKTopAlgo -lTKBRep \
+-lTKPShape -lTKShapeSchema -lCommonOcc 
+#-lCamOcc
 
 
 
@@ -46,14 +33,14 @@ qoccviewwidget.cpp \
 
 DESTDIR = ../../bin
 
-HEADERS += ../inc/qoccinternal.h \
- ../inc/qoccapplication.h \
- ../inc/qoccdocument.h \
- ../inc/qocc.h \
- ../inc/qoccharnesswindow.h \
- ../inc/qoccinputoutput.h \
- ../inc/qoccviewercontext.h \
- ../inc/qoccviewwidget.h \
+HEADERS += qoccinternal.h \
+ qoccapplication.h \
+ qoccdocument.h \
+ qocc.h \
+ qoccharnesswindow.h \
+ qoccinputoutput.h \
+ qoccviewercontext.h \
+ qoccviewwidget.h \
 
 
 TARGET = camocc2

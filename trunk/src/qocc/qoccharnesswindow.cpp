@@ -30,6 +30,7 @@
 
 
 #include "qoccharnesswindow.h"
+#include "lnk.hh"
 
 void LoadBottle ( Handle_AIS_InteractiveContext theContext );
 void ShowOrigin ( Handle_AIS_InteractiveContext theContext );
@@ -51,7 +52,7 @@ QoccHarnessWindow::QoccHarnessWindow()
     	setMinimumSize(160, 160);
 	showMaximized();
 
-	cam myCAM(this);
+	lnk mylink(this);
 
 }
 
