@@ -19,15 +19,22 @@
  ***************************************************************************/
 //renamed from link because 'link' caused problems in qoccharnesswindow.cpp
 #include "lnk.hh"
-#include "uio.hh"
+#include "../uio/uio.hh"
+#include "../g2m/g2m.hh"
 #include <qoccharnesswindow.h>
 
 
 lnk::lnk(QoccHarnessWindow* w) {
-  uio user(w); //MUST be initialized before all classes that use uio!
+  cout << "lnk ctor" << endl;
+
+  uio* user;
+  g2m* g2model;
+
+  user = new uio(w); //MUST be initialized before all classes that use uio!
+  g2model = new g2m();
   //cam myCam();
   //misc myMisc(); // this will be all the stuff that's now "cam"
-  g2m gtom(w);
+  cout << "lnk ctor end" << endl;
 }
 
 lnk::~lnk() {

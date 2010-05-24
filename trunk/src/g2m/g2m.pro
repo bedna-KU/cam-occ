@@ -1,4 +1,3 @@
-#TEMPLATE = app
 TEMPLATE = lib
 
 CONFIG -= thread
@@ -13,13 +12,13 @@ DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 QMAKE_CXXFLAGS_DEBUG += -m64
 QMAKE_CXXFLAGS_RELEASE += -m64
 
-INCLUDEPATH += /opt/occ63/inc/ ../intf/
+INCLUDEPATH += /opt/occ63/inc/ ../uio/
 LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
 -lTKSTEP -lTKService -lTKV3d -lTKernel \
 -lTKIGES -lPTKernel -lTKSTL -lTKVRML \
 -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema \
--lCommonOcc 
+-lOccUio 
 
 
 

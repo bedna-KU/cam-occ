@@ -208,7 +208,7 @@ void QoccHarnessWindow::about()
 {
     statusBar()->showMessage(tr("Invoked Help|About"));
     QMessageBox::about(this, tr("About Menu"),
-            tr("The <b>Qt OpenCASCADE</b> example shows how to create a simple Qt4 Viewer."));
+            tr("<b>cam-occ2</b> is an opensource CAM program. It is very much a work in progress!<br>cam-occ2 (C) 2010 Mark Pictor<p>It uses an early version of <i>Qt OpenCASCADE</i>, a simple Qt4/OpenCASCADE Viewer.<br>QtOCC (C) 2006-7 Peter Dolbey."));
 }
 
 void QoccHarnessWindow::aboutQt()

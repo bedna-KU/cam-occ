@@ -1,12 +1,9 @@
-//link class: link between qocc and my stuff
-//part of a library which will also contain the uio class
-//being a separate lib will speed compilation
 
 /*
 ** had to rename to lnk because something else must define link:
 **    qoccharnesswindow.cpp:55: warning: 
 **    statement is a reference, not call, to function ‘link’ 
-** renaming makes that go away
+** must be a name collision - renaming makes it go away
 */
 
 #ifndef LNK_HH
@@ -32,7 +29,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "qoccharnesswindow.h"
+#include "../qocc/qoccharnesswindow.h"
 
 class QoccHarnessWindow;
 
@@ -40,7 +37,7 @@ class QoccHarnessWindow;
 \class lnk
 \brief This class is the link between qocc and my code.
 	This class is the link between qocc and my cam- and gcode-related code. It was originally named 'link' but that caused compilation problems in qoccharnesswindow.
-	This class and uio are compiled into a library called libOccCommon
+	This class is compiled into a library called libOccLnk
 \author Mark Pictor
 */
 class lnk : public QObject {

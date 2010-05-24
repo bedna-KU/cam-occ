@@ -1,62 +1,93 @@
-#include "g2m.hh"
+/***************************************************************************
+*   Copyright (C) 2010 by Mark Pictor					   *
+*   mpictor@gmail.com							   *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************/
+#include <iostream>
+
+
 #include <QProcess>
 #include <QStringList>
 #include <QString>
 #include <QTime>
 #include <QCoreApplication>
 #include <QEventLoop>
-#include <iostream>
+#include <QFileDialog>
+
+#include "g2m.hh"
+#include "uio.hh"
 #include "canonLine.hh"
 
-g2m::g2m(QoccHarnessWindow* w) {
-	myMenu = new QMenu("gcode");
-	theWindow->menuBar()->insertMenu(theWindow->getHelpMenu(),myMenu);
+g2m::g2m() {
+  cout << "g2m ctor" << endl;
+  QMenu* myMenu = new QMenu("gcode");
+  
+  QAction* myAction = new QAction ( "Create 3D Model...", this );
+  myAction->setShortcut(QString("Ctrl+M"));
+  myAction->setStatusTip ( "Load a .ngc file and create a 3d model" );
+  connect(myAction,SIGNAL(triggered()),this,SLOT(slotModelFromFile()));
+  myMenu->addAction( myAction );
+  
+  /*
+  **	// do next: show segments one at a time
+  **	nextAction = new QAction ( "Do next", this );
+  **	nextAction->setShortcut(QString("Ctrl+."));
+  **	nextAction->setStatusTip ( "Do next" );
+  **	connect(nextAction, SIGNAL(triggered()),this,SLOT(myNextMenuItem()));
+  **	myMenu->addAction( nextAction );
+  */
 
-	myAction = new QAction ( "Create 3D Model...", this );
-	myAction->setShortcut(QString("Ctrl+M"));
-	myAction->setStatusTip ( "Load a .ngc file and create a 3d model" );
-	connect(myAction,SIGNAL(triggered()),this,SLOT(modelfromfile()));
-	myMenu->addAction( myAction );
-
-// do next: show segments one at a time
-	nextAction = new QAction ( "Do next", this );
-	nextAction->setShortcut(QString("Ctrl+."));
-	nextAction->setStatusTip ( "Do next" );
-	connect ( nextAction, SIGNAL ( triggered() ), this, SLOT ( myNextMenuItem() ) );
-	myMenu->addAction( nextAction );
-
-	hasProcessedNgc = false;
-	thePath.Nullify();
+  uio::mb()->insertMenu(uio::hm(),myMenu);
+  cout << "g2m ctor end" << endl;
 }
 
-void g2m::modelfromfile()
+g2m::~g2m(){
+}
+
+void g2m::slotModelFromFile()
 {
-	bool success;
-	cleanUp();
-	hideGrid();
-	axoView();
-	
-	QString file = QFileDialog::getOpenFileName ( theWindow, "Choose .ngc file", "./ngc-in", "*.ngc" );
-	if ( ! file.endsWith(".ngc") ) {
-		uio::infoMsg("You must select a file ending with .ngc!");
-		return;
-	}
-	success = interpret ( file );
-	if (success) {
-		cout << "sweeping..." << endl;
-		sweep();
-		fitAll();
-		hasProcessedNgc = true;
-	} else {
-		infoMsg("Interpreter stopped without finding PROGRAM_END.");
-		drawSome(-1);
-		showWire();
-		fitAll();
-	}
+  //bool success;
+  //cleanUp();
+  uio::hideGrid();
+  uio::axoView();
+  
+  QString file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
+  if ( ! file.endsWith(".ngc") ) {
+    uio::infoMsg("You must select a file ending with .ngc!");
+    return;
+  }
+  /*
+  if (success) {
+ cout << "sweeping..." << endl;
+ sweep();
+ fitAll();
+ hasProcessedNgc = true;
+} else {
+  infoMsg("Interpreter stopped without finding PROGRAM_END.");
+  drawSome(-1);
+  showWire();
+  fitAll();
+}
+*/
 }
 
-g2m::interpret( QString file ) {
+void g2m::interpret(QString file) {
   success = false;
+  //FIXME: don't hardcode these paths
   QString ipath = "/opt/src/emc2/trunk/";
   QString interp = ipath + "bin/rs274";
   QString iparm = ipath + "configs/sim/sim_mm.var\n";
@@ -102,17 +133,17 @@ g2m::interpret( QString file ) {
       } else {	//shouldn't get here!
 	fails++;
 	sleepSecond();
-      }
-    } else {
-      fails++;
-      sleepSecond();
     }
-  } while ( (fails < 100) && 
-  ( (toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning ) )  );
-  //((lineLength > 0) || 	//loop until interp quits and all lines are read.
-  //toCanon.canReadLine() ||  
-  success = foundEOF;
-  return;
+  } else {
+    fails++;
+    sleepSecond();
+  }
+} while ( (fails < 100) && 
+( (toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning ) )  );
+//((lineLength > 0) || 	//loop until interp quits and all lines are read.
+//toCanon.canReadLine() ||  
+success = foundEOF;
+return;
 }
 
 bool g2m::processCanonLine ( std::string l )
@@ -122,19 +153,19 @@ bool g2m::processCanonLine ( std::string l )
   
   //create the object and get its pointer
   canonLine * cl = canonLine::canonLineFactory
-  		(l,*lineVector.back()->getStatus());
+  (l,*lineVector.back()->getStatus());
   //store it
   lineVector.push_back(cl);
   return cl->checkErrors();
 }
 
 void g2m::sleepSecond() {
-	//sleep 1s and process events
-	//cout << "SLEEP..." << endl;
-	QTime dieTime = QTime::currentTime().addSecs(1);
-	while( QTime::currentTime() < dieTime )
-		QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents, 100);
-	return;
+  //sleep 1s and process events
+  //cout << "SLEEP..." << endl;
+  QTime dieTime = QTime::currentTime().addSecs(1);
+  while( QTime::currentTime() < dieTime )
+    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents, 100);
+  return;
 }
 
 void g2m::infoMsg(QString s) {

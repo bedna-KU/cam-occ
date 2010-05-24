@@ -9,9 +9,9 @@ machineStatus::machineStatus(const machineStatus &oldStatus) {
 }
 
 void machineStatus::setEndPose(gp_Ax1 newPose) {
-  startPose = newPose;
+  endPose = newPose;
 }
 
 void machineStatus::setEndPose(gp_Pnt p) {
-  startPose = gp_Ax1( p, gp_Dir(0,0,1) );
+  endPose = gp_Ax1( p, gp_Dir(0,0,1) );
 }

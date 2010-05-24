@@ -12,15 +12,12 @@ DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 QMAKE_CXXFLAGS_DEBUG += -m64
 QMAKE_CXXFLAGS_RELEASE += -m64
 
-INCLUDEPATH += /opt/occ63/inc/ ../intf/
+INCLUDEPATH += /opt/occ63/inc/ ../lnk/
 LIBS += -L/opt/occ63/lib/ -L../../bin \
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
 -lTKSTEP -lTKService -lTKV3d -lTKernel -lTKIGES \
 -lPTKernel -lTKSTL -lTKVRML -lTKTopAlgo -lTKBRep \
--lTKPShape -lTKShapeSchema -lCommonOcc 
-#-lCamOcc
-
-
+-lTKPShape -lTKShapeSchema -lOccUio -lg2model
 
 SOURCES += main.cpp \
 qoccapplication.cpp \
@@ -30,6 +27,7 @@ qoccinputoutput.cpp \
 qoccmakebottle.cpp \
 qoccviewercontext.cpp \
 qoccviewwidget.cpp \
+lnk.cc
 
 DESTDIR = ../../bin
 
@@ -41,7 +39,7 @@ HEADERS += qoccinternal.h \
  qoccinputoutput.h \
  qoccviewercontext.h \
  qoccviewwidget.h \
-
+ lnk.hh
 
 TARGET = camocc2
 
