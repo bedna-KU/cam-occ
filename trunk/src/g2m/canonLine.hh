@@ -10,7 +10,12 @@
 #include "canon.hh"
 #include "machineStatus.hh"
 #include "tool.hh"
-
+/**
+\class canonLine
+\brief A canonLine object represents one canonical command
+Each gcode line produces one or more canonical commands. A canonLine object represents one canonical command. It can either be a motion command (one of LINEAR_TRAVERSE LINEAR_FEED ARC_FEED), or a motionless command (anything else)
+You cannot create objects of this class - instead, create an object of a class that inherits from this class via canonLineFactory()
+*/
 class canonLine: protected canon {
   public:
     const std::string getLine() {return myLine;};
@@ -26,9 +31,9 @@ class canonLine: protected canon {
     const TopoDS_Shape getUnSolid();
     bool checkErrors() {return errors;};
   protected:
-    canonLine(std::string canonL, machineStatus prevStatus);
+    canonLine(std::string canonL, machineStatus &prevStatus);
     std::string myLine;
-    gp_Ax1 myStart,myEnd;
+    //gp_Ax1 myStart,myEnd; //use status.get___Pose() instead
     machineStatus status; //the machine's status *after* execution of this canon line
     bool isMotion;
     static std::vector<tool> *toolVec;
@@ -41,6 +46,7 @@ class canonLine: protected canon {
     gp_Ax1 getPose();
     const std::string getCanonicalCommand();
     bool errors;
+    inline bool clMatch(string m);
 
 };
 

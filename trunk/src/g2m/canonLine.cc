@@ -15,11 +15,11 @@
 
 //canon.cc - implementation of canonLine
 
-canonLine::canonLine(std::string canonL, machineStatus prevStatus) {
+canonLine::canonLine(std::string canonL, machineStatus &prevStatus) {
   status = machineStatus(prevStatus);
   myLine = canonL;
   tokenize(); //splits myLine using delimiters
-  myStart = prevStatus.getStartPose();
+  //myStart = prevStatus.getStartPose();
   //myEnd = myStart; //override in derivative classes
   
   //getPose(); //can't use this here - need to know what type of line it is
@@ -118,19 +118,26 @@ void canonLine::tokenize(std::string str,
 inline void canonLine::tokenize() {
   tokenize(myLine,canonTokens);
 }
+
+inline bool canonLine::clMatch(string m) {
+  return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
+}
+
+
 canonLine * canonLine::canonLineFactory (std::string l, machineStatus s) {
   //check if canonical command is motion or something else
   //motion commands: LINEAR_TRAVERSE LINEAR_FEED ARC_FEED
-  size_t lin,af,cmnt;
+  size_t lin,af,cmnt,msg;
   cmnt=l.find("COMMENT");
+  msg=l.find("MESSAGE");
   lin=l.find("LINEAR_");
   af=l.find("ARC_FEED");
   /*
   ** check for comments first because it is not impossible
   ** for one to contain the text "LINEAR_" or "ARC_FEED"
   */
-  if (cmnt!=std::string::npos) { 		
-    return new canonMotionless(l,s);	
+  if ( (cmnt!=std::string::npos) || (msg!=std::string::npos) ) {       
+    return new canonMotionless(l,s);    
   } else if (lin!=std::string::npos) { //linear traverse or linear feed
     return new linearMotion(l,s);
   } else if (af!=std::string::npos) { //arc feed

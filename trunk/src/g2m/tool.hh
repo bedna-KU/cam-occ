@@ -18,7 +18,8 @@ class tool {
   protected:
     tool();
     bool isRotaryTool;
-    bool valid;
+    bool valid; //TODO: what is this? valid wire? valid solid? input sanity check? or ???
+    bool bruteForceOnly; //for creating solid. FIXME:would it make more sense in another class?
     TopoDS_Face profile;
     TOOLTYPE type; 
 };

@@ -13,7 +13,13 @@
 
 //for LINEAR_TRAVERSE, LINEAR_FEED, ARC_FEED
 typedef enum { ARC, HELIX, LINE } MOTION_TYPE;
-
+/**
+\class canonMotion
+\brief Class canonMotion is for the three canonical motion commands
+canonMotion is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED
+canonMotion can only be instantiated via canonLine::canonLineFactory().
+canonLine::canonLineFactory() creates linearMotion objects for LINEAR_TRAVERSE and LINEAR_FEED commands, and helicalMotion objects for ARC_FEED commands
+*/
 class canonMotion: protected canonLine {
   public:
     MOTION_TYPE getMotionType() {return mtype;};
