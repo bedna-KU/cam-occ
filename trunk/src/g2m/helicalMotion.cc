@@ -29,7 +29,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
  
  //edge.start = last;
  /* example output, starting from x0 y-1 z0 a0 b0 c0, command g02x1y0i0j1
- (names interleaved, see emc's saicannon.cc, line 497)
+ (names interleaved, see emc's saicanon.cc, line 497)
  8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000, 
  line Gline ARC_FEED(first_end, second_end, first_axis, second_axis,
  -1,        0.000000,   0.000000, 0.000000, 0.000000)

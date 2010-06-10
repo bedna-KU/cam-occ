@@ -51,7 +51,9 @@
 	the functions in the class!
 
 	uio creates and populates the Select menu.
-
+	
+	TODO: add logging functionality from dr dobbs example
+	
 \author Mark Pictor
 */
 class QoccHarnessWindow;

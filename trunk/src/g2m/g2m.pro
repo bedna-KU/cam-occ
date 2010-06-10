@@ -1,16 +1,27 @@
 TEMPLATE = lib
 
 CONFIG -= thread
-CONFIG += opengl
-CONFIG += x11
+CONFIG += opengl x11
 CONFIG += debug
 CONFIG -= release
 
-DEFINES += _OCC64 LIN LININTEL 
-DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
+linux-g++ {
+        DEFINES += LIN LININTEL
+        HARDWARE_PLATFORM = $$system(uname -m)
+        contains( HARDWARE_PLATFORM, x86_64 ) {
+                # 64-bit Linux
+                message ("Adding Linux 64 bits compile flags and definitions")
+                DEFINES += _OCC64
+                QMAKE_CXXFLAGS += -m64
 
-QMAKE_CXXFLAGS_DEBUG += -m64
-QMAKE_CXXFLAGS_RELEASE += -m64
+        } else {
+                # 32-bit Linux
+        }
+} else {
+        message ("Not supported on any platform other than linux!")
+}
+
+DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 
 INCLUDEPATH += /opt/occ63/inc/ ../uio/
 LIBS += -L/opt/occ63/lib/ -L../../bin\
@@ -18,13 +29,12 @@ LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lTKSTEP -lTKService -lTKV3d -lTKernel \
 -lTKIGES -lPTKernel -lTKSTL -lTKVRML \
 -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema \
--lOccUio 
+-lOccUio -lstdc++
 
+SOURCES += canon.cc canonMotion.cc g2m.cc linearMotion.cc tool.cc \
+canonLine.cc  canonMotionless.cc  helicalMotion.cc  machineStatus.cc dispShape.cc
 
-
-SOURCES += canon.cc canonMotion.cc helicalMotion.cc machineStatus.cc tool.cc canonLine.cc g2m.cc linearMotion.cc 
-
-HEADERS += canon.hh canonMotion.hh g2m.hh linearMotion.hh tool.hh canonLine.hh canonMotionless.hh helicalMotion.hh machineStatus.hh
+HEADERS += canon.hh canonMotion.hh g2m.hh linearMotion.hh tool.hh canonLine.hh canonMotionless.hh helicalMotion.hh machineStatus.hh dispShape.hh
 
 DESTDIR = ../../bin
 

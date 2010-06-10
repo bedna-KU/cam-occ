@@ -1,4 +1,6 @@
+#include <string>
 #include "canonMotionless.hh"
+#include "uio.hh"
 
 canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):canonLine(canonL, prevStatus) {
   match = true;
@@ -6,48 +8,48 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   status.setEndPose(status.getStartPose());
 
   //match canonical commands. the string MUST be the complete command name
-  if clMatch("COMMENT") {
+  if (clMatch("COMMENT")) {
     //do nothing
-  } else if clMatch("MESSAGE") {
+  } else if (clMatch("MESSAGE")) {
     uio::infoMsg("Message: " + canonTokens[3]);
-  //} else if clMatch("SPINDLE") {
-  //} else if clMatch("MIST") {
-  //} else if clMatch("ENABLE") {
-  //} else if clMatch("FLOOD") {
-  } else if clMatch("DWELL") {
-  //} else if clMatch("FEEDRATE") {
-  } else if clMatch("SET_FEED_RATE") {
+  //} else if (clMatch("SPINDLE")) {
+  //} else if (clMatch("MIST")) {
+  //} else if (clMatch("ENABLE")) {
+  //} else if (clMatch("FLOOD")) {
+  } else if (clMatch("DWELL")) {
+  //} else if (clMatch("FEEDRATE")) {
+  } else if (clMatch("SET_FEED_RATE")) {
     handled = false;
-  } else if clMatch("SET_FEED_REFERENCE") {
+  } else if (clMatch("SET_FEED_REFERENCE")) {
     handled = false;
-  } else if clMatch("SELECT_TOOL") {
+  } else if (clMatch("SELECT_TOOL")) {
     handled = false;
-  } else if clMatch("CHANGE_TOOL") {
+  } else if (clMatch("CHANGE_TOOL")) {
     handled = false;
-  } else if clMatch("USE_TOOL_LENGTH_OFFSET") {
+  } else if (clMatch("USE_TOOL_LENGTH_OFFSET")) {
     handled = false;
-  } else if clMatch("PROGRAM_STOP") {
-  } else if clMatch("SET_ORIGIN_OFFSETS") {
+  } else if (clMatch("PROGRAM_STOP")) {
+  } else if (clMatch("SET_ORIGIN_OFFSETS")) {
     
-    if (std::string::npos != canonLine.find("SET_ORIGIN_OFFSETS(0.0000,")) {
-      infoMsg(QString("Warning, input has reduced precision - expected more zeros: <br>") + canon_line );
+    if (std::string::npos != canonL.find("SET_ORIGIN_OFFSETS(0.0000,")) {
+      uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + canonL );
     }
     handled = false; //because I still don't know what to do if we have the correct data...
-  } else if clMatch("USE_LENGTH_UNITS") {
+  } else if (clMatch("USE_LENGTH_UNITS")) {
     handled = false;
-  } else if clMatch("SET_MOTION_CONTROL_MODE") {
+  } else if (clMatch("SET_MOTION_CONTROL_MODE")) {
     handled = false;
-  } else if clMatch("SET_XY_ROTATION") {
+  } else if (clMatch("SET_XY_ROTATION")) {
     handled = false;
-  } else if clMatch("SET_FEED_REFERENCE") {
+  } else if (clMatch("SET_FEED_REFERENCE")) {
     handled = false;
-  } else if clMatch("SET_NAIVECAM_TOLERANCE") {
+  } else if (clMatch("SET_NAIVECAM_TOLERANCE")) {
     handled = false;
-  } else if clMatch("PROGRAM_END") {
+  } else if (clMatch("PROGRAM_END")) {
   } else match = false;
 
   if ( !match || !handled ) {
-    string m;
+    std::string m;
     if (!handled) 
       m = "Warning, unhandled";
     else m = "Error, unknown";

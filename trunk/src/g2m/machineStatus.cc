@@ -3,9 +3,7 @@
 //implement machineStatus class
 //GPL
 
-machineStatus::machineStatus(const machineStatus &oldStatus) {
-	//TODO
-	#warning incomplete
+machineStatus::machineStatus(machineStatus const& oldStatus) {
 	spindleStat = oldStatus.spindleStat;
     F = oldStatus.F;
     S = oldStatus.S;
@@ -14,20 +12,27 @@ machineStatus::machineStatus(const machineStatus &oldStatus) {
     endPose = startPose = oldStatus.endPose;
 }
 
-machineStatus::clearAll() {
+/**
+\fn machineStatus(gp_Ax1 start)
+This constructor is only to be used when initializing the simulation; it would not be useful elsewhere.
+\param start is the initial pose of the machine, as determined by the interp from the variable file.
+*/
+machineStatus::machineStatus(gp_Ax1& start) {
+  clearAll();
+  startPose = start;
+}
+
+void machineStatus::clearAll() {
   F=S=0.0;
   plane = CANON_PLANE_XY;
   coolant.flood = false;
   coolant.mist = false;
   coolant.spindle = false;
-  endPose = startPose = gp_Ax1(0,0,0,0,0,0);
+  endPose = startPose = gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,0));
   spindleStat = OFF;
-}
-
-void machineStatus::setEndPose(gp_Ax1 newPose) {
-  endPose = newPose;
 }
 
 void machineStatus::setEndPose(gp_Pnt p) {
   endPose = gp_Ax1( p, gp_Dir(0,0,1) );
 }
+

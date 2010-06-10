@@ -44,6 +44,7 @@ class g2m: public QObject {
     void infoMsg(QString);
     void sleepSecond();
     std::vector<canonLine*> lineVector;
+    QString file;
 };
 
 #endif //GTOM_HH

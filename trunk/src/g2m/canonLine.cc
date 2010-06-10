@@ -15,42 +15,37 @@
 
 //canon.cc - implementation of canonLine
 
-canonLine::canonLine(std::string canonL, machineStatus &prevStatus) {
-  status = machineStatus(prevStatus);
+canonLine::canonLine(std::string canonL, machineStatus prevStatus): status(prevStatus) {
   myLine = canonL;
   tokenize(); //splits myLine using delimiters
-  //myStart = prevStatus.getStartPose();
-  //myEnd = myStart; //override in derivative classes
-  
-  //getPose(); //can't use this here - need to know what type of line it is
 }
 
-//returns the number after N on the line, -1 if none
+///returns the number after N on the line, -1 if none
 int canonLine::getN() {
-  //std::string s = canonTokens[1];
   if ( (canonTokens[1].c_str()[1] == '.') && (canonTokens[1].c_str()[2] == '.') )
-   //if ( (s.c_str[1] == '.') && (s.c_str[2] == '.') )
     return -1;
   else
     return tok2i(1,1);
 }
 
-//returns the canon line number
+///returns the canon line number
 int canonLine::getLineNum() {
   return tok2i(0);
 }
 
-//returns the machine's status after execution of this canon line
+///returns the machine's status after execution of this canon line
 const machineStatus* canonLine::getStatus() {
   return &status;
 }
 
+/*
 void canonLine::setToolVecPtr(std::vector<tool> *t) {
   *toolVec = *t;
 }
+*/
 
-//for LINEAR_* and ARC_FEED, first 3 are always xyz and last 3 always abc
-//FIXME: shouldn't this be in class machineStatus?
+///for LINEAR_* and ARC_FEED, first 3 are always xyz and last 3 always abc
+///FIXME: shouldn't this be in class machineStatus?
 gp_Ax1 canonLine::getPose() {
   double x,y,z,a,b,c;
   
@@ -72,7 +67,7 @@ gp_Ax1 canonLine::getPose() {
   return gp_Ax1(p,d);
 }
 
-//converts canonTokens[n] to double
+///converts canonTokens[n] to double
 inline double canonLine::tok2d(uint n) {
   char * end;
   double d = strtod( canonTokens[n].c_str(), &end );
@@ -80,7 +75,7 @@ inline double canonLine::tok2d(uint n) {
   return d;  
 }
 
-//converts canonTokens[n] to int
+///converts canonTokens[n] to int
 inline int canonLine::tok2i(uint n,uint offset) {
   char * end;
   int i = strtol( &canonTokens[n].c_str()[offset], &end, 10 );
@@ -96,6 +91,8 @@ const std::string canonLine::getCanonicalCommand() {
 //0 is canon line
 //1 is gcode Nnnnnn line
 //2 is canonical command
+///splits 'str' at any of 'delimiters' and puts the pieces in 'tokenV'
+///delimiters defaults to both parenthesis, comma, space.
 void canonLine::tokenize(std::string str, 
 			 std::vector<std::string>& tokenV, 
 			 const std::string& delimiters) {
@@ -115,15 +112,21 @@ void canonLine::tokenize(std::string str,
   }
 }
 
+///tokenize myLine with the default delimiters `(), `
 inline void canonLine::tokenize() {
   tokenize(myLine,canonTokens);
 }
 
-inline bool canonLine::clMatch(string m) {
+///return true if the canonical command for this line matches 'm'
+inline bool canonLine::clMatch(std::string m) {
   return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
 }
 
-
+/**
+\fn canonLine * canonLine::canonLineFactory (std::string l, machineStatus s)
+\brief canonLineFactory creates objects that inherit from canonLine
+canonLineFactory determines which type of object to create, and returns a pointer to that object
+*/
 canonLine * canonLine::canonLineFactory (std::string l, machineStatus s) {
   //check if canonical command is motion or something else
   //motion commands: LINEAR_TRAVERSE LINEAR_FEED ARC_FEED

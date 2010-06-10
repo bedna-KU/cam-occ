@@ -6,18 +6,30 @@ CONFIG += x11
 CONFIG += debug
 CONFIG -= release
 
-DEFINES += _OCC64 LIN LININTEL 
-DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
+linux-g++ {
+        DEFINES += LIN LININTEL
+        HARDWARE_PLATFORM = $$system(uname -m)
+        contains( HARDWARE_PLATFORM, x86_64 ) {
+                # 64-bit Linux
+                message ("Adding Linux 64 bits compile flags and definitions")
+                DEFINES += _OCC64
+                QMAKE_CXXFLAGS += -m64
 
-QMAKE_CXXFLAGS_DEBUG += -m64
-QMAKE_CXXFLAGS_RELEASE += -m64
+        } else {
+                # 32-bit Linux
+        }
+} else {
+        message ("Not supported on any platform other than linux!")
+}
+
+DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 
 INCLUDEPATH += /opt/occ63/inc/ ../lnk/
 LIBS += -L/opt/occ63/lib/ -L../../bin \
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
 -lTKSTEP -lTKService -lTKV3d -lTKernel -lTKIGES \
 -lPTKernel -lTKSTL -lTKVRML -lTKTopAlgo -lTKBRep \
--lTKPShape -lTKShapeSchema -lOccUio -lg2model
+-lTKPShape -lTKShapeSchema -lOccUio -lg2model -lstdc++
 
 SOURCES += main.cpp \
 qoccapplication.cpp \

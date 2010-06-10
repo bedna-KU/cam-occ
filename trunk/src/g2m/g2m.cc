@@ -33,7 +33,7 @@
 #include "canonLine.hh"
 
 g2m::g2m() {
-  cout << "g2m ctor" << endl;
+  //cout << "g2m ctor" << endl;
   QMenu* myMenu = new QMenu("gcode");
   
   QAction* myAction = new QAction ( "Create 3D Model...", this );
@@ -52,7 +52,7 @@ g2m::g2m() {
   */
 
   uio::mb()->insertMenu(uio::hm(),myMenu);
-  cout << "g2m ctor end" << endl;
+  //cout << "g2m ctor end" << endl;
 }
 
 g2m::~g2m(){
@@ -65,11 +65,14 @@ void g2m::slotModelFromFile()
   uio::hideGrid();
   uio::axoView();
   
-  QString file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
+  file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
   if ( ! file.endsWith(".ngc") ) {
     uio::infoMsg("You must select a file ending with .ngc!");
     return;
   }
+  interpret();
+ //TODO: process each line, display 
+
   /*
   if (success) {
  cout << "sweeping..." << endl;
@@ -85,7 +88,7 @@ void g2m::slotModelFromFile()
 */
 }
 
-void g2m::interpret(QString file) {
+void g2m::interpret() {
   success = false;
   //FIXME: don't hardcode these paths
   QString ipath = "/opt/src/emc2/trunk/";
@@ -146,10 +149,7 @@ success = foundEOF;
 return;
 }
 
-bool g2m::processCanonLine ( std::string l )
-{
-  //need a vector to store canonLine in
-  //TODO in header file?
+bool g2m::processCanonLine (std::string l) {
   
   //create the object and get its pointer
   canonLine * cl = canonLine::canonLineFactory

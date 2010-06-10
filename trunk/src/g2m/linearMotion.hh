@@ -13,6 +13,8 @@
 class linearMotion: protected canonMotion {
   public:
     linearMotion(std::string canonL, machineStatus prevStatus);
+    ///MOTION_TYPE getMotionType() {return LINEAR;};
+    //need to return RAPID for rapids...
 };
 
 #endif //LINEARMOTION_HH

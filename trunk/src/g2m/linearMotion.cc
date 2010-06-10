@@ -5,7 +5,7 @@
 #include "canonMotion.hh"
 
 linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
-  mtype = LINE;
+  
   //FIXME isTraverse =
 
 }

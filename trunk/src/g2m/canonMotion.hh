@@ -12,7 +12,7 @@
 #include "canonLine.hh"
 
 //for LINEAR_TRAVERSE, LINEAR_FEED, ARC_FEED
-typedef enum { ARC, HELIX, LINE } MOTION_TYPE;
+typedef enum { HELICAL, LINEAR, RAPID } MOTION_TYPE;
 /**
 \class canonMotion
 \brief Class canonMotion is for the three canonical motion commands
@@ -22,13 +22,13 @@ canonLine::canonLineFactory() creates linearMotion objects for LINEAR_TRAVERSE a
 */
 class canonMotion: protected canonLine {
   public:
-    MOTION_TYPE getMotionType() {return mtype;};
+    virtual MOTION_TYPE getMotionType() {};
     bool thisIsTraverse() {return isTraverse;};
-    virtual const TopoDS_Solid getSolid();
+    virtual const TopoDS_Solid getSolid() {};
+    bool isThisMotion() {return true;};
   protected:
-    bool isTraverse;
+    //bool isTraverse;
     canonMotion(std::string canonL, machineStatus prevStatus);
-    MOTION_TYPE mtype;
     TopoDS_Shape solid;
     TopoDS_Edge edge;
 };

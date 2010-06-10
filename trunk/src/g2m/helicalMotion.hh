@@ -23,6 +23,7 @@ class arcMotion: protected canonMotion {
 class helicalMotion: protected canonMotion {
   public:
     helicalMotion(std::string canonL, machineStatus prevStatus);
+    MOTION_TYPE getMotionType() {return HELICAL;};
   private:
     void helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);
     //void arc(status.getStartPose().Location(), startVec, status.endPose)
