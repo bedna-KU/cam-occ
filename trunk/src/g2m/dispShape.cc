@@ -17,39 +17,40 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-//for LINEAR_TRAVERSE, LINEAR_FEED, ARC_FEED
-#include <string>
+
+#include "dispShape.hh"
+#include "uio.hh"
+
 #include <limits.h>
 
-#include <Precision.hxx>
+#include <AIS_Shape.hxx>
+#include <AIS_DisplayMode.hxx>
+#include <Graphic3d_NameOfMaterial.hxx>
+#include <TopoDS_Shape.hxx>
 
-#include "canonMotion.hh"
-#include "canonLine.hh"
-
-canonMotion::canonMotion(std::string canonL, machineStatus prevStatus): canonLine(canonL,prevStatus) {
-  status.setEndPose(getPoseFromCmd());
+dispShape::dispShape( const TopoDS_Shape shape, 
+                      const Graphic3d_NameOfMaterial matl, 
+                      const AIS_DisplayMode mode): 
+                      /*myShape(shape),*/ NoM(matl), dMode(mode) {
+  s = new AIS_Shape(shape);
 }
 
-///for LINEAR_* and ARC_FEED, first 3 are always xyz and last 3 always abc
-gp_Ax1 canonMotion::getPoseFromCmd() {
-  double x,y,z,a,b,c;
-  
-  //need 3,4,5,and -3,-2,-1
-  x = tok2d(3);
-  y = tok2d(4);
-  z = tok2d(5);
-  gp_Pnt p(x,y,z);
-  
-/* FIXME
-  uint s = canonTokens.size(); //a,b,c are last 3 numbers
-  c = tok2d(s-1);
-  b = tok2d(s-2);
-  a = tok2d(s-3);
-  //now how to convert those angles to a unit vector (i.e. gp_Dir)?
-*/  
-  //for now we take the easy way out
-  gp_Dir d(0,0,1); //vertical
-  assert (a+b+c < 3.0 * Precision::Confusion());
-  return gp_Ax1(p,d);
+void dispShape::display() {
+  uio::context()->SetMaterial ( s, NoM, Standard_True );
+  uio::context()->SetDisplayMode ( s,Standard_Integer(dMode),Standard_False );
+  uio::context()->Display ( s );
 }
 
+
+/* values for DisplayMode and NameOfMaterial:
+enum      AIS_DisplayMode { AIS_WireFrame, AIS_Shaded, AIS_QuickHLR, AIS_ExactHLR  }
+
+enum      Graphic3d_NameOfMaterial {
+  Graphic3d_NOM_BRASS, Graphic3d_NOM_BRONZE, Graphic3d_NOM_COPPER, Graphic3d_NOM_GOLD,
+  Graphic3d_NOM_PEWTER, Graphic3d_NOM_PLASTER, Graphic3d_NOM_PLASTIC, Graphic3d_NOM_SILVER,
+  Graphic3d_NOM_STEEL, Graphic3d_NOM_STONE, Graphic3d_NOM_SHINY_PLASTIC, Graphic3d_NOM_SATIN,
+  Graphic3d_NOM_METALIZED, Graphic3d_NOM_NEON_GNC, Graphic3d_NOM_CHROME, Graphic3d_NOM_ALUMINIUM,
+  Graphic3d_NOM_OBSIDIAN, Graphic3d_NOM_NEON_PHC, Graphic3d_NOM_JADE, Graphic3d_NOM_DEFAULT,
+  Graphic3d_NOM_UserDefined
+}
+*/

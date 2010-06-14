@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2010 by Mark Pictor                                     *
+ *   mpictor@gmail.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include <string>
 #include <climits>
 
@@ -6,7 +25,6 @@
 #include <Geom_CylindricalSurface.hxx>
 #include <Geom2d_TrimmedCurve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
-//#include <TopoDS.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <GCE2d_MakeSegment.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
@@ -68,13 +86,11 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
      c = gp_Pnt(a1,a2,status.getStartPose().Location().Z());
      hdist = e3 - status.getStartPose().Location().Z();
  }
- //last = edge.end;
  //skip arc if zero length; caught this bug thanks to tort.ngc
  if (status.getStartPose().Location().Distance(status.getEndPose().Location()) > Precision::Confusion()) {
    //center is c; ends are edge.start, edge.last
    if (fabs(hdist) > 0.000001) {
      helix(status.getStartPose().Location(), status.getEndPose().Location(), c, arcDir,rot);
-     mtype = HELIX;
    } else {
      gp_Vec Vr = gp_Vec(c,status.getStartPose().Location());	//vector from center to start
      gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
@@ -82,9 +98,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
      if (rot==1) startVec *= -1;
      //cout << "Arc with vector at start: " << toString(startVec).toStdString();
      arc(status.getStartPose().Location(), startVec, status.getEndPose().Location());
-     mtype = ARC;
    }
-   isTraverse = false;
    /*
    FIXME - rewrite or copy the old funcs into new src
    chkEdgeStruct check = checkEdge(feedEdges, feedEdges.size()-1);

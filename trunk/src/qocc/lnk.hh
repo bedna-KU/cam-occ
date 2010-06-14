@@ -10,8 +10,8 @@
 #define LNK_HH
 
 /***************************************************************************
- *   Copyright (C) 2010 by Mark Pictor					   *
- *   mpictor@gmail.com							   *
+ *   Copyright (C) 2010 by Mark Pictor                                     *
+ *   mpictor@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,9 +35,8 @@ class QoccHarnessWindow;
 
 /*!
 \class lnk
-\brief This class is the link between qocc and my code.
-	This class is the link between qocc and my cam- and gcode-related code. It was originally named 'link' but that caused compilation problems in qoccharnesswindow.
-	This class is compiled into a library called libOccLnk
+\brief This class is the link between qocc and my cam- and gcode-related code.
+  It was originally named 'link' but that caused compilation problems in qoccharnesswindow.
 \author Mark Pictor
 */
 class lnk : public QObject {
