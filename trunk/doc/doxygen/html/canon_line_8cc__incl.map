@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" href="$canon_line_8hh.html" title="canonLine.hh" alt="" coords="667,237,765,267"/>
+<area shape="rect" href="$machine_status_8hh.html" title="machineStatus.hh" alt="" coords="413,315,539,344"/>
+<area shape="rect" href="$canon_motionless_8hh.html" title="canonMotionless.hh" alt="" coords="552,160,688,189"/>
+<area shape="rect" href="$canon_motion_8hh.html" title="canonMotion.hh" alt="" coords="1101,160,1213,189"/>
+<area shape="rect" href="$linear_motion_8hh.html" title="linearMotion.hh" alt="" coords="920,83,1029,112"/>
+<area shape="rect" href="$helical_motion_8hh.html" title="helicalMotion.hh" alt="" coords="632,83,747,112"/>
+<area shape="rect" href="$canon_8hh.html" title="canon.hh" alt="" coords="995,469,1069,499"/>
+<area shape="rect" href="$tool_8hh.html" title="tool.hh" alt="" coords="624,392,683,421"/>
+</map>

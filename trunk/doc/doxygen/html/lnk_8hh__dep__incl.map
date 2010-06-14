@@ -1,0 +1,21 @@
+<map id="G" name="G">
+<area shape="rect" href="$qocc_2_8moc_2moc__lnk_8cpp.html" title="src/qocc/.moc/moc_lnk.cpp" alt="" coords="445,83,627,112"/>
+<area shape="rect" href="$qoccharnesswindow_8h.html" title="src/qocc/qoccharnesswindow.h" alt="" coords="651,83,853,112"/>
+<area shape="rect" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="836,160,945,189"/>
+<area shape="rect" href="$qoccharnesswindow_8cpp.html" title="src/qocc/qoccharnesswindow.cpp" alt="" coords="969,160,1185,189"/>
+<area shape="rect" href="$ui_stuff_8h.html" title="src/cam/uiStuff.h" alt="" coords="692,160,812,189"/>
+<area shape="rect" href="$cam_8h.html" title="src/cam/cam.h" alt="" coords="409,160,516,189"/>
+<area shape="rect" href="$main_8cpp.html" title="Top level application." alt="" coords="540,160,668,189"/>
+<area shape="rect" href="$a_sample_8h.html" title="src/cam/aSample.h" alt="" coords="1077,237,1211,267"/>
+<area shape="rect" href="$cam_8cpp.html" title="src/cam/cam.cpp" alt="" coords="643,315,765,344"/>
+<area shape="rect" href="$shape_info_8h.html" title="src/cam/shapeInfo.h" alt="" coords="736,237,875,267"/>
+<area shape="rect" href="$shape_offset_8h.html" title="src/cam/shapeOffset.h" alt="" coords="899,237,1053,267"/>
+<area shape="rect" href="$gcode2_model_8h.html" title="src/cam/gcode2Model.h" alt="" coords="451,237,611,267"/>
+<area shape="rect" href="$ui_stuff_8cpp.html" title="src/cam/uiStuff.cpp" alt="" coords="291,237,427,267"/>
+<area shape="rect" href="$a_sample_8cpp.html" title="src/cam/aSample.cpp" alt="" coords="1160,315,1307,344"/>
+<area shape="rect" href="$shape_info_8cpp.html" title="src/cam/shapeInfo.cpp" alt="" coords="789,315,944,344"/>
+<area shape="rect" href="$shape_offset_8cpp.html" title="src/cam/shapeOffset.cpp" alt="" coords="968,315,1136,344"/>
+<area shape="rect" href="$gcode2_model3d_8cpp.html" title="src/cam/gcode2Model3d.cpp" alt="" coords="432,315,619,344"/>
+<area shape="rect" href="$gcode2_model_gc_8cpp.html" title="src/cam/gcode2ModelGc.cpp" alt="" coords="5,315,197,344"/>
+<area shape="rect" href="$gcode2_model_ui_8cpp.html" title="src/cam/gcode2ModelUi.cpp" alt="" coords="221,315,408,344"/>
+</map>

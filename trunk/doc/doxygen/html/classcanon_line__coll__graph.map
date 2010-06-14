@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" href="$classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things..." alt="" coords="5,5,61,35"/>
+<area shape="rect" href="$classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information..." alt="" coords="71,101,177,131"/>
+<area shape="rect" href="$structcoolant_struct.html" title="coolantStruct" alt="" coords="85,5,184,35"/>
+</map>

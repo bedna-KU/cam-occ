@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" href="$canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="5,83,192,112"/>
+<area shape="rect" href="$disp_shape_8cc.html" title="src/g2m/dispShape.cc" alt="" coords="216,83,368,112"/>
+<area shape="rect" href="$g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="392,83,507,112"/>
+<area shape="rect" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="531,83,640,112"/>
+<area shape="rect" href="$uio_8cc.html" title="src/uio/uio.cc" alt="" coords="664,83,763,112"/>
+</map>

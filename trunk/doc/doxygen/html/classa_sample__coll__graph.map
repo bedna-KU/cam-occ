@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" href="$classui_stuff.html" title="uiStuff" alt="" coords="120,197,179,227"/>
+<area shape="rect" href="$class_qocc_harness_window.html" title="QoccHarnessWindow" alt="" coords="77,101,221,131"/>
+<area shape="rect" href="$class_qocc_viewer_context.html" title="This class provides a simple document element of the QtOpenCascade Toolkit." alt="" coords="5,5,141,35"/>
+<area shape="rect" href="$class_qocc_view_widget.html" title="This class provides the view element of the QtOpenCascade Toolkit. This class provides..." alt="" coords="165,5,285,35"/>
+</map>

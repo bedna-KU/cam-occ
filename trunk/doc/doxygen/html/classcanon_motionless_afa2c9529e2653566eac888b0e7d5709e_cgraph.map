@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" href="$classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="309,5,443,35"/>
+<area shape="rect" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="280,59,472,88"/>
+<area shape="rect" href="$classuio.html#a72ced2b751e75942c7ce0002401f9c13" title="uio::infoMsg" alt="" coords="331,112,421,141"/>
+<area shape="rect" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="284,165,468,195"/>
+</map>

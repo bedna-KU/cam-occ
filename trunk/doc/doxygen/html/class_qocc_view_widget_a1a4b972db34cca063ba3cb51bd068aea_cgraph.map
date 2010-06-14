@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" href="$class_qocc_view_widget.html#acda40103d54a8d233a3737057cd3c4aa" title="The initializeOCC() procedure. This function creates the widget&#39;s view using..." alt="" coords="244,5,447,35"/>
+<area shape="rect" href="$class_qocc_view_widget.html#a2d88b5422a3331bb8f7b4fd5c9223369" title="The main redraw function This called from various locations." alt="" coords="263,59,428,88"/>
+<area shape="rect" href="$class_qocc_view_widget.html#a6473ab97a18a68939be608c7c3ec4355" title="QoccViewWidget::initialized" alt="" coords="497,5,679,35"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" href="$classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="239,5,423,35"/>
+<area shape="rect" href="$classmachine_status.html#a134831df227887d28dffa0c3346060a6" title="machineStatus::getPlane" alt="" coords="247,59,415,88"/>
+<area shape="rect" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="235,112,427,141"/>
+<area shape="rect" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="239,165,423,195"/>
+<area shape="rect" href="$classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="converts canonTokens[n] to double" alt="" coords="271,219,391,248"/>
+</map>
