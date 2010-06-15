@@ -28,11 +28,13 @@
 #include <Graphic3d_NameOfMaterial.hxx>
 #include <TopoDS_Shape.hxx>
 
-dispShape::dispShape( const TopoDS_Shape shape, 
-                      const Graphic3d_NameOfMaterial matl, 
-                      const AIS_DisplayMode mode): 
+dispShape::dispShape( const TopoDS_Shape shape,
+                      const int lineNbr,
+                      const Graphic3d_NameOfMaterial matl,
+                      const AIS_DisplayMode mode):
                       /*myShape(shape),*/ NoM(matl), dMode(mode) {
   s = new AIS_Shape(shape);
+  canLine = lineNbr;
 }
 
 void dispShape::display() {

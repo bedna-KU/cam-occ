@@ -28,10 +28,13 @@
 #include <Graphic3d_NameOfMaterial.hxx>
 #include <Handle_AIS_Shape.hxx>
 #include <TopoDS_Shape.hxx>
-
+/**
+\class dispShape
+\brief Stores shapes to be displayed, as well as data for how to display them.
+*/
 class dispShape {
   public:
-    dispShape (const TopoDS_Shape s, const Graphic3d_NameOfMaterial nom = Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode = AIS_Shaded);
+    dispShape (const TopoDS_Shape s, const int lineNbr, const Graphic3d_NameOfMaterial nom = Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode = AIS_Shaded);
     void display();
   private:
     Handle(AIS_Shape) s;
