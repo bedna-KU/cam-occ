@@ -1,3 +1,3 @@
 <map id="G" name="G">
-<area shape="rect" href="$classdisp_shape.html" title="dispShape" alt="" coords="5,5,88,35"/>
+<area shape="rect" href="$classdisp_shape.html" title="Stores shapes to be displayed, as well as data for how to display them." alt="" coords="5,5,88,35"/>
 </map>

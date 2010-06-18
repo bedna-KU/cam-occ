@@ -1,23 +1,22 @@
 <map id="G" name="G">
-<area shape="rect" href="$qoccharnesswindow_8h.html" title="src/qocc/qoccharnesswindow.h" alt="" coords="1456,83,1659,112"/>
-<area shape="rect" href="$qoccinputoutput_8cpp.html" title="src/qocc/qoccinputoutput.cpp" alt="" coords="1683,83,1875,112"/>
-<area shape="rect" href="$ui_stuff_8h.html" title="src/cam/uiStuff.h" alt="" coords="881,160,1001,189"/>
-<area shape="rect" href="$cam_8h.html" title="src/cam/cam.h" alt="" coords="1320,160,1427,189"/>
-<area shape="rect" href="$lnk_8hh.html" title="src/qocc/lnk.hh" alt="" coords="1503,160,1612,189"/>
-<area shape="rect" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="1411,237,1520,267"/>
-<area shape="rect" href="$qoccharnesswindow_8cpp.html" title="src/qocc/qoccharnesswindow.cpp" alt="" coords="1749,237,1965,267"/>
-<area shape="rect" href="$main_8cpp.html" title="Top level application." alt="" coords="1687,160,1815,189"/>
-<area shape="rect" href="$a_sample_8h.html" title="src/cam/aSample.h" alt="" coords="1043,237,1176,267"/>
-<area shape="rect" href="$cam_8cpp.html" title="src/cam/cam.cpp" alt="" coords="821,315,944,344"/>
-<area shape="rect" href="$shape_info_8h.html" title="src/cam/shapeInfo.h" alt="" coords="651,237,789,267"/>
-<area shape="rect" href="$shape_offset_8h.html" title="src/cam/shapeOffset.h" alt="" coords="864,237,1019,267"/>
-<area shape="rect" href="$gcode2_model_8h.html" title="src/cam/gcode2Model.h" alt="" coords="443,237,603,267"/>
-<area shape="rect" href="$ui_stuff_8cpp.html" title="src/cam/uiStuff.cpp" alt="" coords="1200,237,1336,267"/>
-<area shape="rect" href="$a_sample_8cpp.html" title="src/cam/aSample.cpp" alt="" coords="1160,315,1307,344"/>
-<area shape="rect" href="$shape_info_8cpp.html" title="src/cam/shapeInfo.cpp" alt="" coords="643,315,797,344"/>
-<area shape="rect" href="$shape_offset_8cpp.html" title="src/cam/shapeOffset.cpp" alt="" coords="968,315,1136,344"/>
-<area shape="rect" href="$gcode2_model3d_8cpp.html" title="src/cam/gcode2Model3d.cpp" alt="" coords="216,315,403,344"/>
-<area shape="rect" href="$gcode2_model_gc_8cpp.html" title="src/cam/gcode2ModelGc.cpp" alt="" coords="427,315,619,344"/>
-<area shape="rect" href="$gcode2_model_ui_8cpp.html" title="src/cam/gcode2ModelUi.cpp" alt="" coords="5,315,192,344"/>
-<area shape="rect" href="$qocc_2_8moc_2moc__lnk_8cpp.html" title="src/qocc/.moc/moc_lnk.cpp" alt="" coords="1544,237,1725,267"/>
+<area shape="rect" href="$qoccharnesswindow_8h.html" title="src/qocc/qoccharnesswindow.h" alt="" coords="1468,83,1671,112"/>
+<area shape="rect" href="$qoccinputoutput_8cpp.html" title="src/qocc/qoccinputoutput.cpp" alt="" coords="1695,83,1887,112"/>
+<area shape="rect" href="$ui_stuff_8h.html" title="src/cam/uiStuff.h" alt="" coords="937,160,1057,189"/>
+<area shape="rect" href="$cam_8h.html" title="src/cam/cam.h" alt="" coords="1333,160,1440,189"/>
+<area shape="rect" href="$lnk_8hh.html" title="src/qocc/lnk.hh" alt="" coords="1515,160,1624,189"/>
+<area shape="rect" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="1424,237,1533,267"/>
+<area shape="rect" href="$qoccharnesswindow_8cpp.html" title="src/qocc/qoccharnesswindow.cpp" alt="" coords="1557,237,1773,267"/>
+<area shape="rect" href="$main_8cpp.html" title="Top level application." alt="" coords="1699,160,1827,189"/>
+<area shape="rect" href="$a_sample_8h.html" title="src/cam/aSample.h" alt="" coords="664,237,797,267"/>
+<area shape="rect" href="$cam_8cpp.html" title="src/cam/cam.cpp" alt="" coords="992,315,1115,344"/>
+<area shape="rect" href="$shape_info_8h.html" title="src/cam/shapeInfo.h" alt="" coords="821,237,960,267"/>
+<area shape="rect" href="$shape_offset_8h.html" title="src/cam/shapeOffset.h" alt="" coords="1035,237,1189,267"/>
+<area shape="rect" href="$gcode2_model_8h.html" title="src/cam/gcode2Model.h" alt="" coords="445,237,605,267"/>
+<area shape="rect" href="$ui_stuff_8cpp.html" title="src/cam/uiStuff.cpp" alt="" coords="1213,237,1349,267"/>
+<area shape="rect" href="$a_sample_8cpp.html" title="src/cam/aSample.cpp" alt="" coords="643,315,789,344"/>
+<area shape="rect" href="$shape_info_8cpp.html" title="src/cam/shapeInfo.cpp" alt="" coords="813,315,968,344"/>
+<area shape="rect" href="$shape_offset_8cpp.html" title="src/cam/shapeOffset.cpp" alt="" coords="1139,315,1307,344"/>
+<area shape="rect" href="$gcode2_model3d_8cpp.html" title="src/cam/gcode2Model3d.cpp" alt="" coords="5,315,192,344"/>
+<area shape="rect" href="$gcode2_model_gc_8cpp.html" title="src/cam/gcode2ModelGc.cpp" alt="" coords="216,315,408,344"/>
+<area shape="rect" href="$gcode2_model_ui_8cpp.html" title="src/cam/gcode2ModelUi.cpp" alt="" coords="432,315,619,344"/>
 </map>

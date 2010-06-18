@@ -1,8 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" href="$qocc_2_8moc_2moc__lnk_8cpp.html" title="src/qocc/.moc/moc_lnk.cpp" alt="" coords="445,83,627,112"/>
-<area shape="rect" href="$qoccharnesswindow_8h.html" title="src/qocc/qoccharnesswindow.h" alt="" coords="651,83,853,112"/>
-<area shape="rect" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="836,160,945,189"/>
-<area shape="rect" href="$qoccharnesswindow_8cpp.html" title="src/qocc/qoccharnesswindow.cpp" alt="" coords="969,160,1185,189"/>
+<area shape="rect" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="276,160,385,189"/>
+<area shape="rect" href="$qoccharnesswindow_8h.html" title="src/qocc/qoccharnesswindow.h" alt="" coords="503,83,705,112"/>
+<area shape="rect" href="$qoccharnesswindow_8cpp.html" title="src/qocc/qoccharnesswindow.cpp" alt="" coords="836,160,1052,189"/>
 <area shape="rect" href="$ui_stuff_8h.html" title="src/cam/uiStuff.h" alt="" coords="692,160,812,189"/>
 <area shape="rect" href="$cam_8h.html" title="src/cam/cam.h" alt="" coords="409,160,516,189"/>
 <area shape="rect" href="$main_8cpp.html" title="Top level application." alt="" coords="540,160,668,189"/>

@@ -1,20 +1,19 @@
 <map id="G" name="G">
-<area shape="rect" href="$canon_line_8hh.html" title="src/g2m/canonLine.hh" alt="" coords="516,237,665,267"/>
-<area shape="rect" href="$tool_8hh.html" title="src/g2m/tool.hh" alt="" coords="628,83,740,112"/>
-<area shape="rect" href="$machine_status_8hh.html" title="src/g2m/machineStatus.hh" alt="" coords="764,160,940,189"/>
-<area shape="rect" href="$canon_8cc.html" title="src/g2m/canon.cc" alt="" coords="815,83,940,112"/>
-<area shape="rect" href="$g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="1020,315,1135,344"/>
-<area shape="rect" href="$g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="1037,392,1152,421"/>
+<area shape="rect" href="$canon_8cc.html" title="src/g2m/canon.cc" alt="" coords="376,83,501,112"/>
+<area shape="rect" href="$canon_line_8hh.html" title="src/g2m/canonLine.hh" alt="" coords="515,237,664,267"/>
+<area shape="rect" href="$tool_8hh.html" title="src/g2m/tool.hh" alt="" coords="601,83,713,112"/>
+<area shape="rect" href="$machine_status_8hh.html" title="src/g2m/machineStatus.hh" alt="" coords="763,160,939,189"/>
 <area shape="rect" href="$canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="535,469,684,499"/>
-<area shape="rect" href="$canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="747,315,933,344"/>
-<area shape="rect" href="$canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="367,315,529,344"/>
+<area shape="rect" href="$canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="1016,315,1203,344"/>
+<area shape="rect" href="$canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="364,315,527,344"/>
 <area shape="rect" href="$linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="5,469,165,499"/>
 <area shape="rect" href="$helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="587,392,752,421"/>
 <area shape="rect" href="$canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="248,392,411,421"/>
-<area shape="rect" href="$moc__g2m_8cpp.html" title="src/g2m/.moc/moc_g2m.cpp" alt="" coords="1176,392,1363,421"/>
-<area shape="rect" href="$canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="827,392,1013,421"/>
+<area shape="rect" href="$g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="703,315,817,344"/>
+<area shape="rect" href="$g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="776,392,891,421"/>
+<area shape="rect" href="$canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="1016,392,1203,421"/>
 <area shape="rect" href="$linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="64,392,224,421"/>
-<area shape="rect" href="$helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="1092,469,1257,499"/>
-<area shape="rect" href="$tool_8cc.html" title="src/g2m/tool.cc" alt="" coords="628,160,740,189"/>
-<area shape="rect" href="$machine_status_8cc.html" title="src/g2m/machineStatus.cc" alt="" coords="1287,237,1463,267"/>
+<area shape="rect" href="$helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="963,469,1128,499"/>
+<area shape="rect" href="$tool_8cc.html" title="src/g2m/tool.cc" alt="" coords="627,160,739,189"/>
+<area shape="rect" href="$machine_status_8cc.html" title="src/g2m/machineStatus.cc" alt="" coords="845,237,1021,267"/>
 </map>

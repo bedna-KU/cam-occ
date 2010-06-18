@@ -52,32 +52,34 @@
 <a name="l00028"></a>00028 <span class="preprocessor">#include &lt;Graphic3d_NameOfMaterial.hxx&gt;</span>
 <a name="l00029"></a>00029 <span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span>
 <a name="l00030"></a>00030 
-<a name="l00031"></a><a class="code" href="classdisp_shape.html#a2a7623719afbd0e857206cc131e3df05">00031</a> <a class="code" href="classdisp_shape.html#a2a7623719afbd0e857206cc131e3df05">dispShape::dispShape</a>( <span class="keyword">const</span> TopoDS_Shape shape, 
-<a name="l00032"></a>00032                       <span class="keyword">const</span> Graphic3d_NameOfMaterial matl, 
-<a name="l00033"></a>00033                       <span class="keyword">const</span> AIS_DisplayMode mode): 
-<a name="l00034"></a>00034                       <span class="comment">/*myShape(shape),*/</span> NoM(matl), dMode(mode) {
-<a name="l00035"></a>00035   s = <span class="keyword">new</span> AIS_Shape(shape);
-<a name="l00036"></a>00036 }
-<a name="l00037"></a>00037 
-<a name="l00038"></a><a class="code" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81">00038</a> <span class="keywordtype">void</span> <a class="code" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81">dispShape::display</a>() {
-<a name="l00039"></a>00039   <a class="code" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2">uio::context</a>()-&gt;SetMaterial ( s, NoM, Standard_True );
-<a name="l00040"></a>00040   <a class="code" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2">uio::context</a>()-&gt;SetDisplayMode ( s,Standard_Integer(dMode),Standard_False );
-<a name="l00041"></a>00041   <a class="code" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2">uio::context</a>()-&gt;Display ( s );
-<a name="l00042"></a>00042 }
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045 <span class="comment">/* values for DisplayMode and NameOfMaterial:</span>
-<a name="l00046"></a>00046 <span class="comment">enum      AIS_DisplayMode { AIS_WireFrame, AIS_Shaded, AIS_QuickHLR, AIS_ExactHLR  }</span>
-<a name="l00047"></a>00047 <span class="comment"></span>
-<a name="l00048"></a>00048 <span class="comment">enum      Graphic3d_NameOfMaterial {</span>
-<a name="l00049"></a>00049 <span class="comment">  Graphic3d_NOM_BRASS, Graphic3d_NOM_BRONZE, Graphic3d_NOM_COPPER, Graphic3d_NOM_GOLD,</span>
-<a name="l00050"></a>00050 <span class="comment">  Graphic3d_NOM_PEWTER, Graphic3d_NOM_PLASTER, Graphic3d_NOM_PLASTIC, Graphic3d_NOM_SILVER,</span>
-<a name="l00051"></a>00051 <span class="comment">  Graphic3d_NOM_STEEL, Graphic3d_NOM_STONE, Graphic3d_NOM_SHINY_PLASTIC, Graphic3d_NOM_SATIN,</span>
-<a name="l00052"></a>00052 <span class="comment">  Graphic3d_NOM_METALIZED, Graphic3d_NOM_NEON_GNC, Graphic3d_NOM_CHROME, Graphic3d_NOM_ALUMINIUM,</span>
-<a name="l00053"></a>00053 <span class="comment">  Graphic3d_NOM_OBSIDIAN, Graphic3d_NOM_NEON_PHC, Graphic3d_NOM_JADE, Graphic3d_NOM_DEFAULT,</span>
-<a name="l00054"></a>00054 <span class="comment">  Graphic3d_NOM_UserDefined</span>
-<a name="l00055"></a>00055 <span class="comment">}</span>
-<a name="l00056"></a>00056 <span class="comment">*/</span>
+<a name="l00031"></a><a class="code" href="classdisp_shape.html#aa473e4626e7a5daa374794a7ebcbf03e">00031</a> <a class="code" href="classdisp_shape.html#aa473e4626e7a5daa374794a7ebcbf03e">dispShape::dispShape</a>( <span class="keyword">const</span> TopoDS_Shape shape,
+<a name="l00032"></a>00032                       <span class="keyword">const</span> <span class="keywordtype">int</span> lineNbr,
+<a name="l00033"></a>00033                       <span class="keyword">const</span> Graphic3d_NameOfMaterial matl,
+<a name="l00034"></a>00034                       <span class="keyword">const</span> AIS_DisplayMode mode):
+<a name="l00035"></a>00035                       <span class="comment">/*myShape(shape),*/</span> NoM(matl), dMode(mode) {
+<a name="l00036"></a>00036   s = <span class="keyword">new</span> AIS_Shape(shape);
+<a name="l00037"></a>00037   canLine = lineNbr;
+<a name="l00038"></a>00038 }
+<a name="l00039"></a>00039 
+<a name="l00040"></a><a class="code" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81">00040</a> <span class="keywordtype">void</span> <a class="code" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81">dispShape::display</a>() {
+<a name="l00041"></a>00041   <a class="code" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2">uio::context</a>()-&gt;SetMaterial ( s, NoM, Standard_True );
+<a name="l00042"></a>00042   <a class="code" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2">uio::context</a>()-&gt;SetDisplayMode ( s,Standard_Integer(dMode),Standard_False );
+<a name="l00043"></a>00043   <a class="code" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2">uio::context</a>()-&gt;Display ( s );
+<a name="l00044"></a>00044 }
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="comment">/* values for DisplayMode and NameOfMaterial:</span>
+<a name="l00048"></a>00048 <span class="comment">enum      AIS_DisplayMode { AIS_WireFrame, AIS_Shaded, AIS_QuickHLR, AIS_ExactHLR  }</span>
+<a name="l00049"></a>00049 <span class="comment"></span>
+<a name="l00050"></a>00050 <span class="comment">enum      Graphic3d_NameOfMaterial {</span>
+<a name="l00051"></a>00051 <span class="comment">  Graphic3d_NOM_BRASS, Graphic3d_NOM_BRONZE, Graphic3d_NOM_COPPER, Graphic3d_NOM_GOLD,</span>
+<a name="l00052"></a>00052 <span class="comment">  Graphic3d_NOM_PEWTER, Graphic3d_NOM_PLASTER, Graphic3d_NOM_PLASTIC, Graphic3d_NOM_SILVER,</span>
+<a name="l00053"></a>00053 <span class="comment">  Graphic3d_NOM_STEEL, Graphic3d_NOM_STONE, Graphic3d_NOM_SHINY_PLASTIC, Graphic3d_NOM_SATIN,</span>
+<a name="l00054"></a>00054 <span class="comment">  Graphic3d_NOM_METALIZED, Graphic3d_NOM_NEON_GNC, Graphic3d_NOM_CHROME, Graphic3d_NOM_ALUMINIUM,</span>
+<a name="l00055"></a>00055 <span class="comment">  Graphic3d_NOM_OBSIDIAN, Graphic3d_NOM_NEON_PHC, Graphic3d_NOM_JADE, Graphic3d_NOM_DEFAULT,</span>
+<a name="l00056"></a>00056 <span class="comment">  Graphic3d_NOM_UserDefined</span>
+<a name="l00057"></a>00057 <span class="comment">}</span>
+<a name="l00058"></a>00058 <span class="comment">*/</span>
 </pre></div></div>
 <hr class="footer"/><address style="text-align: right;"><small>Generated by&nbsp;
 <a href="http://www.doxygen.org/index.html">

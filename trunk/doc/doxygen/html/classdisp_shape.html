@@ -26,19 +26,23 @@
 </div>
 <div class="contents">
 <h1>dispShape Class Reference</h1><!-- doxytag: class="dispShape" -->
+<p>Stores shapes to be displayed, as well as data for how to display them.  
+<a href="#_details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="disp_shape_8hh_source.html">dispShape.hh</a>&gt;</code></p>
 
 <p><a href="classdisp_shape-members.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdisp_shape.html#a2a7623719afbd0e857206cc131e3df05">dispShape</a> (const TopoDS_Shape s, const Graphic3d_NameOfMaterial nom=Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode=AIS_Shaded)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdisp_shape.html#aa473e4626e7a5daa374794a7ebcbf03e">dispShape</a> (const TopoDS_Shape s, const int lineNbr, const Graphic3d_NameOfMaterial nom=Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode=AIS_Shaded)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81">display</a> ()</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
+<p>Stores shapes to be displayed, as well as data for how to display them. </p>
 
-<p>Definition at line <a class="el" href="disp_shape_8hh_source.html#l00032">32</a> of file <a class="el" href="disp_shape_8hh_source.html">dispShape.hh</a>.</p>
+<p>Definition at line <a class="el" href="disp_shape_8hh_source.html#l00035">35</a> of file <a class="el" href="disp_shape_8hh_source.html">dispShape.hh</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a2a7623719afbd0e857206cc131e3df05"></a><!-- doxytag: member="dispShape::dispShape" ref="a2a7623719afbd0e857206cc131e3df05" args="(const TopoDS_Shape s, const Graphic3d_NameOfMaterial nom=Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode=AIS_Shaded)" -->
+<a class="anchor" id="aa473e4626e7a5daa374794a7ebcbf03e"></a><!-- doxytag: member="dispShape::dispShape" ref="aa473e4626e7a5daa374794a7ebcbf03e" args="(const TopoDS_Shape s, const int lineNbr, const Graphic3d_NameOfMaterial nom=Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode=AIS_Shaded)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -47,6 +51,12 @@
           <td>(</td>
           <td class="paramtype">const TopoDS_Shape&nbsp;</td>
           <td class="paramname"> <em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&nbsp;</td>
+          <td class="paramname"> <em>lineNbr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -89,7 +99,7 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="disp_shape_8cc_source.html#l00038">38</a> of file <a class="el" href="disp_shape_8cc_source.html">dispShape.cc</a>.</p>
+<p>Definition at line <a class="el" href="disp_shape_8cc_source.html#l00040">40</a> of file <a class="el" href="disp_shape_8cc_source.html">dispShape.cc</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
