@@ -3,7 +3,9 @@
 OldScreenShots
 
 = v2 =
-
+This is from r56:
+http://cam-occ.googlecode.com/svn/wiki/images/cds-ngc.png
+----
 http://cam-occ.googlecode.com/svn/wiki/images/G81.png
 http://cam-occ.googlecode.com/svn/wiki/images/camocc2.png
 http://cam-occ.googlecode.com/svn/wiki/images/camocc-offset.png
