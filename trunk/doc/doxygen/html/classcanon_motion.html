@@ -26,7 +26,7 @@
 </div>
 <div class="contents">
 <h1>canonMotion Class Reference</h1><!-- doxytag: class="canonMotion" --><!-- doxytag: inherits="canonLine" -->
-<p>This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED. <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a> is an ABC. Its children should only be instantiated via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines...">canonLine::canonLineFactory()</a>, which creates <a class="el" href="classlinear_motion.html" title="For the canonical commands LINEAR_FEED and LINEAR_TRAVERSE. This class inherits from...">linearMotion</a> objects for LINEAR_TRAVERSE and LINEAR_FEED commands, and <a class="el" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical...">helicalMotion</a> objects for ARC_FEED commands.  
+<p>This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a> is an ABC. Its children should only be instantiated via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines...">canonLine::canonLineFactory()</a>, which creates <a class="el" href="classlinear_motion.html" title="For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits...">linearMotion</a> objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and <a class="el" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical...">helicalMotion</a> objects for ARC_FEED commands.  
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>&gt;</code></p>
@@ -46,20 +46,22 @@ Collaboration diagram for canonMotion:</div>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#aeb581319f165b5309d409f3a2f0367e2">getMotionType</a> ()=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Solid&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#add7e80890899c96f8038740bad6842b1">getSolid</a> ()=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#ad4f3754219ec78bcfb4adbcf8036b8fa">getSolid</a> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a790ed1dab4ab86af785a0f9d6f29948b">isThisMotion</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a80686e68479dd04b295969b3466d7524">isVolumeSuspect</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a18df3ed4d9007b7a8b2f8658ad211111">bruteForceSweep</a> ()</td></tr>
 <tr><td colspan="2"><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69">canonMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gp_Ax1&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a">getPoseFromCmd</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">for LINEAR_* and ARC_FEED, first 3 are always xyz and last 3 always abc  <a href="#a5b09857ac168a4fcc72ff2ecef197d5a"></a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc  <a href="#a5b09857ac168a4fcc72ff2ecef197d5a"></a><br/></td></tr>
 <tr><td colspan="2"><h2>Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Shape&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a90b3190fc746aed853efb3ffd7abb731">solid</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Edge&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a620e2cad7e6d6c8f11189d4080e7d8b8">edge</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a8ac9e37a564a012b406be0c63c4fd9fa">mySolid</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">sweepIsSuspect</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED. <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a> is an ABC. Its children should only be instantiated via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines...">canonLine::canonLineFactory()</a>, which creates <a class="el" href="classlinear_motion.html" title="For the canonical commands LINEAR_FEED and LINEAR_TRAVERSE. This class inherits from...">linearMotion</a> objects for LINEAR_TRAVERSE and LINEAR_FEED commands, and <a class="el" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical...">helicalMotion</a> objects for ARC_FEED commands. </p>
+<p>This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a> is an ABC. Its children should only be instantiated via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines...">canonLine::canonLineFactory()</a>, which creates <a class="el" href="classlinear_motion.html" title="For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits...">linearMotion</a> objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and <a class="el" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical...">helicalMotion</a> objects for ARC_FEED commands. </p>
 
-<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00040">40</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
+<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00041">41</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aa9c3153daba70575fdb5379a67472d69"></a><!-- doxytag: member="canonMotion::canonMotion" ref="aa9c3153daba70575fdb5379a67472d69" args="(std::string canonL, machineStatus prevStatus)" -->
 <div class="memitem">
@@ -93,13 +95,30 @@ Here is the call graph for this function:</div>
 <div class="dynsection">
 <div class="center"><img src="classcanon_motion_aa9c3153daba70575fdb5379a67472d69_cgraph.png" border="0" usemap="#classcanon_motion_aa9c3153daba70575fdb5379a67472d69_cgraph_map" alt=""></div>
 <map name="classcanon_motion_aa9c3153daba70575fdb5379a67472d69_cgraph_map" id="classcanon_motion_aa9c3153daba70575fdb5379a67472d69_cgraph">
-<area shape="rect" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for LINEAR_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="233,5,439,35"/><area shape="rect" href="classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="244,59,428,88"/><area shape="rect" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="converts canonTokens[n] to double" alt="" coords="488,5,608,35"/></map>
+<area shape="rect" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="233,5,439,35"/><area shape="rect" href="classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="244,59,428,88"/><area shape="rect" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="converts canonTokens[n] to double" alt="" coords="488,5,608,35"/></map>
 </div>
 </p>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a18df3ed4d9007b7a8b2f8658ad211111"></a><!-- doxytag: member="canonMotion::bruteForceSweep" ref="a18df3ed4d9007b7a8b2f8658ad211111" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const TopoDS_Solid&amp; canonMotion::bruteForceSweep </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aeb581319f165b5309d409f3a2f0367e2"></a><!-- doxytag: member="canonMotion::getMotionType" ref="aeb581319f165b5309d409f3a2f0367e2" args="()=0" -->
 <div class="memitem">
 <div class="memproto">
@@ -134,7 +153,7 @@ Here is the call graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>for LINEAR_* and ARC_FEED, first 3 are always xyz and last 3 always abc </p>
+<p>for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc </p>
 
 <p>Definition at line <a class="el" href="canon_motion_8cc_source.html#l00034">34</a> of file <a class="el" href="canon_motion_8cc_source.html">canonMotion.cc</a>.</p>
 
@@ -158,12 +177,12 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="add7e80890899c96f8038740bad6842b1"></a><!-- doxytag: member="canonMotion::getSolid" ref="add7e80890899c96f8038740bad6842b1" args="()=0" -->
+<a class="anchor" id="ad4f3754219ec78bcfb4adbcf8036b8fa"></a><!-- doxytag: member="canonMotion::getSolid" ref="ad4f3754219ec78bcfb4adbcf8036b8fa" args="()=0" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const TopoDS_Solid canonMotion::getSolid </td>
+          <td class="memname">virtual const TopoDS_Solid&amp; canonMotion::getSolid </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -173,7 +192,7 @@ Here is the caller graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>Implemented in <a class="el" href="classhelical_motion.html#a2cc2687ba0f5d2d0a7ea500d3db983be">helicalMotion</a>, and <a class="el" href="classlinear_motion.html#a15c3dcb997b2576113700b0e32275269">linearMotion</a>.</p>
+<p>Implemented in <a class="el" href="classhelical_motion.html#a55c8010cd37250dce858deeb5a3a0806">helicalMotion</a>, and <a class="el" href="classlinear_motion.html#ac7d8d0645a63d5e79c6479c98ae8f804">linearMotion</a>.</p>
 
 </div>
 </div>
@@ -194,38 +213,57 @@ Here is the caller graph for this function:</div>
 
 <p>Implements <a class="el" href="classcanon_line.html#aaaba8345d81852f529670a71a2531170">canonLine</a>.</p>
 
-<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00044">44</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
+<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00045">45</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a80686e68479dd04b295969b3466d7524"></a><!-- doxytag: member="canonMotion::isVolumeSuspect" ref="a80686e68479dd04b295969b3466d7524" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool canonMotion::isVolumeSuspect </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00046">46</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
 
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a620e2cad7e6d6c8f11189d4080e7d8b8"></a><!-- doxytag: member="canonMotion::edge" ref="a620e2cad7e6d6c8f11189d4080e7d8b8" args="" -->
+<a class="anchor" id="a8ac9e37a564a012b406be0c63c4fd9fa"></a><!-- doxytag: member="canonMotion::mySolid" ref="a8ac9e37a564a012b406be0c63c4fd9fa" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TopoDS_Edge <a class="el" href="classcanon_motion.html#a620e2cad7e6d6c8f11189d4080e7d8b8">canonMotion::edge</a><code> [protected]</code></td>
+          <td class="memname">const TopoDS_Shape&amp; <a class="el" href="classcanon_motion.html#a8ac9e37a564a012b406be0c63c4fd9fa">canonMotion::mySolid</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00048">48</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
+<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00050">50</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a90b3190fc746aed853efb3ffd7abb731"></a><!-- doxytag: member="canonMotion::solid" ref="a90b3190fc746aed853efb3ffd7abb731" args="" -->
+<a class="anchor" id="a2a6d12a018a0ae1b7d65b5e7fd2316e4"></a><!-- doxytag: member="canonMotion::sweepIsSuspect" ref="a2a6d12a018a0ae1b7d65b5e7fd2316e4" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TopoDS_Shape <a class="el" href="classcanon_motion.html#a90b3190fc746aed853efb3ffd7abb731">canonMotion::solid</a><code> [protected]</code></td>
+          <td class="memname">bool <a class="el" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">canonMotion::sweepIsSuspect</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00047">47</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
+<p>Definition at line <a class="el" href="canon_motion_8hh_source.html#l00053">53</a> of file <a class="el" href="canon_motion_8hh_source.html">canonMotion.hh</a>.</p>
 
 </div>
 </div>

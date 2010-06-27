@@ -35,7 +35,7 @@
 
 /**
 \class helicalMotion
-\brief For the canonical command ARC_FEED. 
+\brief For the canonical command ARC_FEED.
 This class handles both planar arcs and helical arcs. Inherits from canonMotion.
 */
 
@@ -43,7 +43,7 @@ class helicalMotion: protected canonMotion {
   public:
     helicalMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType() {return HELICAL;};
-    const TopoDS_Solid getSolid();
+    const TopoDS_Solid& getSolid();
   private:
     void helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);
     //void arc(status.getStartPose().Location(), startVec, status.endPose)

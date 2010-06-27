@@ -1,3 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" href="$classcam.html" title="cam" alt="" coords="7,5,52,35"/>
+<area shape="rect" href="$classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things..." alt="" coords="5,85,61,115"/>
+<area shape="rect" href="$classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one..." alt="" coords="124,59,204,88"/>
+<area shape="rect" href="$classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information..." alt="" coords="111,112,217,141"/>
+<area shape="rect" href="$classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED..." alt="" coords="279,32,375,61"/>
+<area shape="rect" href="$classcanon_motionless.html" title="A canonical command that (generally) does not cause or alter axis motion This class..." alt="" coords="267,85,387,115"/>
+<area shape="rect" href="$classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical..." alt="" coords="436,5,532,35"/>
+<area shape="rect" href="$classlinear_motion.html" title="For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits..." alt="" coords="439,59,529,88"/>
 </map>

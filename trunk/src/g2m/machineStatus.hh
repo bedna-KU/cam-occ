@@ -52,8 +52,8 @@ class machineStatus: protected canon {
     void setFeed(const double f) {F=f;};
     void setSpindleSpeed(const double s) {S=s;};
     void setSpindleStatus(SPINDLE_STATUS s);
-    void setCoolant(coolantStruct c) {coolant = c;}; 
-    void setTool(toolNumber n) {myTool = n;}; //n is the tool to be used
+    void setCoolant(coolantStruct c) {coolant = c;};
+    void setTool(toolNumber n); //n is the tool to be used
     void setPlane(CANON_PLANE p) {plane = p;};
     double getFeed() const {return F;};
     double getSpindleSpeed() const {return S;};
@@ -65,7 +65,7 @@ class machineStatus: protected canon {
     void clearAll(void);
   private:
     machineStatus();  //prevent use of this ctor by making it private
-    
+
     //TODO: choose one of these
     //const tool* getTool() {return toolTable[myTool];};
     //const toolNumber getTool() {return myTool;};

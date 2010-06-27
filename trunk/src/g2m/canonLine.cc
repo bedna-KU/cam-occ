@@ -69,7 +69,7 @@ inline double canonLine::tok2d(uint n) {
   char * end;
   double d = strtod( canonTokens[n].c_str(), &end );
   assert ( *end == 0 );
-  return d;  
+  return d;
 }
 
 ///converts canonTokens[n] to int
@@ -77,7 +77,7 @@ inline int canonLine::tok2i(uint n,uint offset) {
   char * end;
   int i = strtol( &canonTokens[n].c_str()[offset], &end, 10 );
   assert ( *end == 0 );
-  return i;  
+  return i;
 }
 
 const std::string canonLine::getCanonicalCommand() {
@@ -90,14 +90,14 @@ const std::string canonLine::getCanonicalCommand() {
 //2 is canonical command
 ///splits 'str' at any of 'delimiters' and puts the pieces in 'tokenV'
 ///delimiters defaults to both parenthesis, comma, space.
-void canonLine::tokenize(std::string str, 
-			 std::vector<std::string>& tokenV, 
+void canonLine::tokenize(std::string str,
+			 std::vector<std::string>& tokenV,
 			 const std::string& delimiters) {
   // Skip delimiters at beginning.
   std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
   // Find first "non-delimiter".
   std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
-  
+
   while (std::string::npos != pos || std::string::npos != lastPos)
   {
     // Found a token, add it to the vector.
@@ -126,18 +126,18 @@ canonLineFactory determines which type of object to create, and returns a pointe
 */
 canonLine * canonLine::canonLineFactory (std::string l, machineStatus s) {
   //check if canonical command is motion or something else
-  //motion commands: LINEAR_TRAVERSE LINEAR_FEED ARC_FEED
+  //motion commands: STRAIGHT_TRAVERSE STRAIGHT_FEED ARC_FEED
   size_t lin,af,cmnt,msg;
   cmnt=l.find("COMMENT");
   msg=l.find("MESSAGE");
-  lin=l.find("LINEAR_");
+  lin=l.find("STRAIGHT_");
   af=l.find("ARC_FEED");
   /*
   ** check for comments first because it is not impossible
   ** for one to contain the text "LINEAR_" or "ARC_FEED"
   */
-  if ( (cmnt!=std::string::npos) || (msg!=std::string::npos) ) {       
-    return new canonMotionless(l,s);    
+  if ( (cmnt!=std::string::npos) || (msg!=std::string::npos) ) {
+    return new canonMotionless(l,s);
   } else if (lin!=std::string::npos) { //linear traverse or linear feed
     return new linearMotion(l,s);
   } else if (af!=std::string::npos) { //arc feed

@@ -30,7 +30,7 @@
 
 /**
 \class linearMotion
-\brief For the canonical commands LINEAR_FEED and LINEAR_TRAVERSE. 
+\brief For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE.
 This class inherits from canonMotion.
 */
 
@@ -38,7 +38,7 @@ class linearMotion: protected canonMotion {
   public:
     linearMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType();
-    const TopoDS_Solid getSolid();
+    const TopoDS_Solid& getSolid();
 };
 
 #endif //LINEARMOTION_HH

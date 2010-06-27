@@ -35,15 +35,15 @@
 typedef enum {ROTARY_TOOL,TURNING_TOOL, UNDEFINED} TOOLTYPE;
 class tool {
   public:
-    const TopoDS_Face getProfile() const {assert (valid);return profile;};
+    const TopoDS_Face& getProfile() const {assert (valid);return profile;};
     TOOLTYPE getType() const {return type;};
     bool isValid() const {return valid;};
   protected:
     tool();
-    bool isRotaryTool;
+    //bool isRotaryTool;
     bool valid; //TODO: what is this? valid wire? valid solid? input sanity check? or ???
     bool bruteForceOnly; //for creating solid. FIXME:would it make more sense in another class?
-    TopoDS_Face profile;
+    const TopoDS_Face& profile;
     TOOLTYPE type;
 };
 
@@ -57,12 +57,13 @@ class millTool: protected tool {
   public:
     //getProfile() = 0;
     SHAPE_TYPE getShape() const {return shape;};
-    const TopoDS_Solid getRevol();
+    const TopoDS_Solid& getRevol();
+    const TopoDS_Face& getProj(degrees deg);
   protected:
     millTool();
     SHAPE_TYPE shape;
-    double d,l; //diameter, length
-    TopoDS_Solid revol;
+    double dia,len; //diameter, length
+    const TopoDS_Solid& revol;
 };
 
 /**

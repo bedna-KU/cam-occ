@@ -43,22 +43,80 @@
 <a name="l00019"></a>00019 <span class="comment"> ***************************************************************************/</span>
 <a name="l00020"></a>00020 
 <a name="l00021"></a>00021 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00022"></a>00022 <span class="preprocessor">#include &quot;<a class="code" href="linear_motion_8hh.html">linearMotion.hh</a>&quot;</span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#include &quot;<a class="code" href="canon_motion_8hh.html">canonMotion.hh</a>&quot;</span>
-<a name="l00025"></a>00025 <span class="preprocessor">#include &quot;<a class="code" href="canon_line_8hh.html">canonLine.hh</a>&quot;</span>
-<a name="l00026"></a>00026 
-<a name="l00027"></a><a class="code" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3">00027</a> <a class="code" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3">linearMotion::linearMotion</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information...">machineStatus</a> prevStatus): <a class="code" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a>(canonL,prevStatus) {
-<a name="l00028"></a>00028 }
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="comment">//need to return RAPID for rapids...</span>
-<a name="l00031"></a><a class="code" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">00031</a> <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> <a class="code" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">linearMotion::getMotionType</a>() {
-<a name="l00032"></a>00032   <span class="keyword">static</span> <span class="keywordtype">bool</span> rapid = <a class="code" href="classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &amp;#39;m&amp;#39;">clMatch</a>(<span class="stringliteral">&quot;LINEAR_TRAVERSE&quot;</span>);
-<a name="l00033"></a>00033   <span class="keywordflow">if</span> (rapid)
-<a name="l00034"></a>00034     <span class="keywordflow">return</span> <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379aa5f526f3937ca40f9478fb35531cb7d5">RAPID</a>;
-<a name="l00035"></a>00035   <span class="keywordflow">else</span>
-<a name="l00036"></a>00036     <span class="keywordflow">return</span> <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379adc101ebf31c49c2d4b80b7c6f59f22cb">LINEAR</a>;
-<a name="l00037"></a>00037 }
+<a name="l00022"></a>00022 <span class="preprocessor">#include &lt;BRepBuilderAPI_MakeEdge.hxx&gt;</span>
+<a name="l00023"></a>00023 <span class="preprocessor">#include &quot;<a class="code" href="linear_motion_8hh.html">linearMotion.hh</a>&quot;</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include &quot;<a class="code" href="canon_motion_8hh.html">canonMotion.hh</a>&quot;</span>
+<a name="l00026"></a>00026 <span class="preprocessor">#include &quot;<a class="code" href="canon_line_8hh.html">canonLine.hh</a>&quot;</span>
+<a name="l00027"></a>00027 
+<a name="l00028"></a><a class="code" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3">00028</a> <a class="code" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3">linearMotion::linearMotion</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information...">machineStatus</a> prevStatus): <a class="code" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a>(canonL,prevStatus) {
+<a name="l00029"></a>00029   gp_Pnt a,b;
+<a name="l00030"></a>00030   a = <a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.<a class="code" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042">getStartPose</a>().Location();
+<a name="l00031"></a>00031   b = <a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.<a class="code" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44">getEndPose</a>().Location();
+<a name="l00032"></a>00032   <span class="comment">//TODO: add support for 5 or 6 axis motion</span>
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034   <a class="code" href="classcanon_line.html#a53f87f4ed0c22320f23bbd7ed1749252">myUnSolid</a> = BRepBuilderAPI_MakeEdge(a,b);
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036   <span class="comment">//check if the swept shape will be accurate</span>
+<a name="l00037"></a>00037   <span class="comment">//use the ratio of rise or fall to distance</span>
+<a name="l00038"></a>00038   <span class="keywordtype">double</span> deltaZ = abs(a.Z() - b.Z());
+<a name="l00039"></a>00039   <span class="keywordtype">double</span> dist = a.Distance(b);
+<a name="l00040"></a>00040   <span class="keywordflow">if</span> ( (deltaZ/dist) &gt; 0.001) {
+<a name="l00041"></a>00041     <a class="code" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">sweepIsSuspect</a> = <span class="keyword">true</span>;
+<a name="l00042"></a>00042   }
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044   BRepOffsetAPI_MakePipeShell pipe(<a class="code" href="classcanon_line.html#a53f87f4ed0c22320f23bbd7ed1749252">myUnSolid</a>);
+<a name="l00045"></a>00045     pipe.Add(<a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.getToolProfile(),<span class="keyword">false</span>,<span class="keyword">true</span>);
+<a name="l00046"></a>00046     <span class="comment">//pipe.Add(tool2d,false,true);</span>
+<a name="l00047"></a>00047     pipe.SetTransitionMode(BRepBuilderAPI_RoundCorner); <span class="comment">//there shouldn&#39;t be any discontinuities, but we&#39;ll set this anyway</span>
+<a name="l00048"></a>00048     pipe.SetMode(gp_Dir(0,0,1)); <span class="comment">//binormal to vector 0,0,1 - profile can only rotate about Z now</span>
+<a name="l00049"></a>00049 <span class="comment">//    infoMsg(&quot;added tool\n&quot;);</span>
+<a name="l00050"></a>00050     <span class="keywordflow">if</span> ( pipe.IsReady() ) {
+<a name="l00051"></a>00051         pipe.Build();
+<a name="l00052"></a>00052         BRepBuilderAPI_PipeError error = pipe.GetStatus();
+<a name="l00053"></a>00053         <span class="keywordflow">switch</span> (error) {
+<a name="l00054"></a>00054           <span class="keywordflow">case</span> BRepBuilderAPI_PipeNotDone:
+<a name="l00055"></a>00055             infoMsg(<span class="stringliteral">&quot;Pipe not done&quot;</span>);
+<a name="l00056"></a>00056             <a class="code" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a> = <span class="keyword">true</span>;
+<a name="l00057"></a>00057             <span class="keywordflow">break</span>;
+<a name="l00058"></a>00058           <span class="keywordflow">case</span> BRepBuilderAPI_PlaneNotIntersectGuide:
+<a name="l00059"></a>00059             infoMsg(<span class="stringliteral">&quot;Pipe not intersect guide&quot;</span>);
+<a name="l00060"></a>00060             <a class="code" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a> = <span class="keyword">true</span>;
+<a name="l00061"></a>00061             <span class="keywordflow">break</span>;
+<a name="l00062"></a>00062           <span class="keywordflow">case</span> BRepBuilderAPI_ImpossibleContact:
+<a name="l00063"></a>00063             infoMsg(<span class="stringliteral">&quot;Pipe impossible contact&quot;</span>);
+<a name="l00064"></a>00064             <a class="code" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a> = <span class="keyword">true</span>;
+<a name="l00065"></a>00065             <span class="keywordflow">break</span>;
+<a name="l00066"></a>00066           <span class="keywordflow">case</span> BRepBuilderAPI_PipeDone:
+<a name="l00067"></a>00067             <span class="comment">//ready = true;</span>
+<a name="l00068"></a>00068             <span class="keywordflow">break</span>;
+<a name="l00069"></a>00069          <span class="keywordflow">default</span>:
+<a name="l00070"></a>00070             infoMsg(<span class="stringliteral">&quot;Pipe switch default?!&quot;</span>);
+<a name="l00071"></a>00071             <a class="code" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a> = <span class="keyword">true</span>;
+<a name="l00072"></a>00072         }
+<a name="l00073"></a>00073     }
+<a name="l00074"></a>00074     <span class="keywordflow">if</span> (!<a class="code" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a>) {
+<a name="l00075"></a>00075         <a class="code" href="classcanon_motion.html#a8ac9e37a564a012b406be0c63c4fd9fa">mySolid</a> = pipe.Shape();
+<a name="l00076"></a>00076     }<span class="keywordflow">else</span> {
+<a name="l00077"></a>00077         <span class="comment">//infoMsg(&quot;pipe not ready!&quot;);</span>
+<a name="l00078"></a>00078         <a class="code" href="classcanon_motion.html#a8ac9e37a564a012b406be0c63c4fd9fa">mySolid</a> = tool2d;
+<a name="l00079"></a>00079     }
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 }
+<a name="l00082"></a>00082 
+<a name="l00083"></a>00083 <span class="comment">//need to return RAPID for rapids...</span>
+<a name="l00084"></a><a class="code" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">00084</a> <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> <a class="code" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">linearMotion::getMotionType</a>() {
+<a name="l00085"></a>00085   <span class="keyword">static</span> <span class="keywordtype">bool</span> rapid = <a class="code" href="classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &amp;#39;m&amp;#39;">clMatch</a>(<span class="stringliteral">&quot;STRAIGHT_TRAVERSE&quot;</span>);
+<a name="l00086"></a>00086   <span class="keywordflow">if</span> (rapid) {
+<a name="l00087"></a>00087     <span class="keywordflow">return</span> RAPID;
+<a name="l00088"></a>00088   } <span class="keywordflow">else</span> <span class="keywordflow">if</span> <a class="code" href="classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &amp;#39;m&amp;#39;">clMatch</a>(<span class="stringliteral">&quot;STRAIGHT_FEED&quot;</span>) {
+<a name="l00089"></a>00089     <span class="keywordflow">return</span> <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379adc101ebf31c49c2d4b80b7c6f59f22cb">LINEAR</a>;
+<a name="l00090"></a>00090   } <span class="keywordflow">else</span> {
+<a name="l00091"></a>00091     <span class="keywordtype">string</span> err = <span class="stringliteral">&quot;linearMotion::getMotionType failed on canonLine:\n&quot;</span> + <a class="code" href="classcanon_line.html#a3496308cd55334a5d2904c272c1acf0e">myLine</a> + <span class="stringliteral">&quot;\n\nExiting.&quot;</span>;
+<a name="l00092"></a>00092     infoMsg(err);
+<a name="l00093"></a>00093     exit(1);
+<a name="l00094"></a>00094   }
+<a name="l00095"></a>00095 }
 </pre></div></div>
 <hr class="footer"/><address style="text-align: right;"><small>Generated by&nbsp;
 <a href="http://www.doxygen.org/index.html">

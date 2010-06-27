@@ -46,14 +46,15 @@ Collaboration diagram for millTool:</div>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a6c03cd9b9939804199dae992930dfef7">getShape</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a67deb521b8ded205ecd2790f836fceb3">getRevol</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83">getRevol</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Face &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#ac5088380c50d2b9649a171f280298448">getProj</a> (<a class="el" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> deg)</td></tr>
 <tr><td colspan="2"><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">millTool</a> ()</td></tr>
 <tr><td colspan="2"><h2>Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a2aada9ed0d71b6e80cf0e1cf18d2e950">d</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#afeb689d2c7f0e00845e54e4834ce43f0">l</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Solid&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">revol</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a5a78ab6b434e4abffacf139e648a283d">dia</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#adc8360e7db323a20ed3f640b52693c1b">len</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#aa4d9ba426f6933547800cebdd01038be">revol</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation of one of these tools. </p>
@@ -75,17 +76,46 @@ Collaboration diagram for millTool:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="tool_8cc_source.html#l00039">39</a> of file <a class="el" href="tool_8cc_source.html">tool.cc</a>.</p>
+<p>Definition at line <a class="el" href="tool_8cc_source.html#l00038">38</a> of file <a class="el" href="tool_8cc_source.html">tool.cc</a>.</p>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a67deb521b8ded205ecd2790f836fceb3"></a><!-- doxytag: member="millTool::getRevol" ref="a67deb521b8ded205ecd2790f836fceb3" args="()" -->
+<a class="anchor" id="ac5088380c50d2b9649a171f280298448"></a><!-- doxytag: member="millTool::getProj" ref="ac5088380c50d2b9649a171f280298448" args="(degrees deg)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const TopoDS_Solid millTool::getRevol </td>
+          <td class="memname">const TopoDS_Face &amp; millTool::getProj </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a>&nbsp;</td>
+          <td class="paramname"> <em>deg</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Projects the 3d model of the tool onto a plane normal to XY. Some code from <a href="http://www.opencascade.org/org/forum/thread_16928/">http://www.opencascade.org/org/forum/thread_16928/</a> </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>deg</em>&nbsp;</td><td>Projection angle, in degrees. Sign is ignored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>the projection as a TopoDS_Face. </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classtool.html#ac1d95d33f735194a2b757cf70d5f1f2b">getProfile()</a>, <a class="el" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83">getRevol()</a> </dd></dl>
+
+<p>Definition at line <a class="el" href="tool_8cc_source.html#l00068">68</a> of file <a class="el" href="tool_8cc_source.html">tool.cc</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3a1cecf9a0a60b2cd53ab538f08e8e83"></a><!-- doxytag: member="millTool::getRevol" ref="a3a1cecf9a0a60b2cd53ab538f08e8e83" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const TopoDS_Solid &amp; millTool::getRevol </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -95,7 +125,7 @@ Collaboration diagram for millTool:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="tool_8cc_source.html#l00048">48</a> of file <a class="el" href="tool_8cc_source.html">tool.cc</a>.</p>
+<p>Definition at line <a class="el" href="tool_8cc_source.html#l00046">46</a> of file <a class="el" href="tool_8cc_source.html">tool.cc</a>.</p>
 
 </div>
 </div>
@@ -119,48 +149,48 @@ Collaboration diagram for millTool:</div>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a2aada9ed0d71b6e80cf0e1cf18d2e950"></a><!-- doxytag: member="millTool::d" ref="a2aada9ed0d71b6e80cf0e1cf18d2e950" args="" -->
+<a class="anchor" id="a5a78ab6b434e4abffacf139e648a283d"></a><!-- doxytag: member="millTool::dia" ref="a5a78ab6b434e4abffacf139e648a283d" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="classmill_tool.html#a2aada9ed0d71b6e80cf0e1cf18d2e950">millTool::d</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="tool_8hh_source.html#l00064">64</a> of file <a class="el" href="tool_8hh_source.html">tool.hh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="afeb689d2c7f0e00845e54e4834ce43f0"></a><!-- doxytag: member="millTool::l" ref="afeb689d2c7f0e00845e54e4834ce43f0" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double <a class="el" href="classmill_tool.html#afeb689d2c7f0e00845e54e4834ce43f0">millTool::l</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="tool_8hh_source.html#l00064">64</a> of file <a class="el" href="tool_8hh_source.html">tool.hh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a04d3c6874343d9b27998a555e0f6cc0f"></a><!-- doxytag: member="millTool::revol" ref="a04d3c6874343d9b27998a555e0f6cc0f" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">TopoDS_Solid <a class="el" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">millTool::revol</a><code> [protected]</code></td>
+          <td class="memname">double <a class="el" href="classmill_tool.html#a5a78ab6b434e4abffacf139e648a283d">millTool::dia</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="tool_8hh_source.html#l00065">65</a> of file <a class="el" href="tool_8hh_source.html">tool.hh</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adc8360e7db323a20ed3f640b52693c1b"></a><!-- doxytag: member="millTool::len" ref="adc8360e7db323a20ed3f640b52693c1b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classmill_tool.html#adc8360e7db323a20ed3f640b52693c1b">millTool::len</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="tool_8hh_source.html#l00065">65</a> of file <a class="el" href="tool_8hh_source.html">tool.hh</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa4d9ba426f6933547800cebdd01038be"></a><!-- doxytag: member="millTool::revol" ref="aa4d9ba426f6933547800cebdd01038be" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const TopoDS_Solid&amp; <a class="el" href="classmill_tool.html#aa4d9ba426f6933547800cebdd01038be">millTool::revol</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="tool_8hh_source.html#l00066">66</a> of file <a class="el" href="tool_8hh_source.html">tool.hh</a>.</p>
 
 </div>
 </div>
@@ -175,7 +205,7 @@ Collaboration diagram for millTool:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="tool_8hh_source.html#l00063">63</a> of file <a class="el" href="tool_8hh_source.html">tool.hh</a>.</p>
+<p>Definition at line <a class="el" href="tool_8hh_source.html#l00064">64</a> of file <a class="el" href="tool_8hh_source.html">tool.hh</a>.</p>
 
 </div>
 </div>

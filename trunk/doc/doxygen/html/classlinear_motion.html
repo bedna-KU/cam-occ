@@ -26,7 +26,7 @@
 </div>
 <div class="contents">
 <h1>linearMotion Class Reference</h1><!-- doxytag: class="linearMotion" --><!-- doxytag: inherits="canonMotion" -->
-<p>For the canonical commands LINEAR_FEED and LINEAR_TRAVERSE. This class inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a>.  
+<p>For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a>.  
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="linear_motion_8hh_source.html">linearMotion.hh</a>&gt;</code></p>
@@ -37,7 +37,7 @@ Collaboration diagram for linearMotion:</div>
 <div class="dynsection">
 <div class="center"><img src="classlinear_motion__coll__graph.png" border="0" usemap="#linear_motion_coll__map" alt="Collaboration graph"/></div>
 <map name="linear_motion_coll__map" id="linear_motion_coll__map">
-<area shape="rect" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED..." alt="" coords="19,277,115,307"/><area shape="rect" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one..." alt="" coords="27,197,107,227"/><area shape="rect" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things..." alt="" coords="5,5,61,35"/><area shape="rect" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information..." alt="" coords="71,101,177,131"/><area shape="rect" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="85,5,184,35"/></map>
+<area shape="rect" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED..." alt="" coords="19,277,115,307"/><area shape="rect" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one..." alt="" coords="27,197,107,227"/><area shape="rect" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things..." alt="" coords="5,5,61,35"/><area shape="rect" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information..." alt="" coords="71,101,177,131"/><area shape="rect" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="85,5,184,35"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classlinear_motion-members.html">List of all members.</a></p>
@@ -45,10 +45,10 @@ Collaboration diagram for linearMotion:</div>
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3">linearMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">getMotionType</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a15c3dcb997b2576113700b0e32275269">getSolid</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#ac7d8d0645a63d5e79c6479c98ae8f804">getSolid</a> ()</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>For the canonical commands LINEAR_FEED and LINEAR_TRAVERSE. This class inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a>. </p>
+<p>For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a>. </p>
 
 <p>Definition at line <a class="el" href="linear_motion_8hh_source.html#l00037">37</a> of file <a class="el" href="linear_motion_8hh_source.html">linearMotion.hh</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
@@ -77,7 +77,16 @@ Collaboration diagram for linearMotion:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="linear_motion_8cc_source.html#l00027">27</a> of file <a class="el" href="linear_motion_8cc_source.html">linearMotion.cc</a>.</p>
+<p>Definition at line <a class="el" href="linear_motion_8cc_source.html#l00028">28</a> of file <a class="el" href="linear_motion_8cc_source.html">linearMotion.cc</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dynsection">
+<div class="center"><img src="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph.png" border="0" usemap="#classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph_map" alt=""></div>
+<map name="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph_map" id="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph">
+<area shape="rect" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="228,5,412,35"/><area shape="rect" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="224,59,416,88"/></map>
+</div>
+</p>
 
 </div>
 </div>
@@ -99,7 +108,7 @@ Collaboration diagram for linearMotion:</div>
 
 <p>Implements <a class="el" href="classcanon_motion.html#aeb581319f165b5309d409f3a2f0367e2">canonMotion</a>.</p>
 
-<p>Definition at line <a class="el" href="linear_motion_8cc_source.html#l00031">31</a> of file <a class="el" href="linear_motion_8cc_source.html">linearMotion.cc</a>.</p>
+<p>Definition at line <a class="el" href="linear_motion_8cc_source.html#l00084">84</a> of file <a class="el" href="linear_motion_8cc_source.html">linearMotion.cc</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -112,12 +121,12 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a15c3dcb997b2576113700b0e32275269"></a><!-- doxytag: member="linearMotion::getSolid" ref="a15c3dcb997b2576113700b0e32275269" args="()" -->
+<a class="anchor" id="ac7d8d0645a63d5e79c6479c98ae8f804"></a><!-- doxytag: member="linearMotion::getSolid" ref="ac7d8d0645a63d5e79c6479c98ae8f804" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const TopoDS_Solid linearMotion::getSolid </td>
+          <td class="memname">const TopoDS_Solid&amp; linearMotion::getSolid </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -127,7 +136,7 @@ Here is the call graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>Implements <a class="el" href="classcanon_motion.html#add7e80890899c96f8038740bad6842b1">canonMotion</a>.</p>
+<p>Implements <a class="el" href="classcanon_motion.html#ad4f3754219ec78bcfb4adbcf8036b8fa">canonMotion</a>.</p>
 
 </div>
 </div>

@@ -89,14 +89,14 @@
 <a name="l00069"></a>00069   <span class="keywordtype">char</span> * end;
 <a name="l00070"></a>00070   <span class="keywordtype">double</span> d = strtod( <a class="code" href="classcanon_line.html#aa5ff804f07988125fd5c360b191336f1">canonTokens</a>[n].c_str(), &amp;end );
 <a name="l00071"></a>00071   assert ( *end == 0 );
-<a name="l00072"></a>00072   <span class="keywordflow">return</span> d;  
+<a name="l00072"></a>00072   <span class="keywordflow">return</span> d;
 <a name="l00073"></a>00073 }
 <a name="l00074"></a>00074 
 <a name="l00076"></a><a class="code" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f">00076</a> <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="converts canonTokens[n] to int">canonLine::tok2i</a>(uint n,uint offset) {
 <a name="l00077"></a>00077   <span class="keywordtype">char</span> * end;
 <a name="l00078"></a>00078   <span class="keywordtype">int</span> i = strtol( &amp;<a class="code" href="classcanon_line.html#aa5ff804f07988125fd5c360b191336f1">canonTokens</a>[n].c_str()[offset], &amp;end, 10 );
 <a name="l00079"></a>00079   assert ( *end == 0 );
-<a name="l00080"></a>00080   <span class="keywordflow">return</span> i;  
+<a name="l00080"></a>00080   <span class="keywordflow">return</span> i;
 <a name="l00081"></a>00081 }
 <a name="l00082"></a>00082 
 <a name="l00083"></a><a class="code" href="classcanon_line.html#a112a6f737dd35775913339febdd1ce1e">00083</a> <span class="keyword">const</span> std::string <a class="code" href="classcanon_line.html#a112a6f737dd35775913339febdd1ce1e">canonLine::getCanonicalCommand</a>() {
@@ -107,14 +107,14 @@
 <a name="l00088"></a>00088 <span class="comment">//0 is canon line</span>
 <a name="l00089"></a>00089 <span class="comment">//1 is gcode Nnnnnn line</span>
 <a name="l00090"></a>00090 <span class="comment">//2 is canonical command</span>
-<a name="l00093"></a><a class="code" href="classcanon_line.html#a134534a48882ee3168c5856a78310cc0">00093</a> <span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="classcanon_line.html#a0204ae8c48a4737cf9c8e00d588f807a" title="tokenize myLine with the default delimiters `(), `">canonLine::tokenize</a>(std::string str, 
-<a name="l00094"></a>00094                          std::vector&lt;std::string&gt;&amp; tokenV, 
+<a name="l00093"></a><a class="code" href="classcanon_line.html#a134534a48882ee3168c5856a78310cc0">00093</a> <span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="classcanon_line.html#a0204ae8c48a4737cf9c8e00d588f807a" title="tokenize myLine with the default delimiters `(), `">canonLine::tokenize</a>(std::string str,
+<a name="l00094"></a>00094                          std::vector&lt;std::string&gt;&amp; tokenV,
 <a name="l00095"></a>00095                          <span class="keyword">const</span> std::string&amp; delimiters) {
 <a name="l00096"></a>00096   <span class="comment">// Skip delimiters at beginning.</span>
 <a name="l00097"></a>00097   std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
 <a name="l00098"></a>00098   <span class="comment">// Find first &quot;non-delimiter&quot;.</span>
 <a name="l00099"></a>00099   std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
-<a name="l00100"></a>00100   
+<a name="l00100"></a>00100 
 <a name="l00101"></a>00101   <span class="keywordflow">while</span> (std::string::npos != pos || std::string::npos != lastPos)
 <a name="l00102"></a>00102   {
 <a name="l00103"></a>00103     <span class="comment">// Found a token, add it to the vector.</span>
@@ -136,20 +136,20 @@
 <a name="l00121"></a>00121 
 <a name="l00127"></a><a class="code" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">00127</a> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one...">canonLine</a> * <a class="code" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines...">canonLine::canonLineFactory</a> (std::string l, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information...">machineStatus</a> s) {
 <a name="l00128"></a>00128   <span class="comment">//check if canonical command is motion or something else</span>
-<a name="l00129"></a>00129   <span class="comment">//motion commands: LINEAR_TRAVERSE LINEAR_FEED ARC_FEED</span>
+<a name="l00129"></a>00129   <span class="comment">//motion commands: STRAIGHT_TRAVERSE STRAIGHT_FEED ARC_FEED</span>
 <a name="l00130"></a>00130   <span class="keywordtype">size_t</span> lin,af,cmnt,msg;
 <a name="l00131"></a>00131   cmnt=l.find(<span class="stringliteral">&quot;COMMENT&quot;</span>);
 <a name="l00132"></a>00132   msg=l.find(<span class="stringliteral">&quot;MESSAGE&quot;</span>);
-<a name="l00133"></a>00133   lin=l.find(<span class="stringliteral">&quot;LINEAR_&quot;</span>);
+<a name="l00133"></a>00133   lin=l.find(<span class="stringliteral">&quot;STRAIGHT_&quot;</span>);
 <a name="l00134"></a>00134   af=l.find(<span class="stringliteral">&quot;ARC_FEED&quot;</span>);
 <a name="l00135"></a>00135   <span class="comment">/*</span>
 <a name="l00136"></a>00136 <span class="comment">  ** check for comments first because it is not impossible</span>
 <a name="l00137"></a>00137 <span class="comment">  ** for one to contain the text &quot;LINEAR_&quot; or &quot;ARC_FEED&quot;</span>
 <a name="l00138"></a>00138 <span class="comment">  */</span>
-<a name="l00139"></a>00139   <span class="keywordflow">if</span> ( (cmnt!=std::string::npos) || (msg!=std::string::npos) ) {       
-<a name="l00140"></a>00140     <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classcanon_motionless.html" title="A canonical command that (generally) does not cause or alter axis motion This class...">canonMotionless</a>(l,s);    
+<a name="l00139"></a>00139   <span class="keywordflow">if</span> ( (cmnt!=std::string::npos) || (msg!=std::string::npos) ) {
+<a name="l00140"></a>00140     <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classcanon_motionless.html" title="A canonical command that (generally) does not cause or alter axis motion This class...">canonMotionless</a>(l,s);
 <a name="l00141"></a>00141   } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (lin!=std::string::npos) { <span class="comment">//linear traverse or linear feed</span>
-<a name="l00142"></a>00142     <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classlinear_motion.html" title="For the canonical commands LINEAR_FEED and LINEAR_TRAVERSE. This class inherits from...">linearMotion</a>(l,s);
+<a name="l00142"></a>00142     <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classlinear_motion.html" title="For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits...">linearMotion</a>(l,s);
 <a name="l00143"></a>00143   } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (af!=std::string::npos) { <span class="comment">//arc feed</span>
 <a name="l00144"></a>00144     <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical...">helicalMotion</a>(l,s); <span class="comment">//arc or helix</span>
 <a name="l00145"></a>00145   } <span class="keywordflow">else</span> { <span class="comment">//canonical command is not a motion command</span>

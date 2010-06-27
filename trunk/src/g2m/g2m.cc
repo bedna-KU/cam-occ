@@ -36,13 +36,13 @@
 g2m::g2m() {
   //cout << "g2m ctor" << endl;
   QMenu* myMenu = new QMenu("gcode");
-  
+
   QAction* myAction = new QAction ( "Create 3D Model...", this );
   myAction->setShortcut(QString("Ctrl+M"));
   myAction->setStatusTip ( "Load a .ngc file and create a 3d model" );
   connect(myAction,SIGNAL(triggered()),this,SLOT(slotModelFromFile()));
   myMenu->addAction( myAction );
-  
+
   /*
   **	// do next: show segments one at a time
   **	nextAction = new QAction ( "Do next", this );
@@ -65,14 +65,15 @@ void g2m::slotModelFromFile()
   //cleanUp();
   uio::hideGrid();
   uio::axoView();
-  
+
   file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
   if ( ! file.endsWith(".ngc") ) {
     uio::infoMsg("You must select a file ending with .ngc!");
     return;
   }
   interpret();
- //TODO: process each line, display 
+ //TODO: process each line, display
+ //use dispShape here? or inside the canonLine obj? hrm...
 
   /*
   if (success) {
@@ -104,17 +105,17 @@ void g2m::interpret() {
   So, we just fly blind and assume that there are no errors when we navigate
   the interp's "menu", and that it requires no delays.
   **************************************************/
-  
+
   //now give the interpreter the data it needs
   toCanon.write("2\n");	//set parameter file
   toCanon.write(iparm.toAscii());
   toCanon.write("3\n");	//set tool table file
   toCanon.write(itool.toAscii());
   //can also use 4 and 5
-  
+
   toCanon.write("1\n"); //start interpreting
   //cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
-  
+
   if (!toCanon.waitForReadyRead(1000) ) {
     if ( toCanon.state() == QProcess::NotRunning ){
       infoMsg("Interpreter died.  Bad tool table " + itool + " ?");
@@ -124,7 +125,7 @@ void g2m::interpret() {
     toCanon.close();
     return;
   }
-  
+
   //if readLine is used at the wrong time, it is possible to pick up a line fragment! will canReadLine() fix that?
   qint64 lineLength;
   char line[260];
@@ -142,16 +143,16 @@ void g2m::interpret() {
     fails++;
     sleepSecond();
   }
-} while ( (fails < 100) && 
+} while ( (fails < 100) &&
 ( (toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning ) )  );
 //((lineLength > 0) || 	//loop until interp quits and all lines are read.
-//toCanon.canReadLine() ||  
+//toCanon.canReadLine() ||
 success = foundEOF;
 return;
 }
 
 bool g2m::processCanonLine (std::string l) {
-  
+
   //create the object and get its pointer
   canonLine * cl = canonLine::canonLineFactory
   (l,*lineVector.back()->getStatus());

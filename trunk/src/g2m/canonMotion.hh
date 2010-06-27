@@ -30,23 +30,27 @@
 
 #include "canonLine.hh"
 
-//for LINEAR_TRAVERSE, LINEAR_FEED, ARC_FEED
-typedef enum { HELICAL, LINEAR, RAPID } MOTION_TYPE;
+//for STRAIGHT_TRAVERSE, STRAIGHT_FEED, ARC_FEED
+
+typedef enum { HELICAL, LINEAR, TRAVERSE } MOTION_TYPE;
 /**
 \class canonMotion
-\brief This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED.
-canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for LINEAR_TRAVERSE and LINEAR_FEED commands, and helicalMotion objects for ARC_FEED commands
+\brief This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED.
+canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands
 */
 class canonMotion: protected canonLine {
   public:
     virtual MOTION_TYPE getMotionType() = 0;
-    virtual const TopoDS_Solid getSolid() = 0;
+    virtual const TopoDS_Solid& getSolid() = 0;
     bool isThisMotion() {return true;};
+    bool isVolumeSuspect() {return sweepIsSuspect;};
+    const TopoDS_Solid& bruteForceSweep(); //sweep using brute force, i.e. fuse a solid many times
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
-    TopoDS_Shape solid;
-    TopoDS_Edge edge;
+    const TopoDS_Shape& mySolid;
+    //const TopoDS_Edge& edge; use myUnSolid
     gp_Ax1 getPoseFromCmd();
+    bool sweepIsSuspect;
 };
 
 #endif //CANONMOTION_HH

@@ -44,11 +44,11 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
  double x,y,z,a1,a2,e1,e2,e3,ea,eb,ec,hdist;
  int rot=0;
  x=y=z=a1=a2=e1=e2=e3=ea=eb=ec=0;
- 
+
  //edge.start = last;
  /* example output, starting from x0 y-1 z0 a0 b0 c0, command g02x1y0i0j1
  (names interleaved, see emc's saicanon.cc, line 497)
- 8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000, 
+ 8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000,
  line Gline ARC_FEED(first_end, second_end, first_axis, second_axis,
  -1,        0.000000,   0.000000, 0.000000, 0.000000)
  rotation, axis_end_point,   a,        b,        c)
@@ -63,12 +63,12 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
  eb = tok2d(10); //b
  ec = tok2d(11); //c
  switch (status.getPlane()) {
-   /* 
-   ** the order for these vars is copied from saicannon.cc, line 509+ 
-   ** a,b,c are untouched - yay! 
+   /*
+   ** the order for these vars is copied from saicannon.cc, line 509+
+   ** a,b,c are untouched - yay!
    */
    case CANON_PLANE_XZ:
-     status.setEndPose(gp_Pnt(e2,e3,e1)); 
+     status.setEndPose(gp_Pnt(e2,e3,e1));
      arcDir = gp_Dir(0,1,0);
      c = gp_Pnt(a2,status.getStartPose().Location().Y(),a1);
      hdist = e3 - status.getStartPose().Location().Y();
@@ -125,10 +125,9 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
   gp_Pnt2d p1,p2;
   Handle(Geom_CylindricalSurface) cyl = new Geom_CylindricalSurface(gp_Ax2(c,dir) , radius);
   GeomAPI_ProjectPointOnSurf proj;
-  TopoDS_Edge h;
   int success = 0;
-  
-  h.Nullify();
+
+  edge.Nullify();
   //cout << "Radius " << radius << "   Rot has the value " << rot << endl;
   proj.Init(start,cyl);
   if(proj.NbPoints() > 0) {
@@ -139,7 +138,7 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
     success++;
     p1 = gp_Pnt2d(pU,pV);
   }
-  
+
   proj.Init(end,cyl);
   if(proj.NbPoints() > 0) {
     proj.LowerDistanceParameters(pU, pV);
@@ -149,7 +148,7 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
     success++;
     p2 = gp_Pnt2d(pU,pV);
   }
-  
+
   if (success != 2) {
    /* FIXME
    cout << "Couldn't create a helix from " << toString(start).toStdString() << " to " << toString(end).toStdString() << ". Replacing with a line." <<endl;
@@ -158,12 +157,12 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
     edge = BRepBuilderAPI_MakeEdge( start, end );
     return;
   }
-  
+
   //for the 2d points, x axis is about the circumference.  Units are radians.
   //change direction if rot = 1, not if rot = -1
   //if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); << this is wrong!
   //cout << "p1x " << p1.X() << ", p2x " << p2.X() << endl;
-  
+
   //switch direction if necessary, only works for simple cases
   //should always work for G02/G03 because they are less than 1 rotation
   if (rot==1) {
@@ -172,7 +171,7 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
   }
   Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
   edge = BRepBuilderAPI_MakeEdge(segment , cyl);
-  
+
   return;
 }
 

@@ -1,22 +1,22 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Mark Pictor                                     *
- *   mpictor@gmail.com                                                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+*   Copyright (C) 2010 by Mark Pictor                                     *
+*   mpictor@gmail.com                                                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************/
 #include <string>
 #include "canonMotionless.hh"
 #include "uio.hh"
@@ -44,15 +44,20 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (clMatch("SELECT_TOOL")) {
     handled = false;
   } else if (clMatch("CHANGE_TOOL")) {
+    //for now, always assume it's ballnose. divide tool number by 16 to get diameter
+    //i.e. tool 1 = 1/16" ball nose endmill, tool 24 = 1 1/2" ball nose endmill
+    //TODO: implement
+    //get tool number
+    toolNumber n = tok2i(
+    status.setTool(n);
     handled = false;
   } else if (clMatch("USE_TOOL_LENGTH_OFFSET")) {
     handled = false;
-  } else if (clMatch("PROGRAM_STOP")) {
   } else if (clMatch("SET_ORIGIN_OFFSETS")) {
-    
-    if (std::string::npos != canonL.find("SET_ORIGIN_OFFSETS(0.0000,")) {
-      uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + canonL );
-    }
+
+  if (clMatch("(0.0000,")) {
+    uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine );
+  }
     handled = false; //because I still don't know what to do if we have the correct data...
   } else if (clMatch("USE_LENGTH_UNITS")) {
     handled = false;
@@ -65,24 +70,36 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (clMatch("SET_NAIVECAM_TOLERANCE")) {
     handled = false;
   } else if (clMatch("PROGRAM_END")) {
+  } else if (clMatch("PROGRAM_STOP")) {
+  } else if (clMatch("SELECT_PLANE(" )) {
+    if (clMatch("XZ)")) {
+      status.setPlane(CANON_PLANE_XZ);
+    } else if (clMatch("YZ)")) {
+      status.setPlane(CANON_PLANE_YZ);
+    } else {// XY)
+      status.setPlane(CANON_PLANE_XY);
+    }
   } else match = false;
 
   if ( !match || !handled ) {
     std::string m;
-    if (!handled) 
+    if (!handled) {
       m = "Warning, unhandled";
-    else m = "Error, unknown";
-    uio::infoMsg(m + " canonical command: " + canonL);
+    } else {
+      m = "Error, unknown";
+      uio::infoMsg(m + " canonical command: " + canonL);
+    }
   }
 }
-/*
-SET_ORIGIN_OFFSETS(0.0000,  //this is a common canon statement. we are going to hijack it to produce a warning, because
-        //the data we're getting was produced with a format of %.4f or so
-        infoMsg(QString("Warning, input has reduced precision, expected more zeros: <br>") + canon_line );
-*/
 
-/*
-bool clMatch(string m) {
-  return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
-}
-*/
+ /*
+ SET_ORIGIN_OFFSETS(0.0000,  //this is a common canon statement. we are going to hijack it to produce a warning, because
+ //the data we're getting was produced with a format of %.4f or so
+ infoMsg(QString("Warning, input has reduced precision, expected more zeros: <br>") + canon_line );
+ */
+
+ /*
+ bool clMatch(string m) {
+ return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
+  }
+  */

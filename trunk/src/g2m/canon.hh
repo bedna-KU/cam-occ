@@ -36,8 +36,7 @@ typedef int toolNumber;
 /**
 \class canon
 \brief Class canon was created so canonLine and machineStatus could easily share some things.
-This class was created so that canonLine and machineStatus could easily share tool data and any functions that they have in common (at the moment, the only function is the unimplemented function abc2dir)
-Tool data could be considered a sparse array, so a std::map<> is used to store it. Tools should be loaded from file the first time they are needed, so that the toolTable does not take up more memory than necessary.
+The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class.
 */
 
 class canon {
@@ -53,10 +52,10 @@ class canon {
 #endif //CANON_HH
 
 
- 
+
  //create tool obj
 // toolTable[t] = tool(t);
- 
+
 //access tool obj
 ///need to check if the tool exists before accessing it!!!
 // status.myTool = toolTable[t].getShape();

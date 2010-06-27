@@ -54,58 +54,74 @@
 <a name="l00030"></a>00030 <span class="comment">//tool.cc - functions in classes tool, millTool, etc</span>
 <a name="l00031"></a>00031 
 <a name="l00032"></a><a class="code" href="classtool.html#a72d93f1a12ba5ff152ddec232808e56b">00032</a> <a class="code" href="classtool.html#a72d93f1a12ba5ff152ddec232808e56b">tool::tool</a>() {
-<a name="l00033"></a>00033   <span class="comment">//isRotaryTool = false;</span>
-<a name="l00034"></a>00034   <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = <span class="keyword">false</span>;
-<a name="l00035"></a>00035   <a class="code" href="classtool.html#a851e6b648c4713e9c56c9fd9efb534da">profile</a>.Nullify();
-<a name="l00036"></a>00036   <a class="code" href="classtool.html#addcd1140e586c8696acfc3e813070c2a">type</a> = <a class="code" href="tool_8hh.html#a6635f9ef3157460c42799a8222b39796a605159e8a4c32319fd69b5d151369d93">UNDEFINED</a>;
-<a name="l00037"></a>00037 }
-<a name="l00038"></a>00038 
-<a name="l00039"></a><a class="code" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">00039</a> <a class="code" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">millTool::millTool</a>() {
-<a name="l00040"></a>00040   <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a> = <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391ba632fa39438c1676b435ec43e6a0f9647">UNDEF</a>;
-<a name="l00041"></a>00041   <a class="code" href="classtool.html#addcd1140e586c8696acfc3e813070c2a">type</a> = <a class="code" href="tool_8hh.html#a6635f9ef3157460c42799a8222b39796a69c53b39086331bf56bbfa640a33f3e3">ROTARY_TOOL</a>;
-<a name="l00042"></a>00042   <a class="code" href="classmill_tool.html#a2aada9ed0d71b6e80cf0e1cf18d2e950">d</a>=0.0;
-<a name="l00043"></a>00043   <a class="code" href="classmill_tool.html#afeb689d2c7f0e00845e54e4834ce43f0">l</a>=0.0;
-<a name="l00044"></a>00044   <a class="code" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">revol</a>.Nullify();
-<a name="l00045"></a>00045   <a class="code" href="classtool.html#aebd2d634f193798b974989956a5bdab1">isRotaryTool</a> = <span class="keyword">true</span>;
-<a name="l00046"></a>00046 }
-<a name="l00047"></a>00047 
-<a name="l00048"></a><a class="code" href="classmill_tool.html#a67deb521b8ded205ecd2790f836fceb3">00048</a> <span class="keyword">const</span> TopoDS_Solid <a class="code" href="classmill_tool.html#a67deb521b8ded205ecd2790f836fceb3">millTool::getRevol</a>() {
-<a name="l00049"></a>00049   <span class="keywordflow">if</span> (<a class="code" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">revol</a>.IsNull()) {
-<a name="l00050"></a>00050     gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1));
-<a name="l00051"></a>00051     BRepPrimAPI_MakeRevol rev(<a class="code" href="classtool.html#a851e6b648c4713e9c56c9fd9efb534da">profile</a>,vertical,M_PI,<span class="keyword">true</span>);
-<a name="l00052"></a>00052     <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = rev.IsDone();
-<a name="l00053"></a>00053     <span class="keywordflow">if</span> (<a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a>)
-<a name="l00054"></a>00054       <a class="code" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">revol</a> = TopoDS::Solid( rev.Shape() );
-<a name="l00055"></a>00055   }
-<a name="l00056"></a>00056   <span class="keywordflow">return</span> <a class="code" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">revol</a>;
-<a name="l00057"></a>00057 }
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059 <span class="comment">//aptTool::aptTool() {}</span>
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061 ballnoseTool::ballnoseTool(<span class="keywordtype">double</span> diameter, <span class="keywordtype">double</span> length) {
-<a name="l00062"></a>00062   <span class="keywordtype">double</span> r = diameter/2.0;
-<a name="l00063"></a>00063   <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = <span class="keyword">false</span>;
-<a name="l00064"></a>00064   Handle(Geom_TrimmedCurve) Tc;
-<a name="l00065"></a>00065   Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(0,0,0), gp_Pnt(-r,0,r));
-<a name="l00066"></a>00066   TopoDS_Edge Ec = BRepBuilderAPI_MakeEdge(Tc);
-<a name="l00067"></a>00067   TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,length));
-<a name="l00068"></a>00068   TopoDS_Edge E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,r), gp_Pnt(-r,0,length));
-<a name="l00069"></a>00069   TopoDS_Edge E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
-<a name="l00070"></a>00070   BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
-<a name="l00071"></a>00071   if ( wm.IsDone() ) {
-<a name="l00072"></a>00072     TopoDS_Wire w = wm.Wire();
-<a name="l00073"></a>00073     <span class="keywordflow">if</span> ( w.Closed() ) {
-<a name="l00074"></a>00074       BRepBuilderAPI_MakeFace f(w);
-<a name="l00075"></a>00075       <span class="keywordflow">if</span> (f.IsDone()) {
-<a name="l00076"></a>00076         <a class="code" href="classtool.html#a851e6b648c4713e9c56c9fd9efb534da">profile</a> = f.Face();
-<a name="l00077"></a>00077         <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = <span class="keyword">true</span>;
-<a name="l00078"></a>00078         <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a> = <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391ba354b4cc3393169625276c4ab7ec2147f">BALLNOSE</a>;
-<a name="l00079"></a>00079       }
-<a name="l00080"></a>00080     }
-<a name="l00081"></a>00081   }
-<a name="l00082"></a>00082 }
-<a name="l00083"></a>00083 
-<a name="l00084"></a>00084 <span class="comment">//latheTool::latheTool() {}</span>
+<a name="l00033"></a>00033   <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = <span class="keyword">false</span>;
+<a name="l00034"></a>00034   <a class="code" href="classtool.html#afc541aabdcdee361dc719910cf565950">profile</a>.Nullify();
+<a name="l00035"></a>00035   <a class="code" href="classtool.html#addcd1140e586c8696acfc3e813070c2a">type</a> = <a class="code" href="tool_8hh.html#a6635f9ef3157460c42799a8222b39796a605159e8a4c32319fd69b5d151369d93">UNDEFINED</a>;
+<a name="l00036"></a>00036 }
+<a name="l00037"></a>00037 
+<a name="l00038"></a><a class="code" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">00038</a> <a class="code" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">millTool::millTool</a>() {
+<a name="l00039"></a>00039   <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a> = <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391ba632fa39438c1676b435ec43e6a0f9647">UNDEF</a>;
+<a name="l00040"></a>00040   <a class="code" href="classtool.html#addcd1140e586c8696acfc3e813070c2a">type</a> = <a class="code" href="tool_8hh.html#a6635f9ef3157460c42799a8222b39796a69c53b39086331bf56bbfa640a33f3e3">ROTARY_TOOL</a>;
+<a name="l00041"></a>00041   d=0.0;
+<a name="l00042"></a>00042   l=0.0;
+<a name="l00043"></a>00043   <a class="code" href="classmill_tool.html#aa4d9ba426f6933547800cebdd01038be">revol</a>.Nullify();
+<a name="l00044"></a>00044 }
+<a name="l00045"></a>00045 
+<a name="l00046"></a><a class="code" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83">00046</a> <span class="keyword">const</span> TopoDS_Solid&amp; <a class="code" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83">millTool::getRevol</a>() {
+<a name="l00047"></a>00047   <span class="keywordflow">if</span> (<a class="code" href="classmill_tool.html#aa4d9ba426f6933547800cebdd01038be">revol</a>.IsNull()) {
+<a name="l00048"></a>00048     gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1));
+<a name="l00049"></a>00049     BRepPrimAPI_MakeRevol rev(<a class="code" href="classtool.html#afc541aabdcdee361dc719910cf565950">profile</a>,vertical,M_PI,<span class="keyword">true</span>);
+<a name="l00050"></a>00050     <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = rev.IsDone();
+<a name="l00051"></a>00051     <span class="keywordflow">if</span> (<a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a>)
+<a name="l00052"></a>00052       <a class="code" href="classmill_tool.html#aa4d9ba426f6933547800cebdd01038be">revol</a> = TopoDS::Solid( rev.Shape() );
+<a name="l00053"></a>00053   }
+<a name="l00054"></a>00054   <span class="keywordflow">return</span> <a class="code" href="classmill_tool.html#aa4d9ba426f6933547800cebdd01038be">revol</a>;
+<a name="l00055"></a>00055 }
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057 
+<a name="l00065"></a>00065 <span class="comment">//if this doesnt work, try raytracing</span>
+<a name="l00066"></a>00066 <span class="comment">// see also OpenCASCADE6.3.0/samples/standard/mfc/12_HLR/src/SelectionDialog.cpp</span>
+<a name="l00067"></a>00067 <span class="comment">//Prs3d_Projector (const Standard_Boolean Pers, const Quantity_Length Focus, const Quantity_Length DX, const Quantity_Length DY, const Quantity_Length DZ, const Quantity_Length XAt, const Quantity_Length YAt, const Quantity_Length ZAt, const Quantity_Length XUp, const Quantity_Length YUp, const Quantity_Length ZUp)</span>
+<a name="l00068"></a><a class="code" href="classmill_tool.html#ac5088380c50d2b9649a171f280298448">00068</a> <span class="keyword">const</span> TopoDS_Face&amp; <a class="code" href="classmill_tool.html#ac5088380c50d2b9649a171f280298448">millTool::getProj</a>(<a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> deg) {
+<a name="l00069"></a>00069   <span class="keywordtype">double</span> zloc = 5; <span class="comment">//zloc is z coordinate of projection</span>
+<a name="l00070"></a>00070   Handle(HLRBRep_Algo)myAlgo = <span class="keyword">new</span> HLRBRep_Algo();
+<a name="l00071"></a>00071   myAlgo-&gt;Add(<a class="code" href="classtool.html#afc541aabdcdee361dc719910cf565950">profile</a>);
+<a name="l00072"></a>00072   Prs3d_Projector myProj(<span class="keyword">false</span>,0, 0,0,zloc, 0,0,1, 0,0,1); point
+<a name="l00073"></a>00073   myAlgo-&gt;Projector(myProj.Projector());
+<a name="l00074"></a>00074   myAlgo-&gt;Update();
+<a name="l00075"></a>00075   HLRBRep_HLRToShape aHLRToShape(myAlgo);
+<a name="l00076"></a>00076   TopoDS_Shape Proj = aHLRToShape.VCompound();
+<a name="l00077"></a>00077   <span class="keywordflow">return</span> TopoDS::Face(Proj);
+<a name="l00078"></a>00078 }
+<a name="l00079"></a>00079 
+<a name="l00080"></a>00080 <span class="comment">//aptTool::aptTool() {}</span>
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082 ballnoseTool::ballnoseTool(<span class="keywordtype">double</span> diameter, <span class="keywordtype">double</span> length) {
+<a name="l00083"></a>00083   <span class="keywordtype">double</span> r = diameter/2.0;
+<a name="l00084"></a>00084   <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = <span class="keyword">false</span>;
+<a name="l00085"></a>00085   Handle(Geom_TrimmedCurve) Tc;
+<a name="l00086"></a>00086   Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(0,0,0), gp_Pnt(-r,0,r));
+<a name="l00087"></a>00087   TopoDS_Edge&amp; Ec = BRepBuilderAPI_MakeEdge(Tc);
+<a name="l00088"></a>00088   TopoDS_Edge&amp; E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,length));
+<a name="l00089"></a>00089   TopoDS_Edge&amp; E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,r), gp_Pnt(-r,0,length));
+<a name="l00090"></a>00090   TopoDS_Edge&amp; E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
+<a name="l00091"></a>00091   BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
+<a name="l00092"></a>00092   if ( wm.IsDone() ) {
+<a name="l00093"></a>00093     TopoDS_Wire&amp; w = wm.Wire();
+<a name="l00094"></a>00094     <span class="keywordflow">if</span> ( w.Closed() ) {
+<a name="l00095"></a>00095       BRepBuilderAPI_MakeFace f(w);
+<a name="l00096"></a>00096       <span class="keywordflow">if</span> (f.IsDone()) {
+<a name="l00097"></a>00097         <a class="code" href="classtool.html#afc541aabdcdee361dc719910cf565950">profile</a> = f.Face();
+<a name="l00098"></a>00098         <a class="code" href="classtool.html#a0dc1a01fea90d4216c9cbab3a20d63d7">valid</a> = <span class="keyword">true</span>;
+<a name="l00099"></a>00099         <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a> = <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391ba354b4cc3393169625276c4ab7ec2147f">BALLNOSE</a>;
+<a name="l00100"></a>00100       }
+<a name="l00101"></a>00101     }
+<a name="l00102"></a>00102   }
+<a name="l00103"></a>00103 }
+<a name="l00104"></a>00104 
+<a name="l00105"></a>00105 latheTool::latheTool() {
+<a name="l00106"></a>00106  <a class="code" href="classtool.html#addcd1140e586c8696acfc3e813070c2a">type</a> = <a class="code" href="tool_8hh.html#a6635f9ef3157460c42799a8222b39796ab1e0545b22b8690ee845c6fb4e3eec85">TURNING_TOOL</a>;
+<a name="l00107"></a>00107 }
 </pre></div></div>
 <hr class="footer"/><address style="text-align: right;"><small>Generated by&nbsp;
 <a href="http://www.doxygen.org/index.html">

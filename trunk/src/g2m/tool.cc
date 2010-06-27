@@ -30,7 +30,6 @@
 //tool.cc - functions in classes tool, millTool, etc
 
 tool::tool() {
-  //isRotaryTool = false;
   valid = false;
   profile.Nullify();
   type = UNDEFINED;
@@ -42,10 +41,9 @@ millTool::millTool() {
   d=0.0;
   l=0.0;
   revol.Nullify();
-  isRotaryTool = true;
 }
 
-const TopoDS_Solid millTool::getRevol() {
+const TopoDS_Solid& millTool::getRevol() {
   if (revol.IsNull()) {
     gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1));
     BRepPrimAPI_MakeRevol rev(profile,vertical,M_PI,true);
@@ -56,6 +54,29 @@ const TopoDS_Solid millTool::getRevol() {
   return revol;
 }
 
+
+/**
+Projects the 3d model of the tool onto a plane normal to XY.
+Some code from http://www.opencascade.org/org/forum/thread_16928/
+\param deg Projection angle, in degrees. Sign is ignored.
+\return the projection as a TopoDS_Face.
+\sa getProfile(), getRevol()
+*/
+//if this doesnt work, try raytracing
+// see also OpenCASCADE6.3.0/samples/standard/mfc/12_HLR/src/SelectionDialog.cpp
+//Prs3d_Projector (const Standard_Boolean Pers, const Quantity_Length Focus, const Quantity_Length DX, const Quantity_Length DY, const Quantity_Length DZ, const Quantity_Length XAt, const Quantity_Length YAt, const Quantity_Length ZAt, const Quantity_Length XUp, const Quantity_Length YUp, const Quantity_Length ZUp)
+const TopoDS_Face& millTool::getProj(degrees deg) {
+  double zloc = 5; //zloc is z coordinate of projection
+  Handle(HLRBRep_Algo)myAlgo = new HLRBRep_Algo();
+  myAlgo->Add(profile);
+  Prs3d_Projector myProj(false,0, 0,0,zloc, 0,0,1, 0,0,1); point
+  myAlgo->Projector(myProj.Projector());
+  myAlgo->Update();
+  HLRBRep_HLRToShape aHLRToShape(myAlgo);
+  TopoDS_Shape Proj = aHLRToShape.VCompound();
+  return TopoDS::Face(Proj);
+}
+
 //aptTool::aptTool() {}
 
 ballnoseTool::ballnoseTool(double diameter, double length) {
@@ -63,13 +84,13 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
   valid = false;
   Handle(Geom_TrimmedCurve) Tc;
   Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(0,0,0), gp_Pnt(-r,0,r));
-  TopoDS_Edge Ec = BRepBuilderAPI_MakeEdge(Tc);
-  TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,length));
-  TopoDS_Edge E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,r), gp_Pnt(-r,0,length));
-  TopoDS_Edge E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
+  TopoDS_Edge& Ec = BRepBuilderAPI_MakeEdge(Tc);
+  TopoDS_Edge& E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,length));
+  TopoDS_Edge& E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,r), gp_Pnt(-r,0,length));
+  TopoDS_Edge& E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
   BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
   if ( wm.IsDone() ) {
-    TopoDS_Wire w = wm.Wire();
+    TopoDS_Wire& w = wm.Wire();
     if ( w.Closed() ) {
       BRepBuilderAPI_MakeFace f(w);
       if (f.IsDone()) {
@@ -81,4 +102,6 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
   }
 }
 
-//latheTool::latheTool() {}
+latheTool::latheTool() {
+ type = TURNING_TOOL;
+}

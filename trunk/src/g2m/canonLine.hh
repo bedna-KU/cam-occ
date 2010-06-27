@@ -47,15 +47,12 @@ class canonLine: protected canon {
     static canonLine* canonLineFactory (std::string l, machineStatus s);
     //static void setToolVecPtr(std::vector<tool> *t);
     const std::string getCanonType();
-    const TopoDS_Shape getUnSolid() {assert(!errors); return unSolid;}; //FIXME: use dispShape instead? one obj for both solid and unsolid? throw in highlighting as well?
+    const TopoDS_Shape& getUnSolid() {assert(!errors); return unSolid;}; //FIXME: use dispShape instead? one obj for both solid and unsolid? throw in highlighting as well?
     bool checkErrors() {return errors;};
   protected:
     canonLine(std::string canonL, machineStatus prevStatus);
     std::string myLine;
-    //gp_Ax1 myStart,myEnd; //use status.get___Pose() instead
     machineStatus status; //the machine's status *after* execution of this canon line
-    //bool isMotion;
-    //static std::vector<tool> *toolVec;
     std::vector<std::string> canonTokens;
     double tok2d(uint n);
     inline int tok2i(uint n,uint offset=0);
@@ -65,8 +62,10 @@ class canonLine: protected canon {
     const std::string getCanonicalCommand();
     bool errors;
     bool clMatch(std::string m);
-    TopoDS_Shape unSolid;
-
+    /** \var myUnSolid
+    Use to store a symbol for non-motion commands, or to store the tool path for motion.
+    */
+    const TopoDS_Shape& myUnSolid;
 };
 
 #endif //CANONLINE_HH

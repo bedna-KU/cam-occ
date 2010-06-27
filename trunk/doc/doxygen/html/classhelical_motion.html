@@ -26,7 +26,7 @@
 </div>
 <div class="contents">
 <h1>helicalMotion Class Reference</h1><!-- doxytag: class="helicalMotion" --><!-- doxytag: inherits="canonMotion" -->
-<p>For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs. Inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a>.  
+<p>For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs. Inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a>.  
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="helical_motion_8hh_source.html">helicalMotion.hh</a>&gt;</code></p>
@@ -37,7 +37,7 @@ Collaboration diagram for helicalMotion:</div>
 <div class="dynsection">
 <div class="center"><img src="classhelical_motion__coll__graph.png" border="0" usemap="#helical_motion_coll__map" alt="Collaboration graph"/></div>
 <map name="helical_motion_coll__map" id="helical_motion_coll__map">
-<area shape="rect" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED..." alt="" coords="19,277,115,307"/><area shape="rect" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one..." alt="" coords="27,197,107,227"/><area shape="rect" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things..." alt="" coords="5,5,61,35"/><area shape="rect" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information..." alt="" coords="71,101,177,131"/><area shape="rect" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="85,5,184,35"/></map>
+<area shape="rect" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED..." alt="" coords="19,277,115,307"/><area shape="rect" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one..." alt="" coords="27,197,107,227"/><area shape="rect" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things..." alt="" coords="5,5,61,35"/><area shape="rect" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information..." alt="" coords="71,101,177,131"/><area shape="rect" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="85,5,184,35"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classhelical_motion-members.html">List of all members.</a></p>
@@ -45,10 +45,10 @@ Collaboration diagram for helicalMotion:</div>
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8">helicalMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">getMotionType</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a2cc2687ba0f5d2d0a7ea500d3db983be">getSolid</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a55c8010cd37250dce858deeb5a3a0806">getSolid</a> ()</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs. Inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a>. </p>
+<p>For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs. Inherits from <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a>. </p>
 
 <p>Definition at line <a class="el" href="helical_motion_8hh_source.html#l00042">42</a> of file <a class="el" href="helical_motion_8hh_source.html">helicalMotion.hh</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
@@ -112,12 +112,12 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a2cc2687ba0f5d2d0a7ea500d3db983be"></a><!-- doxytag: member="helicalMotion::getSolid" ref="a2cc2687ba0f5d2d0a7ea500d3db983be" args="()" -->
+<a class="anchor" id="a55c8010cd37250dce858deeb5a3a0806"></a><!-- doxytag: member="helicalMotion::getSolid" ref="a55c8010cd37250dce858deeb5a3a0806" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const TopoDS_Solid helicalMotion::getSolid </td>
+          <td class="memname">const TopoDS_Solid&amp; helicalMotion::getSolid </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -127,7 +127,7 @@ Here is the call graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>Implements <a class="el" href="classcanon_motion.html#add7e80890899c96f8038740bad6842b1">canonMotion</a>.</p>
+<p>Implements <a class="el" href="classcanon_motion.html#ad4f3754219ec78bcfb4adbcf8036b8fa">canonMotion</a>.</p>
 
 </div>
 </div>

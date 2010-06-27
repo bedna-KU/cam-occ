@@ -34,7 +34,7 @@
 */
 class dispShape {
   public:
-    dispShape (const TopoDS_Shape s, const int lineNbr, const Graphic3d_NameOfMaterial nom = Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode = AIS_Shaded);
+    dispShape (const TopoDS_Shape& s, const int lineNbr, const Graphic3d_NameOfMaterial nom = Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode = AIS_Shaded);
     void display();
   private:
     Handle(AIS_Shape) s;

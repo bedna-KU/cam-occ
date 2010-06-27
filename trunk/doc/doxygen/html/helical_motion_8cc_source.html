@@ -60,7 +60,7 @@
 <a name="l00036"></a>00036 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
 <a name="l00037"></a>00037 
 <a name="l00038"></a>00038 <span class="comment">//implements helicalMotion</span>
-<a name="l00039"></a><a class="code" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8">00039</a> <a class="code" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8">helicalMotion::helicalMotion</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information...">machineStatus</a> prevStatus): <a class="code" href="classcanon_motion.html" title="This class is for the canonical commands LINEAR_TRAVERSE, LINEAR_FEED, and ARC_FEED...">canonMotion</a>(canonL,prevStatus) {
+<a name="l00039"></a><a class="code" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8">00039</a> <a class="code" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8">helicalMotion::helicalMotion</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information...">machineStatus</a> prevStatus): <a class="code" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED...">canonMotion</a>(canonL,prevStatus) {
 <a name="l00040"></a>00040   <span class="comment">//part of processCanonLine</span>
 <a name="l00041"></a>00041   <span class="comment">//} else if (canon_line.startsWith( &quot;ARC_FEED(&quot; )) {</span>
 <a name="l00042"></a>00042  gp_Dir arcDir;
@@ -68,11 +68,11 @@
 <a name="l00044"></a>00044  <span class="keywordtype">double</span> x,y,z,a1,a2,e1,e2,e3,ea,eb,ec,hdist;
 <a name="l00045"></a>00045  <span class="keywordtype">int</span> rot=0;
 <a name="l00046"></a>00046  x=y=z=a1=a2=e1=e2=e3=ea=eb=ec=0;
-<a name="l00047"></a>00047  
+<a name="l00047"></a>00047 
 <a name="l00048"></a>00048  <span class="comment">//edge.start = last;</span>
 <a name="l00049"></a>00049  <span class="comment">/* example output, starting from x0 y-1 z0 a0 b0 c0, command g02x1y0i0j1</span>
 <a name="l00050"></a>00050 <span class="comment"> (names interleaved, see emc&#39;s saicanon.cc, line 497)</span>
-<a name="l00051"></a>00051 <span class="comment"> 8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000, </span>
+<a name="l00051"></a>00051 <span class="comment"> 8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000,</span>
 <a name="l00052"></a>00052 <span class="comment"> line Gline ARC_FEED(first_end, second_end, first_axis, second_axis,</span>
 <a name="l00053"></a>00053 <span class="comment"> -1,        0.000000,   0.000000, 0.000000, 0.000000)</span>
 <a name="l00054"></a>00054 <span class="comment"> rotation, axis_end_point,   a,        b,        c)</span>
@@ -87,12 +87,12 @@
 <a name="l00063"></a>00063  eb = <a class="code" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="converts canonTokens[n] to double">tok2d</a>(10); <span class="comment">//b</span>
 <a name="l00064"></a>00064  ec = <a class="code" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="converts canonTokens[n] to double">tok2d</a>(11); <span class="comment">//c</span>
 <a name="l00065"></a>00065  <span class="keywordflow">switch</span> (<a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.<a class="code" href="classmachine_status.html#a134831df227887d28dffa0c3346060a6">getPlane</a>()) {
-<a name="l00066"></a>00066    <span class="comment">/* </span>
-<a name="l00067"></a>00067 <span class="comment">   ** the order for these vars is copied from saicannon.cc, line 509+ </span>
-<a name="l00068"></a>00068 <span class="comment">   ** a,b,c are untouched - yay! </span>
+<a name="l00066"></a>00066    <span class="comment">/*</span>
+<a name="l00067"></a>00067 <span class="comment">   ** the order for these vars is copied from saicannon.cc, line 509+</span>
+<a name="l00068"></a>00068 <span class="comment">   ** a,b,c are untouched - yay!</span>
 <a name="l00069"></a>00069 <span class="comment">   */</span>
 <a name="l00070"></a>00070    <span class="keywordflow">case</span> <a class="code" href="machine_status_8hh.html#ab14ae0680a82ab25b8466b08cf8bbef2af24dc2c73a38da3214859bf55d883782">CANON_PLANE_XZ</a>:
-<a name="l00071"></a>00071      <a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.<a class="code" href="classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6">setEndPose</a>(gp_Pnt(e2,e3,e1)); 
+<a name="l00071"></a>00071      <a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.<a class="code" href="classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6">setEndPose</a>(gp_Pnt(e2,e3,e1));
 <a name="l00072"></a>00072      arcDir = gp_Dir(0,1,0);
 <a name="l00073"></a>00073      c = gp_Pnt(a2,<a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.<a class="code" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042">getStartPose</a>().Location().Y(),a1);
 <a name="l00074"></a>00074      hdist = e3 - <a class="code" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a>.<a class="code" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042">getStartPose</a>().Location().Y();
@@ -149,62 +149,61 @@
 <a name="l00125"></a>00125   gp_Pnt2d p1,p2;
 <a name="l00126"></a>00126   Handle(Geom_CylindricalSurface) cyl = new Geom_CylindricalSurface(gp_Ax2(c,dir) , radius);
 <a name="l00127"></a>00127   GeomAPI_ProjectPointOnSurf proj;
-<a name="l00128"></a>00128   TopoDS_Edge h;
-<a name="l00129"></a>00129   <span class="keywordtype">int</span> success = 0;
-<a name="l00130"></a>00130   
-<a name="l00131"></a>00131   h.Nullify();
-<a name="l00132"></a>00132   <span class="comment">//cout &lt;&lt; &quot;Radius &quot; &lt;&lt; radius &lt;&lt; &quot;   Rot has the value &quot; &lt;&lt; rot &lt;&lt; endl;</span>
-<a name="l00133"></a>00133   proj.Init(start,cyl);
-<a name="l00134"></a>00134   if(proj.NbPoints() &gt; 0) {
-<a name="l00135"></a>00135     proj.LowerDistanceParameters(pU, pV);
-<a name="l00136"></a>00136     <span class="keywordflow">if</span>(proj.LowerDistance() &gt; 1.0e-6 ) {
-<a name="l00137"></a>00137       <span class="comment">//cout &lt;&lt; &quot;Point fitting distance &quot; &lt;&lt; double(proj.LowerDistance()) &lt;&lt; endl;</span>
-<a name="l00138"></a>00138     }
-<a name="l00139"></a>00139     success++;
-<a name="l00140"></a>00140     p1 = gp_Pnt2d(pU,pV);
-<a name="l00141"></a>00141   }
-<a name="l00142"></a>00142   
-<a name="l00143"></a>00143   proj.Init(end,cyl);
-<a name="l00144"></a>00144   <span class="keywordflow">if</span>(proj.NbPoints() &gt; 0) {
-<a name="l00145"></a>00145     proj.LowerDistanceParameters(pU, pV);
-<a name="l00146"></a>00146     <span class="keywordflow">if</span>(proj.LowerDistance() &gt; 1.0e-6 ) {
-<a name="l00147"></a>00147       <span class="comment">//cout &lt;&lt; &quot;Point fitting distance &quot; &lt;&lt; double(proj.LowerDistance()) &lt;&lt; endl;</span>
-<a name="l00148"></a>00148     }
-<a name="l00149"></a>00149     success++;
-<a name="l00150"></a>00150     p2 = gp_Pnt2d(pU,pV);
-<a name="l00151"></a>00151   }
-<a name="l00152"></a>00152   
-<a name="l00153"></a>00153   <span class="keywordflow">if</span> (success != 2) {
-<a name="l00154"></a>00154    <span class="comment">/* FIXME</span>
-<a name="l00155"></a>00155 <span class="comment">   cout &lt;&lt; &quot;Couldn&#39;t create a helix from &quot; &lt;&lt; toString(start).toStdString() &lt;&lt; &quot; to &quot; &lt;&lt; toString(end).toStdString() &lt;&lt; &quot;. Replacing with a line.&quot; &lt;&lt;endl;</span>
-<a name="l00156"></a>00156 <span class="comment">   */</span>
-<a name="l00157"></a>00157     <a class="code" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a>=<span class="keyword">true</span>;
-<a name="l00158"></a>00158     <a class="code" href="classcanon_motion.html#a620e2cad7e6d6c8f11189d4080e7d8b8">edge</a> = BRepBuilderAPI_MakeEdge( start, end );
-<a name="l00159"></a>00159     <span class="keywordflow">return</span>;
-<a name="l00160"></a>00160   }
-<a name="l00161"></a>00161   
-<a name="l00162"></a>00162   <span class="comment">//for the 2d points, x axis is about the circumference.  Units are radians.</span>
-<a name="l00163"></a>00163   <span class="comment">//change direction if rot = 1, not if rot = -1</span>
-<a name="l00164"></a>00164   <span class="comment">//if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); &lt;&lt; this is wrong!</span>
-<a name="l00165"></a>00165   <span class="comment">//cout &lt;&lt; &quot;p1x &quot; &lt;&lt; p1.X() &lt;&lt; &quot;, p2x &quot; &lt;&lt; p2.X() &lt;&lt; endl;</span>
-<a name="l00166"></a>00166   
-<a name="l00167"></a>00167   <span class="comment">//switch direction if necessary, only works for simple cases</span>
-<a name="l00168"></a>00168   <span class="comment">//should always work for G02/G03 because they are less than 1 rotation</span>
-<a name="l00169"></a>00169   <span class="keywordflow">if</span> (rot==1) {
-<a name="l00170"></a>00170     p2.SetX(p2.X()-2*M_PI);
-<a name="l00171"></a>00171     <span class="comment">//cout &lt;&lt; &quot;p2x now &quot; &lt;&lt; p2.X() &lt;&lt; endl;</span>
-<a name="l00172"></a>00172   }
-<a name="l00173"></a>00173   Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
-<a name="l00174"></a>00174   <a class="code" href="classcanon_motion.html#a620e2cad7e6d6c8f11189d4080e7d8b8">edge</a> = BRepBuilderAPI_MakeEdge(segment , cyl);
-<a name="l00175"></a>00175   
-<a name="l00176"></a>00176   return;
-<a name="l00177"></a>00177 }
-<a name="l00178"></a>00178 
-<a name="l00179"></a>00179 <span class="keywordtype">void</span> <a class="code" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical...">helicalMotion</a>::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
-<a name="l00180"></a>00180     Handle(Geom_TrimmedCurve) Tc;
-<a name="l00181"></a>00181     Tc = GC_MakeArcOfCircle ( start, startVec, end );
-<a name="l00182"></a>00182     <a class="code" href="classcanon_motion.html#a620e2cad7e6d6c8f11189d4080e7d8b8">edge</a> = BRepBuilderAPI_MakeEdge ( Tc );
-<a name="l00183"></a>00183 }
+<a name="l00128"></a>00128   <span class="keywordtype">int</span> success = 0;
+<a name="l00129"></a>00129 
+<a name="l00130"></a>00130   edge.Nullify();
+<a name="l00131"></a>00131   <span class="comment">//cout &lt;&lt; &quot;Radius &quot; &lt;&lt; radius &lt;&lt; &quot;   Rot has the value &quot; &lt;&lt; rot &lt;&lt; endl;</span>
+<a name="l00132"></a>00132   proj.Init(start,cyl);
+<a name="l00133"></a>00133   if(proj.NbPoints() &gt; 0) {
+<a name="l00134"></a>00134     proj.LowerDistanceParameters(pU, pV);
+<a name="l00135"></a>00135     <span class="keywordflow">if</span>(proj.LowerDistance() &gt; 1.0e-6 ) {
+<a name="l00136"></a>00136       <span class="comment">//cout &lt;&lt; &quot;Point fitting distance &quot; &lt;&lt; double(proj.LowerDistance()) &lt;&lt; endl;</span>
+<a name="l00137"></a>00137     }
+<a name="l00138"></a>00138     success++;
+<a name="l00139"></a>00139     p1 = gp_Pnt2d(pU,pV);
+<a name="l00140"></a>00140   }
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142   proj.Init(end,cyl);
+<a name="l00143"></a>00143   <span class="keywordflow">if</span>(proj.NbPoints() &gt; 0) {
+<a name="l00144"></a>00144     proj.LowerDistanceParameters(pU, pV);
+<a name="l00145"></a>00145     <span class="keywordflow">if</span>(proj.LowerDistance() &gt; 1.0e-6 ) {
+<a name="l00146"></a>00146       <span class="comment">//cout &lt;&lt; &quot;Point fitting distance &quot; &lt;&lt; double(proj.LowerDistance()) &lt;&lt; endl;</span>
+<a name="l00147"></a>00147     }
+<a name="l00148"></a>00148     success++;
+<a name="l00149"></a>00149     p2 = gp_Pnt2d(pU,pV);
+<a name="l00150"></a>00150   }
+<a name="l00151"></a>00151 
+<a name="l00152"></a>00152   <span class="keywordflow">if</span> (success != 2) {
+<a name="l00153"></a>00153    <span class="comment">/* FIXME</span>
+<a name="l00154"></a>00154 <span class="comment">   cout &lt;&lt; &quot;Couldn&#39;t create a helix from &quot; &lt;&lt; toString(start).toStdString() &lt;&lt; &quot; to &quot; &lt;&lt; toString(end).toStdString() &lt;&lt; &quot;. Replacing with a line.&quot; &lt;&lt;endl;</span>
+<a name="l00155"></a>00155 <span class="comment">   */</span>
+<a name="l00156"></a>00156     <a class="code" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a>=<span class="keyword">true</span>;
+<a name="l00157"></a>00157     edge = BRepBuilderAPI_MakeEdge( start, end );
+<a name="l00158"></a>00158     <span class="keywordflow">return</span>;
+<a name="l00159"></a>00159   }
+<a name="l00160"></a>00160 
+<a name="l00161"></a>00161   <span class="comment">//for the 2d points, x axis is about the circumference.  Units are radians.</span>
+<a name="l00162"></a>00162   <span class="comment">//change direction if rot = 1, not if rot = -1</span>
+<a name="l00163"></a>00163   <span class="comment">//if (rot==1) p2.SetX((p1.X()-p2.X())-2*M_PI); &lt;&lt; this is wrong!</span>
+<a name="l00164"></a>00164   <span class="comment">//cout &lt;&lt; &quot;p1x &quot; &lt;&lt; p1.X() &lt;&lt; &quot;, p2x &quot; &lt;&lt; p2.X() &lt;&lt; endl;</span>
+<a name="l00165"></a>00165 
+<a name="l00166"></a>00166   <span class="comment">//switch direction if necessary, only works for simple cases</span>
+<a name="l00167"></a>00167   <span class="comment">//should always work for G02/G03 because they are less than 1 rotation</span>
+<a name="l00168"></a>00168   <span class="keywordflow">if</span> (rot==1) {
+<a name="l00169"></a>00169     p2.SetX(p2.X()-2*M_PI);
+<a name="l00170"></a>00170     <span class="comment">//cout &lt;&lt; &quot;p2x now &quot; &lt;&lt; p2.X() &lt;&lt; endl;</span>
+<a name="l00171"></a>00171   }
+<a name="l00172"></a>00172   Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
+<a name="l00173"></a>00173   edge = BRepBuilderAPI_MakeEdge(segment , cyl);
+<a name="l00174"></a>00174 
+<a name="l00175"></a>00175   return;
+<a name="l00176"></a>00176 }
+<a name="l00177"></a>00177 
+<a name="l00178"></a>00178 <span class="keywordtype">void</span> <a class="code" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical...">helicalMotion</a>::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
+<a name="l00179"></a>00179     Handle(Geom_TrimmedCurve) Tc;
+<a name="l00180"></a>00180     Tc = GC_MakeArcOfCircle ( start, startVec, end );
+<a name="l00181"></a>00181     edge = BRepBuilderAPI_MakeEdge ( Tc );
+<a name="l00182"></a>00182 }
 </pre></div></div>
 <hr class="footer"/><address style="text-align: right;"><small>Generated by&nbsp;
 <a href="http://www.doxygen.org/index.html">

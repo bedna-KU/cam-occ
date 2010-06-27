@@ -32,7 +32,7 @@
 /**
 \class canonMotionless
 \brief A canonical command that (generally) does not cause or alter axis motion
-This class is for anything other than LINEAR_FEED, LINEAR_TRAVERSE, and ARC_FEED - including changes in feedrate, spindle speed, tool, coolant, ending the program, etc
+This class is for anything other than STRAIGHT_FEED, STRAIGHT_TRAVERSE, and ARC_FEED - including changes in feedrate, spindle speed, tool, coolant, ending the program, etc
 */
 
 class canonMotionless: protected canonLine {
