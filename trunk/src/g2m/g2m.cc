@@ -56,9 +56,6 @@ g2m::g2m() {
   //cout << "g2m ctor end" << endl;
 }
 
-g2m::~g2m(){
-}
-
 void g2m::slotModelFromFile()
 {
   //bool success;
@@ -71,10 +68,9 @@ void g2m::slotModelFromFile()
     uio::infoMsg("You must select a file ending with .ngc!");
     return;
   }
-  interpret();
+  //interpret();
  //TODO: process each line, display
  //use dispShape here? or inside the canonLine obj? hrm...
-
   /*
   if (success) {
  cout << "sweeping..." << endl;
@@ -88,6 +84,16 @@ void g2m::slotModelFromFile()
   fitAll();
 }
 */
+  processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
+  processCanonLine("   14 N0003  SET_FEED_RATE(20.0000)");
+  processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
+  processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
+  processCanonLine("   17 N0004  ARC_FEED(1.0000, 0.0000, 0.0000, 0.0000, -1, 0.0000)");
+  processCanonLine("   18 N0005  COMMENT(\"----go to X1.0, Y0.0 at a feed rate of 20 inches/minute\")");
+  processCanonLine("   19 N0005  SET_FEED_RATE(20.0000)");
+  processCanonLine("   20 N0005  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
+  //now do something with these...
+
 }
 
 void g2m::interpret() {
@@ -152,10 +158,15 @@ return;
 }
 
 bool g2m::processCanonLine (std::string l) {
-
+  static bool first = true;  //first line? if so, init status...
   //create the object and get its pointer
-  canonLine * cl = canonLine::canonLineFactory
-  (l,*lineVector.back()->getStatus());
+  canonLine * cl;
+  if (first) {
+    cl = canonLine::canonLineFactory (l,machineStatus(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1))));
+    first = false;
+  } else {
+    cl = canonLine::canonLineFactory (l,*lineVector.back()->getStatus());
+  }
   //store it
   lineVector.push_back(cl);
   return cl->checkErrors();

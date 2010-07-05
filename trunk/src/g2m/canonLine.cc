@@ -34,8 +34,8 @@
 
 //canon.cc - implementation of canonLine
 
-canonLine::canonLine(std::string canonL, machineStatus prevStatus): status(prevStatus) {
-  myLine = canonL;
+canonLine::canonLine(std::string canonL, machineStatus prevStatus): status(prevStatus), myUnSolid(), myLine(canonL) {
+  //myUnSolid.Nullify();
   tokenize(); //splits myLine using delimiters
 }
 
@@ -64,15 +64,22 @@ void canonLine::setToolVecPtr(std::vector<tool> *t) {
 */
 
 
-///converts canonTokens[n] to double
-inline double canonLine::tok2d(uint n) {
+/** converts canonTokens[n] to double
+\param n this is the token to convert
+\returns token n, converted to double
+*/
+double canonLine::tok2d(uint n) {
   char * end;
   double d = strtod( canonTokens[n].c_str(), &end );
   assert ( *end == 0 );
   return d;
 }
 
-///converts canonTokens[n] to int
+/** converts canonTokens[n] to int
+\param n this is the token to convert
+\param offset skip this many chars at the beginning of the token
+\returns token n, converted to integer
+*/
 inline int canonLine::tok2i(uint n,uint offset) {
   char * end;
   int i = strtol( &canonTokens[n].c_str()[offset], &end, 10 );
@@ -88,8 +95,12 @@ const std::string canonLine::getCanonicalCommand() {
 //0 is canon line
 //1 is gcode Nnnnnn line
 //2 is canonical command
-///splits 'str' at any of 'delimiters' and puts the pieces in 'tokenV'
-///delimiters defaults to both parenthesis, comma, space.
+/** Splits a string using delimiters.
+\param str the string to be split
+\param tokenV a vector of strings, each of which is a piece of str
+\param delimiters defaults to: both parenthesis, comma, space
+\sa tokenize()
+*/
 void canonLine::tokenize(std::string str,
 			 std::vector<std::string>& tokenV,
 			 const std::string& delimiters) {
@@ -110,13 +121,9 @@ void canonLine::tokenize(std::string str,
 }
 
 ///tokenize myLine with the default delimiters `(), `
+///\sa tokenize(std::string str,std::vector<std::string>& tokenV,const std::string& delimiters)
 inline void canonLine::tokenize() {
   tokenize(myLine,canonTokens);
-}
-
-///return true if the canonical command for this line matches 'm'
-inline bool canonLine::clMatch(std::string m) {
-  return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
 }
 
 /**

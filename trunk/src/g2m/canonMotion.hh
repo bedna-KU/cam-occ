@@ -36,7 +36,11 @@ typedef enum { HELICAL, LINEAR, TRAVERSE } MOTION_TYPE;
 /**
 \class canonMotion
 \brief This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED.
-canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands
+canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands.
+
+Note, you may find variations in the terminology I use - I misremembered some of the canonical commands issued by the interpreter. For example, I thought it issued LINEAR_FEED but it's actually STRAIGHT_FEED. So the class linearMotion could have been named straightMotion.
+
+Also, rapid and traverse are used interchangeably, at least in my comments...
 */
 class canonMotion: protected canonLine {
   public:
@@ -47,7 +51,7 @@ class canonMotion: protected canonLine {
     const TopoDS_Solid& bruteForceSweep(); //sweep using brute force, i.e. fuse a solid many times
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
-    const TopoDS_Shape& mySolid;
+    TopoDS_Solid mySolid;
     //const TopoDS_Edge& edge; use myUnSolid
     gp_Ax1 getPoseFromCmd();
     bool sweepIsSuspect;

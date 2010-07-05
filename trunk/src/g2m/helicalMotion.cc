@@ -127,7 +127,7 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
   GeomAPI_ProjectPointOnSurf proj;
   int success = 0;
 
-  edge.Nullify();
+  //myUnSolid.Nullify();
   //cout << "Radius " << radius << "   Rot has the value " << rot << endl;
   proj.Init(start,cyl);
   if(proj.NbPoints() > 0) {
@@ -154,7 +154,7 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
    cout << "Couldn't create a helix from " << toString(start).toStdString() << " to " << toString(end).toStdString() << ". Replacing with a line." <<endl;
    */
     errors=true;
-    edge = BRepBuilderAPI_MakeEdge( start, end );
+    myUnSolid = BRepBuilderAPI_MakeEdge( start, end );
     return;
   }
 
@@ -170,7 +170,7 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
     //cout << "p2x now " << p2.X() << endl;
   }
   Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
-  edge = BRepBuilderAPI_MakeEdge(segment , cyl);
+  myUnSolid = BRepBuilderAPI_MakeEdge(segment , cyl);
 
   return;
 }
@@ -178,5 +178,5 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
 void helicalMotion::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
     Handle(Geom_TrimmedCurve) Tc;
     Tc = GC_MakeArcOfCircle ( start, startVec, end );
-    edge = BRepBuilderAPI_MakeEdge ( Tc );
+    myUnSolid = BRepBuilderAPI_MakeEdge ( Tc );
 }

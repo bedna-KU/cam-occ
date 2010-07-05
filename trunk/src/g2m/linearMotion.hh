@@ -27,6 +27,7 @@
 #include <limits.h>
 #include "canonMotion.hh"
 #include "machineStatus.hh"
+#include "tool.hh"
 
 /**
 \class linearMotion
@@ -38,7 +39,7 @@ class linearMotion: protected canonMotion {
   public:
     linearMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType();
-    const TopoDS_Solid& getSolid();
+    const TopoDS_Solid& getSolid() {return mySolid;};
 };
 
 #endif //LINEARMOTION_HH

@@ -46,10 +46,9 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (clMatch("CHANGE_TOOL")) {
     //for now, always assume it's ballnose. divide tool number by 16 to get diameter
     //i.e. tool 1 = 1/16" ball nose endmill, tool 24 = 1 1/2" ball nose endmill
-    //TODO: implement
-    //get tool number
-    toolNumber n = tok2i(
-    status.setTool(n);
+    //TODO: implement tool table stuff
+    //toolNumber n = tok2i(3);
+    status.setTool(tok2i(3));
     handled = false;
   } else if (clMatch("USE_TOOL_LENGTH_OFFSET")) {
     handled = false;

@@ -31,10 +31,11 @@ LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema \
 -lOccUio -lstdc++
 
-SOURCES += canon.cc canonMotion.cc g2m.cc linearMotion.cc tool.cc \
-canonLine.cc  canonMotionless.cc  helicalMotion.cc  machineStatus.cc dispShape.cc
+SOURCES += g2m.cc canon.cc canonLine.cc canonMotionless.cc canonMotion.cc \
+linearMotion.cc helicalMotion.cc tool.cc machineStatus.cc dispShape.cc
 
-HEADERS += canon.hh canonMotion.hh g2m.hh linearMotion.hh tool.hh canonLine.hh canonMotionless.hh helicalMotion.hh machineStatus.hh dispShape.hh
+HEADERS += g2m.hh canon.hh canonLine.hh canonMotionless.hh canonMotion.hh \
+linearMotion.hh helicalMotion.hh tool.hh machineStatus.hh dispShape.hh
 
 DESTDIR = ../../bin
 

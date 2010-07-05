@@ -37,7 +37,6 @@ class g2m: public QObject {
   Q_OBJECT;
   public:
     g2m();
-    ~g2m();
     void start (QString file);
     bool isOK() {return success;};
   public slots:

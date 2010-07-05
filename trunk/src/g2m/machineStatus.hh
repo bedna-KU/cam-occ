@@ -40,12 +40,16 @@ class machineStatus: protected canon {
     double F,S;  //feedrate, spindle speed
     SPINDLE_STATUS spindleStat;
     coolantStruct coolant;
-    toolNumber myTool;
-    static std::map<toolNumber, tool, std::less<toolNumber> > toolTable;
+    static millTool* theTool;
+//    toolNumber myTool;
+/*    / ** \var toolTable
+      for now, it is for millTool objs only
+    */
+    //static std::map<toolNumber, millTool, std::less<toolNumber> > toolTable;
     CANON_PLANE plane;
   public:
     machineStatus(machineStatus const& oldStatus);
-    machineStatus(gp_Ax1& start);
+    machineStatus(gp_Ax1 initial);
     void setPrevStatus(const machineStatus &oldStatus);
     void setEndPose(gp_Ax1 newPose) {endPose = newPose;};
     void setEndPose(gp_Pnt p);
@@ -53,7 +57,8 @@ class machineStatus: protected canon {
     void setSpindleSpeed(const double s) {S=s;};
     void setSpindleStatus(SPINDLE_STATUS s);
     void setCoolant(coolantStruct c) {coolant = c;};
-    void setTool(toolNumber n); //n is the tool to be used
+    //void setTool(toolNumber n); //n is the tool to be used
+    void setTool(uint n); //n is the size of the tool to be used. FIXME: implement tool table stuff
     void setPlane(CANON_PLANE p) {plane = p;};
     double getFeed() const {return F;};
     double getSpindleSpeed() const {return S;};
@@ -63,13 +68,9 @@ class machineStatus: protected canon {
     const gp_Ax1 getEndPose() {return endPose;};
     CANON_PLANE getPlane() const {return plane;};
     void clearAll(void);
+    millTool* getTool() {return theTool;};
+    //const millTool& getTool() {return toolTable.find(myTool)->second;};
   private:
     machineStatus();  //prevent use of this ctor by making it private
-
-    //TODO: choose one of these
-    //const tool* getTool() {return toolTable[myTool];};
-    //const toolNumber getTool() {return myTool;};
-
 };
-
 #endif //MACHINESTATUS_HH

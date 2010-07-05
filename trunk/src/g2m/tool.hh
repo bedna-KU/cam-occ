@@ -35,15 +35,14 @@
 typedef enum {ROTARY_TOOL,TURNING_TOOL, UNDEFINED} TOOLTYPE;
 class tool {
   public:
-    const TopoDS_Face& getProfile() const {assert (valid);return profile;};
+    const TopoDS_Face& getProfile() const {assert (validProfile);return profile;};
     TOOLTYPE getType() const {return type;};
-    bool isValid() const {return valid;};
+    bool isValid() const {return validProfile;};
   protected:
     tool();
-    //bool isRotaryTool;
-    bool valid; //TODO: what is this? valid wire? valid solid? input sanity check? or ???
+    bool validProfile;
     bool bruteForceOnly; //for creating solid. FIXME:would it make more sense in another class?
-    const TopoDS_Face& profile;
+    TopoDS_Face profile;
     TOOLTYPE type;
 };
 
@@ -53,7 +52,7 @@ class tool {
 It must be possible to create both a 2d and a 3d representation of one of these tools
 */
 typedef enum { BALLNOSE, CYLINDRICAL, TOROIDAL, ENGRAVING, TAPERED, OTHER, UNDEF } SHAPE_TYPE;
-class millTool: protected tool {
+class millTool: public tool {
   public:
     //getProfile() = 0;
     SHAPE_TYPE getShape() const {return shape;};
@@ -63,15 +62,16 @@ class millTool: protected tool {
     millTool();
     SHAPE_TYPE shape;
     double dia,len; //diameter, length
-    const TopoDS_Solid& revol;
+    bool validRev; //true if the revolution is valid
+    TopoDS_Solid& revol;
 };
 
 /**
 \class aptTool
 \brief This class is for the generic APT-style milling tool.
-This class is not complete.
+FIXME This class is not complete!
 */
-class aptTool: protected millTool {
+class aptTool: public millTool {
   public:
     aptTool(double dd,double aa,double bb,
 	    degrees AA,degrees BB, double ll);
@@ -85,8 +85,9 @@ class aptTool: protected millTool {
 \brief This class is for the ballnose tool.
 It was created first because the ballnose tool is easy.
 */
-class ballnoseTool: protected millTool {
-  ballnoseTool(double diameter, double length);
+class ballnoseTool: public millTool {
+  public:
+    ballnoseTool(double diameter, double length);
 };
 
 /**
@@ -95,6 +96,8 @@ class ballnoseTool: protected millTool {
 This class is incomplete. Furthermore, at this time g2m only supports milling.
 */
 class latheTool: public tool {
+  public:
+    latheTool();
 };
 
 #endif //TOOL_HH

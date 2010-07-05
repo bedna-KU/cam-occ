@@ -17,13 +17,19 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include "linearMotion.hh"
 
 #include <string>
+#include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
-#include "linearMotion.hh"
+#include <BRepBuilderAPI_Transform.hxx>
+#include <BRepOffsetAPI_MakePipeShell.hxx>
+#include <BRepBuilderAPI_PipeError.hxx>
+#include <TopoDS.hxx>
 #include "machineStatus.hh"
 #include "canonMotion.hh"
 #include "canonLine.hh"
+#include "uio.hh"
 
 linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
   gp_Pnt a,b;
@@ -31,7 +37,7 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
   b = status.getEndPose().Location();
   //TODO: add support for 5 or 6 axis motion
 
-  myUnSolid = BRepBuilderAPI_MakeEdge(a,b);
+  myUnSolid = BRepBuilderAPI_MakeEdge(a,b).Edge();
 
   //check if the swept shape will be accurate
   //use the ratio of rise or fall to distance
@@ -41,8 +47,8 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
     sweepIsSuspect = true;
   }
 
-  BRepOffsetAPI_MakePipeShell pipe(myUnSolid);
-    pipe.Add(status.getToolProfile(),false,true);
+  BRepOffsetAPI_MakePipeShell pipe(TopoDS::Wire(myUnSolid));
+    pipe.Add(status.getTool()->getProfile(),false,true);
     //pipe.Add(tool2d,false,true);
     pipe.SetTransitionMode(BRepBuilderAPI_RoundCorner); //there shouldn't be any discontinuities, but we'll set this anyway
     pipe.SetMode(gp_Dir(0,0,1)); //binormal to vector 0,0,1 - profile can only rotate about Z now
@@ -52,44 +58,56 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
         BRepBuilderAPI_PipeError error = pipe.GetStatus();
         switch (error) {
           case BRepBuilderAPI_PipeNotDone:
-            infoMsg("Pipe not done");
+            uio::infoMsg("Pipe not done");
             errors = true;
             break;
           case BRepBuilderAPI_PlaneNotIntersectGuide:
-            infoMsg("Pipe not intersect guide");
+            uio::infoMsg("Pipe not intersect guide");
             errors = true;
             break;
           case BRepBuilderAPI_ImpossibleContact:
-            infoMsg("Pipe impossible contact");
+            uio::infoMsg("Pipe impossible contact");
             errors = true;
             break;
           case BRepBuilderAPI_PipeDone:
             //ready = true;
             break;
          default:
-            infoMsg("Pipe switch default?!");
+            uio::infoMsg("Pipe switch default?!");
             errors = true;
         }
     }
     if (!errors) {
-        mySolid = pipe.Shape();
+      //FIXME: each canonMotion obj should check if its startpoint is colinear with the endpoint of the previous object. If not, it should add a 3d model of the tool there.
+
+      //for now, we'll add one at each end of every obj.
+      //gp_Vec sv = status.getStartVector();
+      //gp_Vec ev = prevStatus.getEndVector();
+      //BRepBuilderAPI_Transform
+      //BRepBuilderAPI_GTransform
+
+//      mySolid = pipe.Shape();
+      //TopoDS_Solid& tl = status.getTool()->getRevol();
+      gp_Trsf tr; //FIXME must be initialized
+
+      mySolid = TopoDS::Solid(BRepAlgoAPI_Fuse(pipe.Shape(),BRepBuilderAPI_Transform (status.getTool()->getRevol(),tr) ));
     }else {
-        //infoMsg("pipe not ready!");
-        mySolid = tool2d;
+      //infoMsg("pipe not ready!");
+      mySolid = status.getTool()->getRevol();
     }
 
 }
 
 //need to return RAPID for rapids...
 MOTION_TYPE linearMotion::getMotionType() {
-  static bool rapid = clMatch("STRAIGHT_TRAVERSE");
-  if (rapid) {
-    return RAPID;
-  } else if clMatch("STRAIGHT_FEED") {
+  static bool traverse = clMatch("STRAIGHT_TRAVERSE");
+  if (traverse) {
+    return TRAVERSE;
+  } else if (clMatch("STRAIGHT_FEED")) {
     return LINEAR;
   } else {
-    string err = "linearMotion::getMotionType failed on canonLine:\n" + myLine + "\n\nExiting.";
-    infoMsg(err);
+    std::string err = "linearMotion::getMotionType failed on canonLine:\n" + myLine + "\n\nExiting.";
+    uio::infoMsg(err);
     exit(1);
   }
 }

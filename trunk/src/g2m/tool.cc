@@ -23,32 +23,36 @@
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <Handle_Geom_TrimmedCurve.hxx>
+#include <Handle_HLRBRep_Algo.hxx>
+#include <HLRBRep_Algo.hxx>
+#include <HLRBRep_HLRToShape.hxx>
 #include <GC_MakeArcOfCircle.hxx>
+#include <Prs3d_Projector.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Wire.hxx>
 //tool.cc - functions in classes tool, millTool, etc
 
-tool::tool() {
-  valid = false;
+tool::tool()/*: profile()*/ {
+  validProfile = false;
   profile.Nullify();
   type = UNDEFINED;
 }
 
-millTool::millTool() {
+millTool::millTool(): revol() {
   shape = UNDEF;
   type = ROTARY_TOOL;
-  d=0.0;
-  l=0.0;
-  revol.Nullify();
+  dia=0.0;
+  len=0.0;
+  //revol.Nullify();
 }
 
 const TopoDS_Solid& millTool::getRevol() {
   if (revol.IsNull()) {
     gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1));
     BRepPrimAPI_MakeRevol rev(profile,vertical,M_PI,true);
-    valid = rev.IsDone();
-    if (valid)
+    validRev = rev.IsDone();
+    if (validRev)
       revol = TopoDS::Solid( rev.Shape() );
   }
   return revol;
@@ -67,9 +71,9 @@ Some code from http://www.opencascade.org/org/forum/thread_16928/
 //Prs3d_Projector (const Standard_Boolean Pers, const Quantity_Length Focus, const Quantity_Length DX, const Quantity_Length DY, const Quantity_Length DZ, const Quantity_Length XAt, const Quantity_Length YAt, const Quantity_Length ZAt, const Quantity_Length XUp, const Quantity_Length YUp, const Quantity_Length ZUp)
 const TopoDS_Face& millTool::getProj(degrees deg) {
   double zloc = 5; //zloc is z coordinate of projection
-  Handle(HLRBRep_Algo)myAlgo = new HLRBRep_Algo();
+  Handle(HLRBRep_Algo) myAlgo = new HLRBRep_Algo();
   myAlgo->Add(profile);
-  Prs3d_Projector myProj(false,0, 0,0,zloc, 0,0,1, 0,0,1); point
+  Prs3d_Projector myProj(false,0, 0,0,zloc, 0,0,1, 0,0,1); //point
   myAlgo->Projector(myProj.Projector());
   myAlgo->Update();
   HLRBRep_HLRToShape aHLRToShape(myAlgo);
@@ -81,21 +85,21 @@ const TopoDS_Face& millTool::getProj(degrees deg) {
 
 ballnoseTool::ballnoseTool(double diameter, double length) {
   double r = diameter/2.0;
-  valid = false;
+  validProfile = false;
   Handle(Geom_TrimmedCurve) Tc;
   Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(0,0,0), gp_Pnt(-r,0,r));
-  TopoDS_Edge& Ec = BRepBuilderAPI_MakeEdge(Tc);
-  TopoDS_Edge& E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,length));
-  TopoDS_Edge& E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,r), gp_Pnt(-r,0,length));
-  TopoDS_Edge& E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
+  TopoDS_Edge Ec = BRepBuilderAPI_MakeEdge(Tc);
+  TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,length));
+  TopoDS_Edge E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,r), gp_Pnt(-r,0,length));
+  TopoDS_Edge E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
   BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
   if ( wm.IsDone() ) {
-    TopoDS_Wire& w = wm.Wire();
+    TopoDS_Wire w = wm.Wire();
     if ( w.Closed() ) {
       BRepBuilderAPI_MakeFace f(w);
       if (f.IsDone()) {
 	profile = f.Face();
-	valid = true;
+	validProfile = true;
 	shape = BALLNOSE;
       }
     }
