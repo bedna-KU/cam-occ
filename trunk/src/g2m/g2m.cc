@@ -62,12 +62,15 @@ void g2m::slotModelFromFile()
   //cleanUp();
   uio::hideGrid();
   uio::axoView();
-
+  uio::window()->showNormal(); //for debugging, have a small window
+/* commented out for debugging
   file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
   if ( ! file.endsWith(".ngc") ) {
     uio::infoMsg("You must select a file ending with .ngc!");
     return;
   }
+*/
+
   //interpret();
  //TODO: process each line, display
  //use dispShape here? or inside the canonLine obj? hrm...
@@ -84,6 +87,7 @@ void g2m::slotModelFromFile()
   fitAll();
 }
 */
+  processCanonLine("   11 N0001  CHANGE_TOOL(1)");
   processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
   processCanonLine("   14 N0003  SET_FEED_RATE(20.0000)");
   processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");

@@ -39,18 +39,19 @@ tool::tool()/*: profile()*/ {
   type = UNDEFINED;
 }
 
-millTool::millTool(): revol() {
+millTool::millTool() {
   shape = UNDEF;
   type = ROTARY_TOOL;
   dia=0.0;
   len=0.0;
-  //revol.Nullify();
+  revol.Nullify();
 }
 
 const TopoDS_Solid& millTool::getRevol() {
   if (revol.IsNull()) {
     gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1));
-    BRepPrimAPI_MakeRevol rev(profile,vertical,M_PI,true);
+    BRepBuilderAPI_MakeFace mkF(profile);
+    BRepPrimAPI_MakeRevol rev(mkF.Face(),vertical,M_PI,true);
     validRev = rev.IsDone();
     if (validRev)
       revol = TopoDS::Solid( rev.Shape() );
@@ -94,6 +95,10 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
   TopoDS_Edge E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
   BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
   if ( wm.IsDone() ) {
+    profile = wm.Wire();
+    validProfile = true;
+    shape = BALLNOSE;
+    /*
     TopoDS_Wire w = wm.Wire();
     if ( w.Closed() ) {
       BRepBuilderAPI_MakeFace f(w);
@@ -103,6 +108,7 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
 	shape = BALLNOSE;
       }
     }
+    */
   }
 }
 

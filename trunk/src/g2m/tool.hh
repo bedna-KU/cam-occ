@@ -24,6 +24,7 @@
 #include <limits.h>
 
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Wire.hxx>
 #include <TopoDS_Solid.hxx>
 
 #include "canon.hh"
@@ -35,14 +36,14 @@
 typedef enum {ROTARY_TOOL,TURNING_TOOL, UNDEFINED} TOOLTYPE;
 class tool {
   public:
-    const TopoDS_Face& getProfile() const {assert (validProfile);return profile;};
+    const TopoDS_Wire& getProfile() const {assert (validProfile);return profile;};
     TOOLTYPE getType() const {return type;};
     bool isValid() const {return validProfile;};
   protected:
     tool();
     bool validProfile;
     bool bruteForceOnly; //for creating solid. FIXME:would it make more sense in another class?
-    TopoDS_Face profile;
+    TopoDS_Wire profile;
     TOOLTYPE type;
 };
 
@@ -63,7 +64,7 @@ class millTool: public tool {
     SHAPE_TYPE shape;
     double dia,len; //diameter, length
     bool validRev; //true if the revolution is valid
-    TopoDS_Solid& revol;
+    TopoDS_Solid revol;
 };
 
 /**
