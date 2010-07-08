@@ -32,10 +32,10 @@ LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lOccUio -lstdc++
 
 SOURCES += g2m.cc canon.cc canonLine.cc canonMotionless.cc canonMotion.cc \
-linearMotion.cc helicalMotion.cc tool.cc machineStatus.cc dispShape.cc
+linearMotion.cc helicalMotion.cc tool.cc machineStatus.cc
 
 HEADERS += g2m.hh canon.hh canonLine.hh canonMotionless.hh canonMotion.hh \
-linearMotion.hh helicalMotion.hh tool.hh machineStatus.hh dispShape.hh
+linearMotion.hh helicalMotion.hh tool.hh machineStatus.hh
 
 DESTDIR = ../../bin
 

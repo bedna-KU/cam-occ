@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <iostream>
-
+#include <cmath>
 
 #include <QProcess>
 #include <QStringList>
@@ -32,6 +32,22 @@
 #include "g2m.hh"
 #include "uio.hh"
 #include "canonLine.hh"
+
+#include <Handle_Geom_TrimmedCurve.hxx>
+#include <GC_MakeArcOfCircle.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepPrimAPI_MakeRevol.hxx>
+#include <BRepPrimAPI_MakeBox.hxx>
+#include <BRepPrimAPI_MakeSphere.hxx>
+#include <BRepAlgoAPI_Cut.hxx>
+#include <TopoDS.hxx>
+#include <gp_Pln.hxx>
+#include <TopoDS_Edge.hxx>
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
+#include "dispShape.hh"
 
 g2m::g2m() {
   //cout << "g2m ctor" << endl;
@@ -54,15 +70,54 @@ g2m::g2m() {
 
   uio::mb()->insertMenu(uio::hm(),myMenu);
   //cout << "g2m ctor end" << endl;
+  test();
 }
 
-void g2m::slotModelFromFile()
-{
+void g2m::test() {
+  uio::hideGrid();
+  uio::axoView();
+  double r = .25;
+  double len = 3;
+
+  //build half
+  Handle(Geom_TrimmedCurve) Tc;
+  double rsqrt = r / sqrt(2.0); //for midpoint of circle
+  Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(rsqrt,0,r-rsqrt), gp_Pnt(0,0,0));
+  TopoDS_Edge Ec = BRepBuilderAPI_MakeEdge(Tc);
+  TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,len));
+  TopoDS_Edge E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(0,0,0), gp_Pnt(0,0,len));
+  TopoDS_Edge E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(0,0,len), gp_Pnt(r,0,len));
+  BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
+
+  BRepBuilderAPI_MakeFace mkF(gp_Pln(gp::XOY()),wm.Wire());
+  BRepPrimAPI_MakeRevol rev(mkF.Face(),gp::OZ(),M_PI*2.0,true);
+
+  TopoDS_Solid t,c,s;
+  t = TopoDS::Solid(rev.Shape());
+  //s = TopoDS::Solid(BRepPrimAPI_MakeBox(gp_Pnt(-1,-1,-1),gp_Pnt(1,1,1)).Solid());
+  s = TopoDS::Solid(BRepPrimAPI_MakeSphere(gp_Pnt(0,0,r),r).Solid());
+  //c = TopoDS::Solid(BRepAlgoAPI_Cut(s,t));
+
+  GProp_GProps System;
+  BRepGProp::VolumeProperties ( t,System );
+  cout << "Mass " << System.Mass() << endl;
+
+  //if (rev.IsDone()) {
+    dispShape ds(t);
+    ds.display();
+  //} else {
+//    dispShape ds(wm.Wire());
+//    ds.display();
+//  }
+  uio::fitAll();
+}
+
+void g2m::slotModelFromFile() {
   //bool success;
   //cleanUp();
   uio::hideGrid();
   uio::axoView();
-  uio::window()->showNormal(); //for debugging, have a small window
+  //uio::window()->showNormal(); //for debugging, have a small window
 /* commented out for debugging
   file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
   if ( ! file.endsWith(".ngc") ) {
@@ -88,15 +143,16 @@ void g2m::slotModelFromFile()
 }
 */
   processCanonLine("   11 N0001  CHANGE_TOOL(1)");
-  processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
+ // processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
   processCanonLine("   14 N0003  SET_FEED_RATE(20.0000)");
   processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
-  processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
+/**  processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
   processCanonLine("   17 N0004  ARC_FEED(1.0000, 0.0000, 0.0000, 0.0000, -1, 0.0000)");
   processCanonLine("   18 N0005  COMMENT(\"----go to X1.0, Y0.0 at a feed rate of 20 inches/minute\")");
   processCanonLine("   19 N0005  SET_FEED_RATE(20.0000)");
   processCanonLine("   20 N0005  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
   //now do something with these...
+  */
 
 }
 
@@ -169,7 +225,7 @@ bool g2m::processCanonLine (std::string l) {
     cl = canonLine::canonLineFactory (l,machineStatus(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1))));
     first = false;
   } else {
-    cl = canonLine::canonLineFactory (l,*lineVector.back()->getStatus());
+    cl = canonLine::canonLineFactory (l,*(lineVector.back())->getStatus());
   }
   //store it
   lineVector.push_back(cl);

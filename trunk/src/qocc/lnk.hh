@@ -1,8 +1,8 @@
 
 /*
 ** had to rename to lnk because something else must define link:
-**    qoccharnesswindow.cpp:55: warning: 
-**    statement is a reference, not call, to function ‘link’ 
+**    qoccharnesswindow.cpp:55: warning:
+**    statement is a reference, not call, to function ‘link’
 ** must be a name collision - renaming makes it go away
 */
 
@@ -29,7 +29,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "../qocc/qoccharnesswindow.h"
+#include "qoccharnesswindow.h"
 
 class QoccHarnessWindow;
 
@@ -43,7 +43,6 @@ class lnk : public QObject {
   Q_OBJECT;
   public:
     lnk(QoccHarnessWindow *w);
-    ~lnk();
 };
 
 #endif //LNK_HH

@@ -1,3 +1,6 @@
+#ifndef TST_HH
+#define TST_HH
+
 /***************************************************************************
  *   Copyright (C) 2010 by Mark Pictor                                     *
  *   mpictor@gmail.com                                                     *
@@ -17,32 +20,17 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include <QObject>
+#include <TopoDS_Wire.hxx>
 
-#ifndef DISPSHAPE_HH
-#define DISPSHAPE_HH
-
-#include <limits.h>
-
-#include <AIS_Shape.hxx>
-#include <AIS_DisplayMode.hxx>
-#include <Graphic3d_NameOfMaterial.hxx>
-#include <Handle_AIS_Shape.hxx>
-#include <TopoDS_Shape.hxx>
-/**
-\class dispShape
-\brief Stores shapes to be displayed, as well as data for how to display them.
-*/
-class dispShape {
+class tst: public QObject {
+  Q_OBJECT;
   public:
-    dispShape (const TopoDS_Shape& s, const int lineNbr, const Graphic3d_NameOfMaterial nom = Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode = AIS_Shaded);
-    void display();
-  private:
-    Handle(AIS_Shape) s;
-    Graphic3d_NameOfMaterial NoM;
-    AIS_DisplayMode dMode;
-    int canLine; //store the line number
-};
+    tst();
+  public slots:
+    void slotTest1();
+  protected:
+    TopoDS_Wire halfProf();
 
-
-
-#endif //DISPSHAPE_HH
+}
+#endif //TST_HH

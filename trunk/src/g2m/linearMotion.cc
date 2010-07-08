@@ -32,6 +32,7 @@
 #include "canonMotion.hh"
 #include "canonLine.hh"
 #include "uio.hh"
+#include "dispShape.hh"
 
 linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
   gp_Pnt a,b;
@@ -101,15 +102,26 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
     gp_Pnt a(0,0,0),b;
     b=status.getStartPose().Location();
     tr.SetTranslation(a,b);
+    TopoDS_Shape r = BRepBuilderAPI_Transform (status.getTool()->getRevol(),tr);
 
-    TopoDS_Shape temp = BRepAlgoAPI_Fuse(pipe.Shape(),BRepBuilderAPI_Transform (status.getTool()->getRevol(),tr) );
 
-    b=status.getEndPose().Location();
-    tr.SetTranslation(a,b);
-    mySolid = TopoDS::Solid(BRepAlgoAPI_Fuse(temp,BRepBuilderAPI_Transform (status.getTool()->getRevol(),tr) ));
+    dispShape dr(r,5);
+    dr.display();
+    /*
+    dispShape dp(pipe.Shape(),5);
+    dp.display();
+    */
+    uio::fitAll();
+    uio::infoMsg("done");
+
+    ///TopoDS_Shape temp = BRepAlgoAPI_Fuse(pipe.Shape(), r ); //hangs here
+
+    ///b=status.getEndPose().Location();
+    ///tr.SetTranslation(a,b);
+    ///mySolid = TopoDS::Solid(BRepAlgoAPI_Fuse(temp,BRepBuilderAPI_Transform (status.getTool()->getRevol(),tr) ));
 
     //mySolid = TopoDS::Solid(pipe.Shape());
-  }else {
+  ///}else {
     //infoMsg("pipe not ready!");
     mySolid = status.getTool()->getRevol();
   }

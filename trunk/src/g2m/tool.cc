@@ -27,6 +27,7 @@
 #include <HLRBRep_Algo.hxx>
 #include <HLRBRep_HLRToShape.hxx>
 #include <GC_MakeArcOfCircle.hxx>
+#include <gp_Pln.hxx>
 #include <Prs3d_Projector.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
@@ -49,9 +50,9 @@ millTool::millTool() {
 
 const TopoDS_Solid& millTool::getRevol() {
   if (revol.IsNull()) {
-    gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1));
-    BRepBuilderAPI_MakeFace mkF(profile);
-    BRepPrimAPI_MakeRevol rev(mkF.Face(),vertical,M_PI,true);
+    //gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1)); //use gp::OZ() instead
+    BRepBuilderAPI_MakeFace mkF(gp_Pln(gp::XOY()),profile);
+    BRepPrimAPI_MakeRevol rev(mkF.Face(),gp::OZ(),M_PI,true);
     validRev = rev.IsDone();
     if (validRev)
       revol = TopoDS::Solid( rev.Shape() );
@@ -63,6 +64,7 @@ const TopoDS_Solid& millTool::getRevol() {
 /**
 Projects the 3d model of the tool onto a plane normal to XY.
 Some code from http://www.opencascade.org/org/forum/thread_16928/
+TODO: use param degrees
 \param deg Projection angle, in degrees. Sign is ignored.
 \return the projection as a TopoDS_Face.
 \sa getProfile(), getRevol()
@@ -85,7 +87,9 @@ const TopoDS_Face& millTool::getProj(degrees deg) {
 //aptTool::aptTool() {}
 
 ballnoseTool::ballnoseTool(double diameter, double length) {
-  double r = diameter/2.0;
+  dia = diameter;
+  len = length;
+  double r = dia/2.0;
   validProfile = false;
   Handle(Geom_TrimmedCurve) Tc;
   Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(0,0,0), gp_Pnt(-r,0,r));

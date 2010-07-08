@@ -32,6 +32,15 @@
 #include <AIS_Trihedron.hxx>
 #include <V3d_View.hxx>
 
+/**
+QShortcuts in use:
+qtocc: NOSPBX ZYXCV FARGD
+free: AEHIJKLMQRTUW
+
+me:
+M-g2m
+
+*/
 
 //initialize static variables
 QoccHarnessWindow* uio::windowPtr = 0;
@@ -46,7 +55,6 @@ int uio::errors = 0;
 
 
 uio::uio(QoccHarnessWindow* window) {
-  cout << "uio ctor" << endl;
 
   windowPtr = window;
   viewPtr = window->getView();
@@ -55,45 +63,44 @@ uio::uio(QoccHarnessWindow* window) {
   vcPtr = window->getVC();
   mbPtr = window->menuBar();
   hmPtr = window->getHelpMenu();
-  
+
   initUI();
-  cout << "uio ctor end" << endl;
 }
 
 void uio::initUI() {
-  
+
   slotNeutralSelection();
 
   QMenu *selectMenu;
   selectMenu = new QMenu("&Select");
   mbPtr->insertMenu(hmPtr,selectMenu);  //put this menu BEFORE the help menu
   //	mbPtr->addMenu(selectMenu);
-  
+
   QAction *selectNeutralAction;
   selectNeutralAction = new QAction("Neutral", this);
   //selectNeutralAction->setShortcut(QString("Ctrl+N"));
   selectNeutralAction->setStatusTip("Select Nothing");
   connect(selectNeutralAction, SIGNAL(triggered()), this, SLOT(slotNeutralSelection()));
   selectMenu->addAction( selectNeutralAction );
-  
+
   QAction *selectVertexAction;
   selectVertexAction = new QAction("Vertex", this);
   selectVertexAction->setStatusTip("Select Vertices");
   connect(selectVertexAction, SIGNAL(triggered()), this, SLOT(slotVertexSelection()));
   selectMenu->addAction( selectVertexAction );
-  
+
   QAction *selectEdgeAction;
   selectEdgeAction = new QAction("Edge", this);
   selectEdgeAction->setStatusTip("Select Edges");
   connect(selectEdgeAction, SIGNAL(triggered()), this, SLOT(slotEdgeSelection()));
   selectMenu->addAction( selectEdgeAction );
-  
+
   QAction *selectFaceAction;
   selectFaceAction = new QAction("Face", this);
   selectFaceAction->setStatusTip("Select Faces");
   connect(selectFaceAction, SIGNAL(triggered()), this, SLOT(slotFaceSelection()));
   selectMenu->addAction( selectFaceAction );
-  
+
   QAction *selectSolidAction;
   selectSolidAction = new QAction("Solid", this);
   selectSolidAction->setStatusTip("Select Solids");
@@ -157,7 +164,7 @@ void uio::longMsg( QString message ) {
   //dlg.textBrowser->setText(message);
   //   	dlg.setupUi(dialog);
   //	dialog->show();
-  
+
   QMessageBox msg(windowPtr);
   msg.setIcon(QMessageBox::Information);
   msg.addButton("OK",QMessageBox::AcceptRole);
@@ -167,7 +174,7 @@ void uio::longMsg( QString message ) {
   msg.adjustSize();
   msg.exec();
   //msg.show();
-  
+
 }
 */
 

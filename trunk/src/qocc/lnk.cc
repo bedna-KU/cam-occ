@@ -21,21 +21,18 @@
 #include "lnk.hh"
 #include "../uio/uio.hh"
 #include "../g2m/g2m.hh"
-#include <qoccharnesswindow.h>
+#include "../uio/tst.hh"
+//#include <qoccharnesswindow.h>
 
 
 lnk::lnk(QoccHarnessWindow* w) {
-  cout << "lnk ctor" << endl;
-
   uio* user;
   g2m* g2model;
+  tst* mytst;
 
   user = new uio(w); //MUST be initialized before all classes that use uio!
   g2model = new g2m();
+  mytst = new tst();
   //cam myCam();
   //misc myMisc(); // this will be all the stuff that's now "cam"
-  cout << "lnk ctor end" << endl;
-}
-
-lnk::~lnk() {
 }
