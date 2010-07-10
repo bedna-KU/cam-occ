@@ -1,5 +1,5 @@
 //class uio, i.e. user i/o
-//contains functions that were in uiStuff 
+//contains functions that were in uiStuff
 #ifndef UIO_HH
 #define UIO_HH
 
@@ -26,6 +26,7 @@
 #include <limits.h>
 #include <vector>
 #include <string>
+#include <sstream>
 
 #include <TopoDS_Shape.hxx>
 #include <gp_Pnt.hxx>
@@ -47,13 +48,13 @@
 	This class replaces uiStuff. It contains similar functions, as well as
 	pointers to commonly-referenced objects in qocc. There is no need to
 	inherit from this class to be able to use it's functions, unlike uiStuff.
-	However, it is necessary for the ctor to be called before using any of 
+	However, it is necessary for the ctor to be called before using any of
 	the functions in the class!
 
 	uio creates and populates the Select menu.
-	
+
 	TODO: add logging functionality from dr dobbs example
-	
+
 \author Mark Pictor
 */
 class QoccHarnessWindow;
@@ -93,6 +94,8 @@ class uio : public QObject {
     static void hideGrid();
     static void fitAll();
     static void axoView();
+    ///stringify is from http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1
+    static inline std::string stringify(double x){std::ostringstream o; o<<x; return o.str();};
   public slots:
     static void slotNeutralSelection();
     static void slotVertexSelection();

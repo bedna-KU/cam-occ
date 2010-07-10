@@ -70,7 +70,7 @@ g2m::g2m() {
 
   uio::mb()->insertMenu(uio::hm(),myMenu);
   //cout << "g2m ctor end" << endl;
-  test();
+  //test();
 }
 
 void g2m::test() {

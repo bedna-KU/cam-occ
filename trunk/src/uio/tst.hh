@@ -20,8 +20,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include <limits.h> //included to fix errors compiling MOC stuff
+
 #include <QObject>
 #include <TopoDS_Wire.hxx>
+#include <TopoDS_Solid.hxx>
+#include <TopoDS_Face.hxx>
+
+
 
 class tst: public QObject {
   Q_OBJECT;
@@ -31,6 +37,9 @@ class tst: public QObject {
     void slotTest1();
   protected:
     TopoDS_Wire halfProf();
+    TopoDS_Shape ballnose(double len, double dia);
+    TopoDS_Shape getProj(TopoDS_Shape t, double deg=0);
+    double mass(TopoDS_Shape m);
 
-}
+};
 #endif //TST_HH
