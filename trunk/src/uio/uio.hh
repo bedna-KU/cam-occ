@@ -94,6 +94,8 @@ class uio : public QObject {
     static void hideGrid();
     static void fitAll();
     static void axoView();
+    static void sleep(uint n = 1,bool usrEv = false);
+
     ///stringify is from http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1
     static inline std::string stringify(double x){std::ostringstream o; o<<x; return o.str();};
   public slots:

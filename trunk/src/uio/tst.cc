@@ -40,7 +40,7 @@
 #include <Handle_HLRBRep_Algo.hxx>
 #include <HLRBRep_Algo.hxx>
 #include <HLRBRep_HLRToShape.hxx>
-#include <Prs3d_Projector.hxx>
+#include <HLRAlgo_Projector.hxx>
 #include <gp_Pln.hxx>
 #include <TopoDS_Edge.hxx>
 #include <GProp_GProps.hxx>
@@ -60,17 +60,22 @@ tst::tst() {
 
 void tst::slotTest1() {
   uio::hideGrid();
-  uio::axoView();
+  //uio::axoView();
 
   TopoDS_Shape b,p;
   b = ballnose(3.0,.5);
-  p = getProj(b);
+  p = getProj(b,gp_Dir(0,sqrt(2),sqrt(2)));
 
   //std::string s = "Mass: ";
   //s += uio::stringify(mass(b));
   //uio::infoMsg(s);
   dispShape ds(p);
   ds.display();
+  uio::axoView();
+  uio::fitAll();
+  uio::sleep(1);
+  dispShape dt(b);
+  dt.display();
   uio::fitAll();
 }
 
@@ -86,20 +91,37 @@ TopoDS_Shape tst::ballnose(double len, double dia) {
   return tool;
 }
 
-//use degrees in a trsf, applied to t
-TopoDS_Shape tst::getProj(TopoDS_Shape t, double deg) {
-//  double zloc = 1; //zloc is z coordinate of projection
-  //gp_Vec projDir(0,1,0), upDir(0,0,1);
-  //gp_Pnt viewpnt(0,0,1);
-
+/** Compute the silhouette of a tool
+FIXME: incomplete
+\param t the shape
+\param dir the direction. <b>Must</b> be normal to the x-axis.
+\return the silhouette
+*/
+TopoDS_Shape tst::getProj(TopoDS_Shape t, gp_Dir dir) {
+  gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
+  gp_Dir xDir(1,0,0);
+  gp_Trsf pTrsf;
+  pTrsf.SetTransformation(gp_Ax3(viewpnt,dir,xDir));
   Handle(HLRBRep_Algo) myAlgo = new HLRBRep_Algo();
   myAlgo->Add(t);
-  Prs3d_Projector myProj(false,5, 0,1,0, 0,10,0, 0,0,1);
-  myAlgo->Projector(myProj.Projector());
+  myAlgo->Projector(HLRAlgo_Projector (pTrsf,false,0));
   myAlgo->Update();
   HLRBRep_HLRToShape aHLRToShape(myAlgo);
-  TopoDS_Shape Proj = aHLRToShape.VCompound();
-  return Proj;
+
+  //TODO: join the correct compounds together, remove all internal edges, and transform the result to be perpendicular to dir
+  //looks like we only need OutlineVCompound and VCompound but there are many others
+
+  //TopoDS_Shape Proj = aHLRToShape.VCompound();
+  //TopoDS_Shape Proj = BRepAlgoAPI_Fuse( aHLRToShape.OutLineVCompound(),
+  //                                      aHLRToShape.VCompound());
+  //                                      aHLRToShape.OutLineHCompound());
+  dispShape ds(aHLRToShape.OutLineVCompound());
+  ds.display();
+  uio::fitAll();
+  uio::axoView();
+  uio::sleep(1,true);
+  return aHLRToShape.VCompound();
+  //return aHLRToShape.OutLineVCompound();
 }
 double tst::mass(TopoDS_Shape s) {
   double m;

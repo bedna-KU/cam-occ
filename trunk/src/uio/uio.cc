@@ -1,27 +1,29 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Mark Pictor                                     *
- *   mpictor@gmail.com                                                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+*   Copyright (C) 2010 by Mark Pictor                                     *
+*   mpictor@gmail.com                                                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************/
 
 #include "uio.hh"
 #include <string>
 
 #include <QMenu>
+#include <QTime>
+#include <QCoreApplication>
 #include <QAction>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -39,7 +41,7 @@ free: AEHIJKLMQRTUW
 
 me:
 M-g2m
-
+L-tst
 */
 
 //initialize static variables
@@ -157,32 +159,26 @@ void uio::infoMsg( std::string message ) {
 
 /*
 void uio::longMsg( QString message ) {
-  //	QWidget *dialog = new QWidget;
-  //     	Ui::longMsgDlg dlg;
-  //	connect(this, SIGNAL(theLongMsg(QString)), dlg.textBrowser, SLOT(setText(QString)));
-  //	emit(theLongMsg(message));
-  //dlg.textBrowser->setText(message);
-  //   	dlg.setupUi(dialog);
-  //	dialog->show();
+ //	QWidget *dialog = new QWidget;
+ //     	Ui::longMsgDlg dlg;
+ //	connect(this, SIGNAL(theLongMsg(QString)), dlg.textBrowser, SLOT(setText(QString)));
+ //	emit(theLongMsg(message));
+ //dlg.textBrowser->setText(message);
+ //   	dlg.setupUi(dialog);
+ //	dialog->show();
 
-  QMessageBox msg(windowPtr);
-  msg.setIcon(QMessageBox::Information);
-  msg.addButton("OK",QMessageBox::AcceptRole);
-  msg.setText(message);
-  msg.setTextFormat(Qt::RichText);
-  msg.setWindowTitle("Cam-occ2");
-  msg.adjustSize();
-  msg.exec();
-  //msg.show();
+ QMessageBox msg(windowPtr);
+ msg.setIcon(QMessageBox::Information);
+ msg.addButton("OK",QMessageBox::AcceptRole);
+ msg.setText(message);
+ msg.setTextFormat(Qt::RichText);
+ msg.setWindowTitle("Cam-occ2");
+ msg.adjustSize();
+ msg.exec();
+ //msg.show();
 
-}
-*/
-
-/*
-QString uio::toString(float a,float b, float c) {
-  return QString("%1, %2, %3").arg(a).arg(b).arg(c);
-}
-*/
+ }
+ */
 
 std::string uio::toString(double a,double b, double c) {
   std::ostringstream os;
@@ -288,3 +284,19 @@ void uio::fitAll() {
 void uio::axoView() {
   occPtr->viewAxo();
 }
+
+///Sleep, allowing qt to process events such as window redraws
+///\param n number of seconds to sleep
+///\param usrEv if false, don't process any user input events now
+void uio::sleep(uint n, bool usrEv) {
+  QTime dieTime = QTime::currentTime().addSecs(n);
+  while( QTime::currentTime() < dieTime ) {
+    if (usrEv) {
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    } else {
+      QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents, 100);
+    }
+  }
+  return;
+}
+
