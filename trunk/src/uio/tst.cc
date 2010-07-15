@@ -35,7 +35,10 @@
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepAlgo_Fuse.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Compound.hxx>
 #include <TopoDS_Face.hxx>
 #include <Handle_HLRBRep_Algo.hxx>
 #include <HLRBRep_Algo.hxx>
@@ -45,7 +48,10 @@
 #include <TopoDS_Edge.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
-
+#include <TopTools_HSequenceOfShape.hxx>
+#include <TopExp_Explorer.hxx>
+#include <ShapeAnalysis_FreeBounds.hxx>
+#include <HLRTopoBRep_OutLiner.hxx>
 
 tst::tst() {
   QMenu* myMenu = new QMenu("test");
@@ -63,7 +69,7 @@ void tst::slotTest1() {
   //uio::axoView();
 
   TopoDS_Shape b,p;
-  b = ballnose(3.0,.5);
+  b = ballnose(30,5);
   p = getProj(b,gp_Dir(0,sqrt(2),sqrt(2)));
 
   //std::string s = "Mass: ";
@@ -97,32 +103,138 @@ FIXME: incomplete
 \param dir the direction. <b>Must</b> be normal to the x-axis.
 \return the silhouette
 */
-TopoDS_Shape tst::getProj(TopoDS_Shape t, gp_Dir dir) {
+TopoDS_Face tst::getProj(TopoDS_Shape t, gp_Dir dir) {
   gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
-  gp_Dir xDir(1,0,0);
+  gp_Dir xDir(-1,0,0);
   gp_Trsf pTrsf;
   pTrsf.SetTransformation(gp_Ax3(viewpnt,dir,xDir));
   Handle(HLRBRep_Algo) myAlgo = new HLRBRep_Algo();
   myAlgo->Add(t);
   myAlgo->Projector(HLRAlgo_Projector (pTrsf,false,0));
   myAlgo->Update();
+  myAlgo->Hide(); //from pdf
+  myAlgo->Update(); //just in case
+
   HLRBRep_HLRToShape aHLRToShape(myAlgo);
 
   //TODO: join the correct compounds together, remove all internal edges, and transform the result to be perpendicular to dir
-  //looks like we only need OutlineVCompound and VCompound but there are many others
+  /*form a wire for the face:
+  create a horiz line.
+  find which lines are parallel to it - those are the sides
+  lines that intersect it are the ends, find the two which are farthest apart
+  */
+  //TopoDS_Shape Proj = BRepAlgo_Fuse( aHLRToShape.OutLineVCompound(),aHLRToShape.VCompound());
 
-  //TopoDS_Shape Proj = aHLRToShape.VCompound();
-  //TopoDS_Shape Proj = BRepAlgoAPI_Fuse( aHLRToShape.OutLineVCompound(),
-  //                                      aHLRToShape.VCompound());
-  //                                      aHLRToShape.OutLineHCompound());
-  dispShape ds(aHLRToShape.OutLineVCompound());
-  ds.display();
-  uio::fitAll();
-  uio::axoView();
-  uio::sleep(1,true);
-  return aHLRToShape.VCompound();
-  //return aHLRToShape.OutLineVCompound();
+
+  /*
+  gp_Trsf tr;
+  tr.SetTranslation(gp_Vec(6,0,0));
+  dispShape vc(BRepBuilderAPI_Transform(aHLRToShape.VCompound(),tr).Shape());
+  vc.display();
+  tr.SetTranslation(gp_Vec(12,0,0));
+  dispShape ovc(BRepBuilderAPI_Transform(aHLRToShape.OutLineVCompound(),tr).Shape());
+  ovc.display();
+  tr.SetTranslation(gp_Vec(18,0,0));
+  dispShape rgn(BRepBuilderAPI_Transform(aHLRToShape.RgNLineVCompound(),tr).Shape());
+  rgn.display();
+  tr.SetTranslation(gp_Vec(24,0,0));
+  dispShape hc(BRepBuilderAPI_Transform(aHLRToShape.HCompound(),tr).Shape());
+  hc.display();
+  tr.SetTranslation(gp_Vec(30,0,0));
+  dispShape rgoh(BRepBuilderAPI_Transform(aHLRToShape.Rg1LineHCompound(),tr).Shape());
+  rgoh.display();
+  tr.SetTranslation(gp_Vec(36,0,0));
+  dispShape rgnh(BRepBuilderAPI_Transform(aHLRToShape.RgNLineHCompound(),tr).Shape());
+  rgnh.display();
+  tr.SetTranslation(gp_Vec(42,0,0));
+  dispShape ilh(BRepBuilderAPI_Transform(aHLRToShape.IsoLineHCompound(),tr).Shape());
+  ilh.display();
+  tr.SetTranslation(gp_Vec(48,0,0));
+  dispShape rgo(BRepBuilderAPI_Transform(aHLRToShape.Rg1LineVCompound(),tr).Shape());
+  rgo.display();
+  tr.SetTranslation(gp_Vec(54,0,0));
+  dispShape ohc(BRepBuilderAPI_Transform(aHLRToShape.OutLineHCompound(),tr).Shape());
+  ohc.display();
+  tr.SetTranslation(gp_Vec(60,0,0));
+  dispShape ilv(BRepBuilderAPI_Transform(aHLRToShape.IsoLineVCompound(),tr).Shape());
+  ilv.display();
+  */
+  TopoDS_Compound comp;
+  BRep_Builder builder;
+  builder.MakeCompound( comp );
+  TopoDS_Shape VCompound = aHLRToShape.VCompound();
+  if(!VCompound.IsNull())
+    builder.Add(comp, VCompound);
+  TopoDS_Shape Rg1LineVCompound = aHLRToShape.Rg1LineVCompound();
+  if(!Rg1LineVCompound.IsNull())
+    builder.Add(comp, Rg1LineVCompound);
+  TopoDS_Shape RgNLineVCompound = aHLRToShape.RgNLineVCompound();
+  if(!RgNLineVCompound.IsNull())
+    builder.Add(comp, RgNLineVCompound);
+  TopoDS_Shape OutLineVCompound = aHLRToShape.OutLineVCompound();
+  if(!OutLineVCompound.IsNull())
+    builder.Add(comp, OutLineVCompound);
+  TopoDS_Shape IsoLineVCompound = aHLRToShape.IsoLineVCompound();
+  if(!IsoLineVCompound.IsNull())
+    builder.Add(comp, IsoLineVCompound);
+  TopoDS_Shape HCompound = aHLRToShape.HCompound();
+  if(!HCompound.IsNull())
+    builder.Add(comp, HCompound);
+  TopoDS_Shape Rg1LineHCompound = aHLRToShape.Rg1LineHCompound();
+  if(!Rg1LineHCompound.IsNull())
+    builder.Add(comp, Rg1LineHCompound);
+  TopoDS_Shape RgNLineHCompound = aHLRToShape.RgNLineHCompound();
+  if(!RgNLineHCompound.IsNull())
+    builder.Add(comp, RgNLineHCompound);
+  TopoDS_Shape OutLineHCompound = aHLRToShape.OutLineHCompound();
+  if(!OutLineHCompound.IsNull())
+    builder.Add(comp, OutLineHCompound);
+  TopoDS_Shape IsoLineHCompound = aHLRToShape.IsoLineHCompound();
+  if(!IsoLineHCompound.IsNull())
+    builder.Add(comp, IsoLineHCompound);
+
+ /*probably don't need either of these methods but leave them here for now...
+  //TopoDS_Compound pllels, intrct;
+  //getParallels(comp, &pllels); //find all edges in comp that are not arcs, but are parallel to y
+  //getIntersects(comp,&intrct); //find all edges that intersect X=0;
+  /// http://www.opencascade.org/org/forum/thread_11613/
+  //outermost(intrct)); //find the outermost edges
+
+  //discard all edges which aren't connected
+  //compute the bounding box, and create two points on the axis, one beyond either end of the box
+  //for each point, find the closest edge
+  //discard all other edges which cross the axis
+  //create a wire with the remaining edges
+  */
+
+/*
+from docs: "Tries to build wires of maximum length. Building a wire is stopped when no edges can be connected to it at its head or at its tail. "
+ConnectEdgesToWires (Handle(TopTools_HSequenceOfShape)&edges, const Standard_Real toler, const Standard_Boolean shared, Handle(TopTools_HSequenceOfShape)&wires)
+*/
+/*
+  ///still need to remove extra edges, seems to get confused?!
+  Handle(TopTools_HSequenceOfShape) Edges = new TopTools_HSequenceOfShape();
+  for (TopExp_Explorer Ex(comp,TopAbs_EDGE); Ex.More(); Ex.Next())
+    Edges->Append(TopoDS::Edge(Ex.Current()));
+
+  Handle(TopTools_HSequenceOfShape) Wires = new TopTools_HSequenceOfShape(); //Will hold the wires found
+  ShapeAnalysis_FreeBounds::ConnectEdgesToWires(Edges,Precision::Confusion(),Standard_False,Wires);
+  if (Wires->Length() == 1) {
+    //FIXME: will still be in XY plane... need it to be perpendicular to dir
+    silhouette = BRepBuilderAPI_MakeFace(TopoDS::Wire(Wires->Value(1)));
+  } else {
+    std::string s = "Error, wrong number of wires: ";
+    s += uio::stringify(Wires->Length());
+    uio::infoMsg(s);
+    silhouette.Nullify();
+  }
+*/
+  TopoDS_Face silhouette;
+    silhouette = BRepBuilderAPI_MakeFace(TopoDS::Wire(HLRTopoBRep_OutLiner(comp).OutLinedShape()));
+  return silhouette;
+  //return silhouette;
 }
+
 double tst::mass(TopoDS_Shape s) {
   double m;
   GProp_GProps System;

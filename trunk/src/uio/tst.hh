@@ -39,7 +39,7 @@ class tst: public QObject {
   protected:
     TopoDS_Wire halfProf();
     TopoDS_Shape ballnose(double len, double dia);
-    TopoDS_Shape getProj(TopoDS_Shape t, gp_Dir dir = gp_Dir(0,1,0));
+    TopoDS_Face getProj(TopoDS_Shape t, gp_Dir dir = gp_Dir(0,1,0));
     double mass(TopoDS_Shape m);
 
 };
