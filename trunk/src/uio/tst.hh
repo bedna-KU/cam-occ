@@ -39,7 +39,10 @@ class tst: public QObject {
   protected:
     TopoDS_Wire halfProf();
     TopoDS_Shape ballnose(double len, double dia);
-    TopoDS_Face getProj(TopoDS_Shape t, gp_Dir dir = gp_Dir(0,1,0));
+    TopoDS_Face silhouette(TopoDS_Shape t, gp_Dir dir = gp_Dir(0,1,0));
+    TopoDS_Compound& hlrLines(TopoDS_Shape t, gp_Dir dir);
+    TopoDS_Wire outermost(TopoDS_Compound h);
+    TopoDS_Compound findNearestElements(TopoDS_Shape s, gp_Pnt p);
     double mass(TopoDS_Shape m);
 
 };

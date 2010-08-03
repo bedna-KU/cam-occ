@@ -99,11 +99,65 @@ TopoDS_Shape tst::ballnose(double len, double dia) {
 
 /** Compute the silhouette of a tool
 FIXME: incomplete
-\param t the shape
-\param dir the direction. <b>Must</b> be normal to the x-axis.
+The tool is assumed to have rotational symmetry.
+Unfortunately, OCC's HLR seems to be broken; some HLR shapes, like OutlineVCompound, do not contain all the edges that they should - not even enough to make a closed wire. The only way to get the sillhouette is to take ALL edges available from HLR, then throw away all but the outermost edges.
+\param t the tool
+\param pose the direction of motion
 \return the silhouette
 */
-TopoDS_Face tst::getProj(TopoDS_Shape t, gp_Dir dir) {
+TopoDS_Face tst::silhouette(TopoDS_Shape t, gp_Ax1 pose) {
+  gp_Dir hDir = ... //need to rotate pose.Direction() to be normal to x for HlrLines(...)
+  TopoDS_Compound edges = hlrLines(t,hDir); //get all the edges
+  //TODO:remove all internal edges, and transform the result to be normal to pose
+  TopoDS_Wire outer = outermost(edges);
+
+}
+
+/** Find the outermost edges
+\param e the edges to sort through
+\return a closed TopoDS_Wire
+*/
+TopoDS_Wire tst::outermost(TopoDS_Compound h) {
+  //bounding box. shape is laying along the y axis
+  Bnd_Box bbox;
+  double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
+  BRepBndLib::Add (h, bbox);
+  bbox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax ); //we only need the Y's
+
+  //points on tool axis
+  gp_Pnt pa(0,aYmin-1.0,0),pb(0,aYmax+1.0,0);
+  TopoDS_Vertex a(pa), b(pb); //probably need BRepPrim_Builder::MakeVertex (a,pa);
+  TopoDS_Edge edgeA,edgeB;
+  //find edges closest to those points and save them
+/*
+  TopExp_Explorer ex;
+  for(ex.Init(h,TopAbs_Edge),ex.More(),ex.Next()) {
+    ex.Current()
+  }
+*/
+  //throw away other edges that touch the axis and/or have the same endpoints
+  //make closed wire
+}
+TopoDS_Compound tst::findNearestElements(TopoDS_Shape s, gp_Pnt p) {
+BRepExtrema_DistShapeShape dss(h,a);
+    if (dss.NbSolution() != 1) {
+    //should always be exactly 1
+    //TODO: determine if that is the case - if not, need to find another way to determine which edge is the right one to use
+    //engraving tool comes to mind... nbsolutions would probably = 3: 2 edges, 1 point
+    //also other tools, when at certain angles that would cause two edges to be coincident at Y
+  } else {
+
+  }
+
+}
+
+/** Find all hlr edges for a shape.
+OCC's HLR algorithms are used to find these edges. Unfortunately, HLR seems to be broken. The only way to get the outline is to take ALL edges available from HLR (what this function does), and throw away all but the outermost edges (which is what tst::outermost() does).
+\param t the shape
+\param dir the direction. <b>Must</b> be normal to the x-axis.
+\return the edges, as a TopoDS_Compound.
+*/
+TopoDS_Compound& tst::hlrLines(TopoDS_Shape t, gp_Dir dir) {
   gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
   gp_Dir xDir(-1,0,0);
   gp_Trsf pTrsf;
@@ -117,48 +171,6 @@ TopoDS_Face tst::getProj(TopoDS_Shape t, gp_Dir dir) {
 
   HLRBRep_HLRToShape aHLRToShape(myAlgo);
 
-  //TODO: join the correct compounds together, remove all internal edges, and transform the result to be perpendicular to dir
-  /*form a wire for the face:
-  create a horiz line.
-  find which lines are parallel to it - those are the sides
-  lines that intersect it are the ends, find the two which are farthest apart
-  */
-  //TopoDS_Shape Proj = BRepAlgo_Fuse( aHLRToShape.OutLineVCompound(),aHLRToShape.VCompound());
-
-
-  /*
-  gp_Trsf tr;
-  tr.SetTranslation(gp_Vec(6,0,0));
-  dispShape vc(BRepBuilderAPI_Transform(aHLRToShape.VCompound(),tr).Shape());
-  vc.display();
-  tr.SetTranslation(gp_Vec(12,0,0));
-  dispShape ovc(BRepBuilderAPI_Transform(aHLRToShape.OutLineVCompound(),tr).Shape());
-  ovc.display();
-  tr.SetTranslation(gp_Vec(18,0,0));
-  dispShape rgn(BRepBuilderAPI_Transform(aHLRToShape.RgNLineVCompound(),tr).Shape());
-  rgn.display();
-  tr.SetTranslation(gp_Vec(24,0,0));
-  dispShape hc(BRepBuilderAPI_Transform(aHLRToShape.HCompound(),tr).Shape());
-  hc.display();
-  tr.SetTranslation(gp_Vec(30,0,0));
-  dispShape rgoh(BRepBuilderAPI_Transform(aHLRToShape.Rg1LineHCompound(),tr).Shape());
-  rgoh.display();
-  tr.SetTranslation(gp_Vec(36,0,0));
-  dispShape rgnh(BRepBuilderAPI_Transform(aHLRToShape.RgNLineHCompound(),tr).Shape());
-  rgnh.display();
-  tr.SetTranslation(gp_Vec(42,0,0));
-  dispShape ilh(BRepBuilderAPI_Transform(aHLRToShape.IsoLineHCompound(),tr).Shape());
-  ilh.display();
-  tr.SetTranslation(gp_Vec(48,0,0));
-  dispShape rgo(BRepBuilderAPI_Transform(aHLRToShape.Rg1LineVCompound(),tr).Shape());
-  rgo.display();
-  tr.SetTranslation(gp_Vec(54,0,0));
-  dispShape ohc(BRepBuilderAPI_Transform(aHLRToShape.OutLineHCompound(),tr).Shape());
-  ohc.display();
-  tr.SetTranslation(gp_Vec(60,0,0));
-  dispShape ilv(BRepBuilderAPI_Transform(aHLRToShape.IsoLineVCompound(),tr).Shape());
-  ilv.display();
-  */
   TopoDS_Compound comp;
   BRep_Builder builder;
   builder.MakeCompound( comp );
@@ -193,26 +205,78 @@ TopoDS_Face tst::getProj(TopoDS_Shape t, gp_Dir dir) {
   if(!IsoLineHCompound.IsNull())
     builder.Add(comp, IsoLineHCompound);
 
- /*probably don't need either of these methods but leave them here for now...
+  return comp;
+}
+
+/* things I've tried for silhouette that failed
+////////////////////////////////////////////////////////////////////////////
+
+  //form a wire for the face:
+  create a horiz line.
+  find which lines are parallel to it - those are the sides
+  lines that intersect it are the ends, find the two which are farthest apart
+
+
+//  dispShape c(comp);
+//  c.display();
+//  TopoDS_Face silhouette;
+//  silhouette = BRepBuilderAPI_MakeFace(TopoDS::Wire(HLRTopoBRep_OutLiner(comp).OutLinedShape()));
+
+////////////////////////////////////////////////////////////////////////////
+  gp_Trsf tr;
+  tr.SetTranslation(gp_Vec(6,0,0));
+  dispShape vc(BRepBuilderAPI_Transform(aHLRToShape.VCompound(),tr).Shape());
+  vc.display();
+  tr.SetTranslation(gp_Vec(12,0,0));
+  dispShape ovc(BRepBuilderAPI_Transform(aHLRToShape.OutLineVCompound(),tr).Shape());
+  ovc.display();
+  tr.SetTranslation(gp_Vec(18,0,0));
+  dispShape rgn(BRepBuilderAPI_Transform(aHLRToShape.RgNLineVCompound(),tr).Shape());
+  rgn.display();
+  tr.SetTranslation(gp_Vec(24,0,0));
+  dispShape hc(BRepBuilderAPI_Transform(aHLRToShape.HCompound(),tr).Shape());
+  hc.display();
+  tr.SetTranslation(gp_Vec(30,0,0));
+  dispShape rgoh(BRepBuilderAPI_Transform(aHLRToShape.Rg1LineHCompound(),tr).Shape());
+  rgoh.display();
+  tr.SetTranslation(gp_Vec(36,0,0));
+  dispShape rgnh(BRepBuilderAPI_Transform(aHLRToShape.RgNLineHCompound(),tr).Shape());
+  rgnh.display();
+  tr.SetTranslation(gp_Vec(42,0,0));
+  dispShape ilh(BRepBuilderAPI_Transform(aHLRToShape.IsoLineHCompound(),tr).Shape());
+  ilh.display();
+  tr.SetTranslation(gp_Vec(48,0,0));
+  dispShape rgo(BRepBuilderAPI_Transform(aHLRToShape.Rg1LineVCompound(),tr).Shape());
+  rgo.display();
+  tr.SetTranslation(gp_Vec(54,0,0));
+  dispShape ohc(BRepBuilderAPI_Transform(aHLRToShape.OutLineHCompound(),tr).Shape());
+  ohc.display();
+  tr.SetTranslation(gp_Vec(60,0,0));
+  dispShape ilv(BRepBuilderAPI_Transform(aHLRToShape.IsoLineVCompound(),tr).Shape());
+  ilv.display();
+////////////////////////////////////////////////////////////////////////////
+
+  probably don't need either of these methods but leave them here for now...
   //TopoDS_Compound pllels, intrct;
   //getParallels(comp, &pllels); //find all edges in comp that are not arcs, but are parallel to y
   //getIntersects(comp,&intrct); //find all edges that intersect X=0;
   /// http://www.opencascade.org/org/forum/thread_11613/
   //outermost(intrct)); //find the outermost edges
 
+////////////////////////////////////////////////////////////////////////////
   //discard all edges which aren't connected
   //compute the bounding box, and create two points on the axis, one beyond either end of the box
   //for each point, find the closest edge
   //discard all other edges which cross the axis
   //create a wire with the remaining edges
-  */
 
-/*
+////////////////////////////////////////////////////////////////////////////
+
 from docs: "Tries to build wires of maximum length. Building a wire is stopped when no edges can be connected to it at its head or at its tail. "
 ConnectEdgesToWires (Handle(TopTools_HSequenceOfShape)&edges, const Standard_Real toler, const Standard_Boolean shared, Handle(TopTools_HSequenceOfShape)&wires)
-*/
-/*
-  ///still need to remove extra edges, seems to get confused?!
+////////////////////////////////////////////////////////////////////////////
+
+ this does not work - uses the wrong edges, then gives up
   Handle(TopTools_HSequenceOfShape) Edges = new TopTools_HSequenceOfShape();
   for (TopExp_Explorer Ex(comp,TopAbs_EDGE); Ex.More(); Ex.Next())
     Edges->Append(TopoDS::Edge(Ex.Current()));
@@ -228,12 +292,13 @@ ConnectEdgesToWires (Handle(TopTools_HSequenceOfShape)&edges, const Standard_Rea
     uio::infoMsg(s);
     silhouette.Nullify();
   }
+////////////////////////////////////////////////////////////////////////////
+
+
+// this does not work
+  dispShape outl(HLRTopoBRep_OutLiner(comp).OutLinedShape());
+  outl.display();
 */
-  TopoDS_Face silhouette;
-    silhouette = BRepBuilderAPI_MakeFace(TopoDS::Wire(HLRTopoBRep_OutLiner(comp).OutLinedShape()));
-  return silhouette;
-  //return silhouette;
-}
 
 double tst::mass(TopoDS_Shape s) {
   double m;
