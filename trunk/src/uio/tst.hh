@@ -24,10 +24,16 @@
 
 #include <QObject>
 #include <TopoDS_Wire.hxx>
+#include <TopoDS_Edge.hxx>
 #include <TopoDS_Solid.hxx>
+#include <TopoDS_Compound.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Dir.hxx>
 
+struct nearestEdges {
+  int n;
+  TopoDS_Edge a,b;
+};
 
 
 class tst: public QObject {
@@ -40,10 +46,11 @@ class tst: public QObject {
     TopoDS_Wire halfProf();
     TopoDS_Shape ballnose(double len, double dia);
     TopoDS_Face silhouette(TopoDS_Shape t, gp_Dir dir = gp_Dir(0,1,0));
-    TopoDS_Compound& hlrLines(TopoDS_Shape t, gp_Dir dir);
+    TopoDS_Compound hlrLines(TopoDS_Shape t, gp_Dir dir);
     TopoDS_Wire outermost(TopoDS_Compound h);
-    TopoDS_Compound findNearestElements(TopoDS_Shape s, gp_Pnt p);
+    nearestEdges findNearestEdges(TopoDS_Shape s, TopoDS_Shape t);
     double mass(TopoDS_Shape m);
+
 
 };
 #endif //TST_HH
