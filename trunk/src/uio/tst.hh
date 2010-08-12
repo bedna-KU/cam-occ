@@ -32,7 +32,10 @@
 
 struct nearestEdges {
   int n;
+  //TopTools_ListOfShape edges;
   TopoDS_Edge a,b;
+  gp_Pnt c,d;
+  bool e;
 };
 
 

@@ -35,6 +35,9 @@
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
+#include <Handle_Geom_Curve.hxx>
+#include <Geom_Curve.hxx>
+#include <BRep_Tool.hxx>
 #include <BRepAlgo_Fuse.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBndLib.hxx>
@@ -100,9 +103,10 @@ TopoDS_Shape tst::ballnose(double len, double dia) {
 }
 
 /** Compute the silhouette of a tool
-FIXME: incomplete
 The tool is assumed to have rotational symmetry.
 Unfortunately, OCC's HLR seems to be broken; some HLR shapes, like OutlineVCompound, do not contain all the edges that they should - not even enough to make a closed wire. The only way to get the sillhouette is to take ALL edges available from HLR, then throw away all but the outermost edges.
+
+TODO: for speed, we should cache silhouettes. Map angle to silhouette for each tool?
 \param t the tool
 \param d the direction of motion
 \return the silhouette
@@ -119,6 +123,7 @@ TopoDS_Face tst::silhouette(TopoDS_Shape t, gp_Dir d) {
 }
 
 /** Find the outermost edges
+FIXME: incomplete
 \param e the edges to sort through
 \return a closed TopoDS_Wire
 */
@@ -135,18 +140,15 @@ TopoDS_Wire tst::outermost(TopoDS_Compound h) {
   nearestEdges keepA,keepB; //edge(s) to keep at ends A and B
   keepA = findNearestEdges(h,BRepBuilderAPI_MakeVertex(pa));
   keepB = findNearestEdges(h,BRepBuilderAPI_MakeVertex(pb));
-  /*
-  //TopoDS_Vertex a(pa), b(pb); //probably need BRepPrim_Builder::MakeVertex (a,pa);
-  //TopoDS_Edge closestA,closestB; //these are the edges closest to the points
-  //double distA,distB; //these are the distances from the edges to the points, used to find better edges
-  //find edges closest to those points and save them
-  / *
-  TopExp_Explorer ex;
-  for(ex.Init(h,TopAbs_Edge),ex.More(),ex.Next()) {
-    ex.Current()
-}
-*/
   //throw away other edges that touch the axis and/or have the same endpoints
+  TopTools_ListOfShape lsh;
+  //add all edges to lsh, then compare their endpoints to keepA.c and .d
+  //delete edges that match both c and d
+  //repeat for keepB
+  //if keepA.n = 1, add keepA.a to lsh (because the curve would have been deleted above)
+  //same for keepB
+
+
   //make closed wire
 }
 
@@ -160,33 +162,89 @@ nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
   //BRep_Builder bld;
   nearestEdges ne;
   ne.n = 0;
+  ne.e = false;
   BRepExtrema_DistShapeShape dss(s,t);
   if (dss.NbSolution() == 1) {        //one edge
     ne.n = 1;
     ne.a = TopoDS::Edge(dss.SupportOnShape1(0)); //starts counting at 0, right?
   } else if (dss.NbSolution() == 2) {   //certain angles could cause two edges to be coincident
     uio::infoMsg("Error, can't solve with two edges");
+    ne.e = true;
     //FIXME:how the $%#%^%$&^$ do we solve this?!
     //-->if only one is an arc, choose that one; if both are, choose the one with largest radius
-    //if one is a non-circular arc, or if neither is an arc then shout "teh skai ist fallink!"
+    //if one is a non-circular arc, or if neither is an arc then it becomes really difficult...
   } else if (dss.NbSolution() == 3) {   //2 edges, 1 point - engraving tool?
     //only want edges
     TopoDS_Edge tmp;
     for(int i=0; i<dss.NbSolution();i++) {
       if (dss.SupportTypeShape1(i) == BRepExtrema_IsOnEdge ) {
         tmp = TopoDS::Edge(dss.SupportOnShape1(i));
-        ne.n++;
-        if (ne.n == 1) {
+        if (ne.n == 0) {
           ne.a = tmp;
-        } else if (ne.n == 2) {
+          ne.n++;
+        } else if (ne.n == 1) {
           ne.b = tmp;
+          ne.n++;
         } else {
+          ne.e = true;
           uio::infoMsg("Error, too many edges - max 2");
         }
       }
     }
   } else { //shouldn't get here
+    ne.e = true;
     uio::infoMsg("Error! Cannot find nearest elements, given " + uio::stringify(dss.NbSolution()) + " solutions.");
+  }
+  if (!ne.e) {
+    //no errors, so figure out the endpoints
+    double d1,d2;
+    gp_Pnt p1,p2;
+      //Standard_Real first, last;
+    Handle ( Geom_Curve ) C = BRep_Tool::Curve ( ne.a,d1,d2 );
+    p1=C->Value ( d1 );
+    p2=C->Value ( d2 );
+    if (ne.n == 1) {
+      ne.c = p1;
+      ne.d = p2;
+    } else {
+      gp_Pnt p3,p4;
+      C = BRep_Tool::Curve ( ne.b,d1,d2 );
+      p3 = C->Value(d1);
+      p4 = C->Value(d2);
+      /*
+      compare the points; p1 or p2 should match one of p3, p4.
+      *must* have 3 unique points, so find two that match
+      and then look for another (problem if found)
+      */
+      //alternate: use a line between the outlier points and find all edges that intersect it?
+      int matches = 0;
+      if (p1.Distance(p3) < .00001) {
+        matches++;
+        ne.c = p2;
+        ne.d = p4;
+      }
+      if (p1.Distance(p4) < .00001) {
+        matches++;
+        ne.c = p2;
+        ne.d = p3;
+      }
+      if (p2.Distance(p3) < .00001) {
+        matches++;
+        ne.c = p1;
+        ne.d = p4;
+      }
+      if (p2.Distance(p4) < .00001) {
+        matches++;
+        ne.c = p1;
+        ne.d = p3;
+      }
+      if (matches < 1) {
+        uio::infoMsg("Error, no matches");
+      }
+      if (matches > 1) {
+        uio::infoMsg("Error, too many points coincident: " + uio::stringify(matches));
+      }
+    }
   }
   return ne;
 }
