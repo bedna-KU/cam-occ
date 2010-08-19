@@ -36,6 +36,7 @@ This class inherits from canonMotion.
 */
 
 class linearMotion: protected canonMotion {
+  friend canonLine * canonLine::canonLineFactory (std::string l, machineStatus s);
   public:
     linearMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType();

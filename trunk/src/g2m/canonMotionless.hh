@@ -36,6 +36,7 @@ This class is for anything other than STRAIGHT_FEED, STRAIGHT_TRAVERSE, and ARC_
 */
 
 class canonMotionless: protected canonLine {
+  friend canonLine * canonLine::canonLineFactory (std::string l, machineStatus s);
   public:
     canonMotionless(std::string canonL, machineStatus prevStatus);
     bool isThisMotion() {return false;};

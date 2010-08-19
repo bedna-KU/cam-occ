@@ -40,6 +40,7 @@ This class handles both planar arcs and helical arcs. Inherits from canonMotion.
 */
 
 class helicalMotion: protected canonMotion {
+  friend canonLine * canonLine::canonLineFactory (std::string l, machineStatus s);
   public:
     helicalMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType() {return HELICAL;};
