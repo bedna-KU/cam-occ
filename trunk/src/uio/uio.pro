@@ -36,7 +36,7 @@ LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lTKVRML -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema
 
 # Input
-HEADERS += uio.hh dispShape.hh tst.hh
+HEADERS += uio.hh dispShape.hh tst.hh log.hh
 SOURCES += uio.cc dispShape.cc tst.cc
 
 

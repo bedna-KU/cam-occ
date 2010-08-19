@@ -57,6 +57,7 @@
 #include <TopExp_Explorer.hxx>
 #include <ShapeAnalysis_FreeBounds.hxx>
 #include <HLRTopoBRep_OutLiner.hxx>
+#include <TopTools_ListIteratorOfListOfShape.hxx>
 
 tst::tst() {
   QMenu* myMenu = new QMenu("test");
@@ -112,14 +113,22 @@ TODO: for speed, we should cache silhouettes. Map angle to silhouette for each t
 \return the silhouette
 */
 TopoDS_Face tst::silhouette(TopoDS_Shape t, gp_Dir d) {
+  TopoDS_Face s;
   //find angle between d and Z
   double theta = d.Angle(gp::DZ());
   //create a vector in YZ with same angle
   gp_Dir hDir(0,sin(theta),cos(theta));
   TopoDS_Compound edges = hlrLines(t,hDir); //get all the edges
   //TODO:transform the result to be normal to pose
-  TopoDS_Wire outer = outermost(edges);
-  return BRepBuilderAPI_MakeFace(outer);
+  TopoDS_Wire w = outermost(edges);
+  BRepBuilderAPI_MakeFace mf(w);
+  if (mf.IsDone()) {
+    s = mf.Face();
+  } else {
+    s.Nullify();
+    uio::infoMsg("error, cannot make face from outermost wire");
+  }
+  return s;
 }
 
 /** Find the outermost edges
@@ -140,16 +149,143 @@ TopoDS_Wire tst::outermost(TopoDS_Compound h) {
   nearestEdges keepA,keepB; //edge(s) to keep at ends A and B
   keepA = findNearestEdges(h,BRepBuilderAPI_MakeVertex(pa));
   keepB = findNearestEdges(h,BRepBuilderAPI_MakeVertex(pb));
-  //throw away other edges that touch the axis and/or have the same endpoints
+  //TODO: abort if we don't find anything at one end (i.e. keepA.n==0)
   TopTools_ListOfShape lsh;
-  //add all edges to lsh, then compare their endpoints to keepA.c and .d
-  //delete edges that match both c and d
-  //repeat for keepB
-  //if keepA.n = 1, add keepA.a to lsh (because the curve would have been deleted above)
-  //same for keepB
 
+  TopExp_Explorer Ex(h,TopAbs_EDGE);
+  while (Ex.More()) { //check end points so we know what to do with the edge
+    bool aA,bA,aB,bB;
+    twopnts curr;
+    curr = getEnds(TopoDS::Edge(Ex.Current()));
+    aA = cmpPntPnts(curr.a,keepA.c,keepA.d); //true for match
+    bA = cmpPntPnts(curr.b,keepA.c,keepA.d);
+    aB = cmpPntPnts(curr.a,keepB.c,keepB.d);
+    bB = cmpPntPnts(curr.b,keepB.c,keepB.d);
+    if ( (aA && bA) || (aB && bB) ) {
+      //both ends of this edge match the points at one end of the tool, so we don't want it
+    } else {
+      if ( (aA && (aB||bB)) || (bA && (aB||bB)) ){
+        //matches both ends of the tool
+        lsh.Append(Ex.Current());
+      } else {
+        //matches zero or one points. discard (for now)
+        //TODO: may need to use these edges in some cases
+        //warn potential problem
+        //FILE_LOG(logWARN) << "__FILE__ __PRETTY_FUNCTION__ __LINE__ Discarding line that matches < 2 points";
+      }
+    }
+    Ex.Next();
+  }
+  //append edges from the ends
+  lsh.Append(keepA.a);
+  if (keepA.n == 2)
+    lsh.Append(keepA.b);
+  lsh.Append(keepB.a);
+  if (keepB.n == 2)
+    lsh.Append(keepB.b);
 
-  //make closed wire
+  //make closed wire:
+
+  //take first edge from lsh and put in a wire, remove it from lsh
+  TopoDS_Edge e = TopoDS::Edge(lsh.First());
+  lsh.RemoveFirst();
+  twopnts ends = getEnds(e);
+  BRepBuilderAPI_MakeWire mw(e);
+  TopTools_ListIteratorOfListOfShape iter;
+  bool finished = false;
+
+  //go through the rest of the edges, adding them to the wire in order
+  //note - a while loop, nested inside a do-while loop
+  do {
+  iter.Initialize(lsh);
+  while (iter.More()) {
+
+    //add that edge to wire, remove from lsh
+    e = TopoDS::Edge(iter.Value());
+    twopnts currentEnds = getEnds(e);
+
+    //check for a match and update 'ends'
+    bool match = false;
+    if (cmpPntPnts(currentEnds.a,ends)) { /* currentEnds.a matches, so replace one of
+                                         'ends' with currentEnds.b - but which one? */
+      if (samepnt(currentEnds.a,ends.a))
+        ends.a = currentEnds.b;
+      else
+        ends.b = currentEnds.b;
+      match = true;
+    }
+    if (cmpPntPnts(currentEnds.b,ends)) {
+      if (samepnt(currentEnds.b,ends.a))
+        ends.a = currentEnds.a;
+      else
+        ends.b = currentEnds.a;
+      match = true;
+    }
+    if (match){
+      lsh.Remove(iter);
+      mw.Add(e);
+      break;
+    }
+  }
+  if ( (ends.a.SquareDistance(ends.b) < 1e-10) || //too loose for BRepBuilderAPI_MakeWire?
+       (lsh.IsEmpty()) )
+    finished = true;
+  } while (!finished);
+
+  if (!lsh.IsEmpty()) {
+    //FIXME:error
+  }
+  if (!mw.IsDone()) {
+    //FIXME:error
+  }
+  TopoDS_Wire w;
+  w = mw.Wire();
+  /*if (!w.IsClosed()) {
+    //FIXME:error
+  }  */
+  return w;
+}
+
+bool tst::samepnt(gp_Pnt a, gp_Pnt b) {
+  if (a.SquareDistance(b) < 1e-10)
+    return true;
+  else
+    return false;
+}
+
+/** Get endpoints of a TopoDS_Edge
+\param e the edge
+\return two endpoints
+*/
+twopnts tst::getEnds(TopoDS_Edge e) {
+  double d1,d2;
+  twopnts tp;
+  Handle ( Geom_Curve ) C = BRep_Tool::Curve ( e,d1,d2 );
+  tp.a=C->Value ( d1 );
+  tp.b=C->Value ( d2 );
+  return tp;
+}
+
+/** Compare one point to two others
+\param c the point to be compared
+\param p1,p2 points to compare it to
+\return true for match
+*/
+bool tst::cmpPntPnts(gp_Pnt c,gp_Pnt p1,gp_Pnt p2) {
+  if ( (c.SquareDistance(p1) < 1e-10) //square distance is faster. actual distance would be .00001
+    || (c.SquareDistance(p2) < 1e-10) )
+    return true;
+  else
+    return false;
+}
+
+/** Compare one point to two others in a twopts struct
+\param c the point to be compared
+\param tp struct of two points to compare it to
+\return true for match
+*/
+inline bool tst::cmpPntPnts(gp_Pnt c,twopnts tp) {
+  return cmpPntPnts(c,tp.a,tp.b);
 }
 
 /** Find nearest edges
@@ -191,6 +327,9 @@ nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
         }
       }
     }
+  } else if (dss.NbSolution() == 4) {   //combination of #2 and #3 above
+    uio::infoMsg("Error, can't solve with four edges");
+    ne.e = true;
   } else { //shouldn't get here
     ne.e = true;
     uio::infoMsg("Error! Cannot find nearest elements, given " + uio::stringify(dss.NbSolution()) + " solutions.");
@@ -218,22 +357,22 @@ nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
       */
       //alternate: use a line between the outlier points and find all edges that intersect it?
       int matches = 0;
-      if (p1.Distance(p3) < .00001) {
+      if (p1.SquareDistance(p3) < 1e-10) {
         matches++;
         ne.c = p2;
         ne.d = p4;
       }
-      if (p1.Distance(p4) < .00001) {
+      if (p1.SquareDistance(p4) < 1e-10) {
         matches++;
         ne.c = p2;
         ne.d = p3;
       }
-      if (p2.Distance(p3) < .00001) {
+      if (p2.SquareDistance(p3) < 1e-10) {
         matches++;
         ne.c = p1;
         ne.d = p4;
       }
-      if (p2.Distance(p4) < .00001) {
+      if (p2.SquareDistance(p4) < 1e-10) {
         matches++;
         ne.c = p1;
         ne.d = p3;

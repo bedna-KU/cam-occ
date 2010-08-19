@@ -30,12 +30,18 @@
 #include <TopoDS_Face.hxx>
 #include <gp_Dir.hxx>
 
-struct nearestEdges {
-  int n;
+class nearestEdges {
+  public:
+    nearestEdges(){n=0;a.Nullify();b.Nullify();c=gp::Origin();d=gp::Origin();e=false;};
+    int n;
   //TopTools_ListOfShape edges;
-  TopoDS_Edge a,b;
-  gp_Pnt c,d;
-  bool e;
+    TopoDS_Edge a,b;
+    gp_Pnt c,d;
+    bool e;
+};
+
+struct twopnts {
+  gp_Pnt a,b;
 };
 
 
@@ -53,6 +59,11 @@ class tst: public QObject {
     TopoDS_Wire outermost(TopoDS_Compound h);
     nearestEdges findNearestEdges(TopoDS_Shape s, TopoDS_Shape t);
     double mass(TopoDS_Shape m);
+    bool samepnt(gp_Pnt a, gp_Pnt b);
+    twopnts getEnds(TopoDS_Edge e);
+    bool cmpPntPnts(gp_Pnt c,gp_Pnt p1,gp_Pnt p2);
+    bool cmpPntPnts(gp_Pnt c,twopnts tp);
+
 
 
 };
