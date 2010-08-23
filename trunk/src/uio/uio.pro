@@ -33,11 +33,12 @@ INCLUDEPATH += /opt/occ63/inc/ . ../qocc ../lnk
 LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase -lTKSTEP \
 -lTKService -lTKV3d -lTKernel -lTKIGES -lPTKernel -lTKSTL \
--lTKVRML -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema
+-lTKVRML -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema \
+-lrt
 
 # Input
-HEADERS += uio.hh dispShape.hh tst.hh log.hh
-SOURCES += uio.cc dispShape.cc tst.cc
+HEADERS += uio.hh dispShape.hh tst.hh log.hh nanotimer.hh
+SOURCES += uio.cc dispShape.cc tst.cc nanotimer.cc
 
 
 DESTDIR = ../../bin

@@ -32,12 +32,13 @@
 
 class nearestEdges {
   public:
-    nearestEdges(){n=0;a.Nullify();b.Nullify();c=gp::Origin();d=gp::Origin();e=false;};
+    nearestEdges();
     int n;
   //TopTools_ListOfShape edges;
     TopoDS_Edge a,b;
     gp_Pnt c,d;
     bool e;
+    std::string meminfo();
 };
 
 struct twopnts {
