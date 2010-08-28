@@ -53,7 +53,7 @@ Collaboration diagram for linearMotion:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3">linearMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">getMotionType</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#ac7d8d0645a63d5e79c6479c98ae8f804">getSolid</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#ab4fc542dffb7cb737f8402d1c6439197">getShape</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcanon_line.html">canonLine</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a01cc53acf58a7b495a38e619a9523c33">canonLine::canonLineFactory</a> (std::string l, <a class="el" href="classmachine_status.html">machineStatus</a> s)</td></tr>
@@ -86,17 +86,12 @@ Friends</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p><p>TopoDS_Shape temp = BRepAlgoAPI_Fuse(pipe.Shape(), r ); //hangs here</p>
-<p>b=status.getEndPose().Location(); tr.SetTranslation(a,b); mySolid = TopoDS::Solid(BRepAlgoAPI_Fuse(temp,BRepBuilderAPI_Transform (status.getTool()-&gt;getRevol(),tr) ));</p>
-<p>}else { </p>
-</p>
-
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph.png" border="0" usemap="#classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph" alt=""/></div>
 <map name="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph" id="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph">
-<area shape="rect" id="node3" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="284,5,356,35"/><area shape="rect" id="node7" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="227,58,413,89"/><area shape="rect" id="node9" href="classtool.html#aa7d61ba51903f143f4437c11eb82ebd5" title="tool::getProfile" alt="" coords="267,111,373,142"/><area shape="rect" id="node11" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83" title="millTool::getRevol" alt="" coords="257,165,383,195"/><area shape="rect" id="node13" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="224,218,416,249"/><area shape="rect" id="node15" href="classmachine_status.html#a91af3b3e7d55d0eda4348ca485ee1405" title="machineStatus::getTool" alt="" coords="241,271,399,302"/><area shape="rect" id="node17" href="classuio.html#a72ced2b751e75942c7ce0002401f9c13" title="uio::infoMsg" alt="" coords="273,325,367,355"/><area shape="rect" id="node5" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="464,5,619,35"/></map>
+<area shape="rect" id="node3" href="classmill_tool.html#a3ee89df994b523fd15fdb69c33ed52e5" title="millTool::get3d" alt="" coords="267,5,373,35"/><area shape="rect" id="node5" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="227,58,413,89"/><area shape="rect" id="node7" href="classtool.html#aa7d61ba51903f143f4437c11eb82ebd5" title="tool::getProfile" alt="" coords="267,111,373,142"/><area shape="rect" id="node9" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="224,165,416,195"/><area shape="rect" id="node11" href="classmachine_status.html#a91af3b3e7d55d0eda4348ca485ee1405" title="machineStatus::getTool" alt="" coords="241,218,399,249"/><area shape="rect" id="node13" href="classuio.html#a72ced2b751e75942c7ce0002401f9c13" title="uio::infoMsg" alt="" coords="273,271,367,302"/><area shape="rect" id="node15" href="classuio.html#a38722d25079adb9d4ea23a6c226d1f62" title="uio::sleep" alt="" coords="281,325,359,355"/></map>
 </div>
 </p>
 
@@ -131,12 +126,12 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ac7d8d0645a63d5e79c6479c98ae8f804"></a><!-- doxytag: member="linearMotion::getSolid" ref="ac7d8d0645a63d5e79c6479c98ae8f804" args="()" -->
+<a class="anchor" id="ab4fc542dffb7cb737f8402d1c6439197"></a><!-- doxytag: member="linearMotion::getShape" ref="ab4fc542dffb7cb737f8402d1c6439197" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const TopoDS_Solid&amp; linearMotion::getSolid </td>
+          <td class="memname">const TopoDS_Shape&amp; linearMotion::getShape </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -146,7 +141,7 @@ Here is the call graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>Implements <a class="el" href="classcanon_motion.html#ad4f3754219ec78bcfb4adbcf8036b8fa">canonMotion</a>.</p>
+<p>Implements <a class="el" href="classcanon_motion.html#a410357a570c6d943656e43f74ceb1162">canonMotion</a>.</p>
 
 </div>
 </div>

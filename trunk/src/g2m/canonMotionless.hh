@@ -40,6 +40,8 @@ class canonMotionless: protected canonLine {
   public:
     canonMotionless(std::string canonL, machineStatus prevStatus);
     bool isThisMotion() {return false;};
+    const TopoDS_Shape& getShape() {return canonLine::getUnSolid();};
+
   protected:
     bool match, handled;
 };

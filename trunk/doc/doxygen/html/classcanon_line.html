@@ -67,6 +67,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#aaaba8345d81852f529670a71a2531170">isThisMotion</a> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const std::string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a45aefea90a04cec1e302c5d214a14376">getCanonType</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#aecb5e697d95a7c5b99c57b1e16616830">getUnSolid</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99">getShape</a> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f">checkErrors</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -354,6 +355,43 @@ Here is the call graph for this function:</div>
 </div>
 </p>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph.png" border="0" usemap="#classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph" alt=""/></div>
+<map name="classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph" id="classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="171,31,333,62"/><area shape="rect" id="node5" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="383,5,484,35"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="535,31,695,62"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="744,31,824,62"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a7aaebb9e888cf107e0e7a496e1085d99"></a><!-- doxytag: member="canonLine::getShape" ref="a7aaebb9e888cf107e0e7a496e1085d99" args="()=0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const TopoDS_Shape&amp; canonLine::getShape </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implemented in <a class="el" href="classcanon_motion.html#a410357a570c6d943656e43f74ceb1162">canonMotion</a>, <a class="el" href="classcanon_motionless.html#acd7aea1c06d78731f5b9191f855f4ab0">canonMotionless</a>, <a class="el" href="classhelical_motion.html#a2783c813ce07630df059ad7ccf1c0934">helicalMotion</a>, and <a class="el" href="classlinear_motion.html#ab4fc542dffb7cb737f8402d1c6439197">linearMotion</a>.</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph.png" border="0" usemap="#classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph" alt=""/></div>
+<map name="classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph" id="classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="197,31,360,62"/><area shape="rect" id="node5" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="409,5,511,35"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="561,31,721,62"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="771,31,851,62"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <a class="anchor" id="a279888442733fd0e3dc768f8dbf78e62"></a><!-- doxytag: member="canonLine::getStart" ref="a279888442733fd0e3dc768f8dbf78e62" args="()" -->
@@ -511,7 +549,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph.png" border="0" usemap="#classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph" alt=""/></div>
 <map name="classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph" id="classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph">
-<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="171,5,397,35"/><area shape="rect" id="node5" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="205,58,363,89"/><area shape="rect" id="node7" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="227,111,341,142"/></map>
+<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="171,5,397,35"/><area shape="rect" id="node5" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="205,58,363,89"/><area shape="rect" id="node7" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="227,111,341,142"/><area shape="rect" id="node9" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="445,111,608,142"/><area shape="rect" id="node11" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="657,85,759,115"/><area shape="rect" id="node13" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="809,111,969,142"/><area shape="rect" id="node15" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1019,111,1099,142"/></map>
 </div>
 </p>
 

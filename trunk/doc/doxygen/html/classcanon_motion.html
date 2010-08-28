@@ -55,10 +55,10 @@ Collaboration diagram for canonMotion:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#aeb581319f165b5309d409f3a2f0367e2">getMotionType</a> ()=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#ad4f3754219ec78bcfb4adbcf8036b8fa">getSolid</a> ()=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a410357a570c6d943656e43f74ceb1162">getShape</a> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a790ed1dab4ab86af785a0f9d6f29948b">isThisMotion</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a80686e68479dd04b295969b3466d7524">isVolumeSuspect</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a18df3ed4d9007b7a8b2f8658ad211111">bruteForceSweep</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#ab6c5c89d6ea7347a009b7eb25ac3ca57">bruteForceSweep</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69">canonMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
@@ -66,7 +66,7 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc  <a href="#a5b09857ac168a4fcc72ff2ecef197d5a"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Solid&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#ad69d89291e27b6880758c7a5ab192b1a">mySolid</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Shape&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">myShape</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">sweepIsSuspect</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
@@ -111,12 +111,12 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a18df3ed4d9007b7a8b2f8658ad211111"></a><!-- doxytag: member="canonMotion::bruteForceSweep" ref="a18df3ed4d9007b7a8b2f8658ad211111" args="()" -->
+<a class="anchor" id="ab6c5c89d6ea7347a009b7eb25ac3ca57"></a><!-- doxytag: member="canonMotion::bruteForceSweep" ref="ab6c5c89d6ea7347a009b7eb25ac3ca57" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const TopoDS_Solid&amp; canonMotion::bruteForceSweep </td>
+          <td class="memname">const TopoDS_Shape&amp; canonMotion::bruteForceSweep </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -184,12 +184,12 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ad4f3754219ec78bcfb4adbcf8036b8fa"></a><!-- doxytag: member="canonMotion::getSolid" ref="ad4f3754219ec78bcfb4adbcf8036b8fa" args="()=0" -->
+<a class="anchor" id="a410357a570c6d943656e43f74ceb1162"></a><!-- doxytag: member="canonMotion::getShape" ref="a410357a570c6d943656e43f74ceb1162" args="()=0" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const TopoDS_Solid&amp; canonMotion::getSolid </td>
+          <td class="memname">virtual const TopoDS_Shape&amp; canonMotion::getShape </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -199,7 +199,9 @@ Here is the caller graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>Implemented in <a class="el" href="classhelical_motion.html#a55c8010cd37250dce858deeb5a3a0806">helicalMotion</a>, and <a class="el" href="classlinear_motion.html#ac7d8d0645a63d5e79c6479c98ae8f804">linearMotion</a>.</p>
+<p>Implements <a class="el" href="classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99">canonLine</a>.</p>
+
+<p>Implemented in <a class="el" href="classhelical_motion.html#a2783c813ce07630df059ad7ccf1c0934">helicalMotion</a>, and <a class="el" href="classlinear_motion.html#ab4fc542dffb7cb737f8402d1c6439197">linearMotion</a>.</p>
 
 </div>
 </div>
@@ -240,12 +242,12 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="ad69d89291e27b6880758c7a5ab192b1a"></a><!-- doxytag: member="canonMotion::mySolid" ref="ad69d89291e27b6880758c7a5ab192b1a" args="" -->
+<a class="anchor" id="a5f6ad109e8e966e4e8eb18b09cdd1ffa"></a><!-- doxytag: member="canonMotion::myShape" ref="a5f6ad109e8e966e4e8eb18b09cdd1ffa" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TopoDS_Solid <a class="el" href="classcanon_motion.html#ad69d89291e27b6880758c7a5ab192b1a">canonMotion::mySolid</a><code> [protected]</code></td>
+          <td class="memname">TopoDS_Shape <a class="el" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">canonMotion::myShape</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>

@@ -34,7 +34,7 @@
 </div>
 <div class="contents">
 <!-- doxytag: class="millTool" --><!-- doxytag: inherits="tool" -->
-<p>Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation of one of these tools.  
+<p>Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation of a <a class="el" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a>.  
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="tool_8hh_source.html">tool.hh</a>&gt;</code></p>
@@ -55,8 +55,7 @@ Collaboration diagram for millTool:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a6c03cd9b9939804199dae992930dfef7">getShape</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Solid &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83">getRevol</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Face &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#ac5088380c50d2b9649a171f280298448">getProj</a> (<a class="el" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> deg)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a3ee89df994b523fd15fdb69c33ed52e5">get3d</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">millTool</a> ()</td></tr>
@@ -65,11 +64,11 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a5a78ab6b434e4abffacf139e648a283d">dia</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#adc8360e7db323a20ed3f640b52693c1b">len</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a7369277095bef37031bf08eb15f23265">validRev</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Solid&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">revol</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#af8bc684d00c8384aacb6ec54e07134cd">validSolid</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Shape&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a4a81b529880822eeaecc80a7316d3d7e">myShape</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation of one of these tools. </p>
+<p>Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation of a <a class="el" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a>. </p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="acf39dcc83eac9b042b5ce19bcfa95ea6"></a><!-- doxytag: member="millTool::millTool" ref="acf39dcc83eac9b042b5ce19bcfa95ea6" args="()" -->
 <div class="memitem">
@@ -89,54 +88,29 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="ac5088380c50d2b9649a171f280298448"></a><!-- doxytag: member="millTool::getProj" ref="ac5088380c50d2b9649a171f280298448" args="(degrees deg)" -->
+<a class="anchor" id="a3ee89df994b523fd15fdb69c33ed52e5"></a><!-- doxytag: member="millTool::get3d" ref="a3ee89df994b523fd15fdb69c33ed52e5" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const TopoDS_Face &amp; millTool::getProj </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a>&nbsp;</td>
-          <td class="paramname"> <em>deg</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Projects the 3d model of the tool onto a plane normal to XY. Some code from <a href="http://www.opencascade.org/org/forum/thread_16928/">http://www.opencascade.org/org/forum/thread_16928/</a> TODO: use param degrees </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>deg</em>&nbsp;</td><td>Projection angle, in degrees. Sign is ignored. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>the projection as a TopoDS_Face. </dd></dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classtool.html#aa7d61ba51903f143f4437c11eb82ebd5">getProfile()</a>, <a class="el" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83">getRevol()</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a3a1cecf9a0a60b2cd53ab538f08e8e83"></a><!-- doxytag: member="millTool::getRevol" ref="a3a1cecf9a0a60b2cd53ab538f08e8e83" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const TopoDS_Solid &amp; millTool::getRevol </td>
+          <td class="memname">const TopoDS_Shape &amp; millTool::get3d </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td></td>
+          <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classballnose_tool.html#a9a44d43bed4e242eee818001db14274c">ballnoseTool</a>.</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classmill_tool_a3a1cecf9a0a60b2cd53ab538f08e8e83_icgraph.png" border="0" usemap="#classmill_tool_a3a1cecf9a0a60b2cd53ab538f08e8e83_icgraph" alt=""/></div>
-<map name="classmill_tool_a3a1cecf9a0a60b2cd53ab538f08e8e83_icgraph" id="classmill_tool_a3a1cecf9a0a60b2cd53ab538f08e8e83_icgraph">
-<area shape="rect" id="node3" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="179,5,349,35"/></map>
+<div class="center"><img src="classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph.png" border="0" usemap="#classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph" alt=""/></div>
+<map name="classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph" id="classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph">
+<area shape="rect" id="node3" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="160,5,331,35"/></map>
 </div>
 </p>
 
@@ -186,12 +160,12 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a04d3c6874343d9b27998a555e0f6cc0f"></a><!-- doxytag: member="millTool::revol" ref="a04d3c6874343d9b27998a555e0f6cc0f" args="" -->
+<a class="anchor" id="a4a81b529880822eeaecc80a7316d3d7e"></a><!-- doxytag: member="millTool::myShape" ref="a4a81b529880822eeaecc80a7316d3d7e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TopoDS_Solid <a class="el" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">millTool::revol</a><code> [protected]</code></td>
+          <td class="memname">TopoDS_Shape <a class="el" href="classmill_tool.html#a4a81b529880822eeaecc80a7316d3d7e">millTool::myShape</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -212,12 +186,12 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a7369277095bef37031bf08eb15f23265"></a><!-- doxytag: member="millTool::validRev" ref="a7369277095bef37031bf08eb15f23265" args="" -->
+<a class="anchor" id="af8bc684d00c8384aacb6ec54e07134cd"></a><!-- doxytag: member="millTool::validSolid" ref="af8bc684d00c8384aacb6ec54e07134cd" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classmill_tool.html#a7369277095bef37031bf08eb15f23265">millTool::validRev</a><code> [protected]</code></td>
+          <td class="memname">bool <a class="el" href="classmill_tool.html#af8bc684d00c8384aacb6ec54e07134cd">millTool::validSolid</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>

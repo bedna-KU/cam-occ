@@ -50,21 +50,19 @@ class tool {
 /**
 \class millTool
 \brief Rotary tool for the milling machine
-It must be possible to create both a 2d and a 3d representation of one of these tools
+It must be possible to create both a 2d and a 3d representation of a millTool
 */
 typedef enum { BALLNOSE, CYLINDRICAL, TOROIDAL, ENGRAVING, TAPERED, OTHER, UNDEF } SHAPE_TYPE;
 class millTool: public tool {
   public:
-    //getProfile() = 0;
     SHAPE_TYPE getShape() const {return shape;};
-    const TopoDS_Solid& getRevol();
-    const TopoDS_Face& getProj(degrees deg);
+    virtual const TopoDS_Shape& get3d();
   protected:
     millTool();
     SHAPE_TYPE shape;
     double dia,len; //diameter, length
-    bool validRev; //true if the revolution is valid
-    TopoDS_Solid revol;
+    bool validSolid; //true if the solid is valid
+    TopoDS_Shape myShape; //it's solid, but not always of type TopoDS_Solid
 };
 
 /**
@@ -88,6 +86,7 @@ It was created first because the ballnose tool is easy.
 */
 class ballnoseTool: public millTool {
   public:
+    const TopoDS_Shape& get3d();
     ballnoseTool(double diameter, double length);
 };
 

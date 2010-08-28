@@ -28,6 +28,8 @@
 
 #include "canonLine.hh"
 #include "machineStatus.hh"
+#include "dispShape.hh"
+
 /**
 \class g2m
 \brief This class does the high level stuff for creating a model from gcode.
@@ -48,6 +50,7 @@ class g2m: public QObject {
     void infoMsg(QString);
     void sleepSecond();
     std::vector<canonLine*> lineVector;
+    std::vector<dispShape*> dispVector;
     QString file;
     void test(); //FIXME: temporary
 };

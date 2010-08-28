@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="240,5,427,35"/>
+<area shape="rect" id="node5" href="$classmachine_status.html#a134831df227887d28dffa0c3346060a6" title="machineStatus::getPlane" alt="" coords="249,58,417,89"/>
+<area shape="rect" id="node7" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="237,111,429,142"/>
+<area shape="rect" id="node9" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="240,165,427,195"/>
+<area shape="rect" id="node11" href="$classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="canonLine::tok2d" alt="" coords="273,218,393,249"/>
+</map>

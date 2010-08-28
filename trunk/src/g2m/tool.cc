@@ -18,7 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "tool.hh"
+#include <uio.hh>
+//#include <dispShape.hh>
 #include <BRepPrimAPI_MakeRevol.hxx>
+#include <BRepPrimAPI_MakeCylinder.hxx>
+#include <BRepPrimAPI_MakeSphere.hxx>
+#include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
@@ -45,46 +50,35 @@ millTool::millTool() {
   type = ROTARY_TOOL;
   dia=0.0;
   len=0.0;
-  revol.Nullify();
+  myShape.Nullify();
 }
 
-const TopoDS_Solid& millTool::getRevol() {
-  if (revol.IsNull()) {
-    //gp_Ax1 vertical(gp_Pnt(0,0,0),gp_Dir(0,0,1)); //use gp::OZ() instead
+const TopoDS_Shape& millTool::get3d() {
+  if (myShape.IsNull()) {
     BRepBuilderAPI_MakeFace mkF(gp_Pln(gp::XOY()),profile);
     BRepPrimAPI_MakeRevol rev(mkF.Face(),gp::OZ(),M_PI,true);
-    validRev = rev.IsDone();
-    if (validRev)
-      revol = TopoDS::Solid( rev.Shape() );
+    validSolid = rev.IsDone();
+    if (validSolid)
+      myShape = rev.Shape();
   }
-  return revol;
+  return myShape;
 }
 
-
-/**
-Projects the 3d model of the tool onto a plane normal to XY.
-Some code from http://www.opencascade.org/org/forum/thread_16928/
-TODO: use param degrees
-\param deg Projection angle, in degrees. Sign is ignored.
-\return the projection as a TopoDS_Face.
-\sa getProfile(), getRevol()
-*/
-//if this doesnt work, try raytracing
-// see also OpenCASCADE6.3.0/samples/standard/mfc/12_HLR/src/SelectionDialog.cpp
-//Prs3d_Projector (const Standard_Boolean Pers, const Quantity_Length Focus, const Quantity_Length DX, const Quantity_Length DY, const Quantity_Length DZ, const Quantity_Length XAt, const Quantity_Length YAt, const Quantity_Length ZAt, const Quantity_Length XUp, const Quantity_Length YUp, const Quantity_Length ZUp)
-const TopoDS_Face& millTool::getProj(degrees deg) {
-  double zloc = 5; //zloc is z coordinate of projection
-  Handle(HLRBRep_Algo) myAlgo = new HLRBRep_Algo();
-  myAlgo->Add(profile);
-  Prs3d_Projector myProj(false,0, 0,0,zloc, 0,0,1, 0,0,1); //point
-  myAlgo->Projector(myProj.Projector());
-  myAlgo->Update();
-  HLRBRep_HLRToShape aHLRToShape(myAlgo);
-  TopoDS_Shape Proj = aHLRToShape.VCompound();
-  return TopoDS::Face(Proj);
+const TopoDS_Shape& ballnoseTool::get3d() {
+  if (myShape.IsNull()) {
+    double r = dia / 2.0;
+    TopoDS_Solid s,c;
+    gp_Ax2 axis(gp_Pnt(0,0,r),gp::DZ()); //for cylinder. 0,0,r is the center of the bottom face
+    s = TopoDS::Solid(BRepPrimAPI_MakeSphere(gp_Pnt(0,0,r),r).Solid());
+    c = TopoDS::Solid(BRepPrimAPI_MakeCylinder(axis,r,len-r).Solid());
+    BRepAlgoAPI_Fuse f(s,c);
+    validSolid = f.IsDone();
+    if (validSolid) {
+      myShape = f.Shape();
+    }
+  }
+  return myShape;
 }
-
-//aptTool::aptTool() {}
 
 ballnoseTool::ballnoseTool(double diameter, double length) {
   dia = diameter;
@@ -92,7 +86,7 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
   double r = dia/2.0;
   validProfile = false;
   Handle(Geom_TrimmedCurve) Tc;
-  Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(0,0,0), gp_Pnt(-r,0,r));
+  Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp::Origin(), gp_Pnt(-r,0,r));
   TopoDS_Edge Ec = BRepBuilderAPI_MakeEdge(Tc);
   TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,length));
   TopoDS_Edge E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,r), gp_Pnt(-r,0,length));
@@ -102,17 +96,6 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
     profile = wm.Wire();
     validProfile = true;
     shape = BALLNOSE;
-    /*
-    TopoDS_Wire w = wm.Wire();
-    if ( w.Closed() ) {
-      BRepBuilderAPI_MakeFace f(w);
-      if (f.IsDone()) {
-	profile = f.Face();
-	validProfile = true;
-	shape = BALLNOSE;
-      }
-    }
-    */
   }
 }
 

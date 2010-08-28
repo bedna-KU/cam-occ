@@ -17,14 +17,17 @@
 *   Free Software Foundation, Inc.,                                       *
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
-#include <string>
 #include "canonMotionless.hh"
 #include "uio.hh"
+#include <string>
+#include <BRepBuilderAPI_MakeVertex.hxx>
 
 canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):canonLine(canonL, prevStatus) {
   match = true;
   handled = true;
   status.setEndPose(status.getStartPose());
+  errors = false;
+  myUnSolid = BRepBuilderAPI_MakeVertex(status.getStartPose().Location());
 
   //match canonical commands. the string MUST be the complete command name
   if (clMatch("COMMENT")) {

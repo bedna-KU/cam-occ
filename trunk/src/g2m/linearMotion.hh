@@ -40,7 +40,7 @@ class linearMotion: protected canonMotion {
   public:
     linearMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType();
-    const TopoDS_Solid& getSolid() {return mySolid;};
+    const TopoDS_Shape& getShape() {return myShape;};
 };
 
 #endif //LINEARMOTION_HH

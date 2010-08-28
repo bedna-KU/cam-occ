@@ -44,7 +44,7 @@ class helicalMotion: protected canonMotion {
   public:
     helicalMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType() {return HELICAL;};
-    const TopoDS_Solid& getSolid() {return mySolid;};
+    const TopoDS_Shape& getShape() {return myShape;};
   private:
     void helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);
     //void arc(status.getStartPose().Location(), startVec, status.endPose)

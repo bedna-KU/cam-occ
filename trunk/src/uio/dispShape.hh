@@ -36,6 +36,7 @@ class dispShape {
   public:
     dispShape (const TopoDS_Shape& s, const int lineNbr=0, const Graphic3d_NameOfMaterial nom = Graphic3d_NOM_PLASTIC, const AIS_DisplayMode mode = AIS_Shaded);
     void display();
+    int line() {return canLine;};
   private:
     Handle(AIS_Shape) s;
     Graphic3d_NameOfMaterial NoM;

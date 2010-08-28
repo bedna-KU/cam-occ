@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="233,5,439,35"/>
+<area shape="rect" id="node7" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="243,58,429,89"/>
+<area shape="rect" id="node5" href="$classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="canonLine::tok2d" alt="" coords="489,5,609,35"/>
+</map>

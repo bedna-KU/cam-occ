@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="216,5,408,35"/>
+<area shape="rect" id="node5" href="$classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="233,58,391,89"/>
+<area shape="rect" id="node7" href="$classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="247,111,377,142"/>
+<area shape="rect" id="node11" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="255,165,369,195"/>
+<area shape="rect" id="node15" href="$classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="240,218,384,249"/>
+<area shape="rect" id="node9" href="$classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="469,111,560,142"/>
+<area shape="rect" id="node13" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="456,165,573,195"/>
+</map>

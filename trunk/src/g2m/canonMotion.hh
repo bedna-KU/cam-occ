@@ -45,13 +45,13 @@ Also, rapid and traverse are used interchangeably, at least in my comments...
 class canonMotion: protected canonLine {
   public:
     virtual MOTION_TYPE getMotionType() = 0;
-    virtual const TopoDS_Solid& getSolid() = 0;
+    virtual const TopoDS_Shape& getShape() = 0;
     bool isThisMotion() {return true;};
     bool isVolumeSuspect() {return sweepIsSuspect;};
-    const TopoDS_Solid& bruteForceSweep(); //sweep using brute force, i.e. fuse a solid many times
+    const TopoDS_Shape& bruteForceSweep(); //sweep using brute force, i.e. fuse a solid many times
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
-    TopoDS_Solid mySolid;
+    TopoDS_Shape myShape;
     //const TopoDS_Edge& edge; use myUnSolid
     gp_Ax1 getPoseFromCmd();
     bool sweepIsSuspect;

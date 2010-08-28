@@ -118,41 +118,35 @@ void g2m::slotModelFromFile() {
   uio::hideGrid();
   uio::axoView();
   //uio::window()->showNormal(); //for debugging, have a small window
-/* commented out for debugging
+
+  if (0) { //disabled  for debugging
   file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
   if ( ! file.endsWith(".ngc") ) {
     uio::infoMsg("You must select a file ending with .ngc!");
     return;
   }
-*/
+  interpret();
+  }
 
-  //interpret();
+
  //TODO: process each line, display
- //use dispShape here? or inside the canonLine obj? hrm...
-  /*
-  if (success) {
- cout << "sweeping..." << endl;
- sweep();
- fitAll();
- hasProcessedNgc = true;
-} else {
-  infoMsg("Interpreter stopped without finding PROGRAM_END.");
-  drawSome(-1);
-  showWire();
-  fitAll();
-}
-*/
+ //use dispShape here? or inside the canonLine obj?
+
+
   processCanonLine("   11 N0001  CHANGE_TOOL(1)");
- // processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
+  //processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
   processCanonLine("   14 N0003  SET_FEED_RATE(20.0000)");
   processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
-/**  processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
+  processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
   processCanonLine("   17 N0004  ARC_FEED(1.0000, 0.0000, 0.0000, 0.0000, -1, 0.0000)");
   processCanonLine("   18 N0005  COMMENT(\"----go to X1.0, Y0.0 at a feed rate of 20 inches/minute\")");
   processCanonLine("   19 N0005  SET_FEED_RATE(20.0000)");
   processCanonLine("   20 N0005  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
   //now do something with these...
-  */
+
+
+  //FIXME - do something with the lines here...
+
 
 }
 
@@ -227,8 +221,15 @@ bool g2m::processCanonLine (std::string l) {
   } else {
     cl = canonLine::canonLineFactory (l,*(lineVector.back())->getStatus());
   }
+
+  //show it
+  dispShape *ds = new dispShape(cl->getShape(),cl->getN());
+  ds->display();
+
   //store it
   lineVector.push_back(cl);
+  dispVector.push_back(ds);
+
   return cl->checkErrors();
 }
 

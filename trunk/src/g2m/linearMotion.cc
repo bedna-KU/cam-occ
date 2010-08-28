@@ -21,18 +21,23 @@
 
 #include <string>
 #include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepAlgo_Fuse.hxx>
+#include <BRep_Builder.hxx>
+#include <BRepTools.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_MakeSolid.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepOffsetAPI_MakePipeShell.hxx>
 #include <BRepBuilderAPI_PipeError.hxx>
+#include <ShapeFix_Shape.hxx>
+#include <ShapeFix_Solid.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Wire.hxx>
 #include "machineStatus.hh"
 #include "canonMotion.hh"
 #include "canonLine.hh"
 #include "uio.hh"
-#include "dispShape.hh"
 
 linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
   gp_Pnt a,b;
@@ -87,6 +92,11 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
     }
   }
   if (!errors) {
+    dispShape ds(pipe.Shape());
+    ds.display();
+    uio::sleep(5);
+    pipe.MakeSolid();
+
     //FIXME: each canonMotion obj should check if its startpoint is colinear with the endpoint of the previous object. If not, it should add a 3d model of the tool there.
 
     //for now, we'll add one at each end of every obj.
@@ -95,37 +105,25 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
     //BRepBuilderAPI_Transform
     //BRepBuilderAPI_GTransform
 
-    //mySolid = pipe.Shape();
-    //TopoDS_Solid& tl = status.getTool()->getRevol();
+    gp_Trsf tr;
+    tr.SetTranslation(gp::Origin(),a);
+    BRepBuilderAPI_Transform bt1(tr);
+    bt1.Perform(status.getTool()->get3d(),true);
+    TopoDS_Shape e1 = bt1.Shape(); //this is the tool, translated to the startpoint of the sweep
 
-    gp_Trsf tr; //FIXME must be initialized
-    gp_Pnt a(0,0,0),b;
-    b=status.getStartPose().Location();
-    tr.SetTranslation(a,b);
-    TopoDS_Shape r = BRepBuilderAPI_Transform (status.getTool()->getRevol(),tr);
+    tr.SetTranslation(gp::Origin(),b);
+    BRepBuilderAPI_Transform bt2(tr);
+    bt2.Perform(status.getTool()->get3d(),true);
+    TopoDS_Shape e2 = bt2.Shape(); //this is the tool, translated to the endpoint of the sweep
 
-
-    dispShape dr(r,5);
-    dr.display();
-    /*
-    dispShape dp(pipe.Shape(),5);
-    dp.display();
-    */
-    uio::fitAll();
-    uio::infoMsg("done");
-
-    ///TopoDS_Shape temp = BRepAlgoAPI_Fuse(pipe.Shape(), r ); //hangs here
-
-    ///b=status.getEndPose().Location();
-    ///tr.SetTranslation(a,b);
-    ///mySolid = TopoDS::Solid(BRepAlgoAPI_Fuse(temp,BRepBuilderAPI_Transform (status.getTool()->getRevol(),tr) ));
-
-    //mySolid = TopoDS::Solid(pipe.Shape());
-  ///}else {
-    //infoMsg("pipe not ready!");
-    mySolid = status.getTool()->getRevol();
+    TopoDS_Solid ps = TopoDS::Solid(pipe.Shape());
+    TopoDS_Shape temp = BRepAlgoAPI_Fuse( e1, e2 );
+    if (temp.IsNull()) std::cout << "null shape" << endl;
+    myShape = BRepAlgoAPI_Fuse( ps, temp );
+  } else {
+    uio::infoMsg("pipe not ready!");
+    myShape = status.getTool()->get3d();
   }
-
 }
 
 //need to return RAPID for rapids...
@@ -141,3 +139,43 @@ MOTION_TYPE linearMotion::getMotionType() {
     exit(1);
   }
 }
+
+/*
+TopTools_ListOfShape oneShell (TopoDS_Solid a, TopoDS_Solid b) {
+  TopTools_ListOfShape lsh;
+  TopoDS_Shell shp1_shell = BRepTools::OuterShell(a);
+  TopoDS_Shell shp2_shell = BRepTools::OuterShell(b);
+  TopoDS_Shape fused_shells = BRepAlgoAPI_Fuse(shp1_shell, shp2_shell).Shape();
+
+  TopExp_Explorer Ex;
+  for (Ex.Init(fused_shells, TopAbs_ShapeEnum.TopAbs_SHELL); Ex.More(); Ex.Next()) {
+    TopoDS_Shell crt_shell = TopoDS::Shell(Ex.Current());
+    ShapeFix_Shell FixTopShell(crt_shell);
+    FixTopShell.Perform();
+    if (FixTopShell.NbShells() > 1) {
+      TopoDS_Compound shellComp = OCTopoDS.Compound(FixTopShell.Shape());
+      TopExp_Explorer ExShls(shellComp, TopAbs_ShapeEnum.TopAbs_SHELL);
+      for (; ExShls.More(); ExShls.Next()) {
+        TopoDS_Shell shl1 = TopoDS::Shell(ExShls.Current());
+        ShapeFix_Shell FixShl = new ShapeFix_Shell(shl1);
+        FixShl.Perform();
+
+        TopoDS_Solid sol_tmp1 = BRepBuilderAPI_MakeSolid(FixShl.Shell()).Solid();
+        ShapeFix_Solid FixSld(sol_tmp1);
+        FixSld.Perform();
+        TopoDS_Solid sol_tmp = TopoDS.Solid(FixSld.Solid());
+        // add it to collection....
+        lsh.Add(sol_tmp);
+        cout << "multiple solids!" << endl;
+      }
+    } else {
+      TopoDS_Shell aShell = FixTopShell.Shell();
+      TopoDS_Solid sol = new BRepBuilderAPI_MakeSolid(aShell).Solid();
+      // add it to collection....
+      lsh.Add(sol);
+        cout << "one solid" << endl;
+    }
+  }
+  return lsh;
+}
+*/

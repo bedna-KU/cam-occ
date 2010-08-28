@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_qocc_view_widget.html#a6952910cf2086aa5b6dcf44cb9c59955" title="QoccViewWidget::background" alt="" coords="248,5,443,35"/>
+<area shape="rect" id="node5" href="$class_qocc_view_widget.html#aa450bbb3bf19a7f9e731e3acf1e652d2" title="QoccViewWidget::dump" alt="" coords="265,58,425,89"/>
+<area shape="rect" id="node7" href="$class_qocc_view_widget.html#aa8278c05853d0909b86513f54a4c90f7" title="Mouse release event." alt="" coords="221,111,469,142"/>
+<area shape="rect" id="node9" href="$class_qocc_view_widget.html#a1a4b972db34cca063ba3cb51bd068aea" title="Paint Event Called when the Widget needs to repaint itself." alt="" coords="251,165,440,195"/>
+</map>

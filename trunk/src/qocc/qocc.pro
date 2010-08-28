@@ -24,7 +24,7 @@ linux-g++ {
 
 DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 
-INCLUDEPATH += /opt/occ63/inc/ ../lnk/
+INCLUDEPATH += /opt/occ63/inc/ ../lnk/ ../uio/
 LIBS += -L/opt/occ63/lib/ -L../../bin \
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
 -lTKSTEP -lTKService -lTKV3d -lTKernel -lTKIGES \

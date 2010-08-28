@@ -75,38 +75,37 @@
 <a name="l00055"></a><a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391ba632fa39438c1676b435ec43e6a0f9647">00055</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> { BALLNOSE, CYLINDRICAL, TOROIDAL, ENGRAVING, TAPERED, OTHER, <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391ba632fa39438c1676b435ec43e6a0f9647">UNDEF</a> } SHAPE_TYPE;
 <a name="l00056"></a><a class="code" href="classmill_tool.html">00056</a> <span class="keyword">class </span><a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a>: <span class="keyword">public</span> <a class="code" href="classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else.">tool</a> {
 <a name="l00057"></a>00057   <span class="keyword">public</span>:
-<a name="l00058"></a>00058     <span class="comment">//getProfile() = 0;</span>
-<a name="l00059"></a><a class="code" href="classmill_tool.html#a6c03cd9b9939804199dae992930dfef7">00059</a>     <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a> <a class="code" href="classmill_tool.html#a6c03cd9b9939804199dae992930dfef7">getShape</a>()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a>;};
-<a name="l00060"></a>00060     <span class="keyword">const</span> TopoDS_Solid&amp; <a class="code" href="classmill_tool.html#a3a1cecf9a0a60b2cd53ab538f08e8e83">getRevol</a>();
-<a name="l00061"></a>00061     <span class="keyword">const</span> TopoDS_Face&amp; <a class="code" href="classmill_tool.html#ac5088380c50d2b9649a171f280298448">getProj</a>(<a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> deg);
-<a name="l00062"></a>00062   <span class="keyword">protected</span>:
-<a name="l00063"></a>00063     <a class="code" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">millTool</a>();
-<a name="l00064"></a><a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">00064</a>     <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a> <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a>;
-<a name="l00065"></a><a class="code" href="classmill_tool.html#adc8360e7db323a20ed3f640b52693c1b">00065</a>     <span class="keywordtype">double</span> <a class="code" href="classmill_tool.html#a5a78ab6b434e4abffacf139e648a283d">dia</a>,<a class="code" href="classmill_tool.html#adc8360e7db323a20ed3f640b52693c1b">len</a>; <span class="comment">//diameter, length</span>
-<a name="l00066"></a><a class="code" href="classmill_tool.html#a7369277095bef37031bf08eb15f23265">00066</a>     <span class="keywordtype">bool</span> <a class="code" href="classmill_tool.html#a7369277095bef37031bf08eb15f23265">validRev</a>; <span class="comment">//true if the revolution is valid</span>
-<a name="l00067"></a><a class="code" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">00067</a>     TopoDS_Solid <a class="code" href="classmill_tool.html#a04d3c6874343d9b27998a555e0f6cc0f">revol</a>;
-<a name="l00068"></a>00068 };
-<a name="l00069"></a>00069 
-<a name="l00075"></a><a class="code" href="classapt_tool.html">00075</a> <span class="keyword">class </span><a class="code" href="classapt_tool.html" title="This class is for the generic APT-style milling tool. FIXME This class is not complete!">aptTool</a>: <span class="keyword">public</span> <a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a> {
-<a name="l00076"></a>00076   <span class="keyword">public</span>:
-<a name="l00077"></a>00077     <a class="code" href="classapt_tool.html#a4b2b8dc19568bef6099a5a4a461b086c">aptTool</a>(<span class="keywordtype">double</span> dd,<span class="keywordtype">double</span> aa,<span class="keywordtype">double</span> bb,
-<a name="l00078"></a>00078             <a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> AA,<a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> BB, <span class="keywordtype">double</span> ll);
-<a name="l00079"></a>00079   <span class="keyword">private</span>:
-<a name="l00080"></a>00080     <span class="keywordtype">double</span> a,b; <span class="comment">//d and l are in millTool</span>
-<a name="l00081"></a>00081     <a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> A,B;
-<a name="l00082"></a>00082 };
-<a name="l00083"></a>00083 
-<a name="l00089"></a><a class="code" href="classballnose_tool.html">00089</a> <span class="keyword">class </span><a class="code" href="classballnose_tool.html" title="This class is for the ballnose tool. It was created first because the ballnose tool is easy...">ballnoseTool</a>: <span class="keyword">public</span> <a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a> {
-<a name="l00090"></a>00090   <span class="keyword">public</span>:
-<a name="l00091"></a>00091     <a class="code" href="classballnose_tool.html#ae61afb5b27b99df546e9fc81816e7b1a">ballnoseTool</a>(<span class="keywordtype">double</span> diameter, <span class="keywordtype">double</span> length);
-<a name="l00092"></a>00092 };
-<a name="l00093"></a>00093 
-<a name="l00099"></a><a class="code" href="classlathe_tool.html">00099</a> <span class="keyword">class </span><a class="code" href="classlathe_tool.html" title="A 2d tool for the lathe. This class is incomplete. Furthermore, at this time g2m only supports millin...">latheTool</a>: <span class="keyword">public</span> <a class="code" href="classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else.">tool</a> {
-<a name="l00100"></a>00100   <span class="keyword">public</span>:
-<a name="l00101"></a>00101     <a class="code" href="classlathe_tool.html#aef7f304f0a7b60fbba94f6eed58e3353">latheTool</a>();
-<a name="l00102"></a>00102 };
-<a name="l00103"></a>00103 
-<a name="l00104"></a>00104 <span class="preprocessor">#endif //TOOL_HH</span>
+<a name="l00058"></a><a class="code" href="classmill_tool.html#a6c03cd9b9939804199dae992930dfef7">00058</a>     <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a> <a class="code" href="classmill_tool.html#a6c03cd9b9939804199dae992930dfef7">getShape</a>()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a>;};
+<a name="l00059"></a>00059     <span class="keyword">virtual</span> <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classmill_tool.html#a3ee89df994b523fd15fdb69c33ed52e5">get3d</a>();
+<a name="l00060"></a>00060   <span class="keyword">protected</span>:
+<a name="l00061"></a>00061     <a class="code" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">millTool</a>();
+<a name="l00062"></a><a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">00062</a>     <a class="code" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a> <a class="code" href="classmill_tool.html#a5e34fe1a15e2ab4608743f832e8e79eb">shape</a>;
+<a name="l00063"></a><a class="code" href="classmill_tool.html#adc8360e7db323a20ed3f640b52693c1b">00063</a>     <span class="keywordtype">double</span> <a class="code" href="classmill_tool.html#a5a78ab6b434e4abffacf139e648a283d">dia</a>,<a class="code" href="classmill_tool.html#adc8360e7db323a20ed3f640b52693c1b">len</a>; <span class="comment">//diameter, length</span>
+<a name="l00064"></a><a class="code" href="classmill_tool.html#af8bc684d00c8384aacb6ec54e07134cd">00064</a>     <span class="keywordtype">bool</span> <a class="code" href="classmill_tool.html#af8bc684d00c8384aacb6ec54e07134cd">validSolid</a>; <span class="comment">//true if the solid is valid</span>
+<a name="l00065"></a><a class="code" href="classmill_tool.html#a4a81b529880822eeaecc80a7316d3d7e">00065</a>     TopoDS_Shape <a class="code" href="classmill_tool.html#a4a81b529880822eeaecc80a7316d3d7e">myShape</a>; <span class="comment">//it&#39;s solid, but not always of type TopoDS_Solid</span>
+<a name="l00066"></a>00066 };
+<a name="l00067"></a>00067 
+<a name="l00073"></a><a class="code" href="classapt_tool.html">00073</a> <span class="keyword">class </span><a class="code" href="classapt_tool.html" title="This class is for the generic APT-style milling tool. FIXME This class is not complete!">aptTool</a>: <span class="keyword">public</span> <a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a> {
+<a name="l00074"></a>00074   <span class="keyword">public</span>:
+<a name="l00075"></a>00075     <a class="code" href="classapt_tool.html#a4b2b8dc19568bef6099a5a4a461b086c">aptTool</a>(<span class="keywordtype">double</span> dd,<span class="keywordtype">double</span> aa,<span class="keywordtype">double</span> bb,
+<a name="l00076"></a>00076             <a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> AA,<a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> BB, <span class="keywordtype">double</span> ll);
+<a name="l00077"></a>00077   <span class="keyword">private</span>:
+<a name="l00078"></a>00078     <span class="keywordtype">double</span> a,b; <span class="comment">//d and l are in millTool</span>
+<a name="l00079"></a>00079     <a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">degrees</a> A,B;
+<a name="l00080"></a>00080 };
+<a name="l00081"></a>00081 
+<a name="l00087"></a><a class="code" href="classballnose_tool.html">00087</a> <span class="keyword">class </span><a class="code" href="classballnose_tool.html" title="This class is for the ballnose tool. It was created first because the ballnose tool is easy...">ballnoseTool</a>: <span class="keyword">public</span> <a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a> {
+<a name="l00088"></a>00088   <span class="keyword">public</span>:
+<a name="l00089"></a>00089     <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classballnose_tool.html#a9a44d43bed4e242eee818001db14274c">get3d</a>();
+<a name="l00090"></a>00090     <a class="code" href="classballnose_tool.html#ae61afb5b27b99df546e9fc81816e7b1a">ballnoseTool</a>(<span class="keywordtype">double</span> diameter, <span class="keywordtype">double</span> length);
+<a name="l00091"></a>00091 };
+<a name="l00092"></a>00092 
+<a name="l00098"></a><a class="code" href="classlathe_tool.html">00098</a> <span class="keyword">class </span><a class="code" href="classlathe_tool.html" title="A 2d tool for the lathe. This class is incomplete. Furthermore, at this time g2m only supports millin...">latheTool</a>: <span class="keyword">public</span> <a class="code" href="classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else.">tool</a> {
+<a name="l00099"></a>00099   <span class="keyword">public</span>:
+<a name="l00100"></a>00100     <a class="code" href="classlathe_tool.html#aef7f304f0a7b60fbba94f6eed58e3353">latheTool</a>();
+<a name="l00101"></a>00101 };
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103 <span class="preprocessor">#endif //TOOL_HH</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

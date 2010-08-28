@@ -29,6 +29,8 @@
 #include "canon.hh"
 #include "machineStatus.hh"
 #include "tool.hh"
+#include "dispShape.hh"
+
 /**
 \class canonLine
 \brief A canonLine object represents one canonical command.
@@ -47,7 +49,8 @@ class canonLine: protected canon {
     static canonLine* canonLineFactory (std::string l, machineStatus s);
     //static void setToolVecPtr(std::vector<tool> *t);
     const std::string getCanonType();
-    const TopoDS_Shape& getUnSolid() {assert(!errors); return myUnSolid;}; //FIXME: use dispShape instead? one obj for both solid and unsolid? throw in highlighting as well?
+    const TopoDS_Shape& getUnSolid() {return myUnSolid;}; //FIXME: use dispShape instead? one obj for both solid and unsolid? throw in highlighting as well?
+    virtual const TopoDS_Shape& getShape()=0;
     bool checkErrors() {return errors;};
   protected:
     canonLine(std::string canonL, machineStatus prevStatus);
