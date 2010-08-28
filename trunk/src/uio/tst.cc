@@ -73,7 +73,7 @@ tst::tst() {
   //myAction->setStatusTip ( "" );
   connect(myAction,SIGNAL(triggered()),this,SLOT(slotTest1()));
   myMenu->addAction( myAction );
-  uio::window()->showNormal();
+  //uio::window()->showNormal();
 }
 
 void tst::slotTest1() {

@@ -1,3 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$classcam.html" title="cam" alt="" coords="7,5,52,35"/>
+<area shape="rect" id="node1" href="$classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="7,85,63,115"/>
+<area shape="rect" id="node3" href="$classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c..." alt="" coords="127,58,207,89"/>
+<area shape="rect" id="node13" href="$classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information stored include..." alt="" coords="112,111,221,142"/>
+<area shape="rect" id="node5" href="$classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands." alt="" coords="281,31,377,62"/>
+<area shape="rect" id="node11" href="$classcanon_motionless.html" title="A canonical command that (generally) does not cause or alter axis motion This class is for anything o..." alt="" coords="269,85,389,115"/>
+<area shape="rect" id="node7" href="$classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs..." alt="" coords="437,5,536,35"/>
+<area shape="rect" id="node9" href="$classlinear_motion.html" title="For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits from canonMotion..." alt="" coords="441,58,532,89"/>
 </map>

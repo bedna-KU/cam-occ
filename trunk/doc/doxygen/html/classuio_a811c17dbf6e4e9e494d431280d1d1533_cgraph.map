@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$class_qocc_harness_window.html#a82151cae1142a8a91d9bb6b976178eba" title="QoccHarnessWindow::getContext" alt="" coords="125,5,341,35"/>
-<area shape="rect" id="node7" href="$class_qocc_harness_window.html#a65822a5ab3e9f36c240a0fd1a4d9c31c" title="QoccHarnessWindow::getHelpMenu" alt="" coords="119,58,348,89"/>
-<area shape="rect" id="node9" href="$class_qocc_harness_window.html#acb9a2f21f46d7db862404ea7606661f5" title="QoccHarnessWindow::getOCC" alt="" coords="133,111,333,142"/>
-<area shape="rect" id="node11" href="$class_qocc_harness_window.html#a7aafadb246578396b9a3da389c517ee6" title="QoccHarnessWindow::getVC" alt="" coords="139,165,328,195"/>
-<area shape="rect" id="node13" href="$class_qocc_harness_window.html#a1e5955c403bbc6afab7b71177d0f9f1f" title="QoccHarnessWindow::getView" alt="" coords="133,218,333,249"/>
-<area shape="rect" id="node5" href="$class_qocc_viewer_context.html#ad5ee0a4d6e901df89fa6dc1d5e1a055a" title="QoccViewerContext::getContext" alt="" coords="397,5,605,35"/>
-<area shape="rect" id="node15" href="$class_qocc_view_widget.html#a9306879d39c3784eca82d5c535af3754" title="QoccViewWidget::getView" alt="" coords="415,218,588,249"/>
-</map>
