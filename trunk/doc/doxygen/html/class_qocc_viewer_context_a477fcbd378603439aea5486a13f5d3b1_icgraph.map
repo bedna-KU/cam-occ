@@ -1,6 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" href="$classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="249,5,343,35"/>
-<area shape="rect" href="$classui_stuff.html#a9ce7805fdf97d24afed4ebbb2523f4d1" title="uiStuff::hideGrid" alt="" coords="239,59,353,88"/>
-<area shape="rect" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="403,5,563,35"/>
-<area shape="rect" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="611,5,691,35"/>
+<area shape="rect" id="node3" href="$classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="249,58,343,89"/>
+<area shape="rect" id="node15" href="$classui_stuff.html#a9ce7805fdf97d24afed4ebbb2523f4d1" title="uiStuff::hideGrid" alt="" coords="239,111,353,142"/>
+<area shape="rect" id="node5" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="404,5,564,35"/>
+<area shape="rect" id="node9" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="435,58,533,89"/>
+<area shape="rect" id="node13" href="$classg2m.html#ae469849f9a988d939c9ac89ad05a3653" title="g2m::test" alt="" coords="445,111,523,142"/>
+<area shape="rect" id="node7" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="613,5,693,35"/>
+<area shape="rect" id="node11" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="624,58,683,89"/>
 </map>

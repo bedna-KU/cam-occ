@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="216,5,317,35"/>
-<area shape="rect" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="365,5,525,35"/>
-<area shape="rect" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="573,5,653,35"/>
+<area shape="rect" id="node3" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="247,5,348,35"/>
+<area shape="rect" id="node5" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="217,58,377,89"/>
+<area shape="rect" id="node7" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="427,58,507,89"/>
 </map>

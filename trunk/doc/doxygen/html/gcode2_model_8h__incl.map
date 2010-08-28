@@ -1,9 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" href="$ui_stuff_8h.html" title="uiStuff.h" alt="" coords="1180,83,1249,112"/>
-<area shape="rect" href="$qoccharnesswindow_8h.html" title="qoccharnesswindow.h" alt="" coords="1012,160,1159,189"/>
-<area shape="rect" href="$qoccviewercontext_8h.html" title="qoccviewercontext.h" alt="" coords="1137,237,1276,267"/>
-<area shape="rect" href="$qoccviewwidget_8h.html" title="qoccviewwidget.h" alt="" coords="1447,237,1569,267"/>
-<area shape="rect" href="$qoccinputoutput_8h.html" title="qoccinputoutput.h" alt="" coords="1300,237,1423,267"/>
-<area shape="rect" href="$lnk_8hh.html" title="lnk.hh" alt="" coords="1057,237,1113,267"/>
-<area shape="rect" href="$qocc_8h.html" title="qocc.h" alt="" coords="1356,315,1415,344"/>
+<area shape="rect" id="node25" href="$ui_stuff_8h.html" title="uiStuff.h" alt="" coords="1529,86,1599,117"/>
+<area shape="rect" id="node27" href="$qoccharnesswindow_8h.html" title="qoccharnesswindow.h" alt="" coords="1359,166,1508,197"/>
+<area shape="rect" id="node33" href="$qoccviewercontext_8h.html" title="qoccviewercontext.h" alt="" coords="1205,246,1347,277"/>
+<area shape="rect" id="node72" href="$qoccviewwidget_8h.html" title="qoccviewwidget.h" alt="" coords="1520,246,1643,277"/>
+<area shape="rect" id="node79" href="$qoccinputoutput_8h.html" title="qoccinputoutput.h" alt="" coords="1371,246,1496,277"/>
+<area shape="rect" id="node83" href="$lnk_8hh.html" title="lnk.hh" alt="" coords="1925,246,1981,277"/>
+<area shape="rect" id="node37" href="$qocc_8h.html" title="qocc.h" alt="" coords="1427,326,1488,357"/>
 </map>

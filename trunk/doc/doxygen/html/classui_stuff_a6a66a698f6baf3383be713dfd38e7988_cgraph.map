@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" href="$class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window..." alt="" coords="169,5,324,35"/>
-<area shape="rect" href="$class_qocc_harness_window.html#acb9a2f21f46d7db862404ea7606661f5" title="QoccHarnessWindow::getOCC" alt="" coords="147,59,347,88"/>
+<area shape="rect" id="node3" href="$class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="172,5,327,35"/>
+<area shape="rect" id="node5" href="$class_qocc_harness_window.html#acb9a2f21f46d7db862404ea7606661f5" title="QoccHarnessWindow::getOCC" alt="" coords="149,58,349,89"/>
 </map>

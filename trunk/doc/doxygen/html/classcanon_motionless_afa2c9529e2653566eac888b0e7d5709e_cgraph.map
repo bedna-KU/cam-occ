@@ -1,9 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" href="$classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="309,5,443,35"/>
-<area shape="rect" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="280,59,472,88"/>
-<area shape="rect" href="$classuio.html#a72ced2b751e75942c7ce0002401f9c13" title="uio::infoMsg" alt="" coords="331,112,421,141"/>
-<area shape="rect" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="284,165,468,195"/>
-<area shape="rect" href="$classmachine_status.html#af25b86191decf6b9bfb6717a7a712d5a" title="machineStatus::setPlane" alt="" coords="292,219,460,248"/>
-<area shape="rect" href="$classmachine_status.html#a0ebc6ab5c3d20f31a16acd78e89628dd" title="machineStatus::setTool" alt="" coords="297,272,455,301"/>
-<area shape="rect" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="converts canonTokens[n] to int" alt="" coords="319,325,433,355"/>
+<area shape="rect" id="node3" href="$classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="309,5,443,35"/>
+<area shape="rect" id="node5" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="280,58,472,89"/>
+<area shape="rect" id="node7" href="$classuio.html#a72ced2b751e75942c7ce0002401f9c13" title="uio::infoMsg" alt="" coords="329,111,423,142"/>
+<area shape="rect" id="node9" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="283,165,469,195"/>
+<area shape="rect" id="node11" href="$classmachine_status.html#af25b86191decf6b9bfb6717a7a712d5a" title="machineStatus::setPlane" alt="" coords="292,218,460,249"/>
+<area shape="rect" id="node13" href="$classmachine_status.html#a3d0994b2a38efb8bf75563ab46f7c543" title="machineStatus::setTool" alt="" coords="297,271,455,302"/>
+<area shape="rect" id="node15" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="317,325,435,355"/>
 </map>

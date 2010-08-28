@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" href="$classui_stuff.html#a9ce7805fdf97d24afed4ebbb2523f4d1" title="uiStuff::hideGrid" alt="" coords="244,5,359,35"/>
-<area shape="rect" href="$classuio.html#a811c17dbf6e4e9e494d431280d1d1533" title="uio::uio" alt="" coords="269,59,333,88"/>
+<area shape="rect" id="node3" href="$classui_stuff.html#a9ce7805fdf97d24afed4ebbb2523f4d1" title="uiStuff::hideGrid" alt="" coords="244,5,359,35"/>
+<area shape="rect" id="node5" href="$classuio.html#a811c17dbf6e4e9e494d431280d1d1533" title="uio::uio" alt="" coords="269,58,333,89"/>
 </map>

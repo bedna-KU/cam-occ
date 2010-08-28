@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" href="$classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="175,5,380,35"/>
-<area shape="rect" href="$classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="187,59,368,88"/>
-<area shape="rect" href="$classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69" title="canonMotion::canonMotion" alt="" coords="431,5,607,35"/>
+<area shape="rect" id="node3" href="$classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="177,5,383,35"/>
+<area shape="rect" id="node7" href="$classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="189,58,371,89"/>
+<area shape="rect" id="node5" href="$classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69" title="canonMotion::canonMotion" alt="" coords="432,5,611,35"/>
 </map>

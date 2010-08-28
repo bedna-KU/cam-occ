@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" href="$helical_motion_8hh.html" title="helicalMotion.hh" alt="" coords="500,83,615,112"/>
-<area shape="rect" href="$machine_status_8hh.html" title="machineStatus.hh" alt="" coords="731,315,856,344"/>
-<area shape="rect" href="$canon_motion_8hh.html" title="canonMotion.hh" alt="" coords="261,160,373,189"/>
-<area shape="rect" href="$canon_line_8hh.html" title="canonLine.hh" alt="" coords="456,237,555,267"/>
-<area shape="rect" href="$canon_8hh.html" title="canon.hh" alt="" coords="549,469,624,499"/>
-<area shape="rect" href="$tool_8hh.html" title="tool.hh" alt="" coords="732,392,791,421"/>
+<area shape="rect" id="node29" href="$helical_motion_8hh.html" title="helicalMotion.hh" alt="" coords="503,86,617,117"/>
+<area shape="rect" id="node66" href="$machine_status_8hh.html" title="machineStatus.hh" alt="" coords="733,326,859,357"/>
+<area shape="rect" id="node42" href="$canon_motion_8hh.html" title="canonMotion.hh" alt="" coords="260,166,375,197"/>
+<area shape="rect" id="node51" href="$canon_line_8hh.html" title="canonLine.hh" alt="" coords="459,246,557,277"/>
+<area shape="rect" id="node57" href="$canon_8hh.html" title="canon.hh" alt="" coords="572,486,647,517"/>
+<area shape="rect" id="node70" href="$tool_8hh.html" title="tool.hh" alt="" coords="733,406,795,437"/>
 </map>

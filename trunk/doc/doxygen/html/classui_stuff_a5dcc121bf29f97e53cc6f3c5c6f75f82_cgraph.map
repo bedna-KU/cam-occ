@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" href="$class_qocc_harness_window.html#a1e5955c403bbc6afab7b71177d0f9f1f" title="QoccHarnessWindow::getView" alt="" coords="160,5,360,35"/>
-<area shape="rect" href="$class_qocc_view_widget.html#a9306879d39c3784eca82d5c535af3754" title="QoccViewWidget::getView" alt="" coords="409,5,583,35"/>
+<area shape="rect" id="node3" href="$class_qocc_harness_window.html#a1e5955c403bbc6afab7b71177d0f9f1f" title="QoccHarnessWindow::getView" alt="" coords="160,5,360,35"/>
+<area shape="rect" id="node5" href="$class_qocc_view_widget.html#a9306879d39c3784eca82d5c535af3754" title="QoccViewWidget::getView" alt="" coords="409,5,583,35"/>
 </map>

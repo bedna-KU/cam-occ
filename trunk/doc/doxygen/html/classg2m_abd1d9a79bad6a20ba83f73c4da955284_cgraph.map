@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" href="$classg2m.html#a18718bfaf915219dd85110bc3be63aae" title="g2m::infoMsg" alt="" coords="187,5,285,35"/>
-<area shape="rect" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="156,59,316,88"/>
-<area shape="rect" href="$classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="g2m::sleepSecond" alt="" coords="172,112,300,141"/>
-<area shape="rect" href="$classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLine::canonLineFactory" alt="" coords="365,32,557,61"/>
-<area shape="rect" href="$classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="383,85,540,115"/>
-</map>

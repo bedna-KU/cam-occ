@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" href="$class_qocc_viewer_context.html#ac7612e0248647a093e45f0e974180483" title="QoccViewerContext::createViewer" alt="" coords="317,5,536,35"/>
-<area shape="rect" href="$class_qocc_viewer_context.html#a8d1144db1aac4b5f0e4bd05b395d27b8" title="Turn the grid on." alt="" coords="336,59,517,88"/>
-<area shape="rect" href="$class_qocc_viewer_context.html#aca2aa8d8365d8af82412ef4d9afa76f6" title="Sets the privileged plane to the XY Axis." alt="" coords="335,112,519,141"/>
-<area shape="rect" href="$class_qocc_viewer_context.html#a796d79409a0ac19ca39cb1fdf6d73b6c" title="QoccViewerContext::setGridOffset" alt="" coords="316,165,537,195"/>
+<area shape="rect" id="node3" href="$class_qocc_viewer_context.html#ac7612e0248647a093e45f0e974180483" title="QoccViewerContext::createViewer" alt="" coords="317,5,536,35"/>
+<area shape="rect" id="node5" href="$class_qocc_viewer_context.html#a8d1144db1aac4b5f0e4bd05b395d27b8" title="Turn the grid on." alt="" coords="336,58,517,89"/>
+<area shape="rect" id="node7" href="$class_qocc_viewer_context.html#aca2aa8d8365d8af82412ef4d9afa76f6" title="Sets the privileged plane to the XY Axis." alt="" coords="335,111,519,142"/>
+<area shape="rect" id="node9" href="$class_qocc_viewer_context.html#a796d79409a0ac19ca39cb1fdf6d73b6c" title="QoccViewerContext::setGridOffset" alt="" coords="316,165,537,195"/>
 </map>

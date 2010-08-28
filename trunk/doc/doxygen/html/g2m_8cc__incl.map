@@ -1,8 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" href="$g2m_8hh.html" title="g2m.hh" alt="" coords="879,83,943,112"/>
-<area shape="rect" href="$canon_line_8hh.html" title="canonLine.hh" alt="" coords="1163,160,1261,189"/>
-<area shape="rect" href="$uio_8hh.html" title="uio.hh" alt="" coords="781,392,837,421"/>
-<area shape="rect" href="$machine_status_8hh.html" title="machineStatus.hh" alt="" coords="999,237,1124,267"/>
-<area shape="rect" href="$canon_8hh.html" title="canon.hh" alt="" coords="1120,392,1195,421"/>
-<area shape="rect" href="$tool_8hh.html" title="tool.hh" alt="" coords="1253,315,1312,344"/>
+<area shape="rect" id="node21" href="$g2m_8hh.html" title="g2m.hh" alt="" coords="629,86,693,117"/>
+<area shape="rect" id="node28" href="$canon_line_8hh.html" title="canonLine.hh" alt="" coords="336,166,435,197"/>
+<area shape="rect" id="node58" href="$uio_8hh.html" title="uio.hh" alt="" coords="813,406,869,437"/>
+<area shape="rect" id="node110" href="$disp_shape_8hh.html" title="dispShape.hh" alt="" coords="1865,406,1967,437"/>
+<area shape="rect" id="node47" href="$machine_status_8hh.html" title="machineStatus.hh" alt="" coords="423,246,548,277"/>
+<area shape="rect" id="node36" href="$canon_8hh.html" title="canon.hh" alt="" coords="359,406,433,437"/>
+<area shape="rect" id="node51" href="$tool_8hh.html" title="tool.hh" alt="" coords="304,326,365,357"/>
 </map>
