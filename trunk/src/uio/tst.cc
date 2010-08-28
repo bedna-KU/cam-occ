@@ -27,41 +27,42 @@
 #include <QAction>
 #include <iostream>
 
-#include <Handle_Geom_TrimmedCurve.hxx>
-#include <GC_MakeArcOfCircle.hxx>
-#include <BRepBuilderAPI_MakeWire.hxx>
+#include <Bnd_Box.hxx>
+#include <BRepAdaptor_Curve.hxx>
+#include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepAlgo_Fuse.hxx>
+#include <BRepBndLib.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBuilderAPI_MakeVertex.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepGProp.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
-#include <BRepAlgoAPI_Fuse.hxx>
-#include <BRepTools.hxx>
-#include <Handle_Geom_Curve.hxx>
-#include <Geom_Curve.hxx>
 #include <BRep_Tool.hxx>
-#include <BRepAlgo_Fuse.hxx>
-#include <BRepBuilderAPI_MakeVertex.hxx>
-#include <BRepBndLib.hxx>
-#include <BRepBuilderAPI_Transform.hxx>
-#include <TopoDS.hxx>
-#include <TopoDS_Compound.hxx>
-#include <TopoDS_Face.hxx>
-#include <BRepAdaptor_Curve.hxx>
+#include <BRepTools.hxx>
+#include <GC_MakeArcOfCircle.hxx>
 #include <GeomAbs_SurfaceType.hxx>
+#include <Geom_Curve.hxx>
 #include <gp_Circ.hxx>
+#include <gp_Pln.hxx>
+#include <GProp_GProps.hxx>
+#include <Handle_Geom_Curve.hxx>
+#include <Handle_Geom_TrimmedCurve.hxx>
 #include <Handle_HLRBRep_Algo.hxx>
+#include <HLRAlgo_Projector.hxx>
 #include <HLRBRep_Algo.hxx>
 #include <HLRBRep_HLRToShape.hxx>
-#include <HLRAlgo_Projector.hxx>
-#include <gp_Pln.hxx>
-#include <TopoDS_Edge.hxx>
-#include <GProp_GProps.hxx>
-#include <BRepGProp.hxx>
-#include <TopTools_HSequenceOfShape.hxx>
-#include <TopExp_Explorer.hxx>
-#include <ShapeAnalysis_FreeBounds.hxx>
 #include <HLRTopoBRep_OutLiner.hxx>
+#include <ShapeAnalysis_FreeBounds.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopoDS_Compound.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
+#include <TopoDS.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 
 tst::tst() {
@@ -145,6 +146,8 @@ TopoDS_Wire tst::outermost(TopoDS_Compound h) {
   //bounding box. shape is laying along the y axis
   Bnd_Box bbox;
   double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
+  TopoDS_Wire w;  //this is what we return
+  w.Nullify();
   BRepBndLib::Add (h, bbox);
   bbox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax ); //we only need the Y's
 
@@ -201,150 +204,192 @@ TopoDS_Wire tst::outermost(TopoDS_Compound h) {
 
   //go through the rest of the edges, adding them to the wire in order
   //note - a while loop, nested inside a do-while loop
+  int dwcnt = 0;
   do {
+    int listsize = lsh.Extent();
     iter.Initialize(lsh);
+    int whcnt = 0;
     while (iter.More()) {
-
+      whcnt++;
+      if (whcnt > 500) break;
+      cout << "check an edge..." << endl;
       //add that edge to wire, remove from lsh
       e = TopoDS::Edge(iter.Value());
       twopnts currentEnds = getEnds(e);
-
-      //check for a match and update 'ends'
-      bool match = false;
-      if (cmpPntPnts(currentEnds.a,ends)) { /* currentEnds.a matches, so replace one of
-        'ends' with currentEnds.b - but which one? */
-        if (samepnt(currentEnds.a,ends.a))
-          ends.a = currentEnds.b;
-        else
-          ends.b = currentEnds.b;
-        match = true;
-      }
-      if (cmpPntPnts(currentEnds.b,ends)) {
-        if (samepnt(currentEnds.b,ends.a))
-          ends.a = currentEnds.a;
-        else
-          ends.b = currentEnds.a;
-        match = true;
-      }
-      if (match){
+      if (!currentEnds.e) { //no error
+        //check for a match and update 'ends'
+        bool match = false;
+        if (cmpPntPnts(currentEnds.a,ends)) { /* currentEnds.a matches, so replace one of
+          'ends' with currentEnds.b - but which one? */
+          if (samepnt(currentEnds.a,ends.a))
+            ends.a = currentEnds.b;
+          else
+            ends.b = currentEnds.b;
+          match = true;
+        }
+        if (cmpPntPnts(currentEnds.b,ends)) {
+          if (samepnt(currentEnds.b,ends.a))
+            ends.a = currentEnds.a;
+          else
+            ends.b = currentEnds.a;
+          match = true;
+        }
+        if (match){
+          lsh.Remove(iter);
+          mw.Add(e);
+          break;
+        }
+      } else { //error while finding ends
         lsh.Remove(iter);
-        mw.Add(e);
         break;
       }
     }
     if ( (ends.a.SquareDistance(ends.b) < 1e-10) || //too loose for BRepBuilderAPI_MakeWire?
-      (lsh.IsEmpty()) )
+              (lsh.IsEmpty()) ) {
       finished = true;
+    }
+    dwcnt++;
+    if ( (lsh.Extent() == listsize) && (dwcnt > 50) ) break;
   } while (!finished);
 
   if (!lsh.IsEmpty()) {
     //FIXME:error
-  }
-  if (!mw.IsDone()) {
+  } else if (!mw.IsDone()) {
     //FIXME:error
+  } else if (!finished) {
+    //FIXME:error
+  } else {
+    w = mw.Wire();
   }
-  TopoDS_Wire w;
-  w = mw.Wire();
   /*if (!w.IsClosed()) {
   //FIXME:error
   }  */
   return w;
-  }
+}
 
-  bool tst::samepnt(gp_Pnt a, gp_Pnt b) {
-    if (a.SquareDistance(b) < 1e-10)
-      return true;
-    else
-      return false;
-  }
+bool tst::samepnt(gp_Pnt a, gp_Pnt b) {
+  if (a.SquareDistance(b) < 1e-10)
+    return true;
+  else
+    return false;
+}
 
-  /** Get endpoints of a TopoDS_Edge
-  \param e the edge
-  \return two endpoints
-  */
-  twopnts tst::getEnds(TopoDS_Edge e) {
-    double d1=0,d2=0;
-    twopnts tp;
-    Handle ( Geom_Curve ) C = BRep_Tool::Curve ( e,d1,d2 );
-    if ( (d1==0) || (d2==0) ) {
-      tp.a=gp::Origin();
-      tp.b=gp::Origin();
-      BRepTools::Dump(e,std::cout);
+/** Get endpoints of a TopoDS_Edge
+\param e the edge
+\return two endpoints
+*/
+twopnts tst::getEnds (TopoDS_Edge e) {
+  TopExp_Explorer vx(e,TopAbs_VERTEX);
+  twopnts tp;
+  int v = 0;
+  gp_Pnt prev;
+  tp.e = true;
+  for (;vx.More();vx.Next()) { //compare vertices; if they match, error. also error if >2 vertices
+    v++;
+    if (v == 1) {
+      tp.a = BRep_Tool::Pnt( TopoDS::Vertex(vx.Current()) );
+    } else if (v == 2) {
+      tp.b = BRep_Tool::Pnt( TopoDS::Vertex(vx.Current()) );
+      if ( tp.a.SquareDistance( tp.b ) > 1e-10 ) {
+        tp.e = false;  //not the same point, so no error unless there are more vertices
+      }
+    }
+  }
+  if (v > 2) {
+    tp.e = true;
+    cout << "getends - " << v << " vertices." << endl;
+    BRepTools::Dump(e,std::cout);
+    //cout << "v = " << v << ". point
+  }
+  return tp;
+}
+
+/*
+twopnts tst::getEnds(TopoDS_Edge e) {
+  double d1=0,d2=0;
+  twopnts tp;
+  Handle ( Geom_Curve ) C = BRep_Tool::Curve ( e,d1,d2 );
+  if ( d1 == d2 ) {
+    tp.a=gp::Origin();
+    tp.b=gp::Origin();
+    //BRepTools::Dump(e,std::cout);
+    cout << "failed to find ends" << endl;
     } else {
       cout << "found ends: " << d1 << "," << d2 << endl;
       tp.a=C->Value ( d1 );
       tp.b=C->Value ( d2 );
     }
     return tp;
-  }
+    }
+    */
 
-  /** Compare one point to two others
-  \param c the point to be compared
-  \param p1,p2 points to compare it to
-  \return true for match
-  */
-  bool tst::cmpPntPnts(gp_Pnt c,gp_Pnt p1,gp_Pnt p2) {
-    if ( (c.SquareDistance(p1) < 1e-10) //square distance is faster. actual distance would be .00001
-      || (c.SquareDistance(p2) < 1e-10) )
-      return true;
-    else
-      return false;
-  }
+/** Compare one point to two others
+\param c the point to be compared
+\param p1,p2 points to compare it to
+\return true for match
+*/
+bool tst::cmpPntPnts(gp_Pnt c,gp_Pnt p1,gp_Pnt p2) {
+  if ( (c.SquareDistance(p1) < 1e-10) //square distance is faster. actual distance would be .00001
+    || (c.SquareDistance(p2) < 1e-10) )
+    return true;
+  else
+    return false;
+}
 
-  /** Compare one point to two others in a twopts struct
-  \param c the point to be compared
-  \param tp struct of two points to compare it to
-  \return true for match
-  */
-  inline bool tst::cmpPntPnts(gp_Pnt c,twopnts tp) {
-    return cmpPntPnts(c,tp.a,tp.b);
-  }
+/** Compare one point to two others in a twopts struct
+\param c the point to be compared
+\param tp struct of two points to compare it to
+\return true for match
+*/
+inline bool tst::cmpPntPnts(gp_Pnt c,twopnts tp) {
+  return cmpPntPnts(c,tp.a,tp.b);
+}
 
-  /** Find nearest edges
-  \param s shape containing the edges
-  \param t the object/point to measure from
-  \return a struct containing up to two edges
-  */
-  nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
-    //TopoDS_Compound elements;
-    //BRep_Builder bld;
-    nearestEdges ne;
-    ne.n = 0;
-    ne.e = false;
-    BRepExtrema_DistShapeShape dss(s,t);
-    if (dss.NbSolution() == 1) {        //one edge
-      ne.n = 1;
-      ne.a = TopoDS::Edge(dss.SupportOnShape1(1)); //starts counting at 0, right?
-    } else if (dss.NbSolution() == 2) {   //certain angles could cause two edges to be coincident
-      uio::infoMsg("Error, can't solve with two edges");
-      ne.e = true;
-      //FIXME:how the $%#%^%$&^$ do we solve this?!
-      //-->if only one is an arc, choose that one; if both are, choose the one with largest radius
-      //if one is a non-circular arc, or if neither is an arc then it becomes really difficult...
-    } else if (dss.NbSolution() == 3) {   //2 edges, 1 point - engraving tool?
-      //only want edges
-      TopoDS_Edge tmp;
-      for(int i=0; i<dss.NbSolution();i++) {
-        if (dss.SupportTypeShape1(i) == BRepExtrema_IsOnEdge ) {
-          tmp = TopoDS::Edge(dss.SupportOnShape1(i+1));
-          if (ne.n == 0) {
-            ne.a = tmp;
-            ne.n++;
-          } else if (ne.n == 1) {
-            ne.b = tmp;
-            ne.n++;
-          } else {
-            ne.e = true;
-            uio::infoMsg("Error, too many edges - max 2");
-          }
+/** Find nearest edges
+\param s shape containing the edges
+\param t the object/point to measure from
+\return a struct containing up to two edges
+*/
+nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
+  //TopoDS_Compound elements;
+  //BRep_Builder bld;
+  nearestEdges ne;
+  ne.n = 0;
+  ne.e = false;
+  BRepExtrema_DistShapeShape dss(s,t);
+  if (dss.NbSolution() == 1) {        //one edge
+    ne.n = 1;
+    ne.a = TopoDS::Edge(dss.SupportOnShape1(1)); //starts counting at 0, right?
+  } else if (dss.NbSolution() == 2) {   //certain angles could cause two edges to be coincident
+    uio::infoMsg("Error, can't solve with two edges");
+    ne.e = true;
+    //FIXME:how the $%#%^%$&^$ do we solve this?!
+    //-->if only one is an arc, choose that one; if both are, choose the one with largest radius
+    //if one is a non-circular arc, or if neither is an arc then it becomes really difficult...
+  } else if (dss.NbSolution() == 3) {   //2 edges, 1 point - engraving tool?
+    //only want edges
+    TopoDS_Edge tmp;
+    for(int i=0; i<dss.NbSolution();i++) {
+      if (dss.SupportTypeShape1(i) == BRepExtrema_IsOnEdge ) {
+        tmp = TopoDS::Edge(dss.SupportOnShape1(i+1));
+        if (ne.n == 0) {
+          ne.a = tmp;
+          ne.n++;
+        } else if (ne.n == 1) {
+          ne.b = tmp;
+          ne.n++;
+        } else {
+          ne.e = true;
+          uio::infoMsg("Error, too many edges - max 2");
         }
       }
-    } else if (dss.NbSolution() == 4) {   //combination of #2 and #3 above
-      uio::infoMsg("Error, can't solve with four edges");
-      ne.e = true;
-    } else { //shouldn't get here
-      ne.e = true;
-      uio::infoMsg("Error! Cannot find nearest elements, given " + uio::stringify(dss.NbSolution()) + " solutions.");
+    }
+  } else if (dss.NbSolution() == 4) {   //combination of #2 and #3 above
+    uio::infoMsg("Error, can't solve with four edges");
+    ne.e = true;
+  } else { //shouldn't get here
+    ne.e = true;
+    uio::infoMsg("Error! Cannot find nearest elements, given " + uio::stringify(dss.NbSolution()) + " solutions.");
   }
   if (!ne.e) {
     //no errors, so figure out the endpoints
@@ -362,7 +407,7 @@ TopoDS_Wire tst::outermost(TopoDS_Compound h) {
     //uio::infoMsg(ss.str());
     cout << ss.str();
     */
-    if ((d1 == 0) || (d2 == 0)) {
+    if (d1 == d2) {
       cout << "params zero - skipping" << endl;
       ne.e = true;
       BRepAdaptor_Curve adaptor = BRepAdaptor_Curve ( ne.a );
@@ -371,7 +416,7 @@ TopoDS_Wire tst::outermost(TopoDS_Compound h) {
       } else if ( adaptor.GetType() ==GeomAbs_Line ) {
         cout << "Line" << endl;
       } else cout << "Edge" << endl;
-      BRepTools::Dump(ne.a,std::cout);
+      //BRepTools::Dump(ne.a,std::cout);
     } else {
       cout << "ends: " << d1 << "," << d2 << endl;
       p1=C->Value ( d1 );
@@ -483,7 +528,9 @@ TopoDS_Compound tst::hlrLines(TopoDS_Shape t, gp_Dir dir) {
   builder.MakeCompound(e);
   TopExp_Explorer ex(comp,TopAbs_EDGE);
   TopExp_Explorer vx;
+  int ec = 0, vc = 0; //edge and vertex count
   for (;ex.More();ex.Next()) {
+    ec++;
     vx.Init(TopoDS::Edge(ex.Current()),TopAbs_VERTEX);
     int v = 0;
     gp_Pnt prev;
@@ -492,16 +539,20 @@ TopoDS_Compound tst::hlrLines(TopoDS_Shape t, gp_Dir dir) {
       v++;
       if (v == 1) {
         prev = BRep_Tool::Pnt( TopoDS::Vertex(vx.Current()) );
-      } else if (v == 2) {
+      } else /*if (v == 2)*/ {
         if ( prev.SquareDistance( BRep_Tool::Pnt( TopoDS::Vertex(vx.Current()) ) ) > 1e-10 ) {
-          discard = false;  //not the same point, so we keep this one
+          discard = false;  //not the same point, so we keep this edge
         }
-      } else cout << "skipped zero-length edge" << endl;
+      }
+      vc += v; //add current vertex count to total
     }
-    if (!discard) {
+    if (discard) {
+      cout << "skipped zero-length edge" << endl;
+    } else {
       builder.Add(e,ex.Current());
     }
   }
+  cout << "hlrLines - " << ec << " edges, " << vc << " vertices." << endl;
   return e;
 }
 

@@ -43,6 +43,7 @@ class nearestEdges {
 
 struct twopnts {
   gp_Pnt a,b;
+  bool e;
 };
 
 
