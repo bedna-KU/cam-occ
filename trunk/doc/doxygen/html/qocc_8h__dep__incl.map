@@ -1,31 +1,27 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$qoccviewercontext_8h.html" title="src/qocc/qoccviewercontext.h" alt="" coords="1792,86,1987,117"/>
-<area shape="rect" id="node53" href="$qoccviewwidget_8h.html" title="src/qocc/qoccviewwidget.h" alt="" coords="1361,86,1540,117"/>
-<area shape="rect" id="node58" href="$qoccinputoutput_8h.html" title="src/qocc/qoccinputoutput.h" alt="" coords="1583,86,1761,117"/>
-<area shape="rect" id="node63" href="$qoccapplication_8h.html" title="src/qocc/qoccapplication.h" alt="" coords="2031,86,2207,117"/>
-<area shape="rect" id="node68" href="$qoccdocument_8h.html" title="src/qocc/qoccdocument.h" alt="" coords="2263,86,2433,117"/>
-<area shape="rect" id="node5" href="$qoccharnesswindow_8h.html" title="src/qocc/qoccharnesswindow.h" alt="" coords="1349,166,1552,197"/>
-<area shape="rect" id="node51" href="$qoccviewercontext_8cpp.html" title="src/qocc/qoccviewercontext.cpp" alt="" coords="1792,166,2000,197"/>
-<area shape="rect" id="node7" href="$ui_stuff_8h.html" title="src/cam/uiStuff.h" alt="" coords="871,246,993,277"/>
-<area shape="rect" id="node37" href="$cam_8h.html" title="src/cam/cam.h" alt="" coords="1304,246,1413,277"/>
-<area shape="rect" id="node41" href="$lnk_8hh.html" title="src/qocc/lnk.hh" alt="" coords="1488,246,1597,277"/>
-<area shape="rect" id="node46" href="$qoccharnesswindow_8cpp.html" title="src/qocc/qoccharnesswindow.cpp" alt="" coords="1416,326,1632,357"/>
-<area shape="rect" id="node48" href="$main_8cpp.html" title="Top level application." alt="" coords="1904,246,2032,277"/>
-<area shape="rect" id="node9" href="$a_sample_8h.html" title="src/cam/aSample.h" alt="" coords="653,326,787,357"/>
-<area shape="rect" id="node13" href="$cam_8cpp.html" title="src/cam/cam.cpp" alt="" coords="819,406,941,437"/>
-<area shape="rect" id="node16" href="$shape_info_8h.html" title="src/cam/shapeInfo.h" alt="" coords="861,326,1003,357"/>
-<area shape="rect" id="node21" href="$shape_offset_8h.html" title="src/cam/shapeOffset.h" alt="" coords="1027,326,1181,357"/>
-<area shape="rect" id="node26" href="$gcode2_model_8h.html" title="src/cam/gcode2Model.h" alt="" coords="445,326,605,357"/>
-<area shape="rect" id="node35" href="$ui_stuff_8cpp.html" title="src/cam/uiStuff.cpp" alt="" coords="1205,326,1341,357"/>
-<area shape="rect" id="node11" href="$a_sample_8cpp.html" title="src/cam/aSample.cpp" alt="" coords="645,406,795,437"/>
-<area shape="rect" id="node19" href="$shape_info_8cpp.html" title="src/cam/shapeInfo.cpp" alt="" coords="965,406,1120,437"/>
-<area shape="rect" id="node24" href="$shape_offset_8cpp.html" title="src/cam/shapeOffset.cpp" alt="" coords="1144,406,1312,437"/>
-<area shape="rect" id="node29" href="$gcode2_model3d_8cpp.html" title="src/cam/gcode2Model3d.cpp" alt="" coords="216,406,405,437"/>
-<area shape="rect" id="node31" href="$gcode2_model_gc_8cpp.html" title="src/cam/gcode2ModelGc.cpp" alt="" coords="429,406,621,437"/>
-<area shape="rect" id="node33" href="$gcode2_model_ui_8cpp.html" title="src/cam/gcode2ModelUi.cpp" alt="" coords="5,406,192,437"/>
-<area shape="rect" id="node43" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="1656,326,1765,357"/>
-<area shape="rect" id="node56" href="$qoccviewwidget_8cpp.html" title="src/qocc/qoccviewwidget.cpp" alt="" coords="1133,166,1325,197"/>
-<area shape="rect" id="node61" href="$qoccinputoutput_8cpp.html" title="src/qocc/qoccinputoutput.cpp" alt="" coords="1576,166,1768,197"/>
-<area shape="rect" id="node66" href="$qoccapplication_8cpp.html" title="src/qocc/qoccapplication.cpp" alt="" coords="2024,166,2213,197"/>
-<area shape="rect" id="node70" href="$qoccdocument_8cpp.html" title="src/qocc/qoccdocument.cpp" alt="" coords="2288,166,2475,197"/>
+<area shape="rect" id="node3" href="$qoccviewercontext_8h.html" title="src/qocc/qoccviewercontext.h" alt="" coords="1078,86,1272,117"/>
+<area shape="rect" id="node44" href="$qoccviewwidget_8h.html" title="src/qocc/qoccviewwidget.h" alt="" coords="663,86,842,117"/>
+<area shape="rect" id="node49" href="$qoccinputoutput_8h.html" title="src/qocc/qoccinputoutput.h" alt="" coords="875,86,1054,117"/>
+<area shape="rect" id="node54" href="$qoccapplication_8h.html" title="src/qocc/qoccapplication.h" alt="" coords="1296,86,1472,117"/>
+<area shape="rect" id="node59" href="$qoccdocument_8h.html" title="src/qocc/qoccdocument.h" alt="" coords="1551,86,1722,117"/>
+<area shape="rect" id="node5" href="$qoccharnesswindow_8h.html" title="src/qocc/qoccharnesswindow.h" alt="" coords="651,166,854,197"/>
+<area shape="rect" id="node42" href="$qoccviewercontext_8cpp.html" title="src/qocc/qoccviewercontext.cpp" alt="" coords="1094,166,1302,197"/>
+<area shape="rect" id="node7" href="$ui_stuff_8h.html" title="src/cam/uiStuff.h" alt="" coords="367,246,490,277"/>
+<area shape="rect" id="node28" href="$cam_8h.html" title="src/cam/cam.h" alt="" coords="38,246,147,277"/>
+<area shape="rect" id="node32" href="$lnk_8hh.html" title="src/qocc/lnk.hh" alt="" coords="790,246,899,277"/>
+<area shape="rect" id="node37" href="$qoccharnesswindow_8cpp.html" title="src/qocc/qoccharnesswindow.cpp" alt="" coords="736,326,952,357"/>
+<area shape="rect" id="node39" href="$main_8cpp.html" title="Top level application." alt="" coords="1099,246,1227,277"/>
+<area shape="rect" id="node9" href="$a_sample_8h.html" title="src/cam/aSample.h" alt="" coords="414,326,547,357"/>
+<area shape="rect" id="node13" href="$cam_8cpp.html" title="src/cam/cam.cpp" alt="" coords="287,406,410,437"/>
+<area shape="rect" id="node16" href="$shape_info_8h.html" title="src/cam/shapeInfo.h" alt="" coords="571,326,712,357"/>
+<area shape="rect" id="node21" href="$shape_offset_8h.html" title="src/cam/shapeOffset.h" alt="" coords="184,326,339,357"/>
+<area shape="rect" id="node26" href="$ui_stuff_8cpp.html" title="src/cam/uiStuff.cpp" alt="" coords="24,326,160,357"/>
+<area shape="rect" id="node11" href="$a_sample_8cpp.html" title="src/cam/aSample.cpp" alt="" coords="434,406,583,437"/>
+<area shape="rect" id="node19" href="$shape_info_8cpp.html" title="src/cam/shapeInfo.cpp" alt="" coords="607,406,762,437"/>
+<area shape="rect" id="node24" href="$shape_offset_8cpp.html" title="src/cam/shapeOffset.cpp" alt="" coords="95,406,263,437"/>
+<area shape="rect" id="node34" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="976,326,1086,357"/>
+<area shape="rect" id="node47" href="$qoccviewwidget_8cpp.html" title="src/qocc/qoccviewwidget.cpp" alt="" coords="435,166,627,197"/>
+<area shape="rect" id="node52" href="$qoccinputoutput_8cpp.html" title="src/qocc/qoccinputoutput.cpp" alt="" coords="878,166,1070,197"/>
+<area shape="rect" id="node57" href="$qoccapplication_8cpp.html" title="src/qocc/qoccapplication.cpp" alt="" coords="1376,166,1566,197"/>
+<area shape="rect" id="node61" href="$qoccdocument_8cpp.html" title="src/qocc/qoccdocument.cpp" alt="" coords="1590,166,1776,197"/>
 </map>

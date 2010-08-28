@@ -54,7 +54,7 @@
 <a name="l00025"></a>00025 <span class="preprocessor">#include &quot;<a class="code" href="shape_info_8h.html">shapeInfo.h</a>&quot;</span>
 <a name="l00026"></a>00026 <span class="preprocessor">#include &quot;<a class="code" href="a_sample_8h.html">aSample.h</a>&quot;</span>
 <a name="l00027"></a>00027 <span class="preprocessor">#include &quot;<a class="code" href="shape_offset_8h.html">shapeOffset.h</a>&quot;</span>
-<a name="l00028"></a>00028 <span class="preprocessor">#include &quot;<a class="code" href="gcode2_model_8h.html">gcode2Model.h</a>&quot;</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include &quot;gcode2Model.h&quot;</span>
 <a name="l00029"></a>00029 
 <a name="l00030"></a><a class="code" href="classcam.html#ad13c057b6c604be1cb61e7397b5906d5">00030</a> <a class="code" href="classcam.html#ad13c057b6c604be1cb61e7397b5906d5">cam::cam</a>(<a class="code" href="class_qocc_harness_window.html">QoccHarnessWindow</a>* window) {
 <a name="l00031"></a>00031         assert(window != 0);
@@ -65,7 +65,7 @@
 <a name="l00036"></a>00036         <a class="code" href="classshape_info.html">shapeInfo</a> *shapeI = <span class="keyword">new</span> <a class="code" href="classshape_info.html">shapeInfo</a>();
 <a name="l00037"></a>00037         <a class="code" href="classa_sample.html">aSample</a> *sample = <span class="keyword">new</span> <a class="code" href="classa_sample.html">aSample</a>();
 <a name="l00038"></a>00038         <a class="code" href="classshape_offset.html">shapeOffset</a> *shapeO = <span class="keyword">new</span> <a class="code" href="classshape_offset.html">shapeOffset</a>();
-<a name="l00039"></a>00039         <a class="code" href="classgcode2_model.html">gcode2Model</a> *gToM = <span class="keyword">new</span> <a class="code" href="classgcode2_model.html">gcode2Model</a>();
+<a name="l00039"></a>00039         gcode2Model *gToM = <span class="keyword">new</span> gcode2Model();
 <a name="l00040"></a>00040 }
 <a name="l00041"></a>00041 
 <a name="l00042"></a><a class="code" href="classcam.html#a4a41ef1f56d149ac1015126c7539cab7">00042</a> <a class="code" href="classcam.html#a4a41ef1f56d149ac1015126c7539cab7">cam::~cam</a>() {
