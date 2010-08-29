@@ -28,6 +28,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QString>
+#include <QFileInfo>
 
 #include <AIS_InteractiveContext.hxx>
 #include <AIS_InteractiveObject.hxx>
@@ -54,6 +55,7 @@ QMenuBar* uio::mbPtr = 0;
 QAction* uio::hmPtr = 0;
 std::vector<TopoDS_Shape> uio::selectedShapes;
 int uio::errors = 0;
+//std::string uio::args[10];
 
 
 uio::uio(QoccHarnessWindow* window) {
@@ -67,6 +69,7 @@ uio::uio(QoccHarnessWindow* window) {
   hmPtr = window->getHelpMenu();
 
   initUI();
+ // setArgs();
 }
 
 void uio::initUI() {
@@ -300,3 +303,26 @@ void uio::sleep(uint n, bool usrEv) {
   return;
 }
 
+/*/// store command-line arguments in args[]
+void uio::setArgs() {
+  int argc;
+  char** argv;
+  argv=window()->getArgs(argc);
+  if (argc > 9) argc = 9;
+  for(int i = 1; i < argc; i++) {
+    args[i]=argv[i];
+    std::cout << "arg " << i << ": " << args[i] << endl;
+  }
+}
+/// return a command-line arg stored in args[]
+std::string uio::getArg(int i) {
+  if ((i > 0) && (i < 9))
+    return args[i];
+  else
+    return "error";
+}
+*/
+bool uio::fileExists(QString f) {
+  QFileInfo qfi(f);
+  return qfi.isFile();
+}

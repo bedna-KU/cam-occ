@@ -21,6 +21,7 @@
 #define CANON_HH
 
 #include <string>
+#include <iostream>
 
 #include <cmath>
 #include <limits.h>
@@ -44,6 +45,7 @@ class canon {
     canon();
   protected:
     static const gp_Dir abc2dir(double a, double b, double c);
+    void infoMsg(std::string s) {cout << s << endl;};
 
 
 };

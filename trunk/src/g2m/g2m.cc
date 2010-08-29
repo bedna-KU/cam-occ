@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <fstream>
 
 #include <QProcess>
 #include <QStringList>
@@ -58,7 +59,7 @@ g2m::g2m() {
   myAction->setStatusTip ( "Load a .ngc file and create a 3d model" );
   connect(myAction,SIGNAL(triggered()),this,SLOT(slotModelFromFile()));
   myMenu->addAction( myAction );
-
+  uio::mb()->insertMenu(uio::hm(),myMenu);
   /*
   **	// do next: show segments one at a time
   **	nextAction = new QAction ( "Do next", this );
@@ -68,86 +69,65 @@ g2m::g2m() {
   **	myMenu->addAction( nextAction );
   */
 
-  uio::mb()->insertMenu(uio::hm(),myMenu);
-  //cout << "g2m ctor end" << endl;
-  //test();
-}
-
-void g2m::test() {
-  uio::hideGrid();
-  uio::axoView();
-  double r = .25;
-  double len = 3;
-
-  //build half
-  Handle(Geom_TrimmedCurve) Tc;
-  double rsqrt = r / sqrt(2.0); //for midpoint of circle
-  Tc = GC_MakeArcOfCircle (gp_Pnt(r,0,r), gp_Pnt(rsqrt,0,r-rsqrt), gp_Pnt(0,0,0));
-  TopoDS_Edge Ec = BRepBuilderAPI_MakeEdge(Tc);
-  TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,r), gp_Pnt(r,0,len));
-  TopoDS_Edge E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(0,0,0), gp_Pnt(0,0,len));
-  TopoDS_Edge E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(0,0,len), gp_Pnt(r,0,len));
-  BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
-
-  BRepBuilderAPI_MakeFace mkF(gp_Pln(gp::XOY()),wm.Wire());
-  BRepPrimAPI_MakeRevol rev(mkF.Face(),gp::OZ(),M_PI*2.0,true);
-
-  TopoDS_Solid t,c,s;
-  t = TopoDS::Solid(rev.Shape());
-  //s = TopoDS::Solid(BRepPrimAPI_MakeBox(gp_Pnt(-1,-1,-1),gp_Pnt(1,1,1)).Solid());
-  s = TopoDS::Solid(BRepPrimAPI_MakeSphere(gp_Pnt(0,0,r),r).Solid());
-  //c = TopoDS::Solid(BRepAlgoAPI_Cut(s,t));
-
-  GProp_GProps System;
-  BRepGProp::VolumeProperties ( t,System );
-  cout << "Mass " << System.Mass() << endl;
-
-  //if (rev.IsDone()) {
-    dispShape ds(t);
-    ds.display();
-  //} else {
-//    dispShape ds(wm.Wire());
-//    ds.display();
-//  }
-  uio::fitAll();
+  if (uio::window()->getArg(0).compare("g2m") == 0) {
+    fromCmdLine = true;
+    slotModelFromFile();
+  } else {
+    fromCmdLine = false;
+  }
 }
 
 void g2m::slotModelFromFile() {
-  //bool success;
-  //cleanUp();
+  if (fromCmdLine) {
+    file = uio::window()->getArg(1);
+    if (!uio::fileExists(file))  {
+      fromCmdLine = false;  //if the file doesn't exist, we'll ask for a file
+    }
+  }
   uio::hideGrid();
-  uio::axoView();
-  //uio::window()->showNormal(); //for debugging, have a small window
 
-  if (0) { //disabled  for debugging
-  file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
-  if ( ! file.endsWith(".ngc") ) {
-    uio::infoMsg("You must select a file ending with .ngc!");
+  if (!fromCmdLine) {
+    file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
+  }
+  if ( file.endsWith(".ngc") ) {
+    interpret();
+  } else if (file.endsWith(".canon")) { //just process each line
+    std::ifstream inFile(file.toAscii());
+    std::string sLine;
+    while(std::getline(inFile, sLine)) {
+      processCanonLine(sLine);
+    }
+  } else {
+    uio::infoMsg("You must select a file ending with .ngc or .canon!");
     return;
   }
-  interpret();
-  }
 
 
- //TODO: process each line, display
- //use dispShape here? or inside the canonLine obj?
+
+  //uio::occ()->viewRight();
+  //uio::occ()->viewTop();
+  //uio::axoView();
+  //uio::window()->showNormal(); //for debugging, have a small window
 
 
+/*
   processCanonLine("   11 N0001  CHANGE_TOOL(1)");
   //processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
-  processCanonLine("   14 N0003  SET_FEED_RATE(20.0000)");
-  processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
-  processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
-  processCanonLine("   17 N0004  ARC_FEED(1.0000, 0.0000, 0.0000, 0.0000, -1, 0.0000)");
-  processCanonLine("   18 N0005  COMMENT(\"----go to X1.0, Y0.0 at a feed rate of 20 inches/minute\")");
-  processCanonLine("   19 N0005  SET_FEED_RATE(20.0000)");
-  processCanonLine("   20 N0005  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
+  processCanonLine("   14 N0003  SET_FEED_RATE(30.0000)");
+  processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, -1.0000)");
+  processCanonLine("   16 N0004  STRAIGHT_FEED(0.0000, -1.0000, 1.0000)");
+//  processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
+  //processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
+  //processCanonLine("   17 N0004  ARC_FEED(1.0000, 0.0000, 0.0000, 0.0000, -1, 0.0000, 0.0, 0.0, 0.0)");
+  //processCanonLine("   18 N0005  COMMENT(\"----go to X1.0, Y0.0 at a feed rate of 20 inches/minute\")");
+  //processCanonLine("   19 N0005  SET_FEED_RATE(20.0000)");
+  //processCanonLine("   20 N0005  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
   //now do something with these...
 
 
   //FIXME - do something with the lines here...
-
-
+*/
+ uio::fitAll();
 }
 
 void g2m::interpret() {
@@ -178,7 +158,7 @@ void g2m::interpret() {
 
   if (!toCanon.waitForReadyRead(1000) ) {
     if ( toCanon.state() == QProcess::NotRunning ){
-      infoMsg("Interpreter died.  Bad tool table " + itool + " ?");
+      infoMsg("Interpreter died.  Bad tool table " + itool.toStdString() + " ?");
     } else  infoMsg("Interpreter timed out for an unknown reason.");
     cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
     cout << "stdout: " << (const char*)toCanon.readAllStandardOutput() << endl;
@@ -212,6 +192,9 @@ return;
 }
 
 bool g2m::processCanonLine (std::string l) {
+  if (uio::window()->getArgs()->contains("debug")){
+    uio::infoMsg(l);
+  }
   static bool first = true;  //first line? if so, init status...
   //create the object and get its pointer
   canonLine * cl;
@@ -230,6 +213,10 @@ bool g2m::processCanonLine (std::string l) {
   lineVector.push_back(cl);
   dispVector.push_back(ds);
 
+  if (lineVector.size()%100 == 0) {
+    uio::fitAll(); //fitAll every 100 lines
+  }
+
   return cl->checkErrors();
 }
 
@@ -242,6 +229,6 @@ void g2m::sleepSecond() {
   return;
 }
 
-void g2m::infoMsg(QString s) {
-  cout << s.toStdString() << endl;
+void g2m::infoMsg(std::string s) {
+  cout << s << endl;
 }

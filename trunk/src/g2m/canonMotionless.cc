@@ -33,7 +33,7 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   if (clMatch("COMMENT")) {
     //do nothing
   } else if (clMatch("MESSAGE")) {
-    uio::infoMsg("Message: " + canonTokens[3]);
+    infoMsg("Message: " + canonTokens[3]);
   //} else if (clMatch("SPINDLE")) {
   //} else if (clMatch("MIST")) {
   //} else if (clMatch("ENABLE")) {
@@ -58,7 +58,7 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (clMatch("SET_ORIGIN_OFFSETS")) {
 
   if (clMatch("(0.0000,")) {
-    uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine );
+    infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine );
   }
     handled = false; //because I still don't know what to do if we have the correct data...
   } else if (clMatch("USE_LENGTH_UNITS")) {
@@ -89,7 +89,7 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
       m = "Warning, unhandled";
     } else {
       m = "Error, unknown";
-      uio::infoMsg(m + " canonical command: " + canonL);
+      infoMsg(m + " canonical command: " + canonL);
     }
   }
 }

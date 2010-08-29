@@ -44,10 +44,12 @@ class g2m: public QObject {
   public slots:
     void slotModelFromFile();
   protected:
+    bool fromCmdLine;
     void interpret();
     bool processCanonLine(std::string l);
     bool success;
-    void infoMsg(QString);
+    //inline void infoMsg(QString s) {infoMsg(s.toStdString();};
+    void infoMsg(std::string s);
     void sleepSecond();
     std::vector<canonLine*> lineVector;
     std::vector<dispShape*> dispVector;

@@ -40,10 +40,12 @@ class QoccHarnessWindow : public QMainWindow
 
 public:
 
-	QoccHarnessWindow();
+	QoccHarnessWindow(QStringList ags);
 	Handle_AIS_InteractiveContext& getContext() { return myVC->getContext(); };
 	Handle_V3d_View getView() { return myOCC->getView(); };
 	QAction* getHelpMenu() { return helpAction; };
+    QString getArg(int n) {if(n<=args.count())return args[n];else return "n--";};
+    QStringList* getArgs() {return &args;};
 
 private slots:
     void newFile();
@@ -67,9 +69,9 @@ private slots:
 	void statusMessage (const QString aMessage);
 
 private:
-
-	//cam myCam(QoccHarnessWindow*); //why two?! also shows up in QOHW.cpp
-
+    QStringList args;
+//    int argc;
+//    char* argv[];
     void createActions();
     void createMenus();
 
@@ -131,7 +133,7 @@ private:
 	QoccViewerContext*  myVC;
 
 	QString myLastFolder;
-	
+
   public:
     	QoccViewWidget*     getOCC() { return myOCC; };
 	QoccViewerContext*  getVC() { return myVC; };

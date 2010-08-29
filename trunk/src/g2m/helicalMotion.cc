@@ -34,9 +34,12 @@
 
 #include "helicalMotion.hh"
 #include "machineStatus.hh"
+#include "uio.hh"
 
 //implements helicalMotion
 helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
+    cout << "helicalMotion ctor" << endl;
+
   //part of processCanonLine
   //} else if (canon_line.startsWith( "ARC_FEED(" )) {
  gp_Dir arcDir;
@@ -86,17 +89,18 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
      c = gp_Pnt(a1,a2,status.getStartPose().Location().Z());
      hdist = e3 - status.getStartPose().Location().Z();
  }
- //skip arc if zero length; caught this bug thanks to tort.ngc
- if (status.getStartPose().Location().Distance(status.getEndPose().Location()) > Precision::Confusion()) {
+ if (status.getStartPose().Location().Distance(status.getEndPose().Location()) > Precision::Confusion()) { //skip arc if zero length; caught this bug thanks to tort.ngc
+
    //center is c; ends are edge.start, edge.last
    if (fabs(hdist) > 0.000001) {
      helix(status.getStartPose().Location(), status.getEndPose().Location(), c, arcDir,rot);
+
    } else {
      gp_Vec Vr = gp_Vec(c,status.getStartPose().Location());	//vector from center to start
      gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
      gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
      if (rot==1) startVec *= -1;
-     //cout << "Arc with vector at start: " << toString(startVec).toStdString();
+     //cout << "Arc with vector at start: " << uio::toString(startVec) << endl;
      arc(status.getStartPose().Location(), startVec, status.getEndPose().Location());
    }
    /*
@@ -116,10 +120,13 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
      }
    }
    */
+   sweep();
  } else cout << "Skipped zero-length arc." << endl;
 }
 
+/// Create a helix, place it in myUnSolid
 void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot ) {
+  cout << "helix" << endl;
   Standard_Real pU,pV;
   Standard_Real radius = start.Distance(c);
   gp_Pnt2d p1,p2;
@@ -150,9 +157,8 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
   }
 
   if (success != 2) {
-   /* FIXME
-   cout << "Couldn't create a helix from " << toString(start).toStdString() << " to " << toString(end).toStdString() << ". Replacing with a line." <<endl;
-   */
+   //cout << "Couldn't create a helix from " << uio::toString(start) << " to " << uio::toString(end)  << ". Replacing with a line." <<endl;
+
     errors=true;
     myUnSolid = BRepBuilderAPI_MakeEdge( start, end );
     return;
@@ -175,8 +181,10 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
   return;
 }
 
+/// Create an arc, place it in myUnSolid
 void helicalMotion::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
-    Handle(Geom_TrimmedCurve) Tc;
-    Tc = GC_MakeArcOfCircle ( start, startVec, end );
-    myUnSolid = BRepBuilderAPI_MakeEdge ( Tc );
+  cout << "arc" << endl;
+  Handle(Geom_TrimmedCurve) Tc;
+  Tc = GC_MakeArcOfCircle ( start, startVec, end );
+  myUnSolid = BRepBuilderAPI_MakeEdge ( Tc );
 }

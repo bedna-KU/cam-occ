@@ -7,5 +7,5 @@ echo Applying env vars...
 fi
 progdir=`dirname $0`
 LD_LIBRARY_PATH=$progdir/bin:$LD_LIBRARY_PATH
-$progdir/bin/camocc2& echo $!
+$progdir/bin/camocc2 $1 $2 $3 $4 $5 & echo $!
 

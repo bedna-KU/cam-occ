@@ -36,8 +36,8 @@ void LoadBottle ( Handle_AIS_InteractiveContext theContext );
 void ShowOrigin ( Handle_AIS_InteractiveContext theContext );
 void AddVertex  ( double x, double y, double z, Handle_AIS_InteractiveContext theContext );
 
-QoccHarnessWindow::QoccHarnessWindow()
-: myLastFolder(tr(""))
+QoccHarnessWindow::QoccHarnessWindow(QStringList ags)
+: myLastFolder(tr("")), args(ags)
 {
 	myVC  = new QoccViewerContext();
 	myOCC = new QoccViewWidget(myVC->getContext(), this); //Note this has changed!

@@ -20,18 +20,10 @@
 #include "linearMotion.hh"
 
 #include <string>
-#include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepAlgo_Fuse.hxx>
 #include <BRep_Builder.hxx>
 #include <BRepTools.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
-#include <BRepBuilderAPI_MakeWire.hxx>
-#include <BRepBuilderAPI_MakeSolid.hxx>
-#include <BRepBuilderAPI_Transform.hxx>
-#include <BRepOffsetAPI_MakePipeShell.hxx>
-#include <BRepBuilderAPI_PipeError.hxx>
-#include <ShapeFix_Shape.hxx>
-#include <ShapeFix_Solid.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Wire.hxx>
 #include "machineStatus.hh"
@@ -44,9 +36,8 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
   //TODO: add support for 5 or 6 axis motion
-
-  TopoDS_Edge e = BRepBuilderAPI_MakeEdge(a,b).Edge();
-  myUnSolid = e;
+if (a.Distance(b) > Precision::Confusion()) { //is the edge long enough to bother making?
+  myUnSolid = BRepBuilderAPI_MakeEdge(a,b).Edge();
 
   //check if the swept shape will be accurate
   //use the ratio of rise or fall to distance
@@ -56,74 +47,8 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
     sweepIsSuspect = true;
   }
 
-  BRepOffsetAPI_MakePipeShell pipe(BRepBuilderAPI_MakeWire(e).Wire());
-  TopoDS_Wire w = TopoDS::Wire(status.getTool()->getProfile());
-  if (!w.Closed()) {
-    uio::infoMsg("Wire not closed!");
-  } else {
-    pipe.Add(w,false,true);
-    //pipe.Add(tool2d,false,true);
-    pipe.SetTransitionMode(BRepBuilderAPI_RoundCorner); //there shouldn't be any discontinuities, but we'll set this anyway
-    pipe.SetMode(gp_Dir(0,0,1)); //binormal to vector 0,0,1 - profile can only rotate about Z now
-//    infoMsg("added tool\n");
-    if ( pipe.IsReady() ) {
-        pipe.Build();
-        BRepBuilderAPI_PipeError error = pipe.GetStatus();
-        switch (error) {
-          case BRepBuilderAPI_PipeNotDone:
-            uio::infoMsg("Pipe not done");
-            errors = true;
-            break;
-          case BRepBuilderAPI_PlaneNotIntersectGuide:
-            uio::infoMsg("Pipe not intersect guide");
-            errors = true;
-            break;
-          case BRepBuilderAPI_ImpossibleContact:
-            uio::infoMsg("Pipe impossible contact");
-            errors = true;
-            break;
-          case BRepBuilderAPI_PipeDone:
-            //ready = true;
-            break;
-         default:
-            uio::infoMsg("Pipe switch default?!");
-            errors = true;
-        }
-    }
-  }
-  if (!errors) {
-    dispShape ds(pipe.Shape());
-    ds.display();
-    uio::sleep(5);
-    pipe.MakeSolid();
-
-    //FIXME: each canonMotion obj should check if its startpoint is colinear with the endpoint of the previous object. If not, it should add a 3d model of the tool there.
-
-    //for now, we'll add one at each end of every obj.
-    //gp_Vec sv = status.getStartVector();
-    //gp_Vec ev = prevStatus.getEndVector();
-    //BRepBuilderAPI_Transform
-    //BRepBuilderAPI_GTransform
-
-    gp_Trsf tr;
-    tr.SetTranslation(gp::Origin(),a);
-    BRepBuilderAPI_Transform bt1(tr);
-    bt1.Perform(status.getTool()->get3d(),true);
-    TopoDS_Shape e1 = bt1.Shape(); //this is the tool, translated to the startpoint of the sweep
-
-    tr.SetTranslation(gp::Origin(),b);
-    BRepBuilderAPI_Transform bt2(tr);
-    bt2.Perform(status.getTool()->get3d(),true);
-    TopoDS_Shape e2 = bt2.Shape(); //this is the tool, translated to the endpoint of the sweep
-
-    TopoDS_Solid ps = TopoDS::Solid(pipe.Shape());
-    TopoDS_Shape temp = BRepAlgoAPI_Fuse( e1, e2 );
-    if (temp.IsNull()) std::cout << "null shape" << endl;
-    myShape = BRepAlgoAPI_Fuse( ps, temp );
-  } else {
-    uio::infoMsg("pipe not ready!");
-    myShape = status.getTool()->get3d();
-  }
+  sweep(); //this uses myUnSolid, and the current tool. the result is put in myShape.
+  } else cout << "skipped zero-length line, from N" << getN() << endl;
 }
 
 //need to return RAPID for rapids...
@@ -135,7 +60,7 @@ MOTION_TYPE linearMotion::getMotionType() {
     return LINEAR;
   } else {
     std::string err = "linearMotion::getMotionType failed on canonLine:\n" + myLine + "\n\nExiting.";
-    uio::infoMsg(err);
+    infoMsg(err);
     exit(1);
   }
 }

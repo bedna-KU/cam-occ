@@ -57,6 +57,7 @@ class millTool: public tool {
   public:
     SHAPE_TYPE getShape() const {return shape;};
     virtual const TopoDS_Shape& get3d();
+    const double Dia() {return dia;};
   protected:
     millTool();
     SHAPE_TYPE shape;

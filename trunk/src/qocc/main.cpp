@@ -27,17 +27,24 @@
 using namespace std;
 #include <QtGui/QtGui>
 #include <QtGui/QPlastiqueStyle>
+#include <QStringList>
 
 #include "qoccapplication.h"
 #include "qoccharnesswindow.h"
 
 int main(int argc, char *argv[])
 {
+  QoccApplication app( argc, argv );
 
-	QoccApplication app( argc, argv );
-	QoccHarnessWindow *window = new QoccHarnessWindow();
+  QStringList qsl;
+  for(int i = 1; i < argc; i++) {
+    qsl.append(argv[i]);
+  }
 
-	window->show();
-	int retval = app.exec();
-	return retval;
+  QoccHarnessWindow *window = new QoccHarnessWindow(qsl);
+
+  window->show();
+
+  int retval = app.exec();
+  return retval;
 }

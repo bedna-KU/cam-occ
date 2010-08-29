@@ -52,9 +52,9 @@ class canonMotion: protected canonLine {
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
     TopoDS_Shape myShape;
-    //const TopoDS_Edge& edge; use myUnSolid
     gp_Ax1 getPoseFromCmd();
     bool sweepIsSuspect;
+    void sweep();
 };
 
 #endif //CANONMOTION_HH

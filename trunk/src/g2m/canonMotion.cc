@@ -22,9 +22,18 @@
 #include <limits.h>
 
 #include <Precision.hxx>
+#include <BRepOffsetAPI_MakePipeShell.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_PipeError.hxx>
+#include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
+#include <TopoDS.hxx>
+#include <gp_Circ.hxx>
 
 #include "canonMotion.hh"
 #include "canonLine.hh"
+#include "uio.hh"
 
 canonMotion::canonMotion(std::string canonL, machineStatus prevStatus): canonLine(canonL,prevStatus) {
   status.setEndPose(getPoseFromCmd());
@@ -45,11 +54,118 @@ gp_Ax1 canonMotion::getPoseFromCmd() {
   c = tok2d(s-1);
   b = tok2d(s-2);
   a = tok2d(s-3);
+  assert (a+b+c < 3.0 * Precision::Confusion());
   //now how to convert those angles to a unit vector (i.e. gp_Dir)?
 */
   //for now we take the easy way out
   gp_Dir d(0,0,1); //vertical
-  assert (a+b+c < 3.0 * Precision::Confusion());
   return gp_Ax1(p,d);
 }
 
+/** Sweep tool outline along myUnSolid, "cap" it with 3d tools, and put result in myShape
+*/
+void canonMotion::sweep() {
+  Standard_Real angTol = 0.000175;  //approx .01 degrees
+  TopoDS_Solid solid;
+  gp_Pnt a,b;
+  a = status.getStartPose().Location();
+  b = status.getEndPose().Location();
+  gp_Vec d(a,b);
+
+  gp_Trsf oa,ob;
+  oa.SetTranslation(gp::Origin(),a);
+  BRepBuilderAPI_Transform toa(oa);
+  ob.SetTranslation(gp::Origin(),b);
+  BRepBuilderAPI_Transform tob(ob);
+
+  //check if the sweep will be vertical. if so, we can't use the tool's profile
+  TopoDS_Wire w;
+  bool vert = false;
+  if ( d.IsParallel( gp::DZ(), angTol )) {
+    vert = true;
+    gp_Circ c(gp::XOY(),status.getTool()->Dia()/2.0);
+//    gp_Circ c(gp_Ax2(gp_Pnt(0,0,0),gp_Dir(0,0,1)),status.getTool()->Dia()/2.0);
+    w = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(c));
+    toa.Perform(w,true);
+    tob.Perform(w,true);
+  } else {
+    w = TopoDS::Wire(status.getTool()->getProfile());
+  }
+  BRepOffsetAPI_MakePipeShell pipe(BRepBuilderAPI_MakeWire(TopoDS::Edge(myUnSolid)).Wire());
+  if (!w.Closed()) {
+    infoMsg("Wire not closed!");
+  } else {
+    if(vert) {
+      pipe.Add(toa.Shape(),false,true);
+      pipe.Add(tob.Shape(),false,true);
+    } else {
+      pipe.Add(w,false,true);
+      //binormal to vector 0,0,1 - profile can only rotate about Z now
+      pipe.SetMode(gp_Dir(0,0,1));
+    }
+    //pipe.SetTransitionMode(BRepBuilderAPI_RoundCorner); //there shouldn't be any discontinuities, but we'll set this anyway
+    //    infoMsg("added tool\n");
+    if ( pipe.IsReady() ) {
+      pipe.Build();
+      BRepBuilderAPI_PipeError error = pipe.GetStatus();
+      switch (error) {
+        case BRepBuilderAPI_PipeNotDone:
+          infoMsg("Pipe not done");
+          errors = true;
+          break;
+        case BRepBuilderAPI_PlaneNotIntersectGuide:
+          infoMsg("Pipe not intersect guide");
+          errors = true;
+          break;
+        case BRepBuilderAPI_ImpossibleContact:
+          infoMsg("Pipe impossible contact");
+          errors = true;
+          break;
+        case BRepBuilderAPI_PipeDone:
+          //ready = true;
+          break;
+        default:
+          infoMsg("Pipe switch default?!");
+          errors = true;
+      }
+    }
+  }
+  if (!errors) {
+    pipe.MakeSolid();
+    solid = TopoDS::Solid(pipe.Shape());
+  } else {
+    solid.Nullify();
+  }
+  if (!solid.IsNull()) {
+    if (vert) {
+      //raise the sweep up by 1 radius
+      gp_Pnt v(0,0,status.getTool()->Dia()/2.0);
+      gp_Trsf ov;
+      ov.SetTranslation(gp::Origin(),v);
+      solid = TopoDS::Solid(BRepBuilderAPI_Transform(solid, ov, true).Shape());
+    }
+    //FIXME: each canonMotion obj should check if its startpoint is colinear with the endpoint of the previous object. If not, it should add a 3d model of the tool there.
+
+    //for now, we'll add one at each end of every obj.
+    //gp_Vec sv = status.getStartVector();
+    //gp_Vec ev = prevStatus.getEndVector();
+    //BRepBuilderAPI_Transform
+    //BRepBuilderAPI_GTransform
+
+    //use transforms to create tool shapes for "end caps"
+
+    toa.Perform(status.getTool()->get3d(),true);
+    TopoDS_Shape e1 = toa.Shape(); //this is the tool, translated to the startpoint of the sweep
+
+    tob.Perform(status.getTool()->get3d(),true);
+    TopoDS_Shape e2 = tob.Shape(); //this is the tool, translated to the endpoint of the sweep
+
+    TopoDS_Shape temp = BRepAlgoAPI_Fuse( e1, e2 );
+    if (temp.IsNull()) std::cout << "null shape" << endl;
+    dispShape t(temp),s(solid);
+    myShape = BRepAlgoAPI_Fuse( solid, temp );
+  } else {
+    infoMsg("pipe not ready!");
+    myShape = status.getTool()->get3d();
+  }
+}
