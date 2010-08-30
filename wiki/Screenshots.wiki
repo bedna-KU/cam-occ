@@ -3,6 +3,8 @@
 OldScreenShots
 
 = v2 =
+r96:
+http://cam-occ.googlecode.com/svn/wiki/images/nas-cds-again.png
 This is from r56:
 http://cam-occ.googlecode.com/svn/wiki/images/cds-ngc.png
 ----
