@@ -34,6 +34,8 @@
 #include <AIS_InteractiveObject.hxx>
 #include <AIS_Trihedron.hxx>
 #include <V3d_View.hxx>
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
 /**
 QShortcuts in use:
@@ -303,25 +305,14 @@ void uio::sleep(uint n, bool usrEv) {
   return;
 }
 
-/*/// store command-line arguments in args[]
-void uio::setArgs() {
-  int argc;
-  char** argv;
-  argv=window()->getArgs(argc);
-  if (argc > 9) argc = 9;
-  for(int i = 1; i < argc; i++) {
-    args[i]=argv[i];
-    std::cout << "arg " << i << ": " << args[i] << endl;
-  }
+double uio::mass(TopoDS_Shape s) {
+  double m;
+  GProp_GProps System;
+  BRepGProp::VolumeProperties ( s,System );
+  m = System.Mass();
+  //cout << "Mass " << m << endl;
+  return m;
 }
-/// return a command-line arg stored in args[]
-std::string uio::getArg(int i) {
-  if ((i > 0) && (i < 9))
-    return args[i];
-  else
-    return "error";
-}
-*/
 bool uio::fileExists(QString f) {
   QFileInfo qfi(f);
   return qfi.isFile();

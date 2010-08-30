@@ -30,6 +30,9 @@
 #include <BRepBuilderAPI_Transform.hxx>
 #include <TopoDS.hxx>
 #include <gp_Circ.hxx>
+#include <ShapeFix_Solid.hxx>
+#include <BRepCheck_Analyzer.hxx>
+#include <BRepTools.hxx>
 
 #include "canonMotion.hh"
 #include "canonLine.hh"
@@ -84,27 +87,23 @@ void canonMotion::sweep() {
   if ( d.IsParallel( gp::DZ(), angTol )) {
     vert = true;
     gp_Circ c(gp::XOY(),status.getTool()->Dia()/2.0);
-//    gp_Circ c(gp_Ax2(gp_Pnt(0,0,0),gp_Dir(0,0,1)),status.getTool()->Dia()/2.0);
     w = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(c));
-    toa.Perform(w,true);
     tob.Perform(w,true);
+    //toa will always be used, whether vertical or not
   } else {
     w = TopoDS::Wire(status.getTool()->getProfile());
   }
+  toa.Perform(w,true);
   BRepOffsetAPI_MakePipeShell pipe(BRepBuilderAPI_MakeWire(TopoDS::Edge(myUnSolid)).Wire());
   if (!w.Closed()) {
     infoMsg("Wire not closed!");
   } else {
-    if(vert) {
-      pipe.Add(toa.Shape(),false,true);
+      pipe.Add(toa.Shape(),false,true);  //transform the sweep outline, so that the pipe will be located correctly
+    if (vert) {
       pipe.Add(tob.Shape(),false,true);
-    } else {
-      pipe.Add(w,false,true);
-      //binormal to vector 0,0,1 - profile can only rotate about Z now
-      pipe.SetMode(gp_Dir(0,0,1));
-    }
-    //pipe.SetTransitionMode(BRepBuilderAPI_RoundCorner); //there shouldn't be any discontinuities, but we'll set this anyway
-    //    infoMsg("added tool\n");
+    } //else {
+      pipe.SetMode(gp_Dir(0,0,1)); //binormal mode: can only rotate about Z
+    //}
     if ( pipe.IsReady() ) {
       pipe.Build();
       BRepBuilderAPI_PipeError error = pipe.GetStatus();
@@ -131,8 +130,23 @@ void canonMotion::sweep() {
     }
   }
   if (!errors) {
+    bool mserr = false;
+    TopoDS_Shape t = pipe.Shape();
+    try {
     pipe.MakeSolid();
-    solid = TopoDS::Solid(pipe.Shape());
+    } catch (Standard_ConstructionError) {
+      infoMsg("can't make solid - a:" + uio::toString(a) + " b:" + uio::toString(b) +" line: "+ myLine);
+      mserr = true;
+      solid.Nullify();
+    }
+    if (mserr) {
+      dispShape p(t,getN(),Graphic3d_NOM_NEON_PHC,AIS_Shaded);
+      p.display();
+    } else {
+      ShapeFix_Solid fs(TopoDS::Solid(pipe.Shape()));
+      fs.Perform();
+      solid = TopoDS::Solid(fs.Solid());
+    }
   } else {
     solid.Nullify();
   }
@@ -145,25 +159,39 @@ void canonMotion::sweep() {
       solid = TopoDS::Solid(BRepBuilderAPI_Transform(solid, ov, true).Shape());
     }
     //FIXME: each canonMotion obj should check if its startpoint is colinear with the endpoint of the previous object. If not, it should add a 3d model of the tool there.
-
     //for now, we'll add one at each end of every obj.
-    //gp_Vec sv = status.getStartVector();
-    //gp_Vec ev = prevStatus.getEndVector();
-    //BRepBuilderAPI_Transform
-    //BRepBuilderAPI_GTransform
 
     //use transforms to create tool shapes for "end caps"
-
-    toa.Perform(status.getTool()->get3d(),true);
+/*    toa.Perform(status.getTool()->get3d(),true);
     TopoDS_Shape e1 = toa.Shape(); //this is the tool, translated to the startpoint of the sweep
-
     tob.Perform(status.getTool()->get3d(),true);
     TopoDS_Shape e2 = tob.Shape(); //this is the tool, translated to the endpoint of the sweep
-
     TopoDS_Shape temp = BRepAlgoAPI_Fuse( e1, e2 );
-    if (temp.IsNull()) std::cout << "null shape" << endl;
-    dispShape t(temp),s(solid);
-    myShape = BRepAlgoAPI_Fuse( solid, temp );
+
+    BRepCheck_Analyzer bca(solid);
+    if (!bca.IsValid()) BRepTools::Dump(solid,std::cout);
+    double m = uio::mass(solid);
+    cout << "line N" << getN() << ": solid's mass - " << m << endl;
+
+    try {
+      myShape = BRepAlgoAPI_Fuse( solid, temp );
+    } catch (...){
+      //gp_Trsf tr;
+      //tr.SetTranslation(gp::Origin(),gp_Pnt(5,5,5));
+//      BRepBuilderAPI_Transform tf(t);
+      //solid = TopoDS::Solid(BRepBuilderAPI_Transform(solid, tr, true).Shape());
+      //tr.SetTranslation(gp::Origin(),gp_Pnt(7,7,5));
+      //temp = BRepBuilderAPI_Transform(temp, tr, true).Shape();
+      dispShape s(solid,getN(),Graphic3d_NOM_NEON_GNC,AIS_Shaded);
+      s.display();
+      dispShape t(temp,getN(),Graphic3d_NOM_NEON_PHC,AIS_Shaded);
+      t.display();
+      uio::axoView();
+      uio::fitAll();
+      infoMsg("Error during Fuse operation: " + myLine);
+      uio::sleep(1);
+    }*/
+    myShape = solid;
   } else {
     infoMsg("pipe not ready!");
     myShape = status.getTool()->get3d();

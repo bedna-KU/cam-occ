@@ -5,6 +5,16 @@
 #include <string>
 #include <cstdio>
 
+
+/*
+--where to insert in ui?
+
+--type of object to use?
+
+--how to put the log messages in the obj?
+*/
+
+
 inline std::string NowTime();
 
 enum TLogLevel {logERROR, logWARNING, logINFO, logDEBUG, logDEBUG1, logDEBUG2, logDEBUG3, logDEBUG4};

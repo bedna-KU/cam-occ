@@ -33,6 +33,7 @@
 #include "g2m.hh"
 #include "uio.hh"
 #include "canonLine.hh"
+#include "nanotimer.hh"
 
 #include <Handle_Geom_TrimmedCurve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
@@ -51,7 +52,9 @@
 #include "dispShape.hh"
 
 g2m::g2m() {
-  //cout << "g2m ctor" << endl;
+  if (uio::window()->getArgs()->contains("debug")){
+    debug = true;
+  } else debug = false;
   QMenu* myMenu = new QMenu("gcode");
 
   QAction* myAction = new QAction ( "Create 3D Model...", this );
@@ -60,20 +63,14 @@ g2m::g2m() {
   connect(myAction,SIGNAL(triggered()),this,SLOT(slotModelFromFile()));
   myMenu->addAction( myAction );
   uio::mb()->insertMenu(uio::hm(),myMenu);
-  /*
-  **	// do next: show segments one at a time
-  **	nextAction = new QAction ( "Do next", this );
-  **	nextAction->setShortcut(QString("Ctrl+."));
-  **	nextAction->setStatusTip ( "Do next" );
-  **	connect(nextAction, SIGNAL(triggered()),this,SLOT(myNextMenuItem()));
-  **	myMenu->addAction( nextAction );
-  */
 
-  if (uio::window()->getArg(0).compare("g2m") == 0) {
-    fromCmdLine = true;
-    slotModelFromFile();
-  } else {
-    fromCmdLine = false;
+  fromCmdLine = false;
+  if (uio::window()->getArgs()->count() > 1) {
+    if (uio::window()->getArg(0).compare("g2m") == 0) {
+      fromCmdLine = true;
+      uio::sleep(1);
+      slotModelFromFile();
+    }
   }
 }
 
@@ -192,11 +189,12 @@ return;
 }
 
 bool g2m::processCanonLine (std::string l) {
-  if (uio::window()->getArgs()->contains("debug")){
+  if (debug){
     uio::infoMsg(l);
   }
+  nanotimer nt;
+  nt.start();
   static bool first = true;  //first line? if so, init status...
-  //create the object and get its pointer
   canonLine * cl;
   if (first) {
     cl = canonLine::canonLineFactory (l,machineStatus(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1))));
@@ -212,9 +210,9 @@ bool g2m::processCanonLine (std::string l) {
   //store it
   lineVector.push_back(cl);
   dispVector.push_back(ds);
-
-  if (lineVector.size()%100 == 0) {
-    uio::fitAll(); //fitAll every 100 lines
+  cout << "elapsed time: " << nt.getElapsed() << endl;
+  if ((debug) || (lineVector.size()%100 == 0) ) {
+    uio::fitAll(); //fitAll every 100 lines, or every time if debugging
   }
 
   return cl->checkErrors();

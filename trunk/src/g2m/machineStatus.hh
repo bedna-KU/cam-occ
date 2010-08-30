@@ -20,7 +20,7 @@
 #ifndef MACHINESTATUS_HH
 #define MACHINESTATUS_HH
 
-#include <map>
+//#include <map>
 
 #include "tool.hh"
 #include "canon.hh"

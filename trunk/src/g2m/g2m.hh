@@ -54,6 +54,7 @@ class g2m: public QObject {
     std::vector<canonLine*> lineVector;
     std::vector<dispShape*> dispVector;
     QString file;
+    bool debug;
     void test(); //FIXME: temporary
 };
 

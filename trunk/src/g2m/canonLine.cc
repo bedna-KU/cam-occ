@@ -83,7 +83,9 @@ double canonLine::tok2d(uint n) {
 inline int canonLine::tok2i(uint n,uint offset) {
   char * end;
   int i = strtol( &canonTokens[n].c_str()[offset], &end, 10 );
-  assert ( *end == 0 );
+  if (! *end == 0 ) {
+    std::cout << "error in tok2i with n:" << n << " offset:" << offset << " canonTokens[n]:"<<canonTokens[n];
+  }
   return i;
 }
 

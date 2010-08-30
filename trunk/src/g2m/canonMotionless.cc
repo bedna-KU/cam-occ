@@ -18,6 +18,7 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 #include "canonMotionless.hh"
+#include "machineStatus.hh"
 #include "uio.hh"
 #include <string>
 #include <BRepBuilderAPI_MakeVertex.hxx>
@@ -34,18 +35,34 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
     //do nothing
   } else if (clMatch("MESSAGE")) {
     infoMsg("Message: " + canonTokens[3]);
-  //} else if (clMatch("SPINDLE")) {
-  //} else if (clMatch("MIST")) {
+//  } else if (clMatch("STOP_SPINDLE_TURNING")) {
+//    SPINDLE_STATUS s = OFF;
+//    status.setSpindleStatus(SPINDLE_STATUS(OFF));
   //} else if (clMatch("ENABLE")) {
-  //} else if (clMatch("FLOOD")) {
+  } else if (clMatch("MIST_ON")) {
+    coolantStruct c = status.getCoolant();
+    c.mist = true;
+    status.setCoolant(c);
+  } else if (clMatch("MIST_OFF")) {
+    coolantStruct c = status.getCoolant();
+    c.mist = false;
+    status.setCoolant(c);
+  } else if (clMatch("FLOOD_ON")) {
+    coolantStruct c = status.getCoolant();
+    c.flood = true;
+    status.setCoolant(c);
+  } else if (clMatch("FLOOD_OFF")) {
+    coolantStruct c = status.getCoolant();
+    c.flood = false;
+    status.setCoolant(c);
   } else if (clMatch("DWELL")) {
   //} else if (clMatch("FEEDRATE")) {
   } else if (clMatch("SET_FEED_RATE")) {
-    handled = false;
+    status.setFeed(tok2i(3));
   } else if (clMatch("SET_FEED_REFERENCE")) {
     handled = false;
   } else if (clMatch("SELECT_TOOL")) {
-    handled = false;
+    //this only tells the machine to reposition the tool carousel, correct? if so it can be ignored
   } else if (clMatch("CHANGE_TOOL")) {
     //for now, always assume it's ballnose. divide tool number by 16 to get diameter
     //i.e. tool 1 = 1/16" ball nose endmill, tool 24 = 1 1/2" ball nose endmill
