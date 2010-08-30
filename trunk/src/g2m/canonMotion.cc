@@ -88,8 +88,7 @@ void canonMotion::sweep() {
     vert = true;
     gp_Circ c(gp::XOY(),status.getTool()->Dia()/2.0);
     w = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(c));
-    tob.Perform(w,true);
-    //toa will always be used, whether vertical or not
+    tob.Perform(w,true);  //toa will always be used, whether vertical or not
   } else {
     w = TopoDS::Wire(status.getTool()->getProfile());
   }
@@ -101,9 +100,9 @@ void canonMotion::sweep() {
       pipe.Add(toa.Shape(),false,true);  //transform the sweep outline, so that the pipe will be located correctly
     if (vert) {
       pipe.Add(tob.Shape(),false,true);
-    } //else {
+    } else {
       pipe.SetMode(gp_Dir(0,0,1)); //binormal mode: can only rotate about Z
-    //}
+    }
     if ( pipe.IsReady() ) {
       pipe.Build();
       BRepBuilderAPI_PipeError error = pipe.GetStatus();

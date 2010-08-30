@@ -75,6 +75,9 @@ g2m::g2m() {
 }
 
 void g2m::slotModelFromFile() {
+  lineVector.clear();
+  dispVector.clear();
+
   if (fromCmdLine) {
     file = uio::window()->getArg(1);
     if (!uio::fileExists(file))  {
