@@ -87,20 +87,29 @@ void g2m::slotModelFromFile() {
   uio::hideGrid();
 
   if (!fromCmdLine) {
-    file = QFileDialog::getOpenFileName ( uio::window(), "Choose .ngc file", "./ngc-in", "*.ngc" );
+    file = QFileDialog::getOpenFileName ( uio::window(), "Choose input file", "./ngc-in", "*.ngc *.canon" );
   }
+
+  fromCmdLine = false;
+
+  nanotimer timer;
+  timer.start();
   if ( file.endsWith(".ngc") ) {
     interpret();
   } else if (file.endsWith(".canon")) { //just process each line
     std::ifstream inFile(file.toAscii());
     std::string sLine;
     while(std::getline(inFile, sLine)) {
-      processCanonLine(sLine);
+      if (sLine.length() > 1) {
+        processCanonLine(sLine);
+      } //prevent segfault in canonLine::clMatch()
     }
   } else {
     uio::infoMsg("You must select a file ending with .ngc or .canon!");
     return;
   }
+  double e = timer.getElapsed();
+  std::cout << "Total time to process that file: " << e/1000000000.0 << std::endl;
 
 
 
@@ -110,23 +119,7 @@ void g2m::slotModelFromFile() {
   //uio::window()->showNormal(); //for debugging, have a small window
 
 
-/*
-  processCanonLine("   11 N0001  CHANGE_TOOL(1)");
-  //processCanonLine("   12 N0002  STRAIGHT_TRAVERSE(0.0000, 0.0000, 1.0000)");
-  processCanonLine("   14 N0003  SET_FEED_RATE(30.0000)");
-  processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, -1.0000)");
-  processCanonLine("   16 N0004  STRAIGHT_FEED(0.0000, -1.0000, 1.0000)");
-//  processCanonLine("   15 N0003  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
-  //processCanonLine("   16 N0004  COMMENT(\"----go in an arc from X0.0, Y1.0 to X1.0 Y0.0, with the center of the arc at X0.0, Y0.0\")");
-  //processCanonLine("   17 N0004  ARC_FEED(1.0000, 0.0000, 0.0000, 0.0000, -1, 0.0000, 0.0, 0.0, 0.0)");
-  //processCanonLine("   18 N0005  COMMENT(\"----go to X1.0, Y0.0 at a feed rate of 20 inches/minute\")");
-  //processCanonLine("   19 N0005  SET_FEED_RATE(20.0000)");
-  //processCanonLine("   20 N0005  STRAIGHT_FEED(0.0000, 1.0000, 0.0000)");
-  //now do something with these...
 
-
-  //FIXME - do something with the lines here...
-*/
  uio::fitAll();
 }
 
@@ -206,15 +199,18 @@ bool g2m::processCanonLine (std::string l) {
     cl = canonLine::canonLineFactory (l,*(lineVector.back())->getStatus());
   }
 
-  //show it
-  dispShape *ds = new dispShape(cl->getShape(),cl->getN());
-  ds->display();
 
-  //store it
   lineVector.push_back(cl);
-  dispVector.push_back(ds);
-  cout << "elapsed time: " << nt.getElapsed() << endl;
-  if ((debug) || (lineVector.size()%100 == 0) ) {
+
+  if (!first) {
+    dispShape *ds = new dispShape(cl->getShape(),cl->getN());
+    dispVector.push_back(ds);
+    ds->display();
+  }
+
+  double e = nt.getElapsed();
+  cout << "Time for line " << cl->getN() << ": " << e/1000000000.0 << endl;
+  if ((debug) || (lineVector.size()%20 == 0) ) {
     uio::fitAll(); //fitAll every 100 lines, or every time if debugging
   }
 
@@ -233,3 +229,15 @@ void g2m::sleepSecond() {
 void g2m::infoMsg(std::string s) {
   cout << s << endl;
 }
+
+
+/*
+  void g2m::slotSaveAll() {
+  std::string saveFile = (QFileDialog::getSaveFileName ( uio::window(), "Choose base name for shapes", "./output", "*" )).toStdString();
+  for (int i = 0; i < lineVector.size(); i++) {
+    std::string t = saveFile;
+    t += i;
+    BRepTools::Write( lineVector[i]->getShape(), t.c_str());
+  }
+}
+*/

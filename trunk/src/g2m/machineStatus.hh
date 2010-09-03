@@ -33,6 +33,7 @@ typedef enum {OFF,CW,CCW,BRAKE} SPINDLE_STATUS;
 \class machineStatus
 \brief This class contains the machine's state for one canonical command.
 The information stored includes the coolant state, spindle speed and direction, feedrate, start and end pose, tool in use
+Important: 'pose' refers to how the machine's axes are positioned, while 'direction' refers to the direction of motion
 */
 class machineStatus: protected canon {
   protected:
@@ -41,6 +42,7 @@ class machineStatus: protected canon {
     SPINDLE_STATUS spindleStat;
     coolantStruct coolant;
     static millTool* theTool;
+    gp_Dir endDir, prevEndDir;
 //    toolNumber myTool;
 /*    / ** \var toolTable
       for now, it is for millTool objs only
@@ -67,6 +69,8 @@ class machineStatus: protected canon {
     const gp_Ax1 getStartPose() {return startPose;};
     const gp_Ax1 getEndPose() {return endPose;};
     CANON_PLANE getPlane() const {return plane;};
+    void setEndDir(gp_Dir d) {endDir = d;};
+    const gp_Dir getPrevEndDir() {return prevEndDir;};
     void clearAll(void);
     millTool* getTool() {return theTool;};
     //const millTool& getTool() {return toolTable.find(myTool)->second;};

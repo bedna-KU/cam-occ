@@ -29,6 +29,7 @@
 #include <sstream>
 
 #include <TopoDS_Shape.hxx>
+#include <TopTools_ListOfShape.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
 #include <AIS_InteractiveContext.hxx>
@@ -72,6 +73,7 @@ class uio : public QObject {
     void initUI();
     static std::vector<TopoDS_Shape> selectedShapes;
     static int errors;
+    static TopTools_ListOfShape latestSelection;
     //static std::string args[10];
   //  static void setArgs();
 
@@ -85,7 +87,7 @@ class uio : public QObject {
     static QMenuBar* mb() {return mbPtr;};
     static QAction* hm() {return hmPtr;};
     static void redraw();
-    static void getSelection();
+    //static void getSelection();
     static void debugMsg(std::string s, std::string f, int l);
     static void infoMsg( std::string title, std::string message );
     static void infoMsg( std::string message );
@@ -99,6 +101,7 @@ class uio : public QObject {
     static void sleep(uint n = 1,bool usrEv = false);
     static bool fileExists(QString f);
     static double mass(TopoDS_Shape s);
+    static void grabSelection();
 
 
     ///stringify is from http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1
@@ -109,6 +112,9 @@ class uio : public QObject {
     static void slotEdgeSelection();
     static void slotFaceSelection();
     static void slotSolidSelection();
+    static void slotMassOfSelection();
+    static void slotSaveSelection();
+    static void slotCountFaces();
 
 };
 

@@ -31,6 +31,9 @@
 #include "tool.hh"
 #include "dispShape.hh"
 
+//TODO: add methods to set and get display options for the obj - i.e. color, shading, ...
+//so objs with trouble can be highlighted. same for start and end move, rapid, canned cycles(?), ...
+
 /**
 \class canonLine
 \brief A canonLine object represents one canonical command.

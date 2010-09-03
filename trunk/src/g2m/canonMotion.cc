@@ -66,8 +66,9 @@ gp_Ax1 canonMotion::getPoseFromCmd() {
 }
 
 /** Sweep tool outline along myUnSolid, "cap" it with 3d tools, and put result in myShape
+\param startDir the direction the tool is moving at the start of this canonLine
 */
-void canonMotion::sweep() {
+void canonMotion::sweep(gp_Dir startDir) {
   Standard_Real angTol = 0.000175;  //approx .01 degrees
   TopoDS_Solid solid;
   gp_Pnt a,b;
@@ -157,40 +158,34 @@ void canonMotion::sweep() {
       ov.SetTranslation(gp::Origin(),v);
       solid = TopoDS::Solid(BRepBuilderAPI_Transform(solid, ov, true).Shape());
     }
-    //FIXME: each canonMotion obj should check if its startpoint is colinear with the endpoint of the previous object. If not, it should add a 3d model of the tool there.
-    //for now, we'll add one at each end of every obj.
 
-    //use transforms to create tool shapes for "end caps"
-/*    toa.Perform(status.getTool()->get3d(),true);
-    TopoDS_Shape e1 = toa.Shape(); //this is the tool, translated to the startpoint of the sweep
-    tob.Perform(status.getTool()->get3d(),true);
-    TopoDS_Shape e2 = tob.Shape(); //this is the tool, translated to the endpoint of the sweep
-    TopoDS_Shape temp = BRepAlgoAPI_Fuse( e1, e2 );
-
-    BRepCheck_Analyzer bca(solid);
+/*    BRepCheck_Analyzer bca(solid);
     if (!bca.IsValid()) BRepTools::Dump(solid,std::cout);
-    double m = uio::mass(solid);
-    cout << "line N" << getN() << ": solid's mass - " << m << endl;
+    cout << "line N" << getN() << ": solid's mass - " << uio::mass(solid) << endl;
+*/
 
-    try {
-      myShape = BRepAlgoAPI_Fuse( solid, temp );
-    } catch (...){
-      //gp_Trsf tr;
-      //tr.SetTranslation(gp::Origin(),gp_Pnt(5,5,5));
-//      BRepBuilderAPI_Transform tf(t);
-      //solid = TopoDS::Solid(BRepBuilderAPI_Transform(solid, tr, true).Shape());
-      //tr.SetTranslation(gp::Origin(),gp_Pnt(7,7,5));
-      //temp = BRepBuilderAPI_Transform(temp, tr, true).Shape();
-      dispShape s(solid,getN(),Graphic3d_NOM_NEON_GNC,AIS_Shaded);
-      s.display();
-      dispShape t(temp,getN(),Graphic3d_NOM_NEON_PHC,AIS_Shaded);
-      t.display();
-      uio::axoView();
-      uio::fitAll();
-      infoMsg("Error during Fuse operation: " + myLine);
-      uio::sleep(1);
-    }*/
-    myShape = solid;
+    //is there a sharp corner between the last line and this one?
+    if (!((vert) || (!status.getPrevEndDir().IsParallel(startDir,angTol)))) {
+      myShape = solid; //smooth transition, so we don't need to do anything extra
+    } else {
+      //translate the tool to the startpoint of the sweep, then fuse it with the sweep
+      TopoDS_Shape t;
+      toa.Perform(status.getTool()->get3d(),true);
+      if (vert) { //add in another tool shape
+        tob.Perform(status.getTool()->get3d(),true);
+        t = BRepAlgoAPI_Fuse(toa.Shape(),tob.Shape());
+      } else {
+        t = toa.Shape();
+      }
+      try {
+        myShape = BRepAlgoAPI_Fuse( solid, t );
+      } catch (...){
+        dispShape s(solid,getN(),Graphic3d_NOM_NEON_PHC,AIS_Shaded);
+        s.display();
+        infoMsg("Problematic Fuse operation: " + myLine);
+        //uio::sleep(1);
+      }
+    }
   } else {
     infoMsg("pipe not ready!");
     myShape = status.getTool()->get3d();

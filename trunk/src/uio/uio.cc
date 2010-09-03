@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QString>
 #include <QFileInfo>
+#include <QFileDialog>
 
 #include <AIS_InteractiveContext.hxx>
 #include <AIS_InteractiveObject.hxx>
@@ -36,6 +37,9 @@
 #include <V3d_View.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <BRepTools.hxx>
+#include <TopTools_ListIteratorOfListOfShape.hxx>
 
 /**
 QShortcuts in use:
@@ -57,6 +61,7 @@ QMenuBar* uio::mbPtr = 0;
 QAction* uio::hmPtr = 0;
 std::vector<TopoDS_Shape> uio::selectedShapes;
 int uio::errors = 0;
+TopTools_ListOfShape uio::latestSelection;
 //std::string uio::args[10];
 
 
@@ -114,12 +119,32 @@ void uio::initUI() {
   connect(selectSolidAction, SIGNAL(triggered()), this, SLOT(slotSolidSelection()));
   selectMenu->addAction( selectSolidAction );
 
+  selectMenu->addSeparator(); //---------------------------------------------------------
+
+  QAction *massOfSelectionAction;
+  massOfSelectionAction = new QAction("Mass of Selection...", this);
+  massOfSelectionAction->setStatusTip("Compute mass (volume) of currently selected shapes");
+  connect(massOfSelectionAction, SIGNAL(triggered()), this, SLOT(slotMassOfSelection()));
+  selectMenu->addAction(massOfSelectionAction);
+
+  QAction *saveSelectionAction;
+  saveSelectionAction = new QAction("Save Selection...", this);
+  saveSelectionAction->setStatusTip("Save the currently selected shape to file");
+  connect(saveSelectionAction, SIGNAL(triggered()), this, SLOT(slotSaveSelection()));
+  selectMenu->addAction(saveSelectionAction);
+
+  QAction *countFacesAction;
+  countFacesAction = new QAction("Count faces on selection...", this);
+  countFacesAction->setStatusTip("Counts the number of faces on selection");
+  connect(countFacesAction, SIGNAL(triggered()), this, SLOT(slotCountFaces()));
+  selectMenu->addAction(countFacesAction);
+
 }
 
 void uio::redraw() {
   viewPtr->Redraw();
 }
-
+/*
 void uio::getSelection() {
   selectedShapes.clear();
   for ( contextPtr->InitSelected(); contextPtr->MoreSelected(); contextPtr->NextSelected() ) {
@@ -140,7 +165,7 @@ void uio::getSelection() {
   }
   cout << "selectedShapes.size(): " << selectedShapes.size() << endl;
 }
-
+*/
 
 
 //TODO: pipe messages to a textBrowser at the bottom of the window
@@ -313,7 +338,65 @@ double uio::mass(TopoDS_Shape s) {
   //cout << "Mass " << m << endl;
   return m;
 }
+
 bool uio::fileExists(QString f) {
   QFileInfo qfi(f);
   return qfi.isFile();
+}
+
+void uio::grabSelection() {
+  latestSelection.Clear();
+  for ( context()->InitSelected(); context()->MoreSelected(); context()->NextSelected() ) {
+    Handle_AIS_InteractiveObject IO = context()->Interactive();
+    if (IO->IsKind(STANDARD_TYPE(AIS_Trihedron)) || !context()->HasSelectedShape())
+    {  //don't do anything because clearselected clears everything??
+      //vc()->ClearSelected();
+      //break;
+    } else {
+      latestSelection.Append(context()->SelectedShape());
+    }
+  }
+}
+
+void uio::slotSaveSelection() {
+  grabSelection();
+  TopTools_ListIteratorOfListOfShape lit;
+  lit.Initialize(latestSelection);
+  int i = 0;
+  std::string file = QFileDialog::getSaveFileName ( uio::window(), "Choose base name for shapes", "./output", "*" ).toStdString();
+  for (;lit.More();lit.Next()) {
+    i++;
+    std::string name = file + stringify(i) + ".brep";
+    std::cout << "writing file: " << name << endl;
+    BRepTools::Write(lit.Value(),name.c_str());
+  }
+}
+
+void uio::slotMassOfSelection() {
+  grabSelection();
+  TopTools_ListIteratorOfListOfShape lit;
+  lit.Initialize(latestSelection);
+  double m = 0;
+  int i = 0;
+  for (;lit.More();lit.Next()) {
+    i++;
+    m += mass(lit.Value());
+  }
+  infoMsg("Mass of " + stringify(i) + " selected shape(s): " + stringify(m));
+}
+
+void uio::slotCountFaces(){
+  grabSelection();
+  TopTools_ListIteratorOfListOfShape lit;
+  lit.Initialize(latestSelection);
+  int s = 0;
+  for (;lit.More();lit.Next()) {
+    s++;
+    int f=0;
+    TopExp_Explorer ex(lit.Value(),TopAbs_ShapeEnum.TopAbs_FACE);
+    for (;ex.More();ex.Next()) {
+      f++;
+    }
+    infoMsg("Number of faces on shape " + stringify(s) + ": " + stringify(f));
+  }
 }

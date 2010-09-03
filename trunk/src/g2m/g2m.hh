@@ -30,6 +30,7 @@
 #include "machineStatus.hh"
 #include "dispShape.hh"
 
+//the following comment is for doxygen
 /**
 \class g2m
 \brief This class does the high level stuff for creating a model from gcode.

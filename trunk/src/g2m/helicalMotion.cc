@@ -1,22 +1,22 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Mark Pictor                                     *
- *   mpictor@gmail.com                                                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+*   Copyright (C) 2010 by Mark Pictor                                     *
+*   mpictor@gmail.com                                                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************/
 #include <string>
 #include <climits>
 
@@ -24,11 +24,13 @@
 #include <Handle_Geom_CylindricalSurface.hxx>
 #include <Geom_CylindricalSurface.hxx>
 #include <Geom2d_TrimmedCurve.hxx>
+#include <BRepAdaptor_Curve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <GCE2d_MakeSegment.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
 #include <TopoDS_Edge.hxx>
+#include <TopoDS.hxx>
 #include <gp_Ax1.hxx>
 #include <gp_Ax2.hxx>
 
@@ -38,91 +40,93 @@
 
 //implements helicalMotion
 helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
-    cout << "helicalMotion ctor" << endl;
+  cout << "helicalMotion ctor" << endl;
 
-  //part of processCanonLine
-  //} else if (canon_line.startsWith( "ARC_FEED(" )) {
- gp_Dir arcDir;
- gp_Pnt c;
- double x,y,z,a1,a2,e1,e2,e3,ea,eb,ec,hdist;
- int rot=0;
- x=y=z=a1=a2=e1=e2=e3=ea=eb=ec=0;
+  gp_Pnt start, end;
+  start = status.getStartPose().Location();
+  end = status.getEndPose().Location();
 
- //edge.start = last;
- /* example output, starting from x0 y-1 z0 a0 b0 c0, command g02x1y0i0j1
- (names interleaved, see emc's saicanon.cc, line 497)
- 8  N..... ARC_FEED(1.000000, 0.000000,    0.000000, 0.000000,
- line Gline ARC_FEED(first_end, second_end, first_axis, second_axis,
- -1,        0.000000,   0.000000, 0.000000, 0.000000)
- rotation, axis_end_point,   a,        b,        c)
- */
- e1  = tok2d(3); //first_end
- e2  = tok2d(4); //second_end
- a1 = tok2d(5); //first_axis
- a2 = tok2d(6); //second_axis
- rot = tok2d(7); //rotation (ccw if rot==1,cw if rot==-1)
- e3 = tok2d(8); //axis_end_point
- ea = tok2d(9); //a
- eb = tok2d(10); //b
- ec = tok2d(11); //c
- switch (status.getPlane()) {
-   /*
-   ** the order for these vars is copied from saicannon.cc, line 509+
-   ** a,b,c are untouched - yay!
-   */
-   case CANON_PLANE_XZ:
-     status.setEndPose(gp_Pnt(e2,e3,e1));
-     arcDir = gp_Dir(0,1,0);
-     c = gp_Pnt(a2,status.getStartPose().Location().Y(),a1);
-     hdist = e3 - status.getStartPose().Location().Y();
-     break;
-   case CANON_PLANE_YZ:
-     status.setEndPose(gp_Pnt(e3,e1,e2));
-     arcDir = gp_Dir(1,0,0);
-     c = gp_Pnt(status.getStartPose().Location().X(),a1,a2);
-     hdist = e3 - status.getStartPose().Location().X();
-     break;
-   case CANON_PLANE_XY:
-   default:
-     status.setEndPose(gp_Pnt(e1,e2,e3));
-     arcDir = gp_Dir(0,0,1);
-     c = gp_Pnt(a1,a2,status.getStartPose().Location().Z());
-     hdist = e3 - status.getStartPose().Location().Z();
- }
- if (status.getStartPose().Location().Distance(status.getEndPose().Location()) > Precision::Confusion()) { //skip arc if zero length; caught this bug thanks to tort.ngc
+  gp_Dir arcDir;
+  gp_Pnt c;
+  double x,y,z,a1,a2,e1,e2,e3,ea,eb,ec,hdist;
+  int rot=0;
+  x=y=z=a1=a2=e1=e2=e3=ea=eb=ec=0;
 
-   //center is c; ends are edge.start, edge.last
-   if (fabs(hdist) > 0.000001) {
-     helix(status.getStartPose().Location(), status.getEndPose().Location(), c, arcDir,rot);
+  e1  = tok2d(3); //first_end
+  e2  = tok2d(4); //second_end
+  a1 = tok2d(5); //first_axis
+  a2 = tok2d(6); //second_axis
+  rot = tok2d(7); //rotation (ccw if rot==1,cw if rot==-1)
+  e3 = tok2d(8); //axis_end_point
+  ea = tok2d(9); //a
+  eb = tok2d(10); //b
+  ec = tok2d(11); //c
+  switch (status.getPlane()) {
+    /*
+    ** the order for these vars is copied from saicannon.cc, line 509+
+    ** a,b,c remain in order
+    */
+    case CANON_PLANE_XZ:
+      status.setEndPose(gp_Pnt(e2,e3,e1));
+      arcDir = gp_Dir(0,1,0);
+      c = gp_Pnt(a2,start.Y(),a1);
+      hdist = e3 - start.Y();
+      break;
+    case CANON_PLANE_YZ:
+      status.setEndPose(gp_Pnt(e3,e1,e2));
+      arcDir = gp_Dir(1,0,0);
+      c = gp_Pnt(start.X(),a1,a2);
+      hdist = e3 - start.X();
+      break;
+    case CANON_PLANE_XY:
+    default:
+      status.setEndPose(gp_Pnt(e1,e2,e3));
+      arcDir = gp_Dir(0,0,1);
+      c = gp_Pnt(a1,a2,start.Z());
+      hdist = e3 - start.Z();
+  }
 
-   } else {
-     gp_Vec Vr = gp_Vec(c,status.getStartPose().Location());	//vector from center to start
-     gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
-     gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
-     if (rot==1) startVec *= -1;
-     //cout << "Arc with vector at start: " << uio::toString(startVec) << endl;
-     arc(status.getStartPose().Location(), startVec, status.getEndPose().Location());
-   }
-   /*
-   FIXME - rewrite or copy the old funcs into new src
-   chkEdgeStruct check = checkEdge(feedEdges, feedEdges.size()-1);
-   if (check.startGap != 0.0) {
-     exit(-1); //what SHOULD we do here?!
-   }
-   if (check.endGap != 0.0) {
-     last = check.realEnd;
-     feedEdges.back().end = last;
-     if (check.endGap > 100.0*Precision::Confusion()) {
-       cout << " with center " << toString(c).toStdString();
-       if (mtype == HELIX) cout << " and arcDir " << toString(arcDir).toStdString();
-       cout << " from " << toString(status.getStartPose().Location()).toStdString() << " to " << toString(status.getEndPose).toStdString() << endl;
-       cout << "params:  e1:"<< e1 <<"  e2:" << e2 <<"  a1:"<< a1 <<"  a2:"<< a2 <<"  rot:" << rot <<"  ep:" << ep << endl;
-     }
-   }
-   */
-   sweep();
- } else cout << "Skipped zero-length arc." << endl;
+  if (start.Distance(end) <= Precision::Confusion()) { //skip arc if zero length; caught this bug thanks to tort.ngc
+    cout << "Skipped zero-length arc at N" << getN() << endl;
+  } else {
+
+    if (fabs(hdist) > 0.000001) {
+      helix(start, end, c, arcDir,rot);
+
+    } else {
+      gp_Vec Vr = gp_Vec(c,start);	//vector from center to start
+      gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
+      gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
+      if (rot==1) startVec *= -1;
+      //cout << "Arc with vector at start: " << uio::toString(startVec) << endl;
+      arc(start, startVec, end);
+    }
+    // FIXME - check for gaps
+
+    //here we
+    double f,l,fd,ld;
+    gp_Pnt fp,lp;
+    gp_Vec fv,lv;
+
+    BRepAdaptor_Curve bac(TopoDS::Edge(myUnSolid));
+    f = bac.FirstParameter();
+    l = bac.LastParameter();
+    bac.D1(f,fp,fv);
+    bac.D1(l,lp,lv);
+
+    fd = fp.SquareDistance(start);
+    ld = lp.SquareDistance(start);
+    if ( fd > ld ) { //compare the distances to decide which one is at the start
+      //"first" end (fd) is farther from the starting point, so
+      status.setEndDir(fv);     //use first vector at end
+      sweep(lv);                //and use last vector at start
+    } else {              //other way around
+      status.setEndDir(lv);
+      sweep(fv);
+    }
+  }
 }
+
 
 /// Create a helix, place it in myUnSolid
 void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot ) {
@@ -157,7 +161,7 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int r
   }
 
   if (success != 2) {
-   //cout << "Couldn't create a helix from " << uio::toString(start) << " to " << uio::toString(end)  << ". Replacing with a line." <<endl;
+    //cout << "Couldn't create a helix from " << uio::toString(start) << " to " << uio::toString(end)  << ". Replacing with a line." <<endl;
 
     errors=true;
     myUnSolid = BRepBuilderAPI_MakeEdge( start, end );

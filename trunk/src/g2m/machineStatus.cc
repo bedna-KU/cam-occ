@@ -21,6 +21,7 @@
 millTool* machineStatus::theTool = 0;
 
 machineStatus::machineStatus(machineStatus const& oldStatus) {
+    //FIXME: segfault on next line when modelling a second file?!
 	spindleStat = oldStatus.spindleStat;
     F = oldStatus.F;
     S = oldStatus.S;
@@ -28,6 +29,8 @@ machineStatus::machineStatus(machineStatus const& oldStatus) {
     plane = oldStatus.plane;
     endPose = startPose = oldStatus.endPose;
     theTool = oldStatus.theTool;
+    endDir = gp_Dir(0,0,-1);
+    prevEndDir = oldStatus.endDir;
 }
 
 /**
@@ -48,6 +51,7 @@ void machineStatus::clearAll() {
   coolant.mist = false;
   coolant.spindle = false;
   endPose = startPose = gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1));
+  endDir = prevEndDir = gp_Dir(0,0,-1);
   spindleStat = OFF;
   //theTool = -1;
   if (theTool != 0) {

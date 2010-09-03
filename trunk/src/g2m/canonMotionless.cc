@@ -36,8 +36,7 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (clMatch("MESSAGE")) {
     infoMsg("Message: " + canonTokens[3]);
 //  } else if (clMatch("STOP_SPINDLE_TURNING")) {
-//    SPINDLE_STATUS s = OFF;
-//    status.setSpindleStatus(SPINDLE_STATUS(OFF));
+//    status.setSpindleStatus(SPINDLE_STATUS.OFF);
   //} else if (clMatch("ENABLE")) {
   } else if (clMatch("MIST_ON")) {
     coolantStruct c = status.getCoolant();
@@ -58,7 +57,7 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (clMatch("DWELL")) {
   //} else if (clMatch("FEEDRATE")) {
   } else if (clMatch("SET_FEED_RATE")) {
-    status.setFeed(tok2i(3));
+    status.setFeed(tok2d(3));
   } else if (clMatch("SET_FEED_REFERENCE")) {
     handled = false;
   } else if (clMatch("SELECT_TOOL")) {

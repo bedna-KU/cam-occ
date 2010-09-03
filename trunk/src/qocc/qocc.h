@@ -16,6 +16,15 @@
 
 /*!
 \mainpage
+\section    cam CAM (Computer-Aided Manufacturing)
+
+            While I originally intended to write a CAM program, I haven't proceded very far in that direction. Currently there is no way to generate g-code from this program. If you are looking for useable open-source CAM, try HeeksCNC.
+
+\section    g2m Gcode-to-model
+
+            Using EMC2's stand-alone interpreter, gcode is converted into a series of simple canonical commands which are then processed to create a 3d model of the material to be removed. See classes g2m and canonLine, and the classes that inherit from the latter.
+
+\section    qtocc QtOpenCascade
 
 			This is part of the the QtOpenCascade Toolkit.
 
@@ -35,9 +44,17 @@
 			of your choice and open a command prompt there.
 			<pre>
 				qmake
-				make / nmake
+				make
 			</pre>
 			to build the package.
+
+\section    run Running the program
+
+            Because cam-occ uses libraries, you will need to add bin/ to LD_LIBRARY_PATH. Alternately, edit the file camocc.sh to suit.
+
+            Command line: Currently, cam-occ recognizes the argument 'g2m', followed by an optional file name. This will load a .ngc or .canon file and build a model from it.
+
+            For debugging, there is debug.sh which sets environment variables and then runs gdb.
 */
 
 

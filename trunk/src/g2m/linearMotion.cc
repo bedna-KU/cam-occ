@@ -1,22 +1,22 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Mark Pictor                                     *
- *   mpictor@gmail.com                                                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+*   Copyright (C) 2010 by Mark Pictor                                     *
+*   mpictor@gmail.com                                                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************/
 #include "linearMotion.hh"
 
 #include <string>
@@ -26,6 +26,7 @@
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Wire.hxx>
+
 #include "machineStatus.hh"
 #include "canonMotion.hh"
 #include "canonLine.hh"
@@ -36,19 +37,23 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
   //TODO: add support for 5 or 6 axis motion
-if (a.Distance(b) > Precision::Confusion()) { //is the edge long enough to bother making?
-  myUnSolid = BRepBuilderAPI_MakeEdge(a,b).Edge();
+  if (a.Distance(b) < Precision::Confusion()) { //is the edge long enough to bother making?
+    cout << "skipped zero-length line at N" << getN() << endl;
+  } else {
+    myUnSolid = BRepBuilderAPI_MakeEdge(a,b).Edge();
 
-  //check if the swept shape will be accurate
-  //use the ratio of rise or fall to distance
-  double deltaZ = abs(a.Z() - b.Z());
-  double dist = a.Distance(b);
-  if ( (deltaZ/dist) > 0.001) {
-    sweepIsSuspect = true;
+    //check if the swept shape will be accurate
+    //use the ratio of rise or fall to distance
+    double deltaZ = abs(a.Z() - b.Z());
+    double dist = a.Distance(b);
+    if ( (deltaZ/dist) > 0.001) {
+      sweepIsSuspect = true;
+    }
+
+    gp_Dir endd(gp_Vec(a,b)); //end direction
+    status.setEndDir(endd);
+    sweep(endd); //this uses myUnSolid, and the current tool. the result is put in myShape.
   }
-
-  sweep(); //this uses myUnSolid, and the current tool. the result is put in myShape.
-  } else cout << "skipped zero-length line, from N" << getN() << endl;
 }
 
 //need to return RAPID for rapids...
@@ -92,15 +97,15 @@ TopTools_ListOfShape oneShell (TopoDS_Solid a, TopoDS_Solid b) {
         // add it to collection....
         lsh.Add(sol_tmp);
         cout << "multiple solids!" << endl;
-      }
-    } else {
-      TopoDS_Shell aShell = FixTopShell.Shell();
-      TopoDS_Solid sol = new BRepBuilderAPI_MakeSolid(aShell).Solid();
-      // add it to collection....
-      lsh.Add(sol);
-        cout << "one solid" << endl;
-    }
-  }
-  return lsh;
-}
-*/
+        }
+        } else {
+          TopoDS_Shell aShell = FixTopShell.Shell();
+          TopoDS_Solid sol = new BRepBuilderAPI_MakeSolid(aShell).Solid();
+          // add it to collection....
+          lsh.Add(sol);
+          cout << "one solid" << endl;
+          }
+          }
+          return lsh;
+          }
+          */

@@ -54,7 +54,7 @@ class canonMotion: protected canonLine {
     TopoDS_Shape myShape;
     gp_Ax1 getPoseFromCmd();
     bool sweepIsSuspect;
-    void sweep();
+    void sweep(gp_Dir startDir);
 };
 
 #endif //CANONMOTION_HH
