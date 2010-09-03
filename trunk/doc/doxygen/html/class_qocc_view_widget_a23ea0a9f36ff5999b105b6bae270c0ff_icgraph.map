@@ -1,6 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="209,31,281,62"/>
-<area shape="rect" id="node5" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="331,5,429,35"/>
-<area shape="rect" id="node9" href="$classg2m.html#ae469849f9a988d939c9ac89ad05a3653" title="g2m::test" alt="" coords="341,58,419,89"/>
-<area shape="rect" id="node7" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="479,5,537,35"/>
+<area shape="rect" id="node3" href="$classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="209,107,281,138"/>
+<area shape="rect" id="node5" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="331,55,493,86"/>
+<area shape="rect" id="node9" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="695,57,855,87"/>
+<area shape="rect" id="node15" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="363,159,461,190"/>
+<area shape="rect" id="node7" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="543,5,644,35"/>
+<area shape="rect" id="node11" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="904,57,984,87"/>
+<area shape="rect" id="node17" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="564,159,623,190"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="145,5,305,35"/>
-<area shape="rect" id="node5" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="355,5,435,35"/>
+<area shape="rect" id="node3" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="355,5,435,35"/>
+<area shape="rect" id="node5" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="145,30,305,61"/>
+<area shape="rect" id="node8" href="$classuio.html#ac024098c497a57f08cfa87c1b65cdd5a" title="uio::slotSaveSelection" alt="" coords="149,83,301,114"/>
 </map>

@@ -69,105 +69,107 @@
 <a name="l00040"></a>00040 
 <a name="l00041"></a>00041 <span class="keyword">public</span>:
 <a name="l00042"></a>00042 
-<a name="l00043"></a>00043         <a class="code" href="class_qocc_harness_window.html#ad6cebeeb1582f8b51814ae8a640d358e">QoccHarnessWindow</a>();
+<a name="l00043"></a>00043         <a class="code" href="class_qocc_harness_window.html#adbd4e3f4c3665781221b69f539e381e7">QoccHarnessWindow</a>(QStringList ags);
 <a name="l00044"></a><a class="code" href="class_qocc_harness_window.html#a82151cae1142a8a91d9bb6b976178eba">00044</a>         Handle_AIS_InteractiveContext&amp; <a class="code" href="class_qocc_harness_window.html#a82151cae1142a8a91d9bb6b976178eba">getContext</a>() { <span class="keywordflow">return</span> myVC-&gt;<a class="code" href="class_qocc_viewer_context.html#ad5ee0a4d6e901df89fa6dc1d5e1a055a">getContext</a>(); };
 <a name="l00045"></a><a class="code" href="class_qocc_harness_window.html#a1e5955c403bbc6afab7b71177d0f9f1f">00045</a>         Handle_V3d_View <a class="code" href="class_qocc_harness_window.html#a1e5955c403bbc6afab7b71177d0f9f1f">getView</a>() { <span class="keywordflow">return</span> myOCC-&gt;<a class="code" href="class_qocc_view_widget.html#a9306879d39c3784eca82d5c535af3754">getView</a>(); };
 <a name="l00046"></a><a class="code" href="class_qocc_harness_window.html#a65822a5ab3e9f36c240a0fd1a4d9c31c">00046</a>         QAction* <a class="code" href="class_qocc_harness_window.html#a65822a5ab3e9f36c240a0fd1a4d9c31c">getHelpMenu</a>() { <span class="keywordflow">return</span> helpAction; };
-<a name="l00047"></a>00047 
-<a name="l00048"></a>00048 <span class="keyword">private</span> slots:
-<a name="l00049"></a>00049     <span class="keywordtype">void</span> newFile();
-<a name="l00050"></a>00050     <span class="keywordtype">void</span> open();
-<a name="l00051"></a>00051     <span class="keywordtype">void</span> save();
-<a name="l00052"></a>00052     <span class="keywordtype">void</span> print();
-<a name="l00053"></a>00053     <span class="keywordtype">void</span> undo();
-<a name="l00054"></a>00054     <span class="keywordtype">void</span> redo();
-<a name="l00055"></a>00055     <span class="keywordtype">void</span> cut();
-<a name="l00056"></a>00056     <span class="keywordtype">void</span> copy();
-<a name="l00057"></a>00057     <span class="keywordtype">void</span> paste();
-<a name="l00058"></a>00058     <span class="keywordtype">void</span> about();
-<a name="l00059"></a>00059         <span class="keywordtype">void</span> bottle();
-<a name="l00060"></a>00060     <span class="keywordtype">void</span> aboutQt();
-<a name="l00061"></a>00061         <span class="keywordtype">void</span> xyzPosition (V3d_Coordinate X,
-<a name="l00062"></a>00062                                           V3d_Coordinate Y,
-<a name="l00063"></a>00063                                           V3d_Coordinate Z);
-<a name="l00064"></a>00064         <span class="keywordtype">void</span> addPoint (V3d_Coordinate X,
-<a name="l00065"></a>00065                                    V3d_Coordinate Y,
-<a name="l00066"></a>00066                                    V3d_Coordinate Z);
-<a name="l00067"></a>00067         <span class="keywordtype">void</span> statusMessage (<span class="keyword">const</span> QString aMessage);
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 <span class="keyword">private</span>:
+<a name="l00047"></a><a class="code" href="class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d">00047</a>     QString <a class="code" href="class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d">getArg</a>(<span class="keywordtype">int</span> n) {<span class="keywordflow">if</span>(n&lt;=args.count())<span class="keywordflow">return</span> args[n];<span class="keywordflow">else</span> <span class="keywordflow">return</span> <span class="stringliteral">&quot;n--&quot;</span>;};
+<a name="l00048"></a><a class="code" href="class_qocc_harness_window.html#aa7a3a23b1a54d6400e0b29a838c2ca8d">00048</a>     QStringList* <a class="code" href="class_qocc_harness_window.html#aa7a3a23b1a54d6400e0b29a838c2ca8d">getArgs</a>() {<span class="keywordflow">return</span> &amp;args;};
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 <span class="keyword">private</span> slots:
+<a name="l00051"></a>00051     <span class="keywordtype">void</span> newFile();
+<a name="l00052"></a>00052     <span class="keywordtype">void</span> open();
+<a name="l00053"></a>00053     <span class="keywordtype">void</span> save();
+<a name="l00054"></a>00054     <span class="keywordtype">void</span> print();
+<a name="l00055"></a>00055     <span class="keywordtype">void</span> undo();
+<a name="l00056"></a>00056     <span class="keywordtype">void</span> redo();
+<a name="l00057"></a>00057     <span class="keywordtype">void</span> cut();
+<a name="l00058"></a>00058     <span class="keywordtype">void</span> copy();
+<a name="l00059"></a>00059     <span class="keywordtype">void</span> paste();
+<a name="l00060"></a>00060     <span class="keywordtype">void</span> about();
+<a name="l00061"></a>00061         <span class="keywordtype">void</span> bottle();
+<a name="l00062"></a>00062     <span class="keywordtype">void</span> aboutQt();
+<a name="l00063"></a>00063         <span class="keywordtype">void</span> xyzPosition (V3d_Coordinate X,
+<a name="l00064"></a>00064                                           V3d_Coordinate Y,
+<a name="l00065"></a>00065                                           V3d_Coordinate Z);
+<a name="l00066"></a>00066         <span class="keywordtype">void</span> addPoint (V3d_Coordinate X,
+<a name="l00067"></a>00067                                    V3d_Coordinate Y,
+<a name="l00068"></a>00068                                    V3d_Coordinate Z);
+<a name="l00069"></a>00069         <span class="keywordtype">void</span> statusMessage (<span class="keyword">const</span> QString aMessage);
 <a name="l00070"></a>00070 
-<a name="l00071"></a>00071         <span class="comment">//cam myCam(QoccHarnessWindow*); //why two?! also shows up in QOHW.cpp</span>
-<a name="l00072"></a>00072 
-<a name="l00073"></a>00073     <span class="keywordtype">void</span> createActions();
-<a name="l00074"></a>00074     <span class="keywordtype">void</span> createMenus();
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076     QMenu *fileMenu;
-<a name="l00077"></a>00077     QMenu *editMenu;
-<a name="l00078"></a>00078         QMenu *viewMenu;
-<a name="l00079"></a>00079         QMenu *viewActionsMenu;
-<a name="l00080"></a>00080         QMenu *viewDisplayMenu;
-<a name="l00081"></a>00081     QMenu *formatMenu;
-<a name="l00082"></a>00082     QMenu *helpMenu;
-<a name="l00083"></a>00083     QAction *helpAction;  <span class="comment">//this is so we can insert menus before the help menu...</span>
-<a name="l00084"></a>00084     QMenu *gridMenu;
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086     QAction *newAction;
-<a name="l00087"></a>00087     QAction *openAction;
-<a name="l00088"></a>00088     QAction *saveAction;
-<a name="l00089"></a>00089     QAction *printAction;
-<a name="l00090"></a>00090     QAction *exitAction;
-<a name="l00091"></a>00091     QAction *undoAction;
-<a name="l00092"></a>00092     QAction *redoAction;
-<a name="l00093"></a>00093     QAction *cutAction;
-<a name="l00094"></a>00094     QAction *copyAction;
-<a name="l00095"></a>00095     QAction *pasteAction;
-<a name="l00096"></a>00096     QAction *aboutAction;
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098         QAction *fitAction;
-<a name="l00099"></a>00099         QAction *fitAllAction;
-<a name="l00100"></a>00100         QAction *zoomAction;
-<a name="l00101"></a>00101         QAction *panAction;
-<a name="l00102"></a>00102         QAction *rotAction;
-<a name="l00103"></a>00103 
-<a name="l00104"></a>00104         QAction *gridXYAction;
-<a name="l00105"></a>00105         QAction *gridXZAction;
-<a name="l00106"></a>00106         QAction *gridYZAction;
-<a name="l00107"></a>00107         QAction *gridOnAction;
-<a name="l00108"></a>00108         QAction *gridOffAction;
-<a name="l00109"></a>00109         QAction *gridRectAction;
-<a name="l00110"></a>00110         QAction *gridCircAction;
-<a name="l00111"></a>00111 
-<a name="l00112"></a>00112         QAction *viewFrontAction;
-<a name="l00113"></a>00113         QAction *viewBackAction;
-<a name="l00114"></a>00114         QAction *viewTopAction;
-<a name="l00115"></a>00115         QAction *viewBottomAction;
-<a name="l00116"></a>00116         QAction *viewLeftAction;
-<a name="l00117"></a>00117         QAction *viewRightAction;
-<a name="l00118"></a>00118         QAction *viewAxoAction;
-<a name="l00119"></a>00119         QAction *viewResetAction;
-<a name="l00120"></a>00120         QAction *viewGridAction; 
-<a name="l00122"></a>00122         QAction *backgroundAction;
-<a name="l00123"></a>00123 
-<a name="l00124"></a>00124     QAction *aboutQtAction;
+<a name="l00071"></a>00071 <span class="keyword">private</span>:
+<a name="l00072"></a>00072     QStringList args;
+<a name="l00073"></a>00073 <span class="comment">//    int argc;</span>
+<a name="l00074"></a>00074 <span class="comment">//    char* argv[];</span>
+<a name="l00075"></a>00075     <span class="keywordtype">void</span> createActions();
+<a name="l00076"></a>00076     <span class="keywordtype">void</span> createMenus();
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078     QMenu *fileMenu;
+<a name="l00079"></a>00079     QMenu *editMenu;
+<a name="l00080"></a>00080         QMenu *viewMenu;
+<a name="l00081"></a>00081         QMenu *viewActionsMenu;
+<a name="l00082"></a>00082         QMenu *viewDisplayMenu;
+<a name="l00083"></a>00083     QMenu *formatMenu;
+<a name="l00084"></a>00084     QMenu *helpMenu;
+<a name="l00085"></a>00085     QAction *helpAction;  <span class="comment">//this is so we can insert menus before the help menu...</span>
+<a name="l00086"></a>00086     QMenu *gridMenu;
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088     QAction *newAction;
+<a name="l00089"></a>00089     QAction *openAction;
+<a name="l00090"></a>00090     QAction *saveAction;
+<a name="l00091"></a>00091     QAction *printAction;
+<a name="l00092"></a>00092     QAction *exitAction;
+<a name="l00093"></a>00093     QAction *undoAction;
+<a name="l00094"></a>00094     QAction *redoAction;
+<a name="l00095"></a>00095     QAction *cutAction;
+<a name="l00096"></a>00096     QAction *copyAction;
+<a name="l00097"></a>00097     QAction *pasteAction;
+<a name="l00098"></a>00098     QAction *aboutAction;
+<a name="l00099"></a>00099 
+<a name="l00100"></a>00100         QAction *fitAction;
+<a name="l00101"></a>00101         QAction *fitAllAction;
+<a name="l00102"></a>00102         QAction *zoomAction;
+<a name="l00103"></a>00103         QAction *panAction;
+<a name="l00104"></a>00104         QAction *rotAction;
+<a name="l00105"></a>00105 
+<a name="l00106"></a>00106         QAction *gridXYAction;
+<a name="l00107"></a>00107         QAction *gridXZAction;
+<a name="l00108"></a>00108         QAction *gridYZAction;
+<a name="l00109"></a>00109         QAction *gridOnAction;
+<a name="l00110"></a>00110         QAction *gridOffAction;
+<a name="l00111"></a>00111         QAction *gridRectAction;
+<a name="l00112"></a>00112         QAction *gridCircAction;
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114         QAction *viewFrontAction;
+<a name="l00115"></a>00115         QAction *viewBackAction;
+<a name="l00116"></a>00116         QAction *viewTopAction;
+<a name="l00117"></a>00117         QAction *viewBottomAction;
+<a name="l00118"></a>00118         QAction *viewLeftAction;
+<a name="l00119"></a>00119         QAction *viewRightAction;
+<a name="l00120"></a>00120         QAction *viewAxoAction;
+<a name="l00121"></a>00121         QAction *viewResetAction;
+<a name="l00122"></a>00122         QAction *viewGridAction; 
+<a name="l00124"></a>00124         QAction *backgroundAction;
 <a name="l00125"></a>00125 
-<a name="l00126"></a>00126         <span class="comment">//Sample Action</span>
-<a name="l00127"></a>00127         QAction *bottleAction;
-<a name="l00128"></a>00128 
-<a name="l00129"></a>00129         <span class="comment">// The OpenCASCADE Qt widget and context;</span>
-<a name="l00130"></a>00130         <a class="code" href="class_qocc_view_widget.html" title="This class provides the view element of the QtOpenCascade Toolkit. This class provides a Widget to vi...">QoccViewWidget</a>*     myOCC;
-<a name="l00131"></a>00131         <a class="code" href="class_qocc_viewer_context.html" title="This class provides a simple document element of the QtOpenCascade Toolkit.">QoccViewerContext</a>*  myVC;
-<a name="l00132"></a>00132 
-<a name="l00133"></a>00133         QString myLastFolder;
-<a name="l00134"></a>00134         
-<a name="l00135"></a>00135   <span class="keyword">public</span>:
-<a name="l00136"></a><a class="code" href="class_qocc_harness_window.html#acb9a2f21f46d7db862404ea7606661f5">00136</a>         <a class="code" href="class_qocc_view_widget.html" title="This class provides the view element of the QtOpenCascade Toolkit. This class provides a Widget to vi...">QoccViewWidget</a>*     <a class="code" href="class_qocc_harness_window.html#acb9a2f21f46d7db862404ea7606661f5">getOCC</a>() { <span class="keywordflow">return</span> myOCC; };
-<a name="l00137"></a><a class="code" href="class_qocc_harness_window.html#a7aafadb246578396b9a3da389c517ee6">00137</a>         <a class="code" href="class_qocc_viewer_context.html" title="This class provides a simple document element of the QtOpenCascade Toolkit.">QoccViewerContext</a>*  <a class="code" href="class_qocc_harness_window.html#a7aafadb246578396b9a3da389c517ee6">getVC</a>() { <span class="keywordflow">return</span> myVC; };
-<a name="l00138"></a>00138 
-<a name="l00139"></a>00139 };
+<a name="l00126"></a>00126     QAction *aboutQtAction;
+<a name="l00127"></a>00127 
+<a name="l00128"></a>00128         <span class="comment">//Sample Action</span>
+<a name="l00129"></a>00129         QAction *bottleAction;
+<a name="l00130"></a>00130 
+<a name="l00131"></a>00131         <span class="comment">// The OpenCASCADE Qt widget and context;</span>
+<a name="l00132"></a>00132         <a class="code" href="class_qocc_view_widget.html" title="This class provides the view element of the QtOpenCascade Toolkit. This class provides a Widget to vi...">QoccViewWidget</a>*     myOCC;
+<a name="l00133"></a>00133         <a class="code" href="class_qocc_viewer_context.html" title="This class provides a simple document element of the QtOpenCascade Toolkit.">QoccViewerContext</a>*  myVC;
+<a name="l00134"></a>00134 
+<a name="l00135"></a>00135         QString myLastFolder;
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137   <span class="keyword">public</span>:
+<a name="l00138"></a><a class="code" href="class_qocc_harness_window.html#acb9a2f21f46d7db862404ea7606661f5">00138</a>         <a class="code" href="class_qocc_view_widget.html" title="This class provides the view element of the QtOpenCascade Toolkit. This class provides a Widget to vi...">QoccViewWidget</a>*     <a class="code" href="class_qocc_harness_window.html#acb9a2f21f46d7db862404ea7606661f5">getOCC</a>() { <span class="keywordflow">return</span> myOCC; };
+<a name="l00139"></a><a class="code" href="class_qocc_harness_window.html#a7aafadb246578396b9a3da389c517ee6">00139</a>         <a class="code" href="class_qocc_viewer_context.html" title="This class provides a simple document element of the QtOpenCascade Toolkit.">QoccViewerContext</a>*  <a class="code" href="class_qocc_harness_window.html#a7aafadb246578396b9a3da389c517ee6">getVC</a>() { <span class="keywordflow">return</span> myVC; };
 <a name="l00140"></a>00140 
-<a name="l00141"></a>00141 <span class="preprocessor">#endif</span>
-<a name="l00142"></a>00142 <span class="preprocessor"></span>
+<a name="l00141"></a>00141 };
+<a name="l00142"></a>00142 
+<a name="l00143"></a>00143 <span class="preprocessor">#endif</span>
+<a name="l00144"></a>00144 <span class="preprocessor"></span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

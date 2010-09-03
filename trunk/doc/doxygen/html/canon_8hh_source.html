@@ -50,37 +50,39 @@
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define CANON_HH</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00023"></a>00023 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="preprocessor">#include &lt;cmath&gt;</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;limits.h&gt;</span>
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="preprocessor">#include &lt;gp_Pnt.hxx&gt;</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include &lt;gp_Dir.hxx&gt;</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include &lt;gp_Ax1.hxx&gt;</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span>
-<a name="l00032"></a>00032 
-<a name="l00033"></a><a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">00033</a> <span class="keyword">typedef</span> <span class="keywordtype">double</span> degrees; <span class="comment">//angle in degrees</span>
-<a name="l00034"></a><a class="code" href="canon_8hh.html#a87f92cc0ab0a9f7c81e6f72e92992390">00034</a> <span class="keyword">typedef</span> <span class="keywordtype">int</span> toolNumber;
-<a name="l00035"></a>00035 
-<a name="l00042"></a><a class="code" href="classcanon.html">00042</a> <span class="keyword">class </span><a class="code" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class.">canon</a> {
-<a name="l00043"></a>00043   <span class="keyword">public</span>:
-<a name="l00044"></a>00044     <a class="code" href="classcanon.html#a4e1218a68ee7ce17911472231ebbd664">canon</a>();
-<a name="l00045"></a>00045   <span class="keyword">protected</span>:
-<a name="l00046"></a>00046     <span class="keyword">static</span> <span class="keyword">const</span> gp_Dir <a class="code" href="classcanon.html#abbb13f000985fca6e22145f09ac6c784">abc2dir</a>(<span class="keywordtype">double</span> a, <span class="keywordtype">double</span> b, <span class="keywordtype">double</span> c);
-<a name="l00047"></a>00047 
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049 };
+<a name="l00024"></a>00024 <span class="preprocessor">#include &lt;iostream&gt;</span>
+<a name="l00025"></a>00025 
+<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;cmath&gt;</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#include &lt;limits.h&gt;</span>
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029 <span class="preprocessor">#include &lt;gp_Pnt.hxx&gt;</span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include &lt;gp_Dir.hxx&gt;</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include &lt;gp_Ax1.hxx&gt;</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span>
+<a name="l00033"></a>00033 
+<a name="l00034"></a><a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">00034</a> <span class="keyword">typedef</span> <span class="keywordtype">double</span> degrees; <span class="comment">//angle in degrees</span>
+<a name="l00035"></a><a class="code" href="canon_8hh.html#a87f92cc0ab0a9f7c81e6f72e92992390">00035</a> <span class="keyword">typedef</span> <span class="keywordtype">int</span> toolNumber;
+<a name="l00036"></a>00036 
+<a name="l00043"></a><a class="code" href="classcanon.html">00043</a> <span class="keyword">class </span><a class="code" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class.">canon</a> {
+<a name="l00044"></a>00044   <span class="keyword">public</span>:
+<a name="l00045"></a>00045     <a class="code" href="classcanon.html#a4e1218a68ee7ce17911472231ebbd664">canon</a>();
+<a name="l00046"></a>00046   <span class="keyword">protected</span>:
+<a name="l00047"></a>00047     <span class="keyword">static</span> <span class="keyword">const</span> gp_Dir <a class="code" href="classcanon.html#abbb13f000985fca6e22145f09ac6c784">abc2dir</a>(<span class="keywordtype">double</span> a, <span class="keywordtype">double</span> b, <span class="keywordtype">double</span> c);
+<a name="l00048"></a><a class="code" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448">00048</a>     <span class="keywordtype">void</span> <a class="code" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448">infoMsg</a>(std::string s) {cout &lt;&lt; s &lt;&lt; endl;};
+<a name="l00049"></a>00049 
 <a name="l00050"></a>00050 
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052 <span class="preprocessor">#endif //CANON_HH</span>
-<a name="l00053"></a>00053 <span class="preprocessor"></span>
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055 
-<a name="l00056"></a>00056  <span class="comment">//create tool obj</span>
-<a name="l00057"></a>00057 <span class="comment">// toolTable[t] = tool(t);</span>
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059 <span class="comment">//access tool obj</span>
-<a name="l00061"></a>00061 <span class="comment"></span><span class="comment">// status.myTool = toolTable[t].getShape();</span>
+<a name="l00051"></a>00051 };
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054 <span class="preprocessor">#endif //CANON_HH</span>
+<a name="l00055"></a>00055 <span class="preprocessor"></span>
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058  <span class="comment">//create tool obj</span>
+<a name="l00059"></a>00059 <span class="comment">// toolTable[t] = tool(t);</span>
+<a name="l00060"></a>00060 
+<a name="l00061"></a>00061 <span class="comment">//access tool obj</span>
+<a name="l00063"></a>00063 <span class="comment"></span><span class="comment">// status.myTool = toolTable[t].getShape();</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

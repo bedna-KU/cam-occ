@@ -64,6 +64,7 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69">canonMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gp_Ax1&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a">getPoseFromCmd</a> ()</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc  <a href="#a5b09857ac168a4fcc72ff2ecef197d5a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780">sweep</a> (gp_Dir startDir)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">TopoDS_Shape&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">myShape</a></td></tr>
@@ -238,6 +239,49 @@ Here is the caller graph for this function:</div>
       </table>
 </div>
 <div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac0ff286b51416d5b7e78279e0a361780"></a><!-- doxytag: member="canonMotion::sweep" ref="ac0ff286b51416d5b7e78279e0a361780" args="(gp_Dir startDir)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void canonMotion::sweep </td>
+          <td>(</td>
+          <td class="paramtype">gp_Dir&nbsp;</td>
+          <td class="paramname"> <em>startDir</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sweep tool outline along myUnSolid, "cap" it with 3d tools, and put result in myShape </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>startDir</em>&nbsp;</td><td>the direction the tool is moving at the start of this <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_cgraph.png" border="0" usemap="#classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_cgraph" alt=""/></div>
+<map name="classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_cgraph" id="classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_cgraph">
+<area shape="rect" id="node3" href="classmill_tool.html#a3d8d0495fee5f877df1d1a9ba12cc6a1" title="millTool::Dia" alt="" coords="248,5,341,35"/><area shape="rect" id="node5" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="229,58,360,89"/><area shape="rect" id="node9" href="classmill_tool.html#a3ee89df994b523fd15fdb69c33ed52e5" title="millTool::get3d" alt="" coords="241,111,348,142"/><area shape="rect" id="node11" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="201,165,388,195"/><area shape="rect" id="node13" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="237,218,352,249"/><area shape="rect" id="node17" href="classmachine_status.html#a464ad9c51f4d560bd9860c8c0d54cfca" title="machineStatus::getPrevEndDir" alt="" coords="195,271,395,302"/><area shape="rect" id="node19" href="classtool.html#aa7d61ba51903f143f4437c11eb82ebd5" title="tool::getProfile" alt="" coords="241,325,348,355"/><area shape="rect" id="node21" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="199,378,391,409"/><area shape="rect" id="node23" href="classmachine_status.html#a91af3b3e7d55d0eda4348ca485ee1405" title="machineStatus::getTool" alt="" coords="216,431,373,462"/><area shape="rect" id="node25" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448" title="canon::infoMsg" alt="" coords="240,485,349,515"/><area shape="rect" id="node27" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="249,538,340,569"/><area shape="rect" id="node7" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="456,58,547,89"/><area shape="rect" id="node15" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="443,218,560,249"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_icgraph.png" border="0" usemap="#classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_icgraph" alt=""/></div>
+<map name="classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_icgraph" id="classcanon_motion_ac0ff286b51416d5b7e78279e0a361780_icgraph">
+<area shape="rect" id="node3" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="196,5,377,35"/><area shape="rect" id="node5" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="201,58,372,89"/></map>
+</div>
+</p>
 
 </div>
 </div>

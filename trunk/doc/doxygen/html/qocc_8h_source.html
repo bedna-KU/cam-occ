@@ -43,46 +43,46 @@
 <a name="l00014"></a>00014 <span class="comment">**</span>
 <a name="l00015"></a>00015 <span class="comment">****************************************************************************/</span>
 <a name="l00016"></a>00016 
-<a name="l00044"></a>00044 <span class="preprocessor">#ifndef QOCC_H</span>
-<a name="l00045"></a>00045 <span class="preprocessor"></span><span class="preprocessor">#define QOCC_H</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span><span class="preprocessor">#include &lt;limits.h&gt;</span>
-<a name="l00047"></a>00047 
-<a name="l00048"></a>00048 <span class="preprocessor">#include &lt;AIS_StatusOfDetection.hxx&gt;</span>
-<a name="l00049"></a>00049 <span class="preprocessor">#include &lt;AIS_StatusOfPick.hxx&gt;</span>
-<a name="l00050"></a>00050 <span class="preprocessor">#include &lt;Aspect_Drawable.hxx&gt;</span>
-<a name="l00051"></a>00051 <span class="preprocessor">#include &lt;Aspect_GridDrawMode.hxx&gt;</span>
-<a name="l00052"></a>00052 <span class="preprocessor">#include &lt;Aspect_GridType.hxx&gt;</span>
-<a name="l00053"></a>00053 <span class="preprocessor">#include &lt;Aspect_GraphicCallbackProc.hxx&gt;</span>
-<a name="l00054"></a>00054 <span class="preprocessor">#include &lt;Handle_AIS_InteractiveContext.hxx&gt;</span>
-<a name="l00055"></a>00055 <span class="preprocessor">#include &lt;Handle_V3d_View.hxx&gt;</span>
-<a name="l00056"></a>00056 <span class="preprocessor">#include &lt;Handle_V3d_Viewer.hxx&gt;</span>
-<a name="l00057"></a>00057 <span class="preprocessor">#include &lt;Handle_TopTools_HSequenceOfShape.hxx&gt;</span>
-<a name="l00058"></a>00058 <span class="preprocessor">#include &lt;Standard_TypeDef.hxx&gt;</span>
-<a name="l00059"></a>00059 <span class="preprocessor">#include &lt;Quantity_Factor.hxx&gt;</span>
-<a name="l00060"></a>00060 <span class="preprocessor">#include &lt;Quantity_Length.hxx&gt;</span>
-<a name="l00061"></a>00061 <span class="preprocessor">#include &lt;Quantity_NameOfColor.hxx&gt;</span>
-<a name="l00062"></a>00062 <span class="preprocessor">#include &lt;V3d_Coordinate.hxx&gt;</span>
-<a name="l00063"></a>00063 
-<a name="l00064"></a>00064 <span class="preprocessor">#ifdef WNT</span>
-<a name="l00065"></a>00065 <span class="preprocessor"></span><span class="preprocessor">#include &lt;Handle_WNT_Window.hxx&gt;</span>
-<a name="l00066"></a>00066 <span class="preprocessor">#else</span>
-<a name="l00067"></a>00067 <span class="preprocessor"></span><span class="preprocessor">#include &lt;Handle_Xw_Window.hxx&gt;</span>
-<a name="l00068"></a>00068 <span class="preprocessor">#endif</span>
-<a name="l00069"></a>00069 <span class="preprocessor"></span>
-<a name="l00070"></a>00070 <span class="preprocessor">#ifdef QOCC_STATIC</span>
-<a name="l00071"></a>00071 <span class="preprocessor"></span><span class="preprocessor">#define QOCC_DECLSPEC</span>
-<a name="l00072"></a>00072 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00073"></a>00073 <span class="preprocessor"></span><span class="preprocessor">#ifdef QOCC_MAKEDLL</span>
-<a name="l00074"></a>00074 <span class="preprocessor"></span><span class="preprocessor">#define QOCC_DECLSPEC Q_DECL_EXPORT</span>
-<a name="l00075"></a>00075 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00076"></a><a class="code" href="qocc_8h.html#aead281ac91abb7a947ed6f346b03b293">00076</a> <span class="preprocessor"></span><span class="preprocessor">#define QOCC_DECLSPEC Q_DECL_IMPORT</span>
-<a name="l00077"></a>00077 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00078"></a>00078 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00079"></a>00079 <span class="preprocessor"></span>
-<a name="l00080"></a><a class="code" href="qocc_8h.html#a1d03a61bac95c19534e6e4921e18af72">00080</a> <span class="preprocessor">#define SIGN(X) ((X) &lt; 0. ? -1 : ((X) &gt; 0. ? 1 : 0.))</span>
-<a name="l00081"></a>00081 <span class="preprocessor"></span>
-<a name="l00082"></a>00082 <span class="preprocessor">#endif // Qocc_H</span>
-<a name="l00083"></a>00083 <span class="preprocessor"></span>
+<a name="l00061"></a>00061 <span class="preprocessor">#ifndef QOCC_H</span>
+<a name="l00062"></a>00062 <span class="preprocessor"></span><span class="preprocessor">#define QOCC_H</span>
+<a name="l00063"></a>00063 <span class="preprocessor"></span><span class="preprocessor">#include &lt;limits.h&gt;</span>
+<a name="l00064"></a>00064 
+<a name="l00065"></a>00065 <span class="preprocessor">#include &lt;AIS_StatusOfDetection.hxx&gt;</span>
+<a name="l00066"></a>00066 <span class="preprocessor">#include &lt;AIS_StatusOfPick.hxx&gt;</span>
+<a name="l00067"></a>00067 <span class="preprocessor">#include &lt;Aspect_Drawable.hxx&gt;</span>
+<a name="l00068"></a>00068 <span class="preprocessor">#include &lt;Aspect_GridDrawMode.hxx&gt;</span>
+<a name="l00069"></a>00069 <span class="preprocessor">#include &lt;Aspect_GridType.hxx&gt;</span>
+<a name="l00070"></a>00070 <span class="preprocessor">#include &lt;Aspect_GraphicCallbackProc.hxx&gt;</span>
+<a name="l00071"></a>00071 <span class="preprocessor">#include &lt;Handle_AIS_InteractiveContext.hxx&gt;</span>
+<a name="l00072"></a>00072 <span class="preprocessor">#include &lt;Handle_V3d_View.hxx&gt;</span>
+<a name="l00073"></a>00073 <span class="preprocessor">#include &lt;Handle_V3d_Viewer.hxx&gt;</span>
+<a name="l00074"></a>00074 <span class="preprocessor">#include &lt;Handle_TopTools_HSequenceOfShape.hxx&gt;</span>
+<a name="l00075"></a>00075 <span class="preprocessor">#include &lt;Standard_TypeDef.hxx&gt;</span>
+<a name="l00076"></a>00076 <span class="preprocessor">#include &lt;Quantity_Factor.hxx&gt;</span>
+<a name="l00077"></a>00077 <span class="preprocessor">#include &lt;Quantity_Length.hxx&gt;</span>
+<a name="l00078"></a>00078 <span class="preprocessor">#include &lt;Quantity_NameOfColor.hxx&gt;</span>
+<a name="l00079"></a>00079 <span class="preprocessor">#include &lt;V3d_Coordinate.hxx&gt;</span>
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 <span class="preprocessor">#ifdef WNT</span>
+<a name="l00082"></a>00082 <span class="preprocessor"></span><span class="preprocessor">#include &lt;Handle_WNT_Window.hxx&gt;</span>
+<a name="l00083"></a>00083 <span class="preprocessor">#else</span>
+<a name="l00084"></a>00084 <span class="preprocessor"></span><span class="preprocessor">#include &lt;Handle_Xw_Window.hxx&gt;</span>
+<a name="l00085"></a>00085 <span class="preprocessor">#endif</span>
+<a name="l00086"></a>00086 <span class="preprocessor"></span>
+<a name="l00087"></a>00087 <span class="preprocessor">#ifdef QOCC_STATIC</span>
+<a name="l00088"></a>00088 <span class="preprocessor"></span><span class="preprocessor">#define QOCC_DECLSPEC</span>
+<a name="l00089"></a>00089 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00090"></a>00090 <span class="preprocessor"></span><span class="preprocessor">#ifdef QOCC_MAKEDLL</span>
+<a name="l00091"></a>00091 <span class="preprocessor"></span><span class="preprocessor">#define QOCC_DECLSPEC Q_DECL_EXPORT</span>
+<a name="l00092"></a>00092 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00093"></a><a class="code" href="qocc_8h.html#aead281ac91abb7a947ed6f346b03b293">00093</a> <span class="preprocessor"></span><span class="preprocessor">#define QOCC_DECLSPEC Q_DECL_IMPORT</span>
+<a name="l00094"></a>00094 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00095"></a>00095 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00096"></a>00096 <span class="preprocessor"></span>
+<a name="l00097"></a><a class="code" href="qocc_8h.html#a1d03a61bac95c19534e6e4921e18af72">00097</a> <span class="preprocessor">#define SIGN(X) ((X) &lt; 0. ? -1 : ((X) &gt; 0. ? 1 : 0.))</span>
+<a name="l00098"></a>00098 <span class="preprocessor"></span>
+<a name="l00099"></a>00099 <span class="preprocessor">#endif // Qocc_H</span>
+<a name="l00100"></a>00100 <span class="preprocessor"></span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

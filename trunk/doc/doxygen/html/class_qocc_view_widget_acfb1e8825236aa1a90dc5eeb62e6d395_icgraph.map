@@ -1,8 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classuio.html#a02b84f9beb867e0f87fcf2c6e63d89ca" title="uio::axoView" alt="" coords="232,58,328,89"/>
-<area shape="rect" id="node5" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="377,5,537,35"/>
-<area shape="rect" id="node9" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="408,58,507,89"/>
-<area shape="rect" id="node13" href="$classg2m.html#ae469849f9a988d939c9ac89ad05a3653" title="g2m::test" alt="" coords="419,111,496,142"/>
-<area shape="rect" id="node7" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="587,5,667,35"/>
-<area shape="rect" id="node11" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="597,58,656,89"/>
+<area shape="rect" id="node3" href="$classuio.html#a02b84f9beb867e0f87fcf2c6e63d89ca" title="uio::axoView" alt="" coords="232,5,328,35"/>
+<area shape="rect" id="node5" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="376,5,475,35"/>
+<area shape="rect" id="node7" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="524,5,583,35"/>
 </map>

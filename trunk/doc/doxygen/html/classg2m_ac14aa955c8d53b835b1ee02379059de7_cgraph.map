@@ -1,12 +1,16 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classg2m.html#a18718bfaf915219dd85110bc3be63aae" title="g2m::infoMsg" alt="" coords="188,58,289,89"/>
-<area shape="rect" id="node5" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="157,111,320,142"/>
-<area shape="rect" id="node21" href="$classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="g2m::sleepSecond" alt="" coords="173,165,304,195"/>
-<area shape="rect" id="node7" href="$classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="368,5,560,35"/>
-<area shape="rect" id="node9" href="$classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="385,58,543,89"/>
-<area shape="rect" id="node11" href="$classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="399,111,529,142"/>
-<area shape="rect" id="node15" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="407,165,521,195"/>
-<area shape="rect" id="node19" href="$classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="392,218,536,249"/>
-<area shape="rect" id="node13" href="$classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="621,111,712,142"/>
-<area shape="rect" id="node17" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="608,165,725,195"/>
+<area shape="rect" id="node3" href="$classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="413,5,515,35"/>
+<area shape="rect" id="node5" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="157,191,320,222"/>
+<area shape="rect" id="node30" href="$classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="g2m::sleepSecond" alt="" coords="173,245,304,275"/>
+<area shape="rect" id="node7" href="$classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="368,58,560,89"/>
+<area shape="rect" id="node9" href="$classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="385,111,543,142"/>
+<area shape="rect" id="node11" href="$classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="399,165,529,195"/>
+<area shape="rect" id="node15" href="$classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="428,218,500,249"/>
+<area shape="rect" id="node19" href="$classnanotimer.html#aa8f93cde1217a77ad15676061c065166" title="nanotimer::getElapsed" alt="" coords="388,271,540,302"/>
+<area shape="rect" id="node21" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="407,325,521,355"/>
+<area shape="rect" id="node25" href="$classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="392,378,536,409"/>
+<area shape="rect" id="node28" href="$classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="408,431,520,462"/>
+<area shape="rect" id="node13" href="$classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="640,165,731,195"/>
+<area shape="rect" id="node17" href="$class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="608,218,763,249"/>
+<area shape="rect" id="node23" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="627,325,744,355"/>
 </map>

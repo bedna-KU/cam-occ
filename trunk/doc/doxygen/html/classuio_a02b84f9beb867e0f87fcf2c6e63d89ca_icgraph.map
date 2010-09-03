@@ -1,7 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="151,5,311,35"/>
-<area shape="rect" id="node7" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="181,58,280,89"/>
-<area shape="rect" id="node11" href="$classg2m.html#ae469849f9a988d939c9ac89ad05a3653" title="g2m::test" alt="" coords="192,111,269,142"/>
-<area shape="rect" id="node5" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="360,5,440,35"/>
-<area shape="rect" id="node9" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="371,58,429,89"/>
+<area shape="rect" id="node3" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="149,5,248,35"/>
+<area shape="rect" id="node5" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="297,5,356,35"/>
 </map>
