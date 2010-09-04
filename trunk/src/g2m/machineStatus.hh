@@ -25,9 +25,9 @@
 #include "tool.hh"
 #include "canon.hh"
 
-typedef enum {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ} CANON_PLANE;
-typedef struct {bool flood; bool mist; bool spindle;} coolantStruct;
-typedef enum {OFF,CW,CCW,BRAKE} SPINDLE_STATUS;
+enum CANON_PLANE {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ};
+struct coolantStruct {bool flood; bool mist; bool spindle;};
+enum SPINDLE_STATUS {OFF,CW,CCW,BRAKE};
 
 /**
 \class machineStatus
@@ -42,7 +42,7 @@ class machineStatus: protected canon {
     SPINDLE_STATUS spindleStat;
     coolantStruct coolant;
     static millTool* theTool;
-    gp_Dir endDir, prevEndDir;
+    gp_Dir startDir, endDir, prevEndDir;
 //    toolNumber myTool;
 /*    / ** \var toolTable
       for now, it is for millTool objs only
@@ -57,7 +57,7 @@ class machineStatus: protected canon {
     void setEndPose(gp_Pnt p);
     void setFeed(const double f) {F=f;};
     void setSpindleSpeed(const double s) {S=s;};
-    void setSpindleStatus(SPINDLE_STATUS s);
+    void setSpindleStatus(const SPINDLE_STATUS s) {spindleStat=s;};
     void setCoolant(coolantStruct c) {coolant = c;};
     //void setTool(toolNumber n); //n is the tool to be used
     void setTool(uint n); //n is the size of the tool to be used. FIXME: implement tool table stuff
@@ -70,6 +70,8 @@ class machineStatus: protected canon {
     const gp_Ax1 getEndPose() {return endPose;};
     CANON_PLANE getPlane() const {return plane;};
     void setEndDir(gp_Dir d) {endDir = d;};
+    void setStartDir(gp_Dir d) {startDir = d;};
+    const gp_Dir getStartDir() {return startDir;};
     const gp_Dir getPrevEndDir() {return prevEndDir;};
     void clearAll(void);
     millTool* getTool() {return theTool;};

@@ -40,6 +40,7 @@
 #include <TopTools_ListOfShape.hxx>
 #include <BRepTools.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
+#include <TopExp_Explorer.hxx>
 
 /**
 QShortcuts in use:
@@ -393,7 +394,7 @@ void uio::slotCountFaces(){
   for (;lit.More();lit.Next()) {
     s++;
     int f=0;
-    TopExp_Explorer ex(lit.Value(),TopAbs_ShapeEnum.TopAbs_FACE);
+    TopExp_Explorer ex(lit.Value(),TopAbs_FACE);
     for (;ex.More();ex.Next()) {
       f++;
     }

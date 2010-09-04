@@ -32,7 +32,8 @@
 
 //for STRAIGHT_TRAVERSE, STRAIGHT_FEED, ARC_FEED
 
-typedef enum { HELICAL, LINEAR, TRAVERSE } MOTION_TYPE;
+enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED };
+enum MOTION_TYPE { HELICAL, LINEAR, TRAVERSE };
 /**
 \class canonMotion
 \brief This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED.
@@ -48,13 +49,18 @@ class canonMotion: protected canonLine {
     virtual const TopoDS_Shape& getShape() = 0;
     bool isThisMotion() {return true;};
     bool isVolumeSuspect() {return sweepIsSuspect;};
-    const TopoDS_Shape& bruteForceSweep(); //sweep using brute force, i.e. fuse a solid many times
+    void setSolidMode(SOLID_MODE s) {solidMode = s;};
+    void computeSolid();
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
     TopoDS_Shape myShape;
     gp_Ax1 getPoseFromCmd();
     bool sweepIsSuspect;
-    void sweep(gp_Dir startDir);
+    void sweepSolid();
+    void bruteForceSolid();
+    void assembleSolid();
+    SOLID_MODE solidMode;
+
 };
 
 #endif //CANONMOTION_HH

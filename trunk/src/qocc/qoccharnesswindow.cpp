@@ -46,11 +46,14 @@ QoccHarnessWindow::QoccHarnessWindow(QStringList ags)
     	createActions();
     	createMenus();
 
-    	statusBar()->showMessage(tr("A context menu is available by right-clicking"));
+    	//statusBar()->showMessage(tr("A context menu is available by right-clicking"));
 
     	setWindowTitle(tr("Cam-occ v2"));
-    	setMinimumSize(160, 160);
-	showMaximized();
+        setMinimumSize(300, 300);
+    	resize(798,554);  //so that it will fit nicely on 1/4 of my screen
+        showNormal();
+
+        //showMaximized();
 
 	lnk mylink(this);
 

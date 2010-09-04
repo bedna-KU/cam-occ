@@ -38,13 +38,11 @@
 #include "machineStatus.hh"
 #include "uio.hh"
 
-//implements helicalMotion
 helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
-  cout << "helicalMotion ctor" << endl;
 
   gp_Pnt start, end;
   start = status.getStartPose().Location();
-  end = status.getEndPose().Location();
+  //end must be set after determining which plane is in use
 
   gp_Dir arcDir;
   gp_Pnt c;
@@ -61,6 +59,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
   ea = tok2d(9); //a
   eb = tok2d(10); //b
   ec = tok2d(11); //c
+  /// Shuffle variables around based on the active plane.
   switch (status.getPlane()) {
     /*
     ** the order for these vars is copied from saicannon.cc, line 509+
@@ -85,15 +84,18 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
       c = gp_Pnt(a1,a2,start.Z());
       hdist = e3 - start.Z();
   }
+  end = status.getEndPose().Location();
 
-  if (start.Distance(end) <= Precision::Confusion()) { //skip arc if zero length; caught this bug thanks to tort.ngc
+  if (start.Distance(end) < Precision::Confusion()) { //skip arc if zero length; caught this bug thanks to tort.ngc
     cout << "Skipped zero-length arc at N" << getN() << endl;
+    status.setEndDir(status.getPrevEndDir());
   } else {
-
+    cout << myLine; //endl supplied by helix() or arc()
     if (fabs(hdist) > 0.000001) {
+      /// Create a helix if the third-axis delta is > .000001.
       helix(start, end, c, arcDir,rot);
-
     } else {
+      /// Otherwise, create an arc.
       gp_Vec Vr = gp_Vec(c,start);	//vector from center to start
       gp_Vec Va = gp_Vec(arcDir);		//vector along arc's axis
       gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
@@ -103,7 +105,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
     }
     // FIXME - check for gaps
 
-    //here we
+    /// Find vector direction at start and end of the edge, and save them in status
     double f,l,fd,ld;
     gp_Pnt fp,lp;
     gp_Vec fv,lv;
@@ -118,11 +120,11 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
     ld = lp.SquareDistance(start);
     if ( fd > ld ) { //compare the distances to decide which one is at the start
       //"first" end (fd) is farther from the starting point, so
-      status.setEndDir(fv);     //use first vector at end
-      sweep(lv);                //and use last vector at start
-    } else {              //other way around
+      status.setEndDir(fv);          //use first vector at end
+      status.setStartDir(lv);        //and use last vector at start
+    } else {                         //other way around
       status.setEndDir(lv);
-      sweep(fv);
+      status.setStartDir(fv);
     }
   }
 }

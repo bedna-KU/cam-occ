@@ -31,71 +31,85 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   myUnSolid = BRepBuilderAPI_MakeVertex(status.getStartPose().Location());
 
   //match canonical commands. the string MUST be the complete command name
-  if (clMatch("COMMENT")) {
+  //NOTE: cmdMatch ONLY looks at the command part of the line, canonTokens[2].
+  if (cmdMatch("COMMENT")) {
     //do nothing
-  } else if (clMatch("MESSAGE")) {
-    infoMsg("Message: " + canonTokens[3]);
-//  } else if (clMatch("STOP_SPINDLE_TURNING")) {
-//    status.setSpindleStatus(SPINDLE_STATUS.OFF);
-  //} else if (clMatch("ENABLE")) {
-  } else if (clMatch("MIST_ON")) {
+  } else if (cmdMatch("MESSAGE")) {
+    size_t a,b;
+    a = myLine.find_first_of("\"") + 1;
+    b = myLine.find_last_of("\"");
+    uio::infoMsg("Message: " + myLine.substr(a,b-a));
+  } else if (cmdMatch("STOP_SPINDLE_TURNING")) {
+    status.setSpindleStatus(SPINDLE_STATUS(OFF));
+  } else if (cmdMatch("START_SPINDLE_CLOCKWISE")) {
+    status.setSpindleStatus(SPINDLE_STATUS(CW));
+  } else if (cmdMatch("START_SPINDLE_COUNTERCLOCKWISE")) {
+    status.setSpindleStatus(SPINDLE_STATUS(CCW));
+  } else if (cmdMatch("SET_SPINDLE_SPEED")) {
+    status.setSpindleSpeed(tok2d(3));
+  } else if (cmdMatch("MIST_ON")) {
     coolantStruct c = status.getCoolant();
     c.mist = true;
     status.setCoolant(c);
-  } else if (clMatch("MIST_OFF")) {
+  } else if (cmdMatch("MIST_OFF")) {
     coolantStruct c = status.getCoolant();
     c.mist = false;
     status.setCoolant(c);
-  } else if (clMatch("FLOOD_ON")) {
+  } else if (cmdMatch("FLOOD_ON")) {
     coolantStruct c = status.getCoolant();
     c.flood = true;
     status.setCoolant(c);
-  } else if (clMatch("FLOOD_OFF")) {
+  } else if (cmdMatch("FLOOD_OFF")) {
     coolantStruct c = status.getCoolant();
     c.flood = false;
     status.setCoolant(c);
-  } else if (clMatch("DWELL")) {
-  //} else if (clMatch("FEEDRATE")) {
-  } else if (clMatch("SET_FEED_RATE")) {
+  } else if (cmdMatch("DWELL")) {
+  //} else if (cmdMatch("FEEDRATE")) {
+  } else if (cmdMatch("SET_FEED_RATE")) {
     status.setFeed(tok2d(3));
-  } else if (clMatch("SET_FEED_REFERENCE")) {
+  } else if (cmdMatch("SET_FEED_REFERENCE")) {
     handled = false;
-  } else if (clMatch("SELECT_TOOL")) {
+  } else if (cmdMatch("SELECT_TOOL")) {
     //this only tells the machine to reposition the tool carousel, correct? if so it can be ignored
-  } else if (clMatch("CHANGE_TOOL")) {
+  } else if (cmdMatch("CHANGE_TOOL")) {
     //for now, always assume it's ballnose. divide tool number by 16 to get diameter
     //i.e. tool 1 = 1/16" ball nose endmill, tool 24 = 1 1/2" ball nose endmill
     //TODO: implement tool table stuff
     //toolNumber n = tok2i(3);
     status.setTool(tok2i(3));
     handled = false;
-  } else if (clMatch("USE_TOOL_LENGTH_OFFSET")) {
+  } else if (cmdMatch("USE_TOOL_LENGTH_OFFSET")) {
     handled = false;
-  } else if (clMatch("SET_ORIGIN_OFFSETS")) {
-
-  if (clMatch("(0.0000,")) {
-    infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine );
-  }
-    handled = false; //because I still don't know what to do if we have the correct data...
-  } else if (clMatch("USE_LENGTH_UNITS")) {
+  } else if (cmdMatch("SET_ORIGIN_OFFSETS")) {
+    if (canonTokens[3].compare("0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000") == 0) {
+      /*
+      ** this is a common canon statement. we are going to hijack it to produce a warning,
+      ** because the data we're getting was produced with a format of %.4f or so.
+      */
+      infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine +"\nModel may fail!");
+    }
+      handled = false; //because I still don't know what to do if we have the correct data...
+  } else if (cmdMatch("USE_LENGTH_UNITS")) {
     handled = false;
-  } else if (clMatch("SET_MOTION_CONTROL_MODE")) {
+  } else if (cmdMatch("SET_MOTION_CONTROL_MODE")) {
     handled = false;
-  } else if (clMatch("SET_XY_ROTATION")) {
+  } else if (cmdMatch("SET_XY_ROTATION")) {
     handled = false;
-  } else if (clMatch("SET_FEED_REFERENCE")) {
+  } else if (cmdMatch("SET_FEED_REFERENCE")) {
     handled = false;
-  } else if (clMatch("SET_NAIVECAM_TOLERANCE")) {
+  } else if (cmdMatch("SET_NAIVECAM_TOLERANCE")) {
     handled = false;
-  } else if (clMatch("PROGRAM_END")) {
-  } else if (clMatch("PROGRAM_STOP")) {
-  } else if (clMatch("SELECT_PLANE(" )) {
-    if (clMatch("XZ)")) {
+  } else if (cmdMatch("PROGRAM_END")) {
+  } else if (cmdMatch("PROGRAM_STOP")) {
+  } else if (cmdMatch("SELECT_PLANE" )) {
+    if (canonTokens[3].compare("CANON_PLANE_XZ")==0) {
       status.setPlane(CANON_PLANE_XZ);
-    } else if (clMatch("YZ)")) {
+    } else if (canonTokens[3].compare("CANON_PLANE_YZ")==0) {
       status.setPlane(CANON_PLANE_YZ);
-    } else {// XY)
+    } else if (canonTokens[3].compare("CANON_PLANE_XY")==0) {
       status.setPlane(CANON_PLANE_XY);
+    } else {// sanity check
+      uio::infoMsg("Error: Failed to detect CANON_PLANE in _"+canonTokens[3]+"_:\n" + myLine);
     }
   } else match = false;
 
@@ -105,19 +119,12 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
       m = "Warning, unhandled";
     } else {
       m = "Error, unknown";
-      infoMsg(m + " canonical command: " + canonL);
+      infoMsg(m + " canonical command ("+canonTokens[2]+"): " + canonL);
     }
   }
 }
 
  /*
- SET_ORIGIN_OFFSETS(0.0000,  //this is a common canon statement. we are going to hijack it to produce a warning, because
- //the data we're getting was produced with a format of %.4f or so
+ SET_ORIGIN_OFFSETS(0.0000,
  infoMsg(QString("Warning, input has reduced precision, expected more zeros: <br>") + canon_line );
  */
-
- /*
- bool clMatch(string m) {
- return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
-  }
-  */

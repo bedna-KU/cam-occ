@@ -44,7 +44,7 @@ canonMotion::canonMotion(std::string canonL, machineStatus prevStatus): canonLin
 
 ///for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc
 gp_Ax1 canonMotion::getPoseFromCmd() {
-  double x,y,z,a,b,c;
+  double x,y,z;
 
   //need 3,4,5,and -3,-2,-1
   x = tok2d(3);
@@ -53,6 +53,7 @@ gp_Ax1 canonMotion::getPoseFromCmd() {
   gp_Pnt p(x,y,z);
 
 /* FIXME
+  double a,b,c;
   uint s = canonTokens.size(); //a,b,c are last 3 numbers
   c = tok2d(s-1);
   b = tok2d(s-2);
@@ -65,10 +66,8 @@ gp_Ax1 canonMotion::getPoseFromCmd() {
   return gp_Ax1(p,d);
 }
 
-/** Sweep tool outline along myUnSolid, "cap" it with 3d tools, and put result in myShape
-\param startDir the direction the tool is moving at the start of this canonLine
-*/
-void canonMotion::sweep(gp_Dir startDir) {
+/// Sweep tool outline along myUnSolid, "cap" it with 3d tools, and put result in myShape
+void canonMotion::sweepSolid() {
   Standard_Real angTol = 0.000175;  //approx .01 degrees
   TopoDS_Solid solid;
   gp_Pnt a,b;
@@ -102,6 +101,10 @@ void canonMotion::sweep(gp_Dir startDir) {
     if (vert) {
       pipe.Add(tob.Shape(),false,true);
     } else {
+      /*
+      FIXME: setmode (or build, if setmode is commented out) causes a crash at
+      segf.ngc:N070 - crashes because the edge is too far from horizontal?
+      */
       pipe.SetMode(gp_Dir(0,0,1)); //binormal mode: can only rotate about Z
     }
     if ( pipe.IsReady() ) {
@@ -165,7 +168,7 @@ void canonMotion::sweep(gp_Dir startDir) {
 */
 
     //is there a sharp corner between the last line and this one?
-    if (!((vert) || (!status.getPrevEndDir().IsParallel(startDir,angTol)))) {
+    if (!((vert) || (!status.getPrevEndDir().IsParallel(status.getStartDir(),angTol)))) {
       myShape = solid; //smooth transition, so we don't need to do anything extra
     } else {
       //translate the tool to the startpoint of the sweep, then fuse it with the sweep

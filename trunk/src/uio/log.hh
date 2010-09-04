@@ -12,6 +12,8 @@
 --type of object to use?
 
 --how to put the log messages in the obj?
+--see also comments in src/qocc/qoccharnesswindow.cpp
+
 */
 
 

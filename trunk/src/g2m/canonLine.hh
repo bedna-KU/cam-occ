@@ -34,6 +34,14 @@
 //TODO: add methods to set and get display options for the obj - i.e. color, shading, ...
 //so objs with trouble can be highlighted. same for start and end move, rapid, canned cycles(?), ...
 
+enum DISPLAY_MODE { NO_DISP,           //this object is not displayed
+                    THIN_MOTION,   //show myUnSolid for canonMotion, and nothing else
+                    THIN,               //show myUnSolid for all
+                    ONLY_MOTION,        //show myShape for canonMotion, or myUnSolid if solid fails
+                    BEST,               //show solid where possible, myUnSolid otherwise
+                    ALL                 //show both myUnSolid and myShape
+                  };
+
 /**
 \class canonLine
 \brief A canonLine object represents one canonical command.
@@ -55,6 +63,8 @@ class canonLine: protected canon {
     const TopoDS_Shape& getUnSolid() {return myUnSolid;}; //FIXME: use dispShape instead? one obj for both solid and unsolid? throw in highlighting as well?
     virtual const TopoDS_Shape& getShape()=0;
     bool checkErrors() {return errors;};
+    void display();
+    void setDispMode(DISPLAY_MODE m) {dispMode = m;};
   protected:
     canonLine(std::string canonL, machineStatus prevStatus);
     std::string myLine;
@@ -67,11 +77,14 @@ class canonLine: protected canon {
     inline void tokenize();
     const std::string getCanonicalCommand();
     bool errors;
+    DISPLAY_MODE dispMode;
 
     ///return true if the canonical command for this line matches 'm'
-    inline bool clMatch(std::string m) {
-      return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
-    }
+    inline bool cmdMatch(std::string m) {
+      if (canonTokens.size() < 3) return false;
+        return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
+    };
+
     /** \var myUnSolid
     Use to store a 2d shape for non-motion commands, or to store the tool path for motion.
     */

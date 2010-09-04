@@ -52,16 +52,16 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
 
     gp_Dir endd(gp_Vec(a,b)); //end direction
     status.setEndDir(endd);
-    sweep(endd); //this uses myUnSolid, and the current tool. the result is put in myShape.
+    status.setStartDir(endd); //for linearMotion, same as end.
   }
 }
 
 //need to return RAPID for rapids...
 MOTION_TYPE linearMotion::getMotionType() {
-  static bool traverse = clMatch("STRAIGHT_TRAVERSE");
+  static bool traverse = cmdMatch("STRAIGHT_TRAVERSE");
   if (traverse) {
     return TRAVERSE;
-  } else if (clMatch("STRAIGHT_FEED")) {
+  } else if (cmdMatch("STRAIGHT_FEED")) {
     return LINEAR;
   } else {
     std::string err = "linearMotion::getMotionType failed on canonLine:\n" + myLine + "\n\nExiting.";

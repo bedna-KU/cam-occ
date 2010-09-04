@@ -57,6 +57,7 @@ const machineStatus* canonLine::getStatus() {
   return &status;
 }
 
+
 /*
 void canonLine::setToolVecPtr(std::vector<tool> *t) {
   *toolVec = *t;
@@ -69,6 +70,7 @@ void canonLine::setToolVecPtr(std::vector<tool> *t) {
 \returns token n, converted to double
 */
 double canonLine::tok2d(uint n) {
+  if (canonTokens.size() < n+1 ) return NAN;
   char * end;
   double d = strtod( canonTokens[n].c_str(), &end );
   assert ( *end == 0 );
@@ -81,13 +83,11 @@ double canonLine::tok2d(uint n) {
 \returns token n, converted to integer
 */
 inline int canonLine::tok2i(uint n,uint offset) {
+  if (canonTokens.size() < n+1 ) return INT_MIN;
   char * end;
   int i = strtol( &canonTokens[n].c_str()[offset], &end, 10 );
-  if (! *end == 0 ) {
-    std::cout << "error in tok2i with n:" << n << " offset:" << offset << " myLine:" <<myLine <<endl;
-    return -1;
-  } else
-    return i;
+  assert ( *end == 0 );
+  return i;
 }
 
 const std::string canonLine::getCanonicalCommand() {

@@ -48,8 +48,8 @@
 \param	wflags The widget's window configuration flags
 \see	initialize
 */
-QoccViewWidget::QoccViewWidget( const Handle_AIS_InteractiveContext& aContext, 
-								QWidget *parent, 
+QoccViewWidget::QoccViewWidget( const Handle_AIS_InteractiveContext& aContext,
+								QWidget *parent,
 								Qt::WindowFlags f )
 : QWidget( parent, f | Qt::MSWindowsOwnDC ),
 	myView            ( NULL ),
@@ -70,8 +70,8 @@ QoccViewWidget::QoccViewWidget( const Handle_AIS_InteractiveContext& aContext,
 
 	// Avoid Qt background clears to improve resizing speed,
 	// along with a couple of other attributes
-	setAutoFillBackground( false );				
-	setAttribute( Qt::WA_NoSystemBackground );	
+	setAutoFillBackground( false );
+	setAttribute( Qt::WA_NoSystemBackground );
 
 	// This next attribute seems to be the secret of allowing OCC on Win32
 	// to "own" the window, even though its only supposed to work on X11.
@@ -130,7 +130,7 @@ void QoccViewWidget::initializeOCC(const Handle_AIS_InteractiveContext& aContext
 	myContext = aContext;
 	myViewer  = myContext->CurrentViewer();
 	myView    = myViewer->CreateView();
-	
+
 	int windowHandle = (int) winId();
     short lo = (short)   windowHandle;
     short hi = (short) ( windowHandle >> 16 );
@@ -148,7 +148,7 @@ void QoccViewWidget::initializeOCC(const Handle_AIS_InteractiveContext& aContext
 									::DownCast( myContext->CurrentViewer()->Device() ),
 							  (int) hi, (int) lo, Xw_WQ_SAMEQUALITY, Quantity_NOC_BLACK );
 #endif // WNT
-	
+
 	if (!myView.IsNull())
 	{
 		// Set my window (Hwnd) into the OCC view
@@ -163,7 +163,7 @@ void QoccViewWidget::initializeOCC(const Handle_AIS_InteractiveContext& aContext
 		myView->TriedronDisplay( Aspect_TOTP_LEFT_LOWER, Quantity_NOC_WHITE, 0.1, V3d_WIREFRAME );
 #endif
 		// For testing OCC patches
-		// myView->ColorScaleDisplay();	
+		// myView->ColorScaleDisplay();
 		// Map the window
 		if (!myWindow->IsMapped())
 		{
@@ -204,7 +204,7 @@ void QoccViewWidget::paintEvent ( QPaintEvent * /* e */)
 	}
 	if ( !myViewer.IsNull() )
 	{
-		redraw( true );	
+		redraw( true );
 	}
 }
 
@@ -218,7 +218,7 @@ void QoccViewWidget::paintEvent ( QPaintEvent * /* e */)
 void QoccViewWidget::resizeEvent ( QResizeEvent * /* e */ )
 {
 	myViewResized = Standard_True;
-}	
+}
 
 /*!
 \brief	Mouse press event
@@ -277,7 +277,7 @@ void QoccViewWidget::mouseReleaseEvent(QMouseEvent* e)
 void QoccViewWidget::mouseMoveEvent(QMouseEvent* e)
 {
 	Standard_Real X, Y, Z;
-	
+
 	myCurrentPoint = e->pos();
 	//Check if the grid is active and that we're snapping to it
 	if( myContext->CurrentViewer()->Grid()->IsActive() && myGridSnap )
@@ -322,22 +322,22 @@ void QoccViewWidget::leaveEvent ( QEvent* /* e */ )
 }
 
 /*!
-\brief	The QWheelEvent class contains parameters that describe a wheel event. 
+\brief	The QWheelEvent class contains parameters that describe a wheel event.
 Modification from bytecolor on #cam : shift while zooming in
 */
 void QoccViewWidget::wheelEvent(QWheelEvent* e) {
     if (!myView.IsNull()) {
 	if (e->delta() > 0) {
-            // zoom out, with no shift                                          
-            Quantity_Factor wheelZoomOutFactor = .7; // config setting [.1,.9]  
+            // zoom out, with no shift
+            Quantity_Factor wheelZoomOutFactor = .7; // config setting [.1,.9]
             myView->Panning(0, 0, wheelZoomOutFactor);
         }
         else {
-            // shift what is under the cursor towards the center of             
-            // the screen and zoom in                                           
+            // shift what is under the cursor towards the center of
+            // the screen and zoom in
             Quantity_Length dx, dy;
             Quantity_Factor scale = myView->Scale();
-            Quantity_Factor wheelShiftFactor = 20.; // config setting [1.,20.]  
+            Quantity_Factor wheelShiftFactor = 20.; // config setting [1.,20.]
             dx = 2. * myCurrentPoint.x() / width() - 1.;
             dy = 2. * myCurrentPoint.y() / height() - 1.;
             myView->Panning(wheelShiftFactor * -dx / scale,
@@ -370,11 +370,11 @@ void QoccViewWidget::redraw( bool isPainting )
 			viewPrecision( true );
 		}
 		else
-		{	
+		{
 			// Don't repaint if we are already redrawing
 			// elsewhere due to a keypress or mouse gesture
-			if ( !isPainting || ( isPainting && myButtonFlags == Qt::NoButton ) )	
-			{												
+			if ( !isPainting || ( isPainting && myButtonFlags == Qt::NoButton ) )
+			{
 				myView->Redraw();
 			}
 		}
@@ -400,8 +400,8 @@ void QoccViewWidget::fitExtents( void )
 
 /*!
 \brief	Fits the model to view extents
-		This function fits the current objects to the window,  
-		reducing or increasing the Z extents as needed. 
+		This function fits the current objects to the window,
+		reducing or increasing the Z extents as needed.
 \return	Nothing
 */
 void QoccViewWidget::fitAll( void )
@@ -638,7 +638,7 @@ void QoccViewWidget::setReset ()
 void QoccViewWidget::onLeftButtonDown(  Qt::KeyboardModifiers nFlags, const QPoint point )
 {
     myStartPoint = point;
-    if ( nFlags & CASCADESHORTCUTKEY )
+    if ( nFlags & CASCADESHORTCUTKEY )  //MP: leave the modifier, as the user can use the wheel
     {
 		setMode( CurAction3d_DynamicZooming );
     }
@@ -682,7 +682,7 @@ void QoccViewWidget::onLeftButtonDown(  Qt::KeyboardModifiers nFlags, const QPoi
 void QoccViewWidget::onMiddleButtonDown(  Qt::KeyboardModifiers nFlags, const QPoint point )
 {
 	myStartPoint = point;
-    if ( nFlags & CASCADESHORTCUTKEY )
+    if (1) // nFlags & CASCADESHORTCUTKEY ) //MP: allow panning with or without the modifier
 	{
 		setMode( CurAction3d_DynamicPanning );
 	}
@@ -694,7 +694,7 @@ void QoccViewWidget::onMiddleButtonDown(  Qt::KeyboardModifiers nFlags, const QP
 void QoccViewWidget::onRightButtonDown(  Qt::KeyboardModifiers nFlags, const QPoint point )
 {
 	myStartPoint = point;
-    if ( nFlags & CASCADESHORTCUTKEY )
+    if (1) // nFlags & CASCADESHORTCUTKEY ) //MP: allow rotation with or without the modifier
     {
 		setMode( CurAction3d_DynamicRotation );
 		myView->StartRotation( point.x(), point.y() );
@@ -982,7 +982,7 @@ Standard_Real QoccViewWidget::precision( Standard_Real aReal )
 {
 	Standard_Real preciseReal;
 	Standard_Real thePrecision = std::max (myPrecision, viewPrecision());
-	
+
 	if ( myPrecision != 0.0 )
 	{
 		preciseReal =  SIGN(aReal) * floor((std::abs(aReal) + thePrecision * 0.5) / thePrecision) * thePrecision;
@@ -1016,13 +1016,13 @@ Standard_Boolean QoccViewWidget::convertToPlane(const Standard_Integer Xs,
 	gp_Pln aPlane(myView->Viewer()->PrivilegedPlane());
 
 #ifdef OCC_PATCHED
-	myView->Convert( Xs, Ys, Xv, Yv, Zv ); 
+	myView->Convert( Xs, Ys, Xv, Yv, Zv );
 #else
 	// The + 1 overcomes a fault in OCC, in "OpenGl_togl_unproject_raster.c",
 	// which transforms the Y axis ordinate. The function uses the height of the
 	// window, not the Y maximum which is (height - 1).
-	myView->Convert( Xs, Ys + 1, Xv, Yv, Zv ); 
-#endif 
+	myView->Convert( Xs, Ys + 1, Xv, Yv, Zv );
+#endif
 
 	myView->Proj( Vx, Vy, Vz );
 	gp_Lin aLine(gp_Pnt(Xv, Yv, Zv), gp_Dir(Vx, Vy, Vz));
@@ -1083,7 +1083,7 @@ void QoccViewWidget::hideRubberBand( void )
 /*!
 \brief	Static OpenCascade callback proxy
 */
-int QoccViewWidget::paintCallBack (Aspect_Drawable /* drawable */, 
+int QoccViewWidget::paintCallBack (Aspect_Drawable /* drawable */,
                                   void* aPointer,
                                   Aspect_GraphicCallbackStruct* /* data */)
 {
@@ -1097,7 +1097,7 @@ int QoccViewWidget::paintCallBack (Aspect_Drawable /* drawable */,
 */
 void QoccViewWidget::paintOCC( void )
 {
-	glDisable( GL_LIGHTING ); 
+	glDisable( GL_LIGHTING );
 	glMatrixMode( GL_MODELVIEW );
 	glPushMatrix();
 	glLoadIdentity();
@@ -1141,7 +1141,7 @@ void QoccViewWidget::paintOCC( void )
 
 }
 /*!
-\brief	This routine calculates the minimum sensible precision for the point 
+\brief	This routine calculates the minimum sensible precision for the point
         selection routines, by setting an minumum resolution to a decade one
 		higher than the equivalent pixel width.
 \param	resized		Indicates that recaculation os required due to state
@@ -1155,8 +1155,8 @@ Standard_Real QoccViewWidget::viewPrecision( bool resized )
 
 	if (resized || myViewPrecision == 0.0)
 	{
-		myView->Convert( 0, 0, X1, Y1, Z1 ); 
-		myView->Convert( 1, 0, X2, Y2, Z2 ); 
+		myView->Convert( 0, 0, X1, Y1, Z1 );
+		myView->Convert( 1, 0, X2, Y2, Z2 );
 		Standard_Real pixWidth = X2 - X1;
 		if ( pixWidth != 0.0 )
 		{
@@ -1166,7 +1166,7 @@ Standard_Real QoccViewWidget::viewPrecision( bool resized )
 		else
 		{
 			// Return the user precision if window not defined
-			myViewPrecision = myPrecision; 
+			myViewPrecision = myPrecision;
 		}
 	}
 	return myViewPrecision;

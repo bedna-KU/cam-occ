@@ -68,7 +68,7 @@ g2m::g2m() {
   if (uio::window()->getArgs()->count() > 1) {
     if (uio::window()->getArg(0).compare("g2m") == 0) {
       fromCmdLine = true;
-      uio::sleep(1);
+      uio::sleep(1); //this gives the app time to draw the main window. otherwise we don't see jack unless/until it succeeds
       slotModelFromFile();
     }
   }
@@ -100,9 +100,9 @@ void g2m::slotModelFromFile() {
     std::ifstream inFile(file.toAscii());
     std::string sLine;
     while(std::getline(inFile, sLine)) {
-      if (sLine.length() > 1) {
+      if (sLine.length() > 1) {  //prevent segfault in canonLine::cmdMatch()
         processCanonLine(sLine);
-      } //prevent segfault in canonLine::clMatch()
+      }
     }
   } else {
     uio::infoMsg("You must select a file ending with .ngc or .canon!");
@@ -190,11 +190,9 @@ bool g2m::processCanonLine (std::string l) {
   }
   nanotimer nt;
   nt.start();
-  static bool first = true;  //first line? if so, init status...
   canonLine * cl;
-  if (first) {
+  if (lineVector.size()==0) {
     cl = canonLine::canonLineFactory (l,machineStatus(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1))));
-    first = false;
   } else {
     cl = canonLine::canonLineFactory (l,*(lineVector.back())->getStatus());
   }
@@ -202,7 +200,7 @@ bool g2m::processCanonLine (std::string l) {
 
   lineVector.push_back(cl);
 
-  if (!first) {
+  if (lineVector.size() > 0) {
     dispShape *ds = new dispShape(cl->getShape(),cl->getN());
     dispVector.push_back(ds);
     ds->display();
