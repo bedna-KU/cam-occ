@@ -64,7 +64,7 @@ QAction* uio::hmPtr = 0;
 std::vector<TopoDS_Shape> uio::selectedShapes;
 int uio::errors = 0;
 TopTools_ListOfShape uio::latestSelection;
-bool debugParam = false;
+bool uio::debugParam = false;
 //std::string uio::args[10];
 
 

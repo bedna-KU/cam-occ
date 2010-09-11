@@ -57,6 +57,8 @@
 
 std::vector<canonLine*> g2m::lineVector;
 bool g2m::interpDone = false;
+QMutex g2m::vecModMutex;
+QMutex g2m::vecGrowMutex;
 
 g2m::g2m() {
   mthreadCpuCnt = -1;
@@ -379,7 +381,7 @@ uint g2m::getVecSize() {
 }
 
 ///check occ env
-void checkIfSafeForThreading() {
+void g2m::checkIfSafeForThreading() {
   bool envgood = true;
   std::string msg = "Warning, environment variables incorrectly set. Expect problems!";
   char * opt;

@@ -29,7 +29,7 @@
 
 #include "canonLine.hh"
 #include "machineStatus.hh"
-#include "dispShape.hh"
+//#include "dispShape.hh"
 
 /**
 \class g2m
