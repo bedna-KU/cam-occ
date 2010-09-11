@@ -37,7 +37,7 @@ void ShowOrigin ( Handle_AIS_InteractiveContext theContext );
 void AddVertex  ( double x, double y, double z, Handle_AIS_InteractiveContext theContext );
 
 QoccHarnessWindow::QoccHarnessWindow(QStringList ags)
-: myLastFolder(tr("")), args(ags)
+: args(ags), myLastFolder(tr(""))
 {
 	myVC  = new QoccViewerContext();
 	myOCC = new QoccViewWidget(myVC->getContext(), this); //Note this has changed!
@@ -50,8 +50,8 @@ QoccHarnessWindow::QoccHarnessWindow(QStringList ags)
 
     	setWindowTitle(tr("Cam-occ v2"));
         setMinimumSize(300, 300);
-    	resize(798,554);  //so that it will fit nicely on 1/4 of my screen
         showNormal();
+    	resize(789,527);  //so that it will fit nicely on 1/4 of my screen
 
         //showMaximized();
 

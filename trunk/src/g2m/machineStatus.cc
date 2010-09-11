@@ -31,6 +31,7 @@ machineStatus::machineStatus(machineStatus const& oldStatus) {
     theTool = oldStatus.theTool;
     endDir = gp_Dir(0,0,-1);
     prevEndDir = oldStatus.endDir;
+    first = false;
 }
 
 /**
@@ -42,6 +43,7 @@ machineStatus::machineStatus(gp_Ax1 initial) {
   clearAll();
   theTool = new ballnoseTool(0.0625,0.3125); //1/16" tool. TODO: use EMC's tool table for tool sizes
   startPose = endPose = initial;
+  first = true;
 }
 
 void machineStatus::clearAll() {

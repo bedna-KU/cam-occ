@@ -85,7 +85,7 @@ void tst::slotTest1() {
   p = silhouette(b,gp_Dir(0,sqrt(2),sqrt(2)));
 
   //std::string s = "Mass: ";
-  //s += uio::stringify(mass(b));
+  //s += uio::toString(mass(b));
   //uio::infoMsg(s);
   dispShape ds(p);
   ds.display();
@@ -360,6 +360,7 @@ nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
   if (dss.NbSolution() == 1) {        //one edge
     ne.n = 1;
     ne.a = TopoDS::Edge(dss.SupportOnShape1(1)); //starts counting at 0, right?
+    if (ne.a.IsNull()) uio::infoMsg("error, null edge in dss - ne.a");
   } else if (dss.NbSolution() == 2) {   //certain angles could cause two edges to be coincident
     uio::infoMsg("Error, can't solve with two edges");
     ne.e = true;
@@ -367,11 +368,13 @@ nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
     //-->if only one is an arc, choose that one; if both are, choose the one with largest radius
     //if one is a non-circular arc, or if neither is an arc then it becomes really difficult...
   } else if (dss.NbSolution() == 3) {   //2 edges, 1 point - engraving tool?
+    uio::infoMsg("3 solutions to dss");
     //only want edges
     TopoDS_Edge tmp;
     for(int i=0; i<dss.NbSolution();i++) {
       if (dss.SupportTypeShape1(i) == BRepExtrema_IsOnEdge ) {
         tmp = TopoDS::Edge(dss.SupportOnShape1(i+1));
+        if (tmp.IsNull()) uio::infoMsg("error, null edge in dss - tmp");
         if (ne.n == 0) {
           ne.a = tmp;
           ne.n++;
@@ -389,7 +392,7 @@ nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
     ne.e = true;
   } else { //shouldn't get here
     ne.e = true;
-    uio::infoMsg("Error! Cannot find nearest elements, given " + uio::stringify(dss.NbSolution()) + " solutions.");
+    uio::infoMsg("Error! Cannot find nearest elements, given " + uio::toString(dss.NbSolution()) + " solutions.");
   }
   if (!ne.e) {
     //no errors, so figure out the endpoints
@@ -460,7 +463,7 @@ nearestEdges tst::findNearestEdges(TopoDS_Shape s, TopoDS_Shape t) {
           uio::infoMsg("Error, no matches");
         }
         if (matches > 1) {
-          uio::infoMsg("Error, too many points coincident: " + uio::stringify(matches));
+          uio::infoMsg("Error, too many points coincident: " + uio::toString(matches));
         }
       }
     }

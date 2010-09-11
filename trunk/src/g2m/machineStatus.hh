@@ -43,6 +43,7 @@ class machineStatus: protected canon {
     coolantStruct coolant;
     static millTool* theTool;
     gp_Dir startDir, endDir, prevEndDir;
+    bool first;
 //    toolNumber myTool;
 /*    / ** \var toolTable
       for now, it is for millTool objs only
@@ -72,8 +73,10 @@ class machineStatus: protected canon {
     void setEndDir(gp_Dir d) {endDir = d;};
     void setStartDir(gp_Dir d) {startDir = d;};
     const gp_Dir getStartDir() {return startDir;};
+    const gp_Dir getEndDir() {return endDir;};
     const gp_Dir getPrevEndDir() {return prevEndDir;};
     void clearAll(void);
+    bool isFirst() {return first;};
     millTool* getTool() {return theTool;};
     //const millTool& getTool() {return toolTable.find(myTool)->second;};
   private:

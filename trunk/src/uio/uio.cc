@@ -30,6 +30,7 @@
 #include <QString>
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QStatusBar>
 
 #include <AIS_InteractiveContext.hxx>
 #include <AIS_InteractiveObject.hxx>
@@ -63,6 +64,7 @@ QAction* uio::hmPtr = 0;
 std::vector<TopoDS_Shape> uio::selectedShapes;
 int uio::errors = 0;
 TopTools_ListOfShape uio::latestSelection;
+bool debugParam = false;
 //std::string uio::args[10];
 
 
@@ -77,6 +79,12 @@ uio::uio(QoccHarnessWindow* window) {
   hmPtr = window->getHelpMenu();
 
   initUI();
+  windowPtr->statusBar()->showMessage("Cam-occ2 v0.5");
+
+  if (window->getArgs()->contains("debug")){
+    debugParam = true;
+  }
+
  // setArgs();
 }
 
@@ -367,7 +375,7 @@ void uio::slotSaveSelection() {
   std::string file = QFileDialog::getSaveFileName ( uio::window(), "Choose base name for shapes", "./output", "*" ).toStdString();
   for (;lit.More();lit.Next()) {
     i++;
-    std::string name = file + stringify(i) + ".brep";
+    std::string name = file + toString(i) + ".brep";
     std::cout << "writing file: " << name << endl;
     BRepTools::Write(lit.Value(),name.c_str());
   }
@@ -383,7 +391,7 @@ void uio::slotMassOfSelection() {
     i++;
     m += mass(lit.Value());
   }
-  infoMsg("Mass of " + stringify(i) + " selected shape(s): " + stringify(m));
+  infoMsg("Mass of " + toString(i) + " selected shape(s): " + toString(m));
 }
 
 void uio::slotCountFaces(){
@@ -398,6 +406,6 @@ void uio::slotCountFaces(){
     for (;ex.More();ex.Next()) {
       f++;
     }
-    infoMsg("Number of faces on shape " + stringify(s) + ": " + stringify(f));
+    infoMsg("Number of faces on shape " + toString(s) + ": " + toString(f));
   }
 }

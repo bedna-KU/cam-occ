@@ -25,12 +25,12 @@
 
 #include <QString>
 #include <QObject>
+#include <QMutex>
 
 #include "canonLine.hh"
 #include "machineStatus.hh"
 #include "dispShape.hh"
 
-//the following comment is for doxygen
 /**
 \class g2m
 \brief This class does the high level stuff for creating a model from gcode.
@@ -52,11 +52,31 @@ class g2m: public QObject {
     //inline void infoMsg(QString s) {infoMsg(s.toStdString();};
     void infoMsg(std::string s);
     void sleepSecond();
-    std::vector<canonLine*> lineVector;
-    std::vector<dispShape*> dispVector;
+    static std::vector<canonLine*> lineVector;
+//    std::vector<dispShape*> dispVector;
     QString file;
     bool debug;
-    void test(); //FIXME: temporary
+    //void test(); //FIXME: temporary
+    //void makeSolids(uint start=0, uint incr=1);
+    void statusBarUp(std::string s, double avgtime);
+
+    /******************************** THREAD-RELATED ********************************/
+    ///is interpreter done? must be false until we're done adding to lineVector
+    static bool interpDone;
+    std::list< pthread_t* > threadIdList;
+    ///cpu count for multithreading. this is the size of the array
+    long mthreadCpuCnt;
+//    void startThreads();
+    void createThreads();
+    void joinThreads();
+    void checkIfSafeForThreading();
+    static void* makeSolidsThread(void * v);
+    static void threadSafeSleep();
+    static uint nextAvailInVec(bool onlyWatch = false);
+    static uint getVecSize();
+    static QMutex vecModMutex;   //used when a canonLine is pushed onto vector, and in getVecSize()
+    static QMutex vecGrowMutex;  //used in & blocks makeSolidsThread only, blocks while waiting for vector to grow
+
 };
 
 #endif //GTOM_HH

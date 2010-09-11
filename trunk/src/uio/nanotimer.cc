@@ -22,6 +22,8 @@
 
 
 #include <cstdio>
+#include <string>
+#include "uio.hh"
 #include "nanotimer.hh"
 
 //clock_gettime requires librt
@@ -42,6 +44,24 @@ long nanotimer::getElapsed(){
   delta.tv_sec = now.tv_sec - begin.tv_sec;
   delta.tv_nsec = now.tv_nsec - begin.tv_nsec;
   return delta.tv_sec*1000000000 + delta.tv_nsec;
+}
+
+double nanotimer::getElapsedS(){
+  timespec now,delta;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &now);
+  delta.tv_sec = now.tv_sec - begin.tv_sec;
+  delta.tv_nsec = now.tv_nsec - begin.tv_nsec;
+  return delta.tv_sec + delta.tv_nsec/1000000000;
+}
+
+std::string nanotimer::humanreadable(double s) {
+  int m=0;
+  if (s > 60) {
+    m = s/60;
+    s = s-(m*60);
+  }
+  std::string out = uio::toString(m) + "m, " + uio::toString(s) + "s";
+  return out;
 }
 
 /*

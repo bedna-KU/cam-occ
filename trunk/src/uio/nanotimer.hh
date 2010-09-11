@@ -22,6 +22,7 @@
 **************************************************************************/
 
 #include <time.h>
+#include <string>
 
 class nanotimer {
   private:
@@ -30,6 +31,8 @@ class nanotimer {
     nanotimer() {};
     void start();
     long getElapsed();
+    double getElapsedS();
+    static std::string humanreadable(double s);
 };
 
 #endif //NANOTIMER_HH

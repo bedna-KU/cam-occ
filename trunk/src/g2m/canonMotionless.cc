@@ -27,7 +27,8 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   match = true;
   handled = true;
   status.setEndPose(status.getStartPose());
-  errors = false;
+  solidErrors = false;
+  unsolidErrors = false;
   myUnSolid = BRepBuilderAPI_MakeVertex(status.getStartPose().Location());
 
   //match canonical commands. the string MUST be the complete command name
@@ -68,7 +69,11 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (cmdMatch("SET_FEED_RATE")) {
     status.setFeed(tok2d(3));
   } else if (cmdMatch("SET_FEED_REFERENCE")) {
-    handled = false;
+    if (canonTokens[3].compare("CANON_XYZ") == 0) {
+      //this is the standard feed reference, do nothing
+    } else {  //SET_FEED_REFERENCE(CANON_WORKPIECE)
+      handled = false;
+    }
   } else if (cmdMatch("SELECT_TOOL")) {
     //this only tells the machine to reposition the tool carousel, correct? if so it can be ignored
   } else if (cmdMatch("CHANGE_TOOL")) {
@@ -81,22 +86,33 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (cmdMatch("USE_TOOL_LENGTH_OFFSET")) {
     handled = false;
   } else if (cmdMatch("SET_ORIGIN_OFFSETS")) {
-    if (canonTokens[3].compare("0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000") == 0) {
+    if (canonTokens[3].compare("0.0000") == 0) {
       /*
       ** this is a common canon statement. we are going to hijack it to produce a warning,
       ** because the data we're getting was produced with a format of %.4f or so.
       */
-      infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine +"\nModel may fail!");
-    }
+      uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine +"\nModel may fail!");
+    } else if (canonTokens.size() == 8) {
+      if ((tok2d(3)==0) && (tok2d(4)==0) && (tok2d(5)==0) && (tok2d(6)==0) && (tok2d(7)==0) ) {
+      //do nothing if all zeros, interp issues this when it starts up and it has no effect
+      } else {
+        handled = false;
+      }
+    } else {
       handled = false; //because I still don't know what to do if we have the correct data...
+    }
   } else if (cmdMatch("USE_LENGTH_UNITS")) {
     handled = false;
   } else if (cmdMatch("SET_MOTION_CONTROL_MODE")) {
     handled = false;
   } else if (cmdMatch("SET_XY_ROTATION")) {
-    handled = false;
-  } else if (cmdMatch("SET_FEED_REFERENCE")) {
-    handled = false;
+    if (canonTokens.size() == 6) {
+      if ((tok2d(3)==0) && (tok2d(4)==0) && (tok2d(5)==0) ) {
+        //no rotation. interp issues this when starting up
+      } else {
+        handled = false;
+      }
+    }
   } else if (cmdMatch("SET_NAIVECAM_TOLERANCE")) {
     handled = false;
   } else if (cmdMatch("PROGRAM_END")) {
@@ -119,12 +135,17 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
       m = "Warning, unhandled";
     } else {
       m = "Error, unknown";
-      infoMsg(m + " canonical command ("+canonTokens[2]+"): " + canonL);
     }
+    infoMsg(m + " canonical command ("+canonTokens[2]+"): " + canonL);
   }
 }
 
- /*
- SET_ORIGIN_OFFSETS(0.0000,
- infoMsg(QString("Warning, input has reduced precision, expected more zeros: <br>") + canon_line );
- */
+void canonMotionless::display() {
+  if ((dispMode == THIN) || (dispMode == BEST)) {
+    aisShape = new AIS_Shape(myUnSolid);
+  } else return;
+//  uio::context()->SetMaterial ( aisShape, NoM, Standard_True );
+//  uio::context()->SetDisplayMode ( aisShape,Standard_Integer(dMode),Standard_False );
+  uio::context()->Display ( aisShape );
+}
+

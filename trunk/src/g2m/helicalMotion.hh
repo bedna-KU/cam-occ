@@ -45,11 +45,14 @@ class helicalMotion: protected canonMotion {
     helicalMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType() {return HELICAL;};
     const TopoDS_Shape& getShape() {return myShape;};
+    void assembleSolid();
   private:
-    void helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);
-    //void arc(status.getStartPose().Location(), startVec, status.endPose)
-    //void arc(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);
+    void helix(gp_Pnt start, gp_Pnt end);
     void arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end);
+    bool planar;
+    gp_Pnt center;
+    int rotation;
+    gp_Dir axis;
 };
 
 #endif //HELICALMOTION_HH

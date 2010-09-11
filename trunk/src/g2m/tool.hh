@@ -43,6 +43,7 @@ class tool {
     tool();
     bool validProfile;
     bool bruteForceOnly; //for creating solid. FIXME:would it make more sense in another class?
+    /// profile MUST be in XZ plane!
     TopoDS_Wire profile;
     TOOLTYPE type;
 };
@@ -57,7 +58,8 @@ class millTool: public tool {
   public:
     SHAPE_TYPE getShape() const {return shape;};
     virtual const TopoDS_Shape& get3d();
-    const double Dia() {return dia;};
+    double Dia() {return dia;};
+    double Len() {return len;};
   protected:
     millTool();
     SHAPE_TYPE shape;

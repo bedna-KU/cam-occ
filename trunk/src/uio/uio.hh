@@ -74,6 +74,7 @@ class uio : public QObject {
     static std::vector<TopoDS_Shape> selectedShapes;
     static int errors;
     static TopTools_ListOfShape latestSelection;
+    static bool debugParam;
     //static std::string args[10];
   //  static void setArgs();
 
@@ -94,6 +95,9 @@ class uio : public QObject {
     static std::string toString(double a,double b, double c);
     static std::string toString(gp_Pnt p);
     static std::string toString(gp_Dir d);
+    static inline std::string toString(int x){std::ostringstream o; o<<x; return o.str();};
+    //adapted from stringify at http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1
+    static inline std::string toString(double x){std::ostringstream o; o<<x; return o.str();};
     static void checkShapeType(TopoDS_Shape Shape);
     static void hideGrid();
     static void fitAll();
@@ -102,10 +106,9 @@ class uio : public QObject {
     static bool fileExists(QString f);
     static double mass(TopoDS_Shape s);
     static void grabSelection();
+    static bool debuggingOn() {return debugParam;};
 
 
-    ///stringify is from http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1
-    static inline std::string stringify(double x){std::ostringstream o; o<<x; return o.str();};
   public slots:
     static void slotNeutralSelection();
     static void slotVertexSelection();

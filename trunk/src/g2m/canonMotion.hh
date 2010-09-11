@@ -47,10 +47,11 @@ class canonMotion: protected canonLine {
   public:
     virtual MOTION_TYPE getMotionType() = 0;
     virtual const TopoDS_Shape& getShape() = 0;
-    bool isThisMotion() {return true;};
+    bool isMotion() {return true;};
     bool isVolumeSuspect() {return sweepIsSuspect;};
     void setSolidMode(SOLID_MODE s) {solidMode = s;};
     void computeSolid();
+    void display();
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
     TopoDS_Shape myShape;
@@ -58,7 +59,9 @@ class canonMotion: protected canonLine {
     bool sweepIsSuspect;
     void sweepSolid();
     void bruteForceSolid();
-    void assembleSolid();
+    virtual void assembleSolid()=0;
+    gp_Trsf trsfRotDirDir(gp_Dir first, gp_Dir second,gp_Pnt center = gp::Origin());
+    void addToolMaybe();
     SOLID_MODE solidMode;
 
 };

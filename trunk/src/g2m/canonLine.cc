@@ -34,10 +34,18 @@
 
 //canon.cc - implementation of canonLine
 
-canonLine::canonLine(std::string canonL, machineStatus prevStatus): status(prevStatus), myUnSolid(), myLine(canonL) {
+canonLine::canonLine(std::string canonL, machineStatus prevStatus): myLine(canonL), status(prevStatus), myUnSolid() {
   //myUnSolid.Nullify();
   tokenize(); //splits myLine using delimiters
+  solidErrors = false;
+  unsolidErrors = false;
+  aisShape = 0;
 }
+
+/*canonLine::~canonLine() {
+  if (!aisShape == 0)
+    delete aisShape;
+}*/
 
 ///returns the number after N on the line, -1 if none
 int canonLine::getN() {
@@ -129,10 +137,7 @@ inline void canonLine::tokenize() {
   tokenize(myLine,canonTokens);
 }
 
-/**
-\fn canonLine * canonLine::canonLineFactory (std::string l, machineStatus s)
-\brief canonLineFactory creates objects that inherit from canonLine
-canonLineFactory determines which type of object to create, and returns a pointer to that object
+/**Create objects that inherit from canonLine. It determines which type of object to create, and returns a pointer to that object
 */
 canonLine * canonLine::canonLineFactory (std::string l, machineStatus s) {
   //check if canonical command is motion or something else
@@ -156,3 +161,4 @@ canonLine * canonLine::canonLineFactory (std::string l, machineStatus s) {
     return new canonMotionless(l,s);
   }
 }
+

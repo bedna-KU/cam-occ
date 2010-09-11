@@ -52,15 +52,15 @@ QoccViewWidget::QoccViewWidget( const Handle_AIS_InteractiveContext& aContext,
 								QWidget *parent,
 								Qt::WindowFlags f )
 : QWidget( parent, f | Qt::MSWindowsOwnDC ),
-	myView            ( NULL ),
+    myView            ( NULL ),
+    myViewResized     ( Standard_False ),
+    myViewInitialized ( Standard_False ),
+    myMode            ( CurAction3d_Undefined ),
+    myGridSnap        ( Standard_False ),
+    myDetection       ( AIS_SOD_Nothing ),
 	myRubberBand      ( NULL ),
-	myMode			  ( CurAction3d_Undefined ),
-	myGridSnap        ( Standard_False ),
-	myViewResized	  ( Standard_False ),
-	myViewInitialized ( Standard_False ),
 	myPrecision		  ( 0.001 ),
 	myViewPrecision   ( 0.0 ),
-	myDetection		  ( AIS_SOD_Nothing ),
 	myKeyboardFlags   ( Qt::NoModifier ),
 	myButtonFlags	  ( Qt::NoButton )
 {
@@ -679,7 +679,7 @@ void QoccViewWidget::onLeftButtonDown(  Qt::KeyboardModifiers nFlags, const QPoi
 /*!
 \brief	This function handles middle button down events from the mouse.
 */
-void QoccViewWidget::onMiddleButtonDown(  Qt::KeyboardModifiers nFlags, const QPoint point )
+void QoccViewWidget::onMiddleButtonDown(  Qt::KeyboardModifiers /*nFlags*/, const QPoint point )
 {
 	myStartPoint = point;
     if (1) // nFlags & CASCADESHORTCUTKEY ) //MP: allow panning with or without the modifier
@@ -691,7 +691,7 @@ void QoccViewWidget::onMiddleButtonDown(  Qt::KeyboardModifiers nFlags, const QP
 /*!
 \brief	This function handles right button down events from the mouse.
 */
-void QoccViewWidget::onRightButtonDown(  Qt::KeyboardModifiers nFlags, const QPoint point )
+void QoccViewWidget::onRightButtonDown(  Qt::KeyboardModifiers /*nFlags*/, const QPoint point )
 {
 	myStartPoint = point;
     if (1) // nFlags & CASCADESHORTCUTKEY ) //MP: allow rotation with or without the modifier

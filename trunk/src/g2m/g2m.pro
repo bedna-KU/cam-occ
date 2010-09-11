@@ -1,6 +1,6 @@
 TEMPLATE = lib
 
-CONFIG -= thread
+CONFIG += thread
 CONFIG += opengl x11
 CONFIG += debug
 CONFIG -= release
@@ -15,7 +15,7 @@ linux-g++ {
                 QMAKE_CXXFLAGS += -m64
 
         } else {
-                # 32-bit Linux
+                message("32-bit Linux")
         }
 } else {
         message ("Not supported on any platform other than linux!")

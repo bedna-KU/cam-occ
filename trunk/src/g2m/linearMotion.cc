@@ -24,6 +24,9 @@
 #include <BRep_Builder.hxx>
 #include <BRepTools.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
+#include <BRepPrimAPI_MakePrism.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Wire.hxx>
 
@@ -38,6 +41,7 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
   b = status.getEndPose().Location();
   //TODO: add support for 5 or 6 axis motion
   if (a.Distance(b) < Precision::Confusion()) { //is the edge long enough to bother making?
+    unsolidErrors = true;
     cout << "skipped zero-length line at N" << getN() << endl;
   } else {
     myUnSolid = BRepBuilderAPI_MakeEdge(a,b).Edge();
@@ -53,6 +57,32 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
     gp_Dir endd(gp_Vec(a,b)); //end direction
     status.setEndDir(endd);
     status.setStartDir(endd); //for linearMotion, same as end.
+  }
+}
+
+void linearMotion::assembleSolid() {
+  gp_Pnt a,b;
+  a = status.getStartPose().Location();
+  b = status.getEndPose().Location();
+
+  gp_Trsf ta;
+  ta.SetTranslation(gp::Origin(),a);
+  gp_Trsf tar = trsfRotDirDir(gp::DY(),status.getStartDir());
+
+  TopoDS_Wire tool = TopoDS::Wire(status.getTool()->getProfile());
+  TopoDS_Face toolf = BRepBuilderAPI_MakeFace(tool);
+  BRepBuilderAPI_Transform(toolf,tar); //rotate
+  BRepBuilderAPI_Transform(toolf,ta); //shift from origin to start
+
+  gp_Vec d(a,b);
+
+  //FIXME: probably need to rotate so it's normal to d
+
+  try {
+  TopoDS_Shape myShape = BRepPrimAPI_MakePrism(toolf,d);
+  } catch (...) {
+    infoMsg("make prism failed");
+    solidErrors = true;
   }
 }
 

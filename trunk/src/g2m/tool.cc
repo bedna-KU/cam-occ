@@ -19,7 +19,6 @@
  ***************************************************************************/
 #include "tool.hh"
 #include <uio.hh>
-//#include <dispShape.hh>
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
@@ -37,6 +36,7 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Wire.hxx>
+
 //tool.cc - functions in classes tool, millTool, etc
 
 tool::tool()/*: profile()*/ {
@@ -65,7 +65,9 @@ const TopoDS_Shape& millTool::get3d() {
 }
 
 const TopoDS_Shape& ballnoseTool::get3d() {
-  if (myShape.IsNull()) {
+  if (!myShape.IsNull()) {
+    return myShape;
+  } else {
     double r = dia / 2.0;
     TopoDS_Solid s,c;
     gp_Ax2 axis(gp_Pnt(0,0,r),gp::DZ()); //for cylinder. 0,0,r is the center of the bottom face
@@ -96,6 +98,8 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
     profile = wm.Wire();
     validProfile = true;
     shape = BALLNOSE;
+  } else {
+    uio::infoMsg("Error, invalid tool profile len=" + uio::toString(len) + " dia=" + uio::toString(dia));
   }
 }
 

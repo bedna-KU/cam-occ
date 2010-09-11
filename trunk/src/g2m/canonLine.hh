@@ -35,11 +35,10 @@
 //so objs with trouble can be highlighted. same for start and end move, rapid, canned cycles(?), ...
 
 enum DISPLAY_MODE { NO_DISP,           //this object is not displayed
-                    THIN_MOTION,   //show myUnSolid for canonMotion, and nothing else
-                    THIN,               //show myUnSolid for all
-                    ONLY_MOTION,        //show myShape for canonMotion, or myUnSolid if solid fails
-                    BEST,               //show solid where possible, myUnSolid otherwise
-                    ALL                 //show both myUnSolid and myShape
+                    THIN_MOTION,       //show myUnSolid for canonMotion, and nothing else
+                    THIN,              //show myUnSolid for all
+                    ONLY_MOTION,       //show myShape for canonMotion, or myUnSolid if solid fails
+                    BEST               //show solid where possible, myUnSolid otherwise
                   };
 
 /**
@@ -56,39 +55,44 @@ class canonLine: protected canon {
     int getN(); //returns the number after N on the line, -1 if none
     int getLineNum(); //returns the canon line number
     const machineStatus* getStatus(); //returns the machine's status after execution of this canon line
-    virtual bool isThisMotion() = 0;
+    virtual bool isMotion() = 0;
     static canonLine* canonLineFactory (std::string l, machineStatus s);
     //static void setToolVecPtr(std::vector<tool> *t);
     const std::string getCanonType();
-    const TopoDS_Shape& getUnSolid() {return myUnSolid;}; //FIXME: use dispShape instead? one obj for both solid and unsolid? throw in highlighting as well?
+    const TopoDS_Shape& getUnSolid() {return myUnSolid;};
     virtual const TopoDS_Shape& getShape()=0;
-    bool checkErrors() {return errors;};
-    void display();
+    bool checkErrors() {return solidErrors && unsolidErrors;};
+    virtual void display()=0;
     void setDispMode(DISPLAY_MODE m) {dispMode = m;};
   protected:
     canonLine(std::string canonL, machineStatus prevStatus);
+    //~canonLine();
     std::string myLine;
     machineStatus status; //the machine's status *after* execution of this canon line
     std::vector<std::string> canonTokens;
     double tok2d(uint n);
-    inline int tok2i(uint n,uint offset=0);
-    void tokenize(std::string str, std::vector<std::string>& tokenV,
-		  const std::string& delimiters = "(), ");
-    inline void tokenize();
+    int tok2i(uint n,uint offset=0);
+    void tokenize(std::string str, std::vector<std::string>& tokenV, const std::string& delimiters = "(), ");
+    void tokenize();
     const std::string getCanonicalCommand();
-    bool errors;
+
+    //TODO: color the displayed shape if one or both of these are true
+    bool solidErrors;
+    bool unsolidErrors;
     DISPLAY_MODE dispMode;
 
     ///return true if the canonical command for this line matches 'm'
     inline bool cmdMatch(std::string m) {
-      if (canonTokens.size() < 3) return false;
-        return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
+      if (canonTokens.size() < 3)
+        return false;
+      return (m.compare(canonTokens[2]) == 0); //compare returns zero for a match
     };
 
     /** \var myUnSolid
     Use to store a 2d shape for non-motion commands, or to store the tool path for motion.
     */
     TopoDS_Shape myUnSolid;
+    Handle(AIS_Shape) aisShape;
 };
 
 #endif //CANONLINE_HH

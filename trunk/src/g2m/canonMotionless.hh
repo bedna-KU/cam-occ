@@ -39,9 +39,9 @@ class canonMotionless: protected canonLine {
   friend canonLine * canonLine::canonLineFactory (std::string l, machineStatus s);
   public:
     canonMotionless(std::string canonL, machineStatus prevStatus);
-    bool isThisMotion() {return false;};
+    bool isMotion() {return false;};
     const TopoDS_Shape& getShape() {return canonLine::getUnSolid();};
-
+    void display();
   protected:
     bool match, handled;
 };
