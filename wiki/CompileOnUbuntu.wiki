@@ -37,6 +37,7 @@ Look at the last few lines of output from make. If you don't see the word "error
 = Execute =
 
 `./ubuntu.sh ngc-in/face-sc.canon`
+
 A file can also be chosen from the gcode menu - typing it on the command line isn't necessary. If EMC2's stand-alone interpreter can be found, gcode files can be interpreted. If it isn't available, the only files that can be interpreted are files containing the SAI's output. (At the moment, using the interpreter seems to be broken...)
 
 The stand-alone interpreter isn't in the EMC2 packages; it is necessary to compile from source.
