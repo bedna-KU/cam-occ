@@ -9,4 +9,4 @@
 #g2m works with files of canonical commands, and with g-code.
 #EMC2's stand-alone interpreter is required for g-code.
 
-LD_LIBRARY_PATH=./bin MMGT_OPT=0 bin/camocc2 g2m $1 $2 $3
+LD_LIBRARY_PATH=./bin bin/camocc2 g2m $1 $2 $3
