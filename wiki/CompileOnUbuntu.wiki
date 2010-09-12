@@ -1,4 +1,5 @@
 #summary How to compile and run on Ubuntu 10.04 Lucid Lynx 32-bit.
+#labels Featured
 
 = Introduction =
 
