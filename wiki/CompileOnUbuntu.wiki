@@ -1,0 +1,40 @@
+#summary How to compile and run on Ubuntu 10.04 Lucid Lynx 32-bit.
+
+= Introduction =
+
+cam-occ2 doesn't do much, but with additional eyes I'll be able to squash bugs and improve the things that matter most to users - so I thought I'd write up instructions.
+
+= Required Packages =
+
+*Install the following* (and all packages they require):
+libopencascade-dev
+libtbb-dev
+libqt4-dev
+g++
+subversion
+libxext-dev
+libxmu-dev
+
+= Get the Source =
+
+From a terminal, type the following:
+{{{
+cd
+svn checkout http://cam-occ.googlecode.com/svn/trunk/ cam-occ
+}}}
+
+= Compile =
+
+{{{
+cd cam-occ
+qmake
+make
+}}}
+Look at the last few lines of output from make. If you don't see the word "error", make succeeded.
+
+= Execute =
+
+`./ubuntu.sh ngc-in/face-sc.canon`
+A file can also be chosen from the gcode menu - typing it on the command line isn't necessary. If EMC2's stand-alone interpreter can be found, gcode files can be interpreted. If it isn't available, the only files that can be interpreted are files containing the SAI's output. (At the moment, using the interpreter seems to be broken...)
+
+The stand-alone interpreter isn't in the EMC2 packages; it is necessary to compile from source.
