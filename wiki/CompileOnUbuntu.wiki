@@ -1,5 +1,5 @@
 #summary How to compile and run on Ubuntu 10.04 Lucid Lynx 32-bit.
-#labels Featured
+#labels Featured,Phase-Deploy
 
 = Introduction =
 
@@ -10,7 +10,6 @@ cam-occ2 doesn't do much, but with additional eyes I'll be able to squash bugs a
 *Install the following* (and all packages they require):
 {{{
 libopencascade-dev
-libtbb-dev
 libqt4-dev
 g++
 subversion
