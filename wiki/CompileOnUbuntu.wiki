@@ -40,4 +40,4 @@ Look at the last few lines of output from make. If you don't see the word "error
 
 A file can also be chosen from the gcode menu - typing it on the command line isn't necessary. If EMC2's stand-alone interpreter can be found, gcode files can be interpreted. If it isn't available, the only files that can be interpreted are files containing the SAI's output. (At the moment, using the interpreter seems to be broken...)
 
-The stand-alone interpreter isn't in the EMC2 packages; it is necessary to compile from source.
+The stand-alone interpreter isn't in the EMC2 packages; it is necessary to compile from source. If you don't have EMC2 already, build it as a simulator. See [http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#On_Ubuntu_10_04_or_8_04_from_source Compiling EMC2 from source] and [http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#Building_emc2_simulator Building EMC2 simulator].
