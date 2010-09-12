@@ -62,6 +62,7 @@ QMutex g2m::vecGrowMutex;
 
 g2m::g2m() {
   mthreadCpuCnt = -1;
+  doThreads = true;
 
   QMenu* myMenu = new QMenu("gcode");
 
@@ -85,7 +86,7 @@ g2m::g2m() {
 }
 
 void g2m::slotModelFromFile() {
-  checkIfSafeForThreading();
+  doThreads = checkIfSafeForThreading();
   lineVector.clear();
 
   if (fromCmdLine) {
@@ -105,7 +106,9 @@ void g2m::slotModelFromFile() {
   nanotimer timer;
   timer.start();
 
-  createThreads();
+  if (doThreads) {
+    createThreads();
+  }
 
   if ( file.endsWith(".ngc") ) {
     interpret();
@@ -122,6 +125,11 @@ void g2m::slotModelFromFile() {
     return;
   }
   interpDone = true;
+
+  if (!doThreads) {
+    makeSolidsThread(NULL);
+  }
+
   waitOnThreads(timer);
 
   double e = timer.getElapsedS();
@@ -132,9 +140,9 @@ void g2m::slotModelFromFile() {
 
 ///draw shapes and update statusbar/ui until threads are almost done, then join and display the rest of the shapes
 void g2m::waitOnThreads(nanotimer &timer) {
-  //update status until threads are almost done
   bool threadsAlmostDone = false;
   int lastDrawn = -1;
+  uio::window()->statusBar()->clearMessage();
   do {
     uint current = nextAvailInVec(true);
     uint size = lineVector.size();
@@ -154,11 +162,13 @@ void g2m::waitOnThreads(nanotimer &timer) {
       if (lastDrawn%20 == 0) {
         uio::fitAll();
       }
+
       std::string s = "Processing ";
       s+= lineVector[current]->getLnum();
       s+= " : " + current;
       s+= " of " + size;
       statusBarUp(s,timer.getElapsedS()/double(current));
+      uio::fitAll();
       uio::sleep();
     } else {
       threadsAlmostDone = true;
@@ -170,6 +180,7 @@ void g2m::waitOnThreads(nanotimer &timer) {
   for (uint i=lastDrawn+1;i<lineVector.size();i++) {
     lineVector[i]->display();
   }
+
 }
 
 void g2m::interpret() {
@@ -323,6 +334,7 @@ void g2m::createThreads() {
       printf("ERROR; return code from pthread_create() is %d\n", rc);
       exit(-1);
     }
+    cout << "thread " << tId << " created" << endl;
   }
 }
 
@@ -397,23 +409,20 @@ uint g2m::getVecSize() {
 }
 
 ///check occ env
-void g2m::checkIfSafeForThreading() {
-  bool envgood = true;
-  std::string msg = "Warning, environment variables incorrectly set. Expect problems!";
+bool g2m::checkIfSafeForThreading() {
   char * opt;
-  opt = getenv("MMGT_OPT");
-  if (opt == NULL) {
-    msg += "MMGT_OPT not defined!\n";
-    envgood = false;
-  } else {
-    if (strcmp(opt, "0") == 0) {
-      //occ's mmgt disabled. this is good.
+  opt = getenv("USETHREADS");
+  if (opt != 0) {
+    if (strcmp(opt, "1") == 0) {
+      Standard::SetReentrant (Standard_True);  //make occ use thread-safe handles and mmgt
+
+      opt = getenv("MMGT_OPT");
+      if ((opt == NULL) || (strcmp(opt, "0") != 0))
+        uio::infoMsg("Warning, threading enabled but MMGT_OPT is not 0.\nThis may reduce performance.");
+
+      return true;
     } else {
-      msg += "MMGT_OPT not 0!\n";
-      envgood = false;
+      return false;
     }
   }
-  Standard::SetReentrant (Standard_True);  //make occ use thread-safe handles
-  if (!envgood)
-    uio::infoMsg(msg);
 }

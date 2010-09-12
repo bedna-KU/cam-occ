@@ -59,6 +59,7 @@ class g2m: public QObject {
 
     /******************************** THREAD-RELATED ********************************/
     ///is interpreter done? must be false until we're done adding to lineVector
+    bool doThreads;
     static bool interpDone;
     std::list< pthread_t* > threadIdList;
     ///cpu count for multithreading. this is the size of the array
@@ -66,7 +67,7 @@ class g2m: public QObject {
     void createThreads();
     void joinThreads();
     void waitOnThreads(nanotimer &timer);
-    void checkIfSafeForThreading();
+    bool checkIfSafeForThreading();
     static void* makeSolidsThread(void * v);
     static void threadSafeSleep();
     static uint nextAvailInVec(bool onlyWatch = false);

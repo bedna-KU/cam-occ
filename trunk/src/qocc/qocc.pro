@@ -5,6 +5,8 @@ CONFIG += opengl
 CONFIG += x11
 CONFIG += debug
 CONFIG -= release
+CONFIG -= mallocproxy
+#CONFIG += mallocproxy
 
 linux-g++ {
         DEFINES += LIN LININTEL
@@ -25,12 +27,20 @@ linux-g++ {
 DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 #DEFINES += OCC_PATCHED
 
+CONFIG(mallocproxy) {
+  DEFINES += USE_TBB_MALLOC_PROXY
+  LIBS += -ltbbmalloc_proxy
+} else {
+  DEFINES -= USE_TBB_MALLOC_PROXY
+  LIBS -= -ltbbmalloc_proxy
+}
+
 INCLUDEPATH += /opt/occ63/inc/ ../uio/ /usr/include/opencascade
 LIBS += -L/opt/occ63/lib -L../../bin \
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
 -lTKSTEP -lTKService -lTKV3d -lTKernel -lTKIGES \
 -lPTKernel -lTKSTL -lTKVRML -lTKTopAlgo -lTKBRep \
--lTKPShape -lTKShapeSchema -lOccUio -lg2model -lstdc++ -ltbbmalloc_proxy
+-lTKPShape -lTKShapeSchema -lOccUio -lg2model -lstdc++
 
 SOURCES += main.cpp \
 qoccapplication.cpp \

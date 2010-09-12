@@ -22,9 +22,10 @@
 #include "../uio/uio.hh"
 #include "../g2m/g2m.hh"
 #include "../uio/tst.hh"
-#include <tbb/tbbmalloc_proxy.h> //replace calls to C malloc with tbb's thread-optimized calls
 
-//#include <qoccharnesswindow.h>
+#ifdef USE_TBB_MALLOC_PROXY
+#include <tbb/tbbmalloc_proxy.h> //replace calls to C malloc with tbb's thread-optimized calls
+#endif //USE_TBB_MALLOC_PROXY
 
 
 lnk::lnk(QoccHarnessWindow* w) {
