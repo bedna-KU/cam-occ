@@ -22,14 +22,14 @@
 
 #include <string>
 #include <vector>
-
 #include <cmath>
 #include <limits.h>
+
+#include <Handle_AIS_Shape.hxx>
 
 #include "canon.hh"
 #include "machineStatus.hh"
 #include "tool.hh"
-#include "dispShape.hh"
 
 //TODO: add methods to set and get display options for the obj - i.e. color, shading, ...
 //so objs with trouble can be highlighted. same for start and end move, rapid, canned cycles(?), ...
@@ -64,9 +64,17 @@ class canonLine: protected canon {
     bool checkErrors() {return solidErrors && unsolidErrors;};
     virtual void display()=0;
     void setDispMode(DISPLAY_MODE m) {dispMode = m;};
+    void setSolidDone() {solidIsDone=true;};
+    bool isSolidDone() {return solidIsDone;};
+    inline std::string cantok(uint n) {
+      if (n < canonTokens.size()) {return canonTokens[n];} else {
+        cout << "malformed input line " << myLine << endl;
+        std::string s = ""; return s;
+      }
+    }
+    const std::string getLnum();
   protected:
     canonLine(std::string canonL, machineStatus prevStatus);
-    //~canonLine();
     std::string myLine;
     machineStatus status; //the machine's status *after* execution of this canon line
     std::vector<std::string> canonTokens;
@@ -79,6 +87,7 @@ class canonLine: protected canon {
     //TODO: color the displayed shape if one or both of these are true
     bool solidErrors;
     bool unsolidErrors;
+    bool solidIsDone;
     DISPLAY_MODE dispMode;
 
     ///return true if the canonical command for this line matches 'm'

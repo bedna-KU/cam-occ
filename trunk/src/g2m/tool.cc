@@ -18,7 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "tool.hh"
-#include <uio.hh>
+#include "uio.hh"
+
+#include <QMutex>
+
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
@@ -65,6 +68,8 @@ const TopoDS_Shape& millTool::get3d() {
 }
 
 const TopoDS_Shape& ballnoseTool::get3d() {
+  QMutex get3dMutex;
+  QMutexLocker g3ml(&get3dMutex);
   if (!myShape.IsNull()) {
     return myShape;
   } else {

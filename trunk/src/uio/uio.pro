@@ -27,8 +27,8 @@ linux-g++ {
 
 DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 
-DEPENDPATH += . ../qocc ../lnk
-INCLUDEPATH += /opt/occ63/inc/ . ../qocc ../lnk
+DEPENDPATH += . ../qocc
+INCLUDEPATH += /opt/occ63/inc/ . ../qocc /usr/include/opencascade
 
 LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase -lTKSTEP \

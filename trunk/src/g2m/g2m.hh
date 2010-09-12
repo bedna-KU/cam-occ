@@ -29,7 +29,8 @@
 
 #include "canonLine.hh"
 #include "machineStatus.hh"
-//#include "dispShape.hh"
+#include "nanotimer.hh"
+
 
 /**
 \class g2m
@@ -49,15 +50,11 @@ class g2m: public QObject {
     void interpret();
     bool processCanonLine(std::string l);
     bool success;
-    //inline void infoMsg(QString s) {infoMsg(s.toStdString();};
     void infoMsg(std::string s);
     void sleepSecond();
     static std::vector<canonLine*> lineVector;
-//    std::vector<dispShape*> dispVector;
     QString file;
     bool debug;
-    //void test(); //FIXME: temporary
-    //void makeSolids(uint start=0, uint incr=1);
     void statusBarUp(std::string s, double avgtime);
 
     /******************************** THREAD-RELATED ********************************/
@@ -66,9 +63,9 @@ class g2m: public QObject {
     std::list< pthread_t* > threadIdList;
     ///cpu count for multithreading. this is the size of the array
     long mthreadCpuCnt;
-//    void startThreads();
     void createThreads();
     void joinThreads();
+    void waitOnThreads(nanotimer &timer);
     void checkIfSafeForThreading();
     static void* makeSolidsThread(void * v);
     static void threadSafeSleep();

@@ -36,6 +36,7 @@
 #include <BRepCheck_Analyzer.hxx>
 #include <BRepTools.hxx>
 #include <BRep_Tool.hxx>
+#include <AIS_Shape.hxx>
 
 #include "canonMotion.hh"
 #include "canonLine.hh"
@@ -249,7 +250,7 @@ void canonMotion::sweepSolid() {
     TopoDS_Shape t = pipe.Shape();
     try {
     pipe.MakeSolid();
-    } catch (Standard_ConstructionError) {
+    } catch (...) {
       infoMsg("can't make solid - a:" + uio::toString(a) + " b:" + uio::toString(b) +" line: "+ myLine);
       solidErrors = true;
       solid.Nullify();
@@ -261,7 +262,7 @@ void canonMotion::sweepSolid() {
         fs.Perform();
         solid = TopoDS::Solid(fs.Solid());
       } else {
-        cout << "pipe isn't solid: " << canonTokens[0] << canonTokens[1] << canonTokens[2] << endl;
+        cout << "pipe isn't solid: " << cantok(0) << cantok(1) << cantok(2) << endl;
         solidErrors = true;
         myShape = s;
       }
@@ -286,7 +287,7 @@ void canonMotion::sweepSolid() {
 */
 
       myShape = solid;
-      cout << "no errors on " << getLineNum() << endl;
+      cout << "no errors on " << getLnum() << endl;
   } else {
     solidErrors = true;
     infoMsg("pipe not ready!");

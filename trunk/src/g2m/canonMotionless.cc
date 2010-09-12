@@ -22,6 +22,7 @@
 #include "uio.hh"
 #include <string>
 #include <BRepBuilderAPI_MakeVertex.hxx>
+#include <AIS_Shape.hxx>
 
 canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):canonLine(canonL, prevStatus) {
   match = true;
@@ -69,7 +70,7 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (cmdMatch("SET_FEED_RATE")) {
     status.setFeed(tok2d(3));
   } else if (cmdMatch("SET_FEED_REFERENCE")) {
-    if (canonTokens[3].compare("CANON_XYZ") == 0) {
+    if (cantok(3).compare("CANON_XYZ") == 0) {
       //this is the standard feed reference, do nothing
     } else {  //SET_FEED_REFERENCE(CANON_WORKPIECE)
       handled = false;
@@ -86,14 +87,14 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (cmdMatch("USE_TOOL_LENGTH_OFFSET")) {
     handled = false;
   } else if (cmdMatch("SET_ORIGIN_OFFSETS")) {
-    if (canonTokens[3].compare("0.0000") == 0) {
+    if (cantok(3).compare("0.0000") == 0) {
       /*
       ** this is a common canon statement. we are going to hijack it to produce a warning,
       ** because the data we're getting was produced with a format of %.4f or so.
       */
       uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine +"\nModel may fail!");
-    } else if (canonTokens.size() == 8) {
-      if ((tok2d(3)==0) && (tok2d(4)==0) && (tok2d(5)==0) && (tok2d(6)==0) && (tok2d(7)==0) ) {
+    } else if (canonTokens.size() == 9) {
+      if ((tok2d(3)==0) && (tok2d(4)==0) && (tok2d(5)==0) && (tok2d(6)==0) && (tok2d(7)==0) && (tok2d(8)==0)) {
       //do nothing if all zeros, interp issues this when it starts up and it has no effect
       } else {
         handled = false;
@@ -103,6 +104,10 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
     }
   } else if (cmdMatch("USE_LENGTH_UNITS")) {
     handled = false;
+  } else if (cmdMatch("ENABLE_FEED_OVERRIDE")) {
+    handled = true;
+  } else if (cmdMatch("ENABLE_SPEED_OVERRIDE")) {
+    handled = true;
   } else if (cmdMatch("SET_MOTION_CONTROL_MODE")) {
     handled = false;
   } else if (cmdMatch("SET_XY_ROTATION")) {
@@ -118,25 +123,26 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (cmdMatch("PROGRAM_END")) {
   } else if (cmdMatch("PROGRAM_STOP")) {
   } else if (cmdMatch("SELECT_PLANE" )) {
-    if (canonTokens[3].compare("CANON_PLANE_XZ")==0) {
+    if (cantok(3).compare("CANON_PLANE_XZ")==0) {
       status.setPlane(CANON_PLANE_XZ);
-    } else if (canonTokens[3].compare("CANON_PLANE_YZ")==0) {
+    } else if (cantok(3).compare("CANON_PLANE_YZ")==0) {
       status.setPlane(CANON_PLANE_YZ);
-    } else if (canonTokens[3].compare("CANON_PLANE_XY")==0) {
+    } else if (cantok(3).compare("CANON_PLANE_XY")==0) {
       status.setPlane(CANON_PLANE_XY);
     } else {// sanity check
-      uio::infoMsg("Error: Failed to detect CANON_PLANE in _"+canonTokens[3]+"_:\n" + myLine);
+      uio::infoMsg("Error: Failed to detect CANON_PLANE in _"+cantok(3)+"_:\n" + myLine);
     }
   } else match = false;
 
   if ( !match || !handled ) {
     std::string m;
     if (!handled) {
-      m = "Warning, unhandled";
+      m = "Unhandled canonical command ("+cantok(2)+")";
     } else {
-      m = "Error, unknown";
+      m = "Unknown canonical command ("+cantok(2)+"): " + canonL;
     }
-    infoMsg(m + " canonical command ("+canonTokens[2]+"): " + canonL);
+    if (uio::debuggingOn())
+      infoMsg(m);
   }
 }
 

@@ -53,8 +53,8 @@
 #include <TopoDS_Edge.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
-//#include "dispShape.hh"
 
+//init static members
 std::vector<canonLine*> g2m::lineVector;
 bool g2m::interpDone = false;
 QMutex g2m::vecModMutex;
@@ -82,18 +82,16 @@ g2m::g2m() {
       slotModelFromFile();
     }
   }
-
 }
 
 void g2m::slotModelFromFile() {
   checkIfSafeForThreading();
   lineVector.clear();
-//  dispVector.clear();
 
   if (fromCmdLine) {
     file = uio::window()->getArg(1);
     if (!uio::fileExists(file))  {
-      fromCmdLine = false;  //if the file doesn't exist, we'll ask for a file
+      fromCmdLine = false;  //the file doesn't exist, we'll ask for a file
     }
   }
   uio::hideGrid();
@@ -124,20 +122,40 @@ void g2m::slotModelFromFile() {
     return;
   }
   interpDone = true;
+  waitOnThreads(timer);
 
+  double e = timer.getElapsedS();
+  std::cout << "Total time to process that file: " << timer.humanreadable(e) << std::endl;
+
+  uio::fitAll();
+}
+
+///draw shapes and update statusbar/ui until threads are almost done, then join and display the rest of the shapes
+void g2m::waitOnThreads(nanotimer &timer) {
   //update status until threads are almost done
   bool threadsAlmostDone = false;
+  int lastDrawn = -1;
   do {
     uint current = nextAvailInVec(true);
     uint size = lineVector.size();
     if (current < (size-mthreadCpuCnt)) {
-      if (lineVector.size()%20 == 0) {
+
+      //loop over objs that are definitely done
+      uint i;
+      for (i=lastDrawn+1;i<lineVector.size();i++) {
+        if (lineVector[i]->isSolidDone()) {
+          lineVector[i]->display();
+        } else {
+          lastDrawn = i-1;
+          break;
+        }
+      }
+
+      if (lastDrawn%20 == 0) {
         uio::fitAll();
       }
       std::string s = "Processing ";
-      s+= (lineVector[current]->getN()==-1) ?
-          uio::toString(lineVector[current]->getLineNum()) :
-          std::string("N"+lineVector[current]->getN());
+      s+= lineVector[current]->getLnum();
       s+= " : " + current;
       s+= " of " + size;
       statusBarUp(s,timer.getElapsedS()/double(current));
@@ -149,10 +167,9 @@ void g2m::slotModelFromFile() {
 
   joinThreads();
 
-  double e = timer.getElapsedS();
-  std::cout << "Total time to process that file: " << timer.humanreadable(e) << std::endl;
-
-  uio::fitAll();
+  for (uint i=lastDrawn+1;i<lineVector.size();i++) {
+    lineVector[i]->display();
+  }
 }
 
 void g2m::interpret() {
@@ -217,7 +234,6 @@ void g2m::interpret() {
 }
 
 bool g2m::processCanonLine (std::string l) {
-  double e = 0;
   if (debug){
     infoMsg(l);
   }
@@ -229,7 +245,9 @@ bool g2m::processCanonLine (std::string l) {
   } else {
     cl = canonLine::canonLineFactory (l,*(lineVector.back())->getStatus());
   }
+  vecModMutex.lock();
   lineVector.push_back(cl);
+  vecModMutex.unlock();
 
   /* need to highlight the first *solid* rather than the first obj
   if (lineVector.size()==1) {
@@ -240,15 +258,7 @@ bool g2m::processCanonLine (std::string l) {
 
   double t = nt.getElapsedS();
   if (debug) cout << "Line " << cl->getLineNum() << "/N" << cl->getN() << " - time " << nt.humanreadable(t) << endl;
-  e += t;
 
-  //every 20 lines, or every time if debugging
-  if ((debug) || (lineVector.size()%20 == 0) ) {
-    std::string s = "Last processed:";
-    s+= (cl->getN()==-1) ? uio::toString(cl->getLineNum()) : std::string("N"+cl->getN());
-    statusBarUp(s, e/(double)lineVector.size());
-    //    uio::fitAll();
-  }
   return cl->checkErrors();
 }
 
@@ -256,7 +266,6 @@ void g2m::statusBarUp(std::string s, double avgtime) {
   //  std::string s = "Last processed:";
   s+= "   |   Avg time: " + nanotimer::humanreadable(avgtime);
   uio::window()->statusBar()->showMessage(s.c_str());
-
 }
 
 ///Sleep 1s and process events
@@ -280,14 +289,18 @@ void g2m::slotSaveAll() {
     std::string t = saveFile;
     t += i;
     BRepTools::Write( lineVector[i]->getShape(), t.c_str());
-    }
-    }
-    */
+  }
+}
+*/
 
 /** mutexes - use QMutexLocker ( QMutex * mutex ) and QMutex()
 vecModMutex   //used when a canonLine is pushed onto vector, and in getVecSize()
 vecGrowMutex  //used in & blocks makeSolidsThread only, blocks while waiting for vector to grow
 */
+
+/** \fn createThreads
+*** Create 1 thread per cpu. Each thread calls makeSolidsThread()
+**/
 void g2m::createThreads() {
   pthread_attr_t attr;
   pthread_attr_init(&attr);
@@ -335,22 +348,25 @@ void* g2m::makeSolidsThread(void *) {
   while (1) {  //exit thread by using return, not pthread_exit(), to prevent memory leaks
     QMutexLocker growLocker(&vecGrowMutex);  //unlock on destroy
     index = nextAvailInVec();
-    while ( getVecSize() < index ) { //wait for lineVector to grow, unless interpDone==true
-      if ((interpDone) && (getVecSize() < index)) {
+    while ( getVecSize()-1 < index ) { //wait for lineVector to grow, unless interpDone==true
+      if ((interpDone) && (getVecSize()-1 < index)) {
         return 0;  //destroy growLocker and free memory
       }
       threadSafeSleep();
     }
     growLocker.unlock();
-
+    if (uio::debuggingOn()) {
+      cout << "index" << index << "size" << lineVector.size() << endl;
+    }
     if (lineVector[index]->isMotion()) {
       //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
       ((canonMotion*)lineVector[index])->setSolidMode(SWEPT);
       ((canonMotion*)lineVector[index])->computeSolid();
     }
     //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
+    lineVector[index]->setSolidDone();
     lineVector[index]->setDispMode(BEST);
-    lineVector[index]->display();
+    //lineVector[index]->display();
   }
 }
 
@@ -401,40 +417,3 @@ void g2m::checkIfSafeForThreading() {
   if (!envgood)
     uio::infoMsg(msg);
 }
-
-/* *intended to be called by a thread
-\param start the first item to get from the vector
-\param skip how many to skip over (4 for 4 threads)
-* /
-void g2m::makeSolids(uint start, uint incr) {
-  uint curr = start;
-  nanotimer nt;
-  if (start == (uint)0){
-    nt.start();
-  }
-  while ((!interpDone) || (lineVector.size() > curr)) {
-    if (lineVector.size() > curr) {
-      if (lineVector[curr]->isMotion()) {
-        //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
-        ((canonMotion*)lineVector[curr])->setSolidMode(SWEPT);
-        ((canonMotion*)lineVector[curr])->computeSolid();
-      }
-      //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
-      lineVector[curr]->setDispMode(BEST);
-      lineVector[curr]->display();
-
-      if (start == (uint)0){
-        double e = nt.getElapsedS()/(double)(curr/incr);
-        statusBarUp("Creating Solids: ~" + uio::toString(curr) + " done",e);
-      }
-      if (debug) {
-        infoMsg("Current: "+uio::toString(curr));
-      }
-      curr += incr;
-    } else {
-      infoMsg("sleep in makesolids");
-      uio::sleep(1);
-    }
-  }
-}
-*/

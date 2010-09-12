@@ -30,7 +30,7 @@
 #include "canonMotion.hh"
 #include "linearMotion.hh"
 #include "helicalMotion.hh"
-
+#include "uio.hh"
 
 //canon.cc - implementation of canonLine
 
@@ -39,6 +39,7 @@ canonLine::canonLine(std::string canonL, machineStatus prevStatus): myLine(canon
   tokenize(); //splits myLine using delimiters
   solidErrors = false;
   unsolidErrors = false;
+  solidIsDone = false;
   aisShape = 0;
 }
 
@@ -49,7 +50,7 @@ canonLine::canonLine(std::string canonL, machineStatus prevStatus): myLine(canon
 
 ///returns the number after N on the line, -1 if none
 int canonLine::getN() {
-  if ( (canonTokens[1].c_str()[1] == '.') && (canonTokens[1].c_str()[2] == '.') )
+  if ( (cantok(1).c_str()[1] == '.') && (cantok(1).c_str()[2] == '.') )
     return -1;
   else
     return tok2i(1,1);
@@ -99,9 +100,14 @@ inline int canonLine::tok2i(uint n,uint offset) {
 }
 
 const std::string canonLine::getCanonicalCommand() {
+  if (canonTokens.size() < 3 ) return "BAD_LINE_NO_CMD";
   return canonTokens[2];
 }
 
+///return a line identifier as string: getN() if !=-1, else getLineNum()
+const std::string canonLine::getLnum() {
+  return getN()==-1 ? uio::toString(getLineNum()) : std::string("N"+getN());
+}
 //from http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
 //0 is canon line
 //1 is gcode Nnnnnn line

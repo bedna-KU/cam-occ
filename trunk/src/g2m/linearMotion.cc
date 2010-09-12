@@ -42,7 +42,7 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
   //TODO: add support for 5 or 6 axis motion
   if (a.Distance(b) < Precision::Confusion()) { //is the edge long enough to bother making?
     unsolidErrors = true;
-    cout << "skipped zero-length line at N" << getN() << endl;
+    cout << "skipped zero-length line at " << getLnum() << endl;
   } else {
     myUnSolid = BRepBuilderAPI_MakeEdge(a,b).Edge();
 
