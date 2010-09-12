@@ -7,6 +7,7 @@ cam-occ2 doesn't do much, but with additional eyes I'll be able to squash bugs a
 = Required Packages =
 
 *Install the following* (and all packages they require):
+{{{
 libopencascade-dev
 libtbb-dev
 libqt4-dev
@@ -14,6 +15,7 @@ g++
 subversion
 libxext-dev
 libxmu-dev
+}}}
 
 = Get the Source =
 
