@@ -5,6 +5,8 @@
 
 cam-occ2 doesn't do much, but with additional eyes I'll be able to squash bugs and improve the things that matter most to users - so I thought I'd write up instructions.
 
+I normally develop on 64-bit Debian, but wrote this up because Ubuntu is so common.
+
 = Required Packages =
 
 *Install the following* (and all packages they require):
@@ -37,6 +39,8 @@ Look at the last few lines of output from make. If you don't see the word "error
 = Execute =
 
 `./ubuntu.sh ngc-in/face-sc.canon`
+
+The program will probably crash if threads are enabled ( environment variable USETHREADS=1 )
 
 A file can also be chosen from the gcode menu - typing it on the command line isn't necessary. If EMC2's stand-alone interpreter can be found, gcode files can be interpreted. If it isn't available, the only files that can be interpreted are files containing the SAI's output. (At the moment, using the interpreter seems to be broken...)
 
