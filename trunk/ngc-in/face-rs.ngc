@@ -1,0 +1,20 @@
+;N01(File /home/mark/Desktop/cam-occ/face.ngc created by cam-occ)
+;N02 #101 = 77.0 (Safe height for rapids)
+;N03 M09 M05 M48 G17 G21 G40
+;N04 G54 G64 G90 G92.2 G94
+N05 M06 T16 G43 H1
+;N06 G00 Z#101
+;N07 X0.0 Y0.0
+N08 M03 S1000 F1000 M08
+;N09 (MSG, test message)
+;N10 G00 X-9.000000 Y-7.000000
+N11 G01 Z2.000000
+N12 G01 X-8.0 Y-5.000000 Z3.0 (missing face)
+N13 Z4.0
+N14 G01 X-7.0 Y6.0 Z5.0 (missing face)
+;N15 Z-.5
+;N16 Y5
+;N17 Z-3.0
+N18 G4 P0
+N19 M05
+N20 M02
