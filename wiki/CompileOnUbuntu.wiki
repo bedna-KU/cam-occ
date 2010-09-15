@@ -40,8 +40,27 @@ Look at the last few lines of output from make. If you don't see the word "error
 
 `./ubuntu.sh ngc-in/face-sc.canon`
 
-The program will probably crash if threads are enabled ( environment variable USETHREADS=1 )
+The program will probably crash if threads are enabled ( as of r115, enabling threads would require modifying the source )
 
 A file can also be chosen from the gcode menu - typing it on the command line isn't necessary. If EMC2's stand-alone interpreter can be found, gcode files can be interpreted. If it isn't available, the only files that can be interpreted are files containing the SAI's output. (At the moment, using the interpreter seems to be broken...)
 
-The stand-alone interpreter isn't in the EMC2 packages; it is necessary to compile from source. If you don't have EMC2 already, build it as a simulator. See [http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#On_Ubuntu_10_04_or_8_04_from_source Compiling EMC2 from source] and [http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#Building_emc2_simulator Building EMC2 simulator].
+If you don't have EMC2 already, you can install a simulator which includes the necessary binary. Use the following script to install: 
+{{{
+#!/bin/sh
+
+#adapted from the script at http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#On_Ubuntu_10_04_using_precompiled_EMC2_packages
+
+gksudo -m "Enter your password to install EMC2-sim" true
+gpg --keyserver pgpkeys.mit.edu --recv-key 8F374FEF
+gpg -a --export 8F374FEF | sudo apt-key add -
+
+sudo sh -c 'cat > /etc/apt/sources.list.d/linuxcnc.list' <<EOF
+deb http://www.linuxcnc.org/emc2 lucid base emc2.4-sim
+deb-src http://www.linuxcnc.org/emc2 lucid base emc2.4-sim
+EOF
+
+sudo apt-get update
+sudo apt-get -o Apt::Install-Recommends=true install emc2-sim
+
+}}}
+Or if you wish to compile it yourself, see [http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#On_Ubuntu_10_04_or_8_04_from_source Compiling EMC2 from source] and [http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#Building_emc2_simulator Building EMC2 simulator].
