@@ -31,7 +31,6 @@
 #include <QEventLoop>
 #include <QFileDialog>
 #include <QStatusBar>
-#include <QMutexLocker>
 
 #include "g2m.hh"
 #include "uio.hh"
@@ -57,12 +56,8 @@
 //init static members
 std::vector<canonLine*> g2m::lineVector;
 bool g2m::interpDone = false;
-QMutex g2m::vecModMutex;
-QMutex g2m::vecGrowMutex;
 
 g2m::g2m() {
-  mthreadCpuCnt = -1;
-  doThreads = true;
 
   QMenu* myMenu = new QMenu("gcode");
 
@@ -86,8 +81,9 @@ g2m::g2m() {
 }
 
 void g2m::slotModelFromFile() {
-  doThreads = checkIfSafeForThreading();
   lineVector.clear();
+  uio::hideGrid();
+  interpDone = false;
 
   if (fromCmdLine) {
     file = uio::window()->getArg(1);
@@ -95,20 +91,15 @@ void g2m::slotModelFromFile() {
       fromCmdLine = false;  //the file doesn't exist, we'll ask for a file
     }
   }
-  uio::hideGrid();
-
   if (!fromCmdLine) {
     file = QFileDialog::getOpenFileName ( uio::window(), "Choose input file", "./ngc-in", "*.ngc *.canon" );
   }
-
-  fromCmdLine = false;
+  fromCmdLine = false;  //so that if a second file is processed, this time within gui, the program won't use the one from the command line instead
 
   nanotimer timer;
   timer.start();
 
-  if (doThreads) {
-    createThreads();
-  }
+  createThreads();  //does nothing in g2m. overridden in g2m_threaded.
 
   if ( file.endsWith(".ngc") ) {
     interpret();
@@ -124,13 +115,12 @@ void g2m::slotModelFromFile() {
     uio::infoMsg("You must select a file ending with .ngc or .canon!");
     return;
   }
-  interpDone = true;
 
-  if (!doThreads) {
-    makeSolidsThread(NULL);
-  }
+  interpDone = true;  //for g2m_threaded. tells threads they can quit when they reach the end of the vector.
 
-  waitOnThreads(timer);
+  //in g2m, this creates the solids
+  //overridden in g2m_threaded - waits for the threads to finish
+  finishAllSolids(timer);
 
   double e = timer.getElapsedS();
   std::cout << "Total time to process that file: " << timer.humanreadable(e) << std::endl;
@@ -138,47 +128,20 @@ void g2m::slotModelFromFile() {
   uio::fitAll();
 }
 
-///draw shapes and update statusbar/ui until threads are almost done, then join and display the rest of the shapes
-void g2m::waitOnThreads(nanotimer &timer) {
-  bool threadsAlmostDone = false;
-  int lastDrawn = -1;
+void g2m::finishAllSolids(nanotimer &timer) {
   uio::window()->statusBar()->clearMessage();
-  do {
-    uint current = nextAvailInVec(true);
-    uint size = lineVector.size();
-    if (current < (size-mthreadCpuCnt)) {
 
-      //loop over objs that are definitely done
-      uint i;
-      for (i=lastDrawn+1;i<lineVector.size();i++) {
-        if (lineVector[i]->isSolidDone()) {
-          lineVector[i]->display();
-        } else {
-          lastDrawn = i-1;
-          break;
-        }
-      }
-
-      if (lastDrawn%20 == 0) {
-        uio::fitAll();
-      }
-
-      std::string s = "Processing ";
-      s+= lineVector[current]->getLnum();
-      s+= " : " + current;
-      s+= " of " + size;
-      statusBarUp(s,timer.getElapsedS()/double(current));
+  for (uint i=0;i<lineVector.size();i++) {
+    //lineVector[i]->display();
+    makeSolid(i);
+    if (i%20 == 0) { //every 20
       uio::fitAll();
-      uio::sleep();
-    } else {
-      threadsAlmostDone = true;
+      std::string s = "Processing ";
+      s+= lineVector[i]->getLnum();
+      s+= " : " + i;
+      s+= " of " + lineVector.size();
+      statusBarUp(s,timer.getElapsedS()/double(i));
     }
-  }  while ( !threadsAlmostDone );
-
-  joinThreads();
-
-  for (uint i=lastDrawn+1;i<lineVector.size();i++) {
-    lineVector[i]->display();
   }
 
 }
@@ -256,9 +219,10 @@ bool g2m::processCanonLine (std::string l) {
   } else {
     cl = canonLine::canonLineFactory (l,*(lineVector.back())->getStatus());
   }
-  vecModMutex.lock();
+
+  lockMutex();
   lineVector.push_back(cl);
-  vecModMutex.unlock();
+  unlockMutex();
 
   /* need to highlight the first *solid* rather than the first obj
   if (lineVector.size()==1) {
@@ -304,125 +268,14 @@ void g2m::slotSaveAll() {
 }
 */
 
-/** mutexes - use QMutexLocker ( QMutex * mutex ) and QMutex()
-vecModMutex   //used when a canonLine is pushed onto vector, and in getVecSize()
-vecGrowMutex  //used in & blocks makeSolidsThread only, blocks while waiting for vector to grow
-*/
-
-/** \fn createThreads
-*** Create 1 thread per cpu. Each thread calls makeSolidsThread()
-**/
-void g2m::createThreads() {
-  pthread_attr_t attr;
-  pthread_attr_init(&attr);
-  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-
-  //figure out number of cores, we'll create 1 thread per
-  mthreadCpuCnt = sysconf(_SC_NPROCESSORS_ONLN);
-  if (mthreadCpuCnt < 1) {
-    uio::infoMsg("Unknown number of processors. Only creating one thread!");
-    mthreadCpuCnt = 1;
+void g2m::makeSolid(uint index) {
+  if (lineVector[index]->isMotion()) {
+    //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
+    ((canonMotion*)lineVector[index])->setSolidMode(SWEPT);
+    ((canonMotion*)lineVector[index])->computeSolid();
   }
-
-//  threadIDarr = new pthread_t[mthreadCpuCnt];
-
-  for (int j=0; j<mthreadCpuCnt; j++) {
-    pthread_t *tId( new pthread_t );
-    threadIdList.push_back(tId);
-    int rc = pthread_create(tId, &attr, makeSolidsThread, NULL);
-    if (rc) {
-      printf("ERROR; return code from pthread_create() is %d\n", rc);
-      exit(-1);
-    }
-    cout << "thread " << tId << " created" << endl;
-  }
-}
-
-///join threads when processing is done
-void g2m::joinThreads() {
-    std::list< pthread_t* >::iterator it;
-
-  for ( it=threadIdList.begin() ; it != threadIdList.end(); it++ ) {
-//  for (int j=0; j<mthreadCpuCnt; j++) {
-    int rc = pthread_join(**it, NULL);
-    if (rc) {
-      printf("ERROR; return code from pthread_join() is %d\n", rc);
-      exit(-1);
-    }
-  }
-}
-
-///called by pthread_create. A loop that looks for unprocessed objs in lineVector and processes them.
-///creates and displays solid. Locks vecGrowMutex when not processing an obj.
-void* g2m::makeSolidsThread(void *) {
-  uint index;
-  while (lineVector.size() == 0) {threadSafeSleep();}  //don't use 100%cpu waiting for 1st obj...
-  while (1) {  //exit thread by using return, not pthread_exit(), to prevent memory leaks
-    QMutexLocker growLocker(&vecGrowMutex);  //unlock on destroy
-    index = nextAvailInVec();
-    while ( getVecSize()-1 < index ) { //wait for lineVector to grow, unless interpDone==true
-      if ((interpDone) && (getVecSize()-1 < index)) {
-        return 0;  //destroy growLocker and free memory
-      }
-      threadSafeSleep();
-    }
-    growLocker.unlock();
-    if (uio::debuggingOn()) {
-      cout << "index" << index << "size" << lineVector.size() << endl;
-    }
-    if (lineVector[index]->isMotion()) {
-      //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
-      ((canonMotion*)lineVector[index])->setSolidMode(SWEPT);
-      ((canonMotion*)lineVector[index])->computeSolid();
-    }
-    //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
-    lineVector[index]->setSolidDone();
-    lineVector[index]->setDispMode(BEST);
-    //lineVector[index]->display();
-  }
-}
-
-void g2m::threadSafeSleep() {
-  timeval timeout;
-  timeout.tv_sec = 0;  timeout.tv_usec = 10000; // 0.01 second delay
-  select( 0, NULL, NULL, NULL, & timeout );
-}
-
-///return index of next unprocessed line from vector
-///unless onlyWatch = false, vecGrowMutex must be locked and nextLineInVec is incremented
-uint g2m::nextAvailInVec(bool onlyWatch) {
-  static uint nextLineInVec = 0;
-  uint t = nextLineInVec;
-  if (!onlyWatch) {
-    assert(!vecGrowMutex.tryLock());  //this mutex should already be locked
-    nextLineInVec++;
-  }  //else assert (inMainThread()==true)
-  return t;
-}
-
-///using vecModMutex,return size of vector
-uint g2m::getVecSize() {
-  uint t;
-  QMutexLocker modLocker(&vecModMutex);
-  t = lineVector.size();
-  return t;
-}
-
-///check occ env
-bool g2m::checkIfSafeForThreading() {
-  char * opt;
-  opt = getenv("USETHREADS");
-  if (opt != 0) {
-    if (strcmp(opt, "1") == 0) {
-      Standard::SetReentrant (Standard_True);  //make occ use thread-safe handles and mmgt
-
-      opt = getenv("MMGT_OPT");
-      if ((opt == NULL) || (strcmp(opt, "0") != 0))
-        uio::infoMsg("Warning, threading enabled but MMGT_OPT is not 0.\nThis may reduce performance.");
-
-      return true;
-    } else {
-      return false;
-    }
-  }
+  //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
+  lineVector[index]->setSolidDone();
+  lineVector[index]->setDispMode(BEST);
+  //lineVector[index]->display();
 }

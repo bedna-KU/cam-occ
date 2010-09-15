@@ -21,6 +21,10 @@
 #define MACHINESTATUS_HH
 
 //#include <map>
+#include <limits.h> //to fix "error: ?INT_MIN? was not declared in this scope"
+#include <Bnd_Box.hxx>
+#include <TopoDS_Edge.hxx>
+#include <gp_Pnt.hxx>
 
 #include "tool.hh"
 #include "canon.hh"
@@ -28,6 +32,7 @@
 enum CANON_PLANE {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ};
 struct coolantStruct {bool flood; bool mist; bool spindle;};
 enum SPINDLE_STATUS {OFF,CW,CCW,BRAKE};
+struct boundaries {gp_Pnt a,b;};
 
 /**
 \class machineStatus
@@ -44,6 +49,7 @@ class machineStatus: protected canon {
     static millTool* theTool;
     gp_Dir startDir, endDir, prevEndDir;
     bool first;
+    static Bnd_Box rapidBbox,cutBbox;
 //    toolNumber myTool;
 /*    / ** \var toolTable
       for now, it is for millTool objs only
@@ -76,8 +82,13 @@ class machineStatus: protected canon {
     const gp_Dir getEndDir() {return endDir;};
     const gp_Dir getPrevEndDir() {return prevEndDir;};
     void clearAll(void);
-    bool isFirst() {return first;};
+    bool isFirst() {/*FIXME change this to check for motion*/return first;};
     millTool* getTool() {return theTool;};
+    void addToCBbox(TopoDS_Edge e); //c=cutting
+    void addToRBbox(TopoDS_Edge e); //r=rapid
+    boundaries getRBbox();
+    boundaries getCBbox();
+
     //const millTool& getTool() {return toolTable.find(myTool)->second;};
   private:
     machineStatus();  //prevent use of this ctor by making it private

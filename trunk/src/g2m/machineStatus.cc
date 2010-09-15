@@ -18,7 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "machineStatus.hh"
+#include <BRepBndLib.hxx>
+#include <Bnd_Box.hxx>
+
+
 millTool* machineStatus::theTool = 0;
+Bnd_Box machineStatus::rapidBbox;
+Bnd_Box machineStatus::cutBbox;
 
 machineStatus::machineStatus(machineStatus const& oldStatus) {
     //FIXME: segfault on next line when modelling a second file?!
@@ -79,3 +85,30 @@ void machineStatus::setTool(uint n) {
   double d = double(n)/16.0; //for testing, n is diameter in 16ths, and length is 5*diameter. FIXME
   theTool = new ballnoseTool(d,d*5.0); //TODO: use EMC's tool table for tool sizes
 }
+
+void machineStatus::addToCBbox(TopoDS_Edge e) {
+  BRepBndLib::Add(e,cutBbox);
+}
+
+void machineStatus::addToRBbox(TopoDS_Edge e) {
+  BRepBndLib::Add(e,rapidBbox);
+}
+
+boundaries machineStatus::getRBbox() {
+  double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
+  rapidBbox.Get (aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
+  boundaries b;
+  b.a=gp_Pnt(aXmin,aYmin,aZmin);
+  b.b=gp_Pnt(aXmax,aYmax,aZmax);
+  return b;
+}
+
+boundaries machineStatus::getCBbox() {
+  double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
+  cutBbox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
+  boundaries b;
+  b.a=gp_Pnt(aXmin,aYmin,aZmin);
+  b.b=gp_Pnt(aXmax,aYmax,aZmax);
+  return b;
+}
+
