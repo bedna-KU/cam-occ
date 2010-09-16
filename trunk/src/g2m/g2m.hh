@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <QString>
+#include <QProcess>
 #include <QObject>
 
 #include "canonLine.hh"
@@ -57,6 +58,7 @@ class g2m: public QObject {
     void statusBarUp(std::string s, double avgtime);
     void makeSolid(uint index);
     static bool interpDone;
+    bool startInterp(QProcess &tc);
 
     //functions overridden by g2m_threaded to make threading work
     virtual void finishAllSolids(nanotimer &timer);

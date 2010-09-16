@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-CONFIG += thread
+CONFIG -= thread
 CONFIG += opengl
 CONFIG += x11
 CONFIG += debug

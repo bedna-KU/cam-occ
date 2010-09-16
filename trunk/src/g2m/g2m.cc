@@ -21,7 +21,6 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
-#include <unistd.h>  // because we use sysconf() to find nr cpus for threading
 
 #include <QProcess>
 #include <QStringList>
@@ -128,6 +127,8 @@ void g2m::slotModelFromFile() {
   uio::fitAll();
 }
 
+///call makeSolid on each obj in lineVector
+///this is overridden by g2m_threaded
 void g2m::finishAllSolids(nanotimer &timer) {
   uio::window()->statusBar()->clearMessage();
 
@@ -146,35 +147,66 @@ void g2m::finishAllSolids(nanotimer &timer) {
 
 }
 
-void g2m::interpret() {
-  success = false;
-  //FIXME: don't hardcode these paths
-  QString ipath = "/opt/src/emc2/trunk/";
-  QString interp = ipath + "bin/rs274";
-  QString iparm = ipath + "configs/sim/sim_mm.var\n";
-  QString itool = ipath + "configs/sim/sim_mm.tbl\n";
-  QProcess toCanon;
-  bool foundEOF;
-  toCanon.start(interp,QStringList(file));
+bool g2m::startInterp(QProcess &tc) {
+  //bool success = true;
+  QString tool, interp;
+
+  //if the user has specified a location for the interpreter, use it. if not, guess.
+  //if that fails, ask. save the result.
+//  QSettings settings("camocc.googlecode.com","cam-occ");
+  interp = uio::conf().value("rs274/binary","/usr/bin/rs274").toString();
+  if (!QFileInfo(interp).isExecutable()) {
+    uio::infoMsg("Tried to use " + interp.toStdString() + " as the interpreter, but it doesn't exist or isn't executable.");
+    interp = QFileDialog::getOpenFileName ( uio::window(), "Locate rs274 interpreter", "~", "rs274" );
+    if (!QFileInfo(interp).isExecutable()) {
+      return false;
+    }
+    uio::conf().setValue("rs274/binary",interp);
+  }
+
+  //ask for a tool table, even if one is configured - user may wish to change it
+  QString loc;
+  bool ttconf = uio::conf().contains("rs274/tool-table");
+  if (ttconf) {
+    //passing the file name as the path means that it is preselected
+    loc = uio::conf().value("rs274/tool-table").toString();
+  } else {
+    loc =  "/usr/share/doc/emc2/examples/sample-configs/sim";
+  }
+  tool = QFileDialog::getOpenFileName ( uio::window(), "Locate tool table", loc, "*.tbl" );
+  if (!QFileInfo(tool).exists()){
+    return false;
+  }
+  uio::conf().setValue("rs274/tool-table",tool);
+  tool += "\n";
+
+  tc.start(interp,QStringList(file));
+
   /**************************************************
   Apparently, QProcess::setReadChannel screws with waitForReadyRead() and canReadLine()
-  So, we just fly blind and assume that there are no errors when we navigate
-  the interp's "menu", and that it requires no delays.
+  So we just fly blind and assume that
+  - there are no errors when we navigate the interp's "menu", and
+  - it requires no delays.
   **************************************************/
 
-  //now give the interpreter the data it needs
-  toCanon.write("2\n");	//set parameter file
-  toCanon.write(iparm.toAscii());
-  toCanon.write("3\n");	//set tool table file
-  toCanon.write(itool.toAscii());
-  //can also use 4 and 5
+  tc.write("1\n"); //start interpreting
+  tc.write(tool.toAscii());
 
-  toCanon.write("1\n"); //start interpreting
+  return true;
+}
+void g2m::interpret() {
+  success = false;
+  QProcess toCanon;
+  bool foundEOF;
+
+  if (!startInterp(toCanon))
+    return;
+
   //cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
   uio::window()->statusBar()->showMessage("Starting interpreter...");
   if (!toCanon.waitForReadyRead(1000) ) {
     if ( toCanon.state() == QProcess::NotRunning ){
-      infoMsg("Interpreter died.  Bad tool table " + itool.toStdString() + " ?");
+      infoMsg("Interpreter died.  Bad tool table?");
     } else  infoMsg("Interpreter timed out for an unknown reason.");
     cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
     cout << "stdout: " << (const char*)toCanon.readAllStandardOutput() << endl;

@@ -21,6 +21,7 @@
 #include "g2m_threaded.hh"
 #include "g2m.hh"
 #include <QMutex>
+#include <unistd.h>  // because we use sysconf() to find nr cpus for threading
 
 
 QMutex g2m::vecModMutex;

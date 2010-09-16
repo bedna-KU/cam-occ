@@ -65,7 +65,7 @@ std::vector<TopoDS_Shape> uio::selectedShapes;
 int uio::errors = 0;
 TopTools_ListOfShape uio::latestSelection;
 bool uio::debugParam = false;
-//std::string uio::args[10];
+QSettings uio::settings("camocc.googlecode.com","cam-occ");
 
 
 uio::uio(QoccHarnessWindow* window) {

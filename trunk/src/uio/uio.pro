@@ -4,7 +4,7 @@
 
 TEMPLATE = lib
 
-CONFIG += thread
+CONFIG -= thread
 CONFIG += opengl x11
 CONFIG += debug
 CONFIG -= release

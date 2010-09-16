@@ -39,6 +39,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
+#include <QSettings>
 
 #include "../qocc/qoccharnesswindow.h"
 
@@ -75,6 +76,7 @@ class uio : public QObject {
     static int errors;
     static TopTools_ListOfShape latestSelection;
     static bool debugParam;
+    static QSettings settings;
     //static std::string args[10];
   //  static void setArgs();
 
@@ -92,6 +94,7 @@ class uio : public QObject {
     static void debugMsg(std::string s, std::string f, int l);
     static void infoMsg( std::string title, std::string message );
     static void infoMsg( std::string message );
+    //static inline void infoMsg( QString m ) {infoMsg(m.toStdString());};
     static std::string toString(double a,double b, double c);
     static std::string toString(gp_Pnt p);
     static std::string toString(gp_Dir d);
@@ -107,6 +110,7 @@ class uio : public QObject {
     static double mass(TopoDS_Shape s);
     static void grabSelection();
     static bool debuggingOn() {return debugParam;};
+    static QSettings& conf() {return settings;};
 
 
   public slots:
