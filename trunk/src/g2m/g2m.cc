@@ -54,7 +54,7 @@
 
 //init static members
 std::vector<canonLine*> g2m::lineVector;
-bool g2m::interpDone = false;
+//bool g2m::interpDone = false;
 
 g2m::g2m() {
 
@@ -82,7 +82,7 @@ g2m::g2m() {
 void g2m::slotModelFromFile() {
   lineVector.clear();
   uio::hideGrid();
-  interpDone = false;
+  //interpDone = false;
 
   if (fromCmdLine) {
     file = uio::window()->getArg(1);
@@ -98,8 +98,6 @@ void g2m::slotModelFromFile() {
   nanotimer timer;
   timer.start();
 
-  createThreads();  //does nothing in g2m. overridden in g2m_threaded.
-
   if ( file.endsWith(".ngc") ) {
     interpret();
   } else if (file.endsWith(".canon")) { //just process each line
@@ -111,15 +109,21 @@ void g2m::slotModelFromFile() {
       }
     }
   } else {
-    uio::infoMsg("You must select a file ending with .ngc or .canon!");
+    uio::infoMsg("File name must end with .ngc or .canon!");
     return;
   }
 
-  interpDone = true;  //for g2m_threaded. tells threads they can quit when they reach the end of the vector.
+  //interpDone = true;  //for g2m_threaded. tells threads they can quit when they reach the end of the vector.
+
+  createBlankWorkpiece();  //must be called before canonLine solids are created, because it calculates the minimum tool length
+
+  createThreads();  //does nothing in g2m. overridden in g2m_threaded.
 
   //in g2m, this creates the solids
   //overridden in g2m_threaded - waits for the threads to finish
   finishAllSolids(timer);
+
+
 
   double e = timer.getElapsedS();
   std::cout << "Total time to process that file: " << timer.humanreadable(e) << std::endl;
@@ -133,8 +137,8 @@ void g2m::finishAllSolids(nanotimer &timer) {
   uio::window()->statusBar()->clearMessage();
 
   for (uint i=0;i<lineVector.size();i++) {
-    //lineVector[i]->display();
     makeSolid(i);
+    lineVector[i]->display();
     if (i%20 == 0) { //every 20
       uio::fitAll();
       std::string s = "Processing ";
@@ -149,7 +153,7 @@ void g2m::finishAllSolids(nanotimer &timer) {
 
 bool g2m::startInterp(QProcess &tc) {
   //bool success = true;
-  QString tool, interp;
+  QString interp;
 
   //if the user has specified a location for the interpreter, use it. if not, guess.
   //if that fails, ask. save the result.
@@ -173,12 +177,11 @@ bool g2m::startInterp(QProcess &tc) {
   } else {
     loc =  "/usr/share/doc/emc2/examples/sample-configs/sim";
   }
-  tool = QFileDialog::getOpenFileName ( uio::window(), "Locate tool table", loc, "*.tbl" );
-  if (!QFileInfo(tool).exists()){
+  tooltable = QFileDialog::getOpenFileName ( uio::window(), "Locate tool table", loc, "*.tbl" );
+  if (!QFileInfo(tooltable).exists()){
     return false;
   }
-  uio::conf().setValue("rs274/tool-table",tool);
-  tool += "\n";
+  uio::conf().setValue("rs274/tool-table",tooltable);
 
   tc.start(interp,QStringList(file));
 
@@ -190,10 +193,12 @@ bool g2m::startInterp(QProcess &tc) {
   **************************************************/
 
   tc.write("1\n"); //start interpreting
-  tc.write(tool.toAscii());
+  tc.write(tooltable.toAscii());
+  tc.write("\n");
 
   return true;
 }
+
 void g2m::interpret() {
   success = false;
   QProcess toCanon;
@@ -252,9 +257,9 @@ bool g2m::processCanonLine (std::string l) {
     cl = canonLine::canonLineFactory (l,*(lineVector.back())->getStatus());
   }
 
-  lockMutex();
+  //lockMutex();  //no longer necessary since subtracting requires things be done in a different order
   lineVector.push_back(cl);
-  unlockMutex();
+  //unlockMutex();
 
   /* need to highlight the first *solid* rather than the first obj
   if (lineVector.size()==1) {
@@ -300,14 +305,43 @@ void g2m::slotSaveAll() {
 }
 */
 
+///call this before creating solids, and use bbox size to figure out length of tools
+void g2m::createBlankWorkpiece() {
+  pntPair f,t;
+  std::string fs,ts,ws;
+  gp_Pnt a,b;
+
+  f = machineStatus::getFeedBounds();
+  t = machineStatus::getTraverseBounds();
+  a = f.a; a.SetZ(a.Z()-0.5);
+  b = f.b; b.SetZ(b.Z()+0.5);
+  minToolLength = b.Z() - f.a.Z();
+  blank = BRepPrimAPI_MakeBox(a,b).Solid();
+  workpiece = blank;
+
+  fs = "All motion at feedrate fits within a bounding box with corners ";
+  fs += uio::toString(f.a) + " and " + uio::toString(f.b) + ".\n";
+  ts = "All traverse motion fits within a bounding box with corners ";
+  ts += uio::toString(t.a) + " and " + uio::toString(t.b) + ".\n";
+  ws = "Creating workpiece between " + uio::toString(a) + " and " + uio::toString(b) + ".\n";
+  uio::infoMsg("Workpiece size", fs + ts + ws);
+}
+
 void g2m::makeSolid(uint index) {
-  if (lineVector[index]->isMotion()) {
+  MOTION_TYPE mt = lineVector[index]->getMotionType();
+  //if (lineVector[index]->isMotion()) {
+  if (mt == NOT_DEFINED) {
+    infoMsg("motion type not defined at " + lineVector[index]->getLnum() );
+    return;
+  }
+  if ( mt != MOTIONLESS ) {
     //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
     ((canonMotion*)lineVector[index])->setSolidMode(SWEPT);
     ((canonMotion*)lineVector[index])->computeSolid();
+    workpiece = ((canonMotion*)lineVector[index])->subtract(workpiece);
   }
   //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
   lineVector[index]->setSolidDone();
-  lineVector[index]->setDispMode(BEST);
+  lineVector[index]->setDispMode(THIN_MOTION);
   //lineVector[index]->display();
 }

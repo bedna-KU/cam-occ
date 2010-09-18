@@ -56,6 +56,7 @@ class canonLine: protected canon {
     int getLineNum(); //returns the canon line number
     const machineStatus* getStatus(); //returns the machine's status after execution of this canon line
     virtual bool isMotion() = 0;
+    virtual MOTION_TYPE getMotionType() = 0;
     static canonLine* canonLineFactory (std::string l, machineStatus s);
     //static void setToolVecPtr(std::vector<tool> *t);
     const std::string getCanonType();

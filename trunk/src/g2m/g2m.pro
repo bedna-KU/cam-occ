@@ -21,6 +21,12 @@ linux-g++ {
         message ("Not supported on any platform other than linux!")
 }
 
+CONFIG(thread) {
+  DEFINES += MULTITHREADED
+} else {
+#  LIBS -= -lpthread
+}
+
 DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 
 INCLUDEPATH += /opt/occ63/inc/ ../uio/ /usr/include/opencascade

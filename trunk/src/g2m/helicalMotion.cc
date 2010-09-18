@@ -44,12 +44,12 @@
 #include "uio.hh"
 
 helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
-
+  status.setMotionType(HELICAL);
   gp_Pnt start, end;
   start = status.getStartPose().Location();
   //end must be set after determining which plane is in use
   planar = true;
-  double x,y,z,a1,a2,e1,e2,e3,ea,eb,ec,hdist;
+  double a1,a2,e1,e2,e3,ea,eb,ec,hdist;
 //  x=y=z=a1=a2=e1=e2=e3=ea=eb=ec=0;
 
   e1  = tok2d(3); //first_end
@@ -107,6 +107,8 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
       //cout << "Arc with vector at start: " << uio::toString(startVec) << endl;
       arc(start, startVec, end);
     }
+    status.addArcToBbox(TopoDS::Edge(myUnSolid));
+
     // FIXME - check for gaps
 
     /// Find vector direction at start and end of the edge, and save them in status
@@ -199,8 +201,8 @@ void helicalMotion::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
   myUnSolid = BRepBuilderAPI_MakeEdge ( Tc );
 }
 
-///build solid from faces
-void helicalMotion::assembleSolid() {
+///build solid from faces FIXME INCOMPLETE
+void helicalMotion::assembleSolid(millTool* theTool) {
   gp_Pnt a,b;
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
@@ -212,7 +214,7 @@ void helicalMotion::assembleSolid() {
   tb.SetTranslation(gp::Origin(),a);
   gp_Trsf tbr = trsfRotDirDir(gp::DY(),status.getEndDir());
 
-  TopoDS_Wire tool = TopoDS::Wire(status.getTool()->getProfile());
+  TopoDS_Wire tool = TopoDS::Wire(theTool->getProfile());
   TopoDS_Face toolb = BRepBuilderAPI_MakeFace(tool);
   TopoDS_Face toola = toolb; //for end a
 

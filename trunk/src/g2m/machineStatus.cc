@@ -22,11 +22,11 @@
 #include <Bnd_Box.hxx>
 
 
-millTool* machineStatus::theTool = 0;
-Bnd_Box machineStatus::rapidBbox;
-Bnd_Box machineStatus::cutBbox;
+//millTool* machineStatus::theTool = 0;
+Bnd_Box machineStatus::traverseBbox;
+Bnd_Box machineStatus::feedBbox;
 
-machineStatus::machineStatus(machineStatus const& oldStatus) {
+machineStatus::machineStatus(const machineStatus& oldStatus) {
     //FIXME: segfault on next line when modelling a second file?!
 	spindleStat = oldStatus.spindleStat;
     F = oldStatus.F;
@@ -34,10 +34,11 @@ machineStatus::machineStatus(machineStatus const& oldStatus) {
     coolant = oldStatus.coolant;
     plane = oldStatus.plane;
     endPose = startPose = oldStatus.endPose;
-    theTool = oldStatus.theTool;
+    myTool = oldStatus.myTool;
     endDir = gp_Dir(0,0,-1);
     prevEndDir = oldStatus.endDir;
-    first = false;
+    first = oldStatus.first;
+    motionType = NOT_DEFINED;
 }
 
 /**
@@ -47,7 +48,7 @@ This constructor is only to be used when initializing the simulation; it would n
 */
 machineStatus::machineStatus(gp_Ax1 initial) {
   clearAll();
-  theTool = new ballnoseTool(0.0625,0.3125); //1/16" tool. TODO: use EMC's tool table for tool sizes
+  //theTool = new ballnoseTool(0.0625,0.3125); //1/16" tool. TODO: use EMC's tool table for tool sizes
   startPose = endPose = initial;
   first = true;
 }
@@ -61,52 +62,79 @@ void machineStatus::clearAll() {
   endPose = startPose = gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1));
   endDir = prevEndDir = gp_Dir(0,0,-1);
   spindleStat = OFF;
-  //theTool = -1;
-  if (theTool != 0) {
-    delete theTool;
-    theTool = 0;
+  myTool = -1;
+}
+
+///sets motion type, and checks whether this is the second (or later) motion command.
+void machineStatus::setMotionType(MOTION_TYPE m) {
+  motionType = m;
+  static int count = 0;
+  if ((first) && ((m == STRAIGHT_FEED) || (m == TRAVERSE) || (m == HELICAL)) ) {
+    count++;
+    if (count == 2) {
+      first = false;
+    }
+  }
+
+}
+
+
+/**
+set end points, and if not first, add points to bndbox.
+for an arc or helix, the edge must be added from its ctor.
+\sa addArcToBbox(TopoDS_Edge e)
+*/
+void machineStatus::setEndPose(gp_Pnt p) {
+  endPose = gp_Ax1( p, gp_Dir(0,0,1) );
+
+  if (first) {
+    return;
+  } else if (motionType == NOT_DEFINED) {
+    infoMsg("error, mtype not defined");
+  } else if (motionType == STRAIGHT_FEED) {
+    feedBbox.Add(startPose.Location());
+    feedBbox.Add(endPose.Location());
+  } else if (motionType == TRAVERSE) {
+    traverseBbox.Add(startPose.Location());
+    traverseBbox.Add(endPose.Location());
   }
 }
 
-void machineStatus::setEndPose(gp_Pnt p) {
-  endPose = gp_Ax1( p, gp_Dir(0,0,1) );
+
+void machineStatus::setTool(toolNumber n) {
+  myTool = n;
+  canon::addTool(n);
 }
 
 /*
-void machineStatus::setTool(toolNumber n) {
-  myTool = n;
-  //check if the tool exists
-  //if not, load it
-}
-*/
 void machineStatus::setTool(uint n) {
   if (theTool != 0)
     delete theTool;
   double d = double(n)/16.0; //for testing, n is diameter in 16ths, and length is 5*diameter. FIXME
   theTool = new ballnoseTool(d,d*5.0); //TODO: use EMC's tool table for tool sizes
 }
+*/
 
-void machineStatus::addToCBbox(TopoDS_Edge e) {
-  BRepBndLib::Add(e,cutBbox);
+///if not first, add an arc or helix to feedBbox. STRAIGHT_* is added in setEndPose()
+void machineStatus::addArcToBbox(TopoDS_Edge e) {
+  if (!first) {
+    BRepBndLib::Add(e,feedBbox);
+  }
 }
 
-void machineStatus::addToRBbox(TopoDS_Edge e) {
-  BRepBndLib::Add(e,rapidBbox);
-}
-
-boundaries machineStatus::getRBbox() {
+pntPair machineStatus::getTraverseBounds() {
   double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
-  rapidBbox.Get (aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
-  boundaries b;
+  traverseBbox.Get (aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
+  pntPair b;
   b.a=gp_Pnt(aXmin,aYmin,aZmin);
   b.b=gp_Pnt(aXmax,aYmax,aZmax);
   return b;
 }
 
-boundaries machineStatus::getCBbox() {
+pntPair machineStatus::getFeedBounds() {
   double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
-  cutBbox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
-  boundaries b;
+  feedBbox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
+  pntPair b;
   b.a=gp_Pnt(aXmin,aYmin,aZmin);
   b.b=gp_Pnt(aXmax,aYmax,aZmax);
   return b;

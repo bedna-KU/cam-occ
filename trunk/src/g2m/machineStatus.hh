@@ -20,19 +20,21 @@
 #ifndef MACHINESTATUS_HH
 #define MACHINESTATUS_HH
 
-//#include <map>
-#include <limits.h> //to fix "error: ?INT_MIN? was not declared in this scope"
+#include <map>
+#include <limits.h> //to fix "error: INT_MIN was not declared in this scope"
 #include <Bnd_Box.hxx>
 #include <TopoDS_Edge.hxx>
 #include <gp_Pnt.hxx>
 
-#include "tool.hh"
+//#include "tool.hh"
 #include "canon.hh"
 
 enum CANON_PLANE {CANON_PLANE_XY, CANON_PLANE_YZ, CANON_PLANE_XZ};
 struct coolantStruct {bool flood; bool mist; bool spindle;};
 enum SPINDLE_STATUS {OFF,CW,CCW,BRAKE};
-struct boundaries {gp_Pnt a,b;};
+//enum MTYPE {UNDEF,MOTIONLESS,FEED,TRAVERSE};
+enum MOTION_TYPE { NOT_DEFINED, MOTIONLESS, HELICAL, STRAIGHT_FEED, TRAVERSE };
+struct pntPair {gp_Pnt a,b;};
 
 /**
 \class machineStatus
@@ -46,20 +48,18 @@ class machineStatus: protected canon {
     double F,S;  //feedrate, spindle speed
     SPINDLE_STATUS spindleStat;
     coolantStruct coolant;
-    static millTool* theTool;
+    //static millTool* theTool;
     gp_Dir startDir, endDir, prevEndDir;
     bool first;
-    static Bnd_Box rapidBbox,cutBbox;
-//    toolNumber myTool;
-/*    / ** \var toolTable
-      for now, it is for millTool objs only
-    */
-    //static std::map<toolNumber, millTool, std::less<toolNumber> > toolTable;
+    static Bnd_Box traverseBbox,feedBbox;
+    MOTION_TYPE motionType;
+    toolNumber myTool;
     CANON_PLANE plane;
   public:
     machineStatus(machineStatus const& oldStatus);
     machineStatus(gp_Ax1 initial);
-    void setPrevStatus(const machineStatus &oldStatus);
+    //void setPrevStatus(const machineStatus &oldStatus);
+    void setMotionType(MOTION_TYPE m);
     void setEndPose(gp_Ax1 newPose) {endPose = newPose;};
     void setEndPose(gp_Pnt p);
     void setFeed(const double f) {F=f;};
@@ -67,7 +67,7 @@ class machineStatus: protected canon {
     void setSpindleStatus(const SPINDLE_STATUS s) {spindleStat=s;};
     void setCoolant(coolantStruct c) {coolant = c;};
     //void setTool(toolNumber n); //n is the tool to be used
-    void setTool(uint n); //n is the size of the tool to be used. FIXME: implement tool table stuff
+    void setTool(toolNumber n); //n is the ID of the tool to be used.
     void setPlane(CANON_PLANE p) {plane = p;};
     double getFeed() const {return F;};
     double getSpindleSpeed() const {return S;};
@@ -82,12 +82,13 @@ class machineStatus: protected canon {
     const gp_Dir getEndDir() {return endDir;};
     const gp_Dir getPrevEndDir() {return prevEndDir;};
     void clearAll(void);
-    bool isFirst() {/*FIXME change this to check for motion*/return first;};
-    millTool* getTool() {return theTool;};
-    void addToCBbox(TopoDS_Edge e); //c=cutting
-    void addToRBbox(TopoDS_Edge e); //r=rapid
-    boundaries getRBbox();
-    boundaries getCBbox();
+    bool isFirst() {return first;};
+    //static std::set<int> & getToolTable() {return toolTable;};
+    toolNumber getToolNum() {return myTool;};
+    //millTool* getTool() {return theTool;};
+    void addArcToBbox(TopoDS_Edge e); //LINEAR_* is added automagically
+    static pntPair getTraverseBounds();  //bnd_box for *_TRAVERSE
+    static pntPair getFeedBounds(); //bnd_box for *_FEED
 
     //const millTool& getTool() {return toolTable.find(myTool)->second;};
   private:

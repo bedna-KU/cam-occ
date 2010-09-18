@@ -36,6 +36,8 @@
 #include "uio.hh"
 
 linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonMotion(canonL,prevStatus) {
+  status.setMotionType(getMotionType());
+  status.setEndPose(getPoseFromCmd());
   gp_Pnt a,b;
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
@@ -60,7 +62,7 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
   }
 }
 
-void linearMotion::assembleSolid() {
+void linearMotion::assembleSolid(millTool* theTool) {
   gp_Pnt a,b;
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
@@ -69,7 +71,7 @@ void linearMotion::assembleSolid() {
   ta.SetTranslation(gp::Origin(),a);
   gp_Trsf tar = trsfRotDirDir(gp::DY(),status.getStartDir());
 
-  TopoDS_Wire tool = TopoDS::Wire(status.getTool()->getProfile());
+  TopoDS_Wire tool = TopoDS::Wire(theTool->getProfile());
   TopoDS_Face toolf = BRepBuilderAPI_MakeFace(tool);
   BRepBuilderAPI_Transform(toolf,tar); //rotate
   BRepBuilderAPI_Transform(toolf,ta); //shift from origin to start

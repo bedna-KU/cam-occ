@@ -20,7 +20,9 @@
 #include "tool.hh"
 #include "uio.hh"
 
+#ifdef MULTITHREADED
 #include <QMutex>
+#endif //MULTITHREADED
 
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
@@ -68,8 +70,10 @@ const TopoDS_Shape& millTool::get3d() {
 }
 
 const TopoDS_Shape& ballnoseTool::get3d() {
+  #ifdef MULTITHREADED
   QMutex get3dMutex;
-  QMutexLocker g3ml(&get3dMutex);
+  QMutexLocker g3ml(&get3dMutex);  //locks mutex on create, unlocks on destroy
+  #endif //MULTITHREADED
   if (!myShape.IsNull()) {
     return myShape;
   } else {

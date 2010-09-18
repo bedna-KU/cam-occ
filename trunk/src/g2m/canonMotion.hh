@@ -28,12 +28,12 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Shape.hxx>
 
+#include "machineStatus.hh"
 #include "canonLine.hh"
 
 //for STRAIGHT_TRAVERSE, STRAIGHT_FEED, ARC_FEED
 
 enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED };
-enum MOTION_TYPE { HELICAL, LINEAR, TRAVERSE };
 /**
 \class canonMotion
 \brief This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED.
@@ -47,21 +47,23 @@ class canonMotion: protected canonLine {
   public:
     virtual MOTION_TYPE getMotionType() = 0;
     virtual const TopoDS_Shape& getShape() = 0;
+    TopoDS_Shape toolAtStart(millTool & theTool);
+    TopoDS_Shape subtract(TopoDS_Shape & s);
     bool isMotion() {return true;};
     bool isVolumeSuspect() {return sweepIsSuspect;};
     void setSolidMode(SOLID_MODE s) {solidMode = s;};
-    void computeSolid();
+    void computeSolid(millTool & theTool);
     void display();
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
     TopoDS_Shape myShape;
     gp_Ax1 getPoseFromCmd();
     bool sweepIsSuspect;
-    void sweepSolid();
-    void bruteForceSolid();
-    virtual void assembleSolid()=0;
+    void sweepSolid(millTool & theTool);
+    void bruteForceSolid(millTool & theTool);
+    virtual void assembleSolid(millTool & theTool)=0;
     gp_Trsf trsfRotDirDir(gp_Dir first, gp_Dir second,gp_Pnt center = gp::Origin());
-    void addToolMaybe();
+    void addToolMaybe(millTool & theTool);
     SOLID_MODE solidMode;
 
 };

@@ -17,8 +17,50 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+
 #include "canon.hh"
+#include "tool.hh"
 //canon.cc
 
+//static
+std::map<toolNumber,millTool*> canon::toolTable;
+
+
 canon::canon() {
+  toolsBuilt = false;
+}
+
+void canon::addTool(toolNumber n) {
+  assert(n>0);
+  toolTable.insert(n, (millTool *) NULL);
+}
+
+void canon::buildTools(QString toolTableFile) {
+  toolsBuilt = true;
+  toolTable.iterator it;
+  parseTable(toolTableFile);
+  for (it=toolTable.begin(); it!=toolTable.end(); it++) {
+    it->second = toolFromTable(it->first);  //replace NULL* from addTool() with pointer to actual object
+  }
+  cout << "tool table populated. contains " << toolTable.size() << " tools." << endl;
+}
+
+millTool & canon::getTool(toolNumber n) {
+  assert(toolsBuilt);
+  assert(n>0);
+  toolTable.iterator it;
+  it=toolTable.find(n);
+  assert(it!=map::end);
+  assert(it->second != NULL);
+  return it->second;
+}
+
+void canon::parseTable(QString toolTableFile) {
+
+}
+
+millTool* canon::toolFromTable(toolNumber n) {
+
+  return new ...
 }

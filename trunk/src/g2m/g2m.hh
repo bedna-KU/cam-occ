@@ -46,6 +46,9 @@ class g2m: public QObject {
   public slots:
     void slotModelFromFile();
   protected:
+    TopoDS_Shape blank,workpiece;
+    void createBlankWorkpiece();
+    double minToolLength;
     bool fromCmdLine;
     void interpret();
     bool processCanonLine(std::string l);
@@ -53,11 +56,11 @@ class g2m: public QObject {
     void infoMsg(std::string s);
     void sleepSecond();
     static std::vector<canonLine*> lineVector;
-    QString file;
+    QString file, tooltable;
     bool debug;
     void statusBarUp(std::string s, double avgtime);
     void makeSolid(uint index);
-    static bool interpDone;
+    //static bool interpDone;
     bool startInterp(QProcess &tc);
 
     //functions overridden by g2m_threaded to make threading work

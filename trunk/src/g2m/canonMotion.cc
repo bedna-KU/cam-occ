@@ -27,6 +27,7 @@
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_PipeError.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepAlgoAPI_Cut.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <TopoDS.hxx>
 #include <gp_Circ.hxx>
@@ -43,7 +44,6 @@
 #include "uio.hh"
 
 canonMotion::canonMotion(std::string canonL, machineStatus prevStatus): canonLine(canonL,prevStatus) {
-  status.setEndPose(getPoseFromCmd());
 }
 
 ///for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc
@@ -70,7 +70,7 @@ gp_Ax1 canonMotion::getPoseFromCmd() {
   return gp_Ax1(p,d);
 }
 
-void canonMotion::computeSolid() {
+void canonMotion::computeSolid(millTool & theTool) {
   if (unsolidErrors) {
     myShape.Nullify();
     return;
@@ -78,15 +78,15 @@ void canonMotion::computeSolid() {
   if (!status.isFirst()) {
     switch (solidMode) {
       case SWEPT:
-        sweepSolid();
-        addToolMaybe();
+        sweepSolid(theTool);
+        //addToolMaybe();
         break;
       case BRUTEFORCE:
-        bruteForceSolid();
+        bruteForceSolid(theTool);
         break;
       case ASSEMBLED:
-        assembleSolid();
-        addToolMaybe();
+        assembleSolid(theTool);
+        //addToolMaybe();
       default:
         break;
     }
@@ -98,22 +98,18 @@ void canonMotion::computeSolid() {
 ///fuse tool at start of mySolid, if necessary
 ///faster to build a shell and attach in place of one face?
 ///faster to fuse a half-tool? (this won't work unless horizontal!)
-void canonMotion::addToolMaybe() {
+void canonMotion::addToolMaybe(millTool & theTool) {
   Standard_Real angTol = 0.0175;  //approx 1 degree
   if (!status.getPrevEndDir().IsParallel(status.getStartDir(),angTol)) {
     //translate the tool to the startpoint of the sweep, then fuse it with the sweep
-    gp_Trsf tr;
-    tr.SetTranslation(gp::Origin(),status.getStartPose().Location());
-    BRepBuilderAPI_Transform btr(tr);
-    btr.Perform(status.getTool()->get3d(),true);
 
     /*if (vert) { //add in another tool shape
-      tob.Perform(status.getTool()->get3d(),true);
+      tob.Perform(theTool.get3d(),true);
       t = BRepAlgoAPI_Fuse(toa.Shape(),tob.Shape());
     }
     */
     try {
-      myShape = BRepAlgoAPI_Fuse( myShape, btr.Shape() );
+      myShape = BRepAlgoAPI_Fuse( myShape, toolAtStart(theTool) );
     } catch (...){
       infoMsg("Problematic Fuse operation: " + myLine);
       //uio::sleep(1);
@@ -122,7 +118,28 @@ void canonMotion::addToolMaybe() {
 
 }
 
-//when rotating and translating, do rotation first!
+//subtract mySolid from s, return the result
+TopoDS_Shape canonMotion::subtract(TopoDS_Shape & s) {
+  try {
+    return BRepAlgoAPI_Cut(s,myShape);
+  } catch (...) {
+    infoMsg("cut failed at " + myLine);
+  }
+}
+
+///Returns 3d tool, shifted to startpoint
+TopoDS_Shape canonMotion::toolAtStart(millTool & theTool) {
+  gp_Trsf tr;
+  tr.SetTranslation(gp::Origin(),status.getStartPose().Location());
+  BRepBuilderAPI_Transform btr(tr);
+  btr.Perform(theTool.get3d(),true);
+  return btr.Shape();
+}
+
+/**
+Creates a transform that rotates from first to second, about center
+NOTE: when rotating and translating, do rotation first!
+*/
 gp_Trsf canonMotion::trsfRotDirDir(gp_Dir first, gp_Dir second, gp_Pnt center) {
   gp_Dir perpendicular = first^second; //perpendicular to both first and second
   gp_Ax1 ax(center,perpendicular);
@@ -134,9 +151,9 @@ gp_Trsf canonMotion::trsfRotDirDir(gp_Dir first, gp_Dir second, gp_Pnt center) {
 
 
 ///a *very* bad idea - *extremely* time consuming, potential for crashes, ...
-void canonMotion::bruteForceSolid() {
+void canonMotion::bruteForceSolid(millTool & theTool) {
   double len = status.getStartPose().Location().Distance(status.getEndPose().Location()); //FIXME: very inaccurate for arcs
-  double dia = status.getTool()->Dia();
+  double dia = theTool.Dia();
   double reps = (len/dia)*10; //10 fuse ops per tool diameter
   double param1=0,param2 = 0;
   TopLoc_Location loc;    //transform used for edge
@@ -147,7 +164,7 @@ void canonMotion::bruteForceSolid() {
     int i;
     TopoDS_Shape result;
     result.Nullify();
-    TopoDS_Shape tool = status.getTool()->get3d();
+    TopoDS_Shape tool = theTool.get3d();
     gp_Trsf trsf;
     for (i=0;i<reps;i++) {
       gp_Pnt pntOnLine =  C->Value(param1 + increment*i);
@@ -169,7 +186,7 @@ void canonMotion::bruteForceSolid() {
 }
 
 /// Sweep tool outline along myUnSolid and put result in myShape
-void canonMotion::sweepSolid() {
+void canonMotion::sweepSolid(millTool & theTool) {
   Standard_Real angTol = 0.0175;  //approx 1 degree
   TopoDS_Solid solid;
   gp_Pnt a,b;
@@ -189,12 +206,12 @@ void canonMotion::sweepSolid() {
   //check if the sweep will be vertical. if so, we can't use the tool's profile
   if ( d.IsParallel( gp::DZ(), angTol )) {
     vert = true;
-    gp_Circ c(gp::XOY(),status.getTool()->Dia()/2.0);
+    gp_Circ c(gp::XOY(),theTool.Dia()/2.0);
     w = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(c));
     tob.Perform(w,true);  //toa will always be used, whether vertical or not
 
   } else {
-    w = TopoDS::Wire(status.getTool()->getProfile());
+    w = TopoDS::Wire(theTool.getProfile());
   }
   toa.Perform(w,true);
   BRepOffsetAPI_MakePipeShell pipe(BRepBuilderAPI_MakeWire(TopoDS::Edge(myUnSolid)).Wire());
@@ -275,7 +292,7 @@ void canonMotion::sweepSolid() {
   if ((!solid.IsNull()) && (!solidErrors)) {
     if (vert) {
       //raise the sweep up by 1 radius
-      gp_Pnt v(0,0,status.getTool()->Dia()/2.0);
+      gp_Pnt v(0,0,theTool.Dia()/2.0);
       gp_Trsf ov;
       ov.SetTranslation(gp::Origin(),v);
       solid = TopoDS::Solid(BRepBuilderAPI_Transform(solid, ov, true).Shape());

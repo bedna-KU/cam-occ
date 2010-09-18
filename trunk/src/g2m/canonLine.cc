@@ -155,11 +155,11 @@ canonLine * canonLine::canonLineFactory (std::string l, machineStatus s) {
   af=l.find("ARC_FEED");
   /*
   ** check for comments first because it is not impossible
-  ** for one to contain the text "LINEAR_" or "ARC_FEED"
+  ** for one to contain the text "STRAIGHT" or "ARC_FEED"
   */
   if ( (cmnt!=std::string::npos) || (msg!=std::string::npos) ) {
     return new canonMotionless(l,s);
-  } else if (lin!=std::string::npos) { //linear traverse or linear feed
+  } else if (lin!=std::string::npos) { //straight traverse or straight feed
     return new linearMotion(l,s);
   } else if (af!=std::string::npos) { //arc feed
     return new helicalMotion(l,s); //arc or helix

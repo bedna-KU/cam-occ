@@ -20,6 +20,7 @@
 #ifndef CANON_HH
 #define CANON_HH
 
+#include <QString>
 #include <string>
 #include <iostream>
 
@@ -30,6 +31,8 @@
 #include <gp_Dir.hxx>
 #include <gp_Ax1.hxx>
 #include <TopoDS_Shape.hxx>
+
+#include "tool.h"
 
 typedef double degrees; //angle in degrees
 typedef int toolNumber;
@@ -43,21 +46,17 @@ The only shared items are the unimplemented function abc2dir, and the types degr
 class canon {
   public:
     canon();
+    void addTool(toolNumber n);
+    void buildTools(QString toolTableFile);
+    millTool & getTool(toolNumber n);
   protected:
     static const gp_Dir abc2dir(double a, double b, double c);
     void infoMsg(std::string s) {cout << s << endl;};
-
-
+    static std::map<toolNumber,millTool*> toolTable;
+    bool toolsBuilt;
+    void parseTable(QString toolTableFile);
+    millTool* toolFromTable(toolNumber n);
 };
 
 
 #endif //CANON_HH
-
-
-
- //create tool obj
-// toolTable[t] = tool(t);
-
-//access tool obj
-///need to check if the tool exists before accessing it!!!
-// status.myTool = toolTable[t].getShape();

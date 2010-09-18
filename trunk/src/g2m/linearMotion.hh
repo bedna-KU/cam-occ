@@ -41,7 +41,7 @@ class linearMotion: protected canonMotion {
     linearMotion(std::string canonL, machineStatus prevStatus);
     MOTION_TYPE getMotionType();
     const TopoDS_Shape& getShape() {return myShape;};
-    void assembleSolid();
+    void assembleSolid(millTool & theTool);
 };
 
 #endif //LINEARMOTION_HH
