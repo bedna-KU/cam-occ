@@ -62,7 +62,7 @@ linearMotion::linearMotion(std::string canonL, machineStatus prevStatus): canonM
   }
 }
 
-void linearMotion::assembleSolid(millTool* theTool) {
+void linearMotion::assembleSolid() {
   gp_Pnt a,b;
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
@@ -71,7 +71,7 @@ void linearMotion::assembleSolid(millTool* theTool) {
   ta.SetTranslation(gp::Origin(),a);
   gp_Trsf tar = trsfRotDirDir(gp::DY(),status.getStartDir());
 
-  TopoDS_Wire tool = TopoDS::Wire(theTool->getProfile());
+  TopoDS_Wire tool = TopoDS::Wire(getTool(status.getToolNum())->getProfile());
   TopoDS_Face toolf = BRepBuilderAPI_MakeFace(tool);
   BRepBuilderAPI_Transform(toolf,tar); //rotate
   BRepBuilderAPI_Transform(toolf,ta); //shift from origin to start
@@ -93,12 +93,8 @@ MOTION_TYPE linearMotion::getMotionType() {
   static bool traverse = cmdMatch("STRAIGHT_TRAVERSE");
   if (traverse) {
     return TRAVERSE;
-  } else if (cmdMatch("STRAIGHT_FEED")) {
-    return LINEAR;
   } else {
-    std::string err = "linearMotion::getMotionType failed on canonLine:\n" + myLine + "\n\nExiting.";
-    infoMsg(err);
-    exit(1);
+    return STRAIGHT_FEED;
   }
 }
 

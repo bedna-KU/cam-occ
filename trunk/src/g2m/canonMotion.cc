@@ -70,7 +70,7 @@ gp_Ax1 canonMotion::getPoseFromCmd() {
   return gp_Ax1(p,d);
 }
 
-void canonMotion::computeSolid(millTool & theTool) {
+void canonMotion::computeSolid() {
   if (unsolidErrors) {
     myShape.Nullify();
     return;
@@ -78,14 +78,14 @@ void canonMotion::computeSolid(millTool & theTool) {
   if (!status.isFirst()) {
     switch (solidMode) {
       case SWEPT:
-        sweepSolid(theTool);
+        sweepSolid();
         //addToolMaybe();
         break;
       case BRUTEFORCE:
-        bruteForceSolid(theTool);
+        bruteForceSolid();
         break;
       case ASSEMBLED:
-        assembleSolid(theTool);
+        assembleSolid();
         //addToolMaybe();
       default:
         break;
@@ -98,18 +98,18 @@ void canonMotion::computeSolid(millTool & theTool) {
 ///fuse tool at start of mySolid, if necessary
 ///faster to build a shell and attach in place of one face?
 ///faster to fuse a half-tool? (this won't work unless horizontal!)
-void canonMotion::addToolMaybe(millTool & theTool) {
+void canonMotion::addToolMaybe() {
   Standard_Real angTol = 0.0175;  //approx 1 degree
   if (!status.getPrevEndDir().IsParallel(status.getStartDir(),angTol)) {
     //translate the tool to the startpoint of the sweep, then fuse it with the sweep
 
     /*if (vert) { //add in another tool shape
-      tob.Perform(theTool.get3d(),true);
+      tob.Perform(getTool(status.getToolNum())->get3d(),true);
       t = BRepAlgoAPI_Fuse(toa.Shape(),tob.Shape());
     }
     */
     try {
-      myShape = BRepAlgoAPI_Fuse( myShape, toolAtStart(theTool) );
+      myShape = BRepAlgoAPI_Fuse( myShape, toolAtStart() );
     } catch (...){
       infoMsg("Problematic Fuse operation: " + myLine);
       //uio::sleep(1);
@@ -125,14 +125,15 @@ TopoDS_Shape canonMotion::subtract(TopoDS_Shape & s) {
   } catch (...) {
     infoMsg("cut failed at " + myLine);
   }
+  return s;
 }
 
 ///Returns 3d tool, shifted to startpoint
-TopoDS_Shape canonMotion::toolAtStart(millTool & theTool) {
+TopoDS_Shape canonMotion::toolAtStart() {
   gp_Trsf tr;
   tr.SetTranslation(gp::Origin(),status.getStartPose().Location());
   BRepBuilderAPI_Transform btr(tr);
-  btr.Perform(theTool.get3d(),true);
+  btr.Perform(getTool(status.getToolNum())->get3d(),true);
   return btr.Shape();
 }
 
@@ -151,9 +152,9 @@ gp_Trsf canonMotion::trsfRotDirDir(gp_Dir first, gp_Dir second, gp_Pnt center) {
 
 
 ///a *very* bad idea - *extremely* time consuming, potential for crashes, ...
-void canonMotion::bruteForceSolid(millTool & theTool) {
+void canonMotion::bruteForceSolid() {
   double len = status.getStartPose().Location().Distance(status.getEndPose().Location()); //FIXME: very inaccurate for arcs
-  double dia = theTool.Dia();
+  double dia = getTool(status.getToolNum())->Dia();
   double reps = (len/dia)*10; //10 fuse ops per tool diameter
   double param1=0,param2 = 0;
   TopLoc_Location loc;    //transform used for edge
@@ -164,7 +165,7 @@ void canonMotion::bruteForceSolid(millTool & theTool) {
     int i;
     TopoDS_Shape result;
     result.Nullify();
-    TopoDS_Shape tool = theTool.get3d();
+    TopoDS_Shape tool = getTool(status.getToolNum())->get3d();
     gp_Trsf trsf;
     for (i=0;i<reps;i++) {
       gp_Pnt pntOnLine =  C->Value(param1 + increment*i);
@@ -186,7 +187,7 @@ void canonMotion::bruteForceSolid(millTool & theTool) {
 }
 
 /// Sweep tool outline along myUnSolid and put result in myShape
-void canonMotion::sweepSolid(millTool & theTool) {
+void canonMotion::sweepSolid() {
   Standard_Real angTol = 0.0175;  //approx 1 degree
   TopoDS_Solid solid;
   gp_Pnt a,b;
@@ -206,12 +207,13 @@ void canonMotion::sweepSolid(millTool & theTool) {
   //check if the sweep will be vertical. if so, we can't use the tool's profile
   if ( d.IsParallel( gp::DZ(), angTol )) {
     vert = true;
-    gp_Circ c(gp::XOY(),theTool.Dia()/2.0);
+    if (uio::debuggingOn()) infoMsg("Line " +cantok(0)+"/"+cantok(1)+" is vertical.");
+    gp_Circ c(gp::XOY(),getTool(status.getToolNum())->Dia()/2.0);
     w = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(c));
     tob.Perform(w,true);  //toa will always be used, whether vertical or not
 
   } else {
-    w = TopoDS::Wire(theTool.getProfile());
+    w = TopoDS::Wire(getTool(status.getToolNum())->getProfile());
   }
   toa.Perform(w,true);
   BRepOffsetAPI_MakePipeShell pipe(BRepBuilderAPI_MakeWire(TopoDS::Edge(myUnSolid)).Wire());
@@ -264,8 +266,9 @@ void canonMotion::sweepSolid(millTool & theTool) {
     }
   }
   if (!solidErrors) {
-    TopoDS_Shape t = pipe.Shape();
+    TopoDS_Shape t;
     try {
+    t = pipe.Shape();
     pipe.MakeSolid();
     } catch (...) {
       infoMsg("can't make solid - a:" + uio::toString(a) + " b:" + uio::toString(b) +" line: "+ myLine);
@@ -292,7 +295,7 @@ void canonMotion::sweepSolid(millTool & theTool) {
   if ((!solid.IsNull()) && (!solidErrors)) {
     if (vert) {
       //raise the sweep up by 1 radius
-      gp_Pnt v(0,0,theTool.Dia()/2.0);
+      gp_Pnt v(0,0,getTool(status.getToolNum())->Dia()/2.0);
       gp_Trsf ov;
       ov.SetTranslation(gp::Origin(),v);
       solid = TopoDS::Solid(BRepBuilderAPI_Transform(solid, ov, true).Shape());
@@ -304,10 +307,36 @@ void canonMotion::sweepSolid(millTool & theTool) {
 */
 
       myShape = solid;
-      cout << "no errors on " << getLnum() << endl;
+      if (uio::debuggingOn()) infoMsg("no errors on " + cantok(0) + "/" + cantok(1));
   } else {
     solidErrors = true;
     infoMsg("pipe not ready!");
+  }
+
+  //dump the data?
+  if (uio::debuggingOn() && (uio::getDump() == getLineNum()) {
+    //what to dump: endpoints and end Dirs, tool wire, sweep path, myShape
+    std::string name,type;
+    name="Dump_"+uio::getDump()+"_outline.brep";
+    BRepTools::Write(toa.Shape(),name.c_str());
+
+    name="Dump_"+uio::getDump()+"_spine_edge.brep";
+    BRepTools::Write(myUnSolid,name.c_str());
+
+    name="Dump_"+uio::getDump()+"_pipe_shell.brep";
+    BRepTools::Write(myShape,name.c_str());
+
+    MOTION_TYPE mt = getMotionType();
+    if (mt == HELICAL) {
+      type = "HELICAL";
+    } else if (mt == STRAIGHT_FEED) {
+      type = "STRAIGHT_FEED";
+    } else if (mt == TRAVERSE) {
+      type = "TRAVERSE";
+    } else type = "?!";
+
+    infoMsg("Dumping breps for " + myLine + ", starting at " +uio::toString(a)+" and ending at " +uio::toString(b)+" with type " + type);
+
   }
 }
 
@@ -316,6 +345,13 @@ void canonMotion::display() {
     return;
   } else if ((dispMode == THIN_MOTION) || (dispMode == THIN)) {
     aisShape = new AIS_Shape(myUnSolid);
+    if ( unsolidErrors || solidErrors ) {
+      uio::context()->SetColor(aisShape, Quantity_NOC_BLUE1 );
+    } else if (getMotionType() != TRAVERSE) {
+      uio::context()->SetColor(aisShape, Quantity_NOC_GREEN );
+    } else {
+      uio::context()->SetColor(aisShape, Quantity_NOC_RED );
+    }
   } else if ((dispMode == ONLY_MOTION) || (dispMode == BEST)) {
     if (myShape.IsNull()) {
       aisShape = new AIS_Shape(myUnSolid);
@@ -327,7 +363,7 @@ void canonMotion::display() {
   if (unsolidErrors) {
     nom = Graphic3d_NOM_NEON_PHC;//green
   } else if (solidErrors) {
-    nom = Graphic3d_NOM_PLASTER;
+    nom = Graphic3d_NOM_NEON_GNC;
   } else {
     nom = Graphic3d_NOM_DEFAULT;
   }
@@ -337,4 +373,12 @@ void canonMotion::display() {
   uio::context()->SetMaterial ( aisShape, nom, Standard_True );
   uio::context()->SetDisplayMode ( aisShape,Standard_Integer(AIS_Shaded),Standard_False );
   uio::context()->Display ( aisShape );
+}
+
+//dump sweep
+void canonMotion::dumpSweep() {
+
+}
+
+void canonMotion::dumpSubtract() {
 }

@@ -66,6 +66,7 @@ int uio::errors = 0;
 TopTools_ListOfShape uio::latestSelection;
 bool uio::debugParam = false;
 QSettings uio::settings("camocc.googlecode.com","cam-occ");
+int uio::dump = 0;
 
 
 uio::uio(QoccHarnessWindow* window) {
@@ -77,15 +78,18 @@ uio::uio(QoccHarnessWindow* window) {
   vcPtr = window->getVC();
   mbPtr = window->menuBar();
   hmPtr = window->getHelpMenu();
-
-  initUI();
   windowPtr->statusBar()->showMessage("Cam-occ2 v0.5");
+  initUI();
 
   if (window->getArgs()->contains("debug")){
     debugParam = true;
   }
 
- // setArgs();
+  char * opt;
+  opt = getenv("DUMP");
+  if (opt != 0) {
+    dump = strtol( opt, NULL, 10 );
+  }
 }
 
 void uio::initUI() {
@@ -409,3 +413,34 @@ void uio::slotCountFaces(){
     infoMsg("Number of faces on shape " + toString(s) + ": " + toString(f));
   }
 }
+
+//from http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
+//0 is canon line
+//1 is gcode Nnnnnn line
+//2 is canonical command
+/** Splits a string using delimiters.
+\param str the string to be split
+\param tokenV a vector of strings, each of which is a piece of str
+\param delimiters defaults to: both parenthesis, comma, space
+\sa tokenize()
+*/
+void uio::tokenize(std::string str,
+             std::vector<std::string>& tokenV,
+             const std::string& delimiters) {
+  // Skip delimiters at beginning.
+  std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+  // Find first "non-delimiter".
+  std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
+
+  while (std::string::npos != pos || std::string::npos != lastPos)
+  {
+    // Found a token, add it to the vector.
+    tokenV.push_back(str.substr(lastPos, pos - lastPos));
+    // Skip delimiters.  Note the "not_of"
+    lastPos = str.find_first_not_of(delimiters, pos);
+    // Find next "non-delimiter"
+    pos = str.find_first_of(delimiters, lastPos);
+  }
+}
+
+

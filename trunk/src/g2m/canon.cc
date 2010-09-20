@@ -21,10 +21,14 @@
 
 #include "canon.hh"
 #include "tool.hh"
-//canon.cc
+#include "uio.hh"
 
 //static
 std::map<toolNumber,millTool*> canon::toolTable;
+bool canon::toolsBuilt = false;
+std::string canon::ttname = "";
+double canon::toolLength = 0;
+
 
 
 canon::canon() {
@@ -33,34 +37,125 @@ canon::canon() {
 
 void canon::addTool(toolNumber n) {
   assert(n>0);
-  toolTable.insert(n, (millTool *) NULL);
+  toolTable.insert(std::pair<toolNumber,millTool*>(n, (millTool *) NULL));
 }
 
-void canon::buildTools(QString toolTableFile) {
+void canon::buildTools(std::string toolTableFile, double toolLen) {
+  toolLength = toolLen;
+  ttname = toolTableFile;
   toolsBuilt = true;
-  toolTable.iterator it;
-  parseTable(toolTableFile);
-  for (it=toolTable.begin(); it!=toolTable.end(); it++) {
-    it->second = toolFromTable(it->first);  //replace NULL* from addTool() with pointer to actual object
-  }
+  readTTfile();
+  checkTTskips();
   cout << "tool table populated. contains " << toolTable.size() << " tools." << endl;
 }
 
-millTool & canon::getTool(toolNumber n) {
+void canon::checkTTskips() {
+  std::map<toolNumber,millTool*>::iterator it;
+  for(it=toolTable.begin() ; it != toolTable.end(); it++ ) {
+    if (it->second == NULL) {
+      double dia = (double)it->first/(double)4.0;
+      it->second = createTool(dia,"ball");
+      cout << "Missing tool " << it->first << ", replacing with ballnose tool diam=" << dia << endl;
+    }
+  }
+}
+
+millTool * canon::getTool(toolNumber n) {
   assert(toolsBuilt);
   assert(n>0);
-  toolTable.iterator it;
+  std::map<toolNumber,millTool*>::iterator it;
   it=toolTable.find(n);
-  assert(it!=map::end);
+  assert(it!=toolTable.end());
   assert(it->second != NULL);
   return it->second;
 }
 
-void canon::parseTable(QString toolTableFile) {
-
+bool canon::checkRange(std::string tline, std::string item,size_t c) {
+  if (c != std::string::npos) {
+    return true;
+  } else {
+    infoMsg("Out of range error searching for " + item + " on line " + tline + " of tool table " + ttname + ".");
+    return false;
+  }
 }
 
-millTool* canon::toolFromTable(toolNumber n) {
-
-  return new ...
+///create a tool. for now, only supports cylindricalTool and ballnoseTool
+millTool* canon::createTool(double diam,std::string comment) {
+  size_t ball,end;
+  assert(diam>0);
+  ball = comment.find("ball");
+  end = comment.find("end");
+  if ((end != std::string::npos) && (ball == std::string::npos)) {
+    //std end mill
+    return new cylindricalTool(diam,toolLength);
+  } else {
+    //ball mill
+    return new ballnoseTool(diam,toolLength);
+  }
 }
+
+void canon::readTTfile() {
+  if (uio::fileExists(ttname)) {
+    std::ifstream inFile(ttname.c_str());
+    std::string line;
+    while(std::getline(inFile, line)) {
+      //find the numbers after T and D, and the comment
+      size_t t,d,c,sp;
+      std::string data,comment;
+      int tool;
+      double diam;
+      char * end; //use with strtol
+      c = line.find(";");
+      if (c != std::string::npos) {
+        comment = line.substr(c+1); //everything after ;
+        data = line.substr(0,c); //everything before ;
+      } else {
+        comment = "";
+        data = line;
+      }
+
+      t = data.find("T");
+      if (!checkRange(line,"T",t)) {
+          continue;
+        }
+      sp = data.find(" ",t);
+      if (!checkRange(line,"T_",sp)) {
+          continue;
+        }
+      tool = strtol(data.substr(t+1,sp).c_str(),&end,10);
+      if (end == 0) {
+        if (!checkRange(line,"Tnnn")) {
+          continue;
+        }
+      }
+
+      d = data.find("D");
+      if (!checkRange(line,"D",d)) {
+          continue;
+        }
+      sp = data.find(" ",d);
+      if (!checkRange(line,"D_",sp)) {
+          continue;
+        }
+      diam = strtod(data.substr(d+1,sp).c_str(),&end);
+      if (end == 0) {
+        if (!checkRange(line,"Dnnn")) {
+          continue;
+        }
+      }
+      //now check if this tool number is in toolTable - if it is, create the tool obj
+      std::map<toolNumber,millTool*>::iterator it;
+      it = toolTable.find(tool);
+      if (it != toolTable.end()) { //found it, so replace the null pointer that's there now
+        if (it->second != NULL) {
+          infoMsg("Overwriting duplicate tool " + uio::toString(tool) + " in " + ttname);
+        }
+        it->second = createTool(diam,comment);
+      }
+    }
+  } else {
+    infoMsg("Can't find tool table - ?!");
+  }
+}
+
+

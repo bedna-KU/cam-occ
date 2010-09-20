@@ -58,7 +58,6 @@ class canonLine: protected canon {
     virtual bool isMotion() = 0;
     virtual MOTION_TYPE getMotionType() = 0;
     static canonLine* canonLineFactory (std::string l, machineStatus s);
-    //static void setToolVecPtr(std::vector<tool> *t);
     const std::string getCanonType();
     const TopoDS_Shape& getUnSolid() {return myUnSolid;};
     virtual const TopoDS_Shape& getShape()=0;
@@ -81,7 +80,6 @@ class canonLine: protected canon {
     std::vector<std::string> canonTokens;
     double tok2d(uint n);
     int tok2i(uint n,uint offset=0);
-    void tokenize(std::string str, std::vector<std::string>& tokenV, const std::string& delimiters = "(), ");
     void tokenize();
     const std::string getCanonicalCommand();
 

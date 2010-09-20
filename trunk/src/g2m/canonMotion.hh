@@ -47,23 +47,25 @@ class canonMotion: protected canonLine {
   public:
     virtual MOTION_TYPE getMotionType() = 0;
     virtual const TopoDS_Shape& getShape() = 0;
-    TopoDS_Shape toolAtStart(millTool & theTool);
+    TopoDS_Shape toolAtStart();
     TopoDS_Shape subtract(TopoDS_Shape & s);
     bool isMotion() {return true;};
     bool isVolumeSuspect() {return sweepIsSuspect;};
     void setSolidMode(SOLID_MODE s) {solidMode = s;};
-    void computeSolid(millTool & theTool);
+    void computeSolid();
     void display();
   protected:
     canonMotion(std::string canonL, machineStatus prevStatus);
     TopoDS_Shape myShape;
     gp_Ax1 getPoseFromCmd();
     bool sweepIsSuspect;
-    void sweepSolid(millTool & theTool);
-    void bruteForceSolid(millTool & theTool);
-    virtual void assembleSolid(millTool & theTool)=0;
+    void sweepSolid();
+    void dumpSweep();
+    void dumpSubtract();
+    void bruteForceSolid();
+    virtual void assembleSolid()=0;
     gp_Trsf trsfRotDirDir(gp_Dir first, gp_Dir second,gp_Pnt center = gp::Origin());
-    void addToolMaybe(millTool & theTool);
+    void addToolMaybe();
     SOLID_MODE solidMode;
 
 };

@@ -46,10 +46,11 @@ class g2m: public QObject {
   public slots:
     void slotModelFromFile();
   protected:
-    TopoDS_Shape blank,workpiece;
+    TopoDS_Shape workpiece;
     void createBlankWorkpiece();
     double minToolLength;
     bool fromCmdLine;
+    bool chooseToolTable();
     void interpret();
     bool processCanonLine(std::string l);
     bool success;

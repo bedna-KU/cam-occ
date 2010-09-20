@@ -36,6 +36,7 @@
 #include "canonLine.hh"
 #include "canonMotion.hh"
 #include "nanotimer.hh"
+#include "dispShape.hh"
 
 #include <Handle_Geom_TrimmedCurve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
@@ -101,6 +102,10 @@ void g2m::slotModelFromFile() {
   if ( file.endsWith(".ngc") ) {
     interpret();
   } else if (file.endsWith(".canon")) { //just process each line
+    if (!chooseToolTable()) {
+      uio::infoMsg("Can't find tool table. Aborting.");
+      return;
+    }
     std::ifstream inFile(file.toAscii());
     std::string sLine;
     while(std::getline(inFile, sLine)) {
@@ -115,7 +120,9 @@ void g2m::slotModelFromFile() {
 
   //interpDone = true;  //for g2m_threaded. tells threads they can quit when they reach the end of the vector.
 
-  createBlankWorkpiece();  //must be called before canonLine solids are created, because it calculates the minimum tool length
+  //must be called before canonLine solids are created, because it calculates the minimum tool length
+  createBlankWorkpiece();
+  canon::buildTools(tooltable.toStdString(),minToolLength);
 
   createThreads();  //does nothing in g2m. overridden in g2m_threaded.
 
@@ -123,7 +130,9 @@ void g2m::slotModelFromFile() {
   //overridden in g2m_threaded - waits for the threads to finish
   finishAllSolids(timer);
 
-
+  //now display the workpiece
+  dispShape wp(workpiece);
+  wp.display();
 
   double e = timer.getElapsedS();
   std::cout << "Total time to process that file: " << timer.humanreadable(e) << std::endl;
@@ -151,6 +160,25 @@ void g2m::finishAllSolids(nanotimer &timer) {
 
 }
 
+///ask for a tool table, even if one is configured - user may wish to change it
+bool g2m::chooseToolTable() {
+  QString loc;
+  bool ttconf = uio::conf().contains("rs274/tool-table");
+  if (ttconf) {
+    //passing the file name as the path means that it is preselected
+    loc = uio::conf().value("rs274/tool-table").toString();
+  } else {
+    loc =  "/usr/share/doc/emc2/examples/sample-configs/sim";
+  }
+  tooltable = QFileDialog::getOpenFileName ( uio::window(), "Locate tool table", loc, "*.tbl" );
+
+  if (!QFileInfo(tooltable).exists()){
+    return false;
+  }
+  uio::conf().setValue("rs274/tool-table",tooltable);
+  return true;
+}
+
 bool g2m::startInterp(QProcess &tc) {
   //bool success = true;
   QString interp;
@@ -168,20 +196,8 @@ bool g2m::startInterp(QProcess &tc) {
     uio::conf().setValue("rs274/binary",interp);
   }
 
-  //ask for a tool table, even if one is configured - user may wish to change it
-  QString loc;
-  bool ttconf = uio::conf().contains("rs274/tool-table");
-  if (ttconf) {
-    //passing the file name as the path means that it is preselected
-    loc = uio::conf().value("rs274/tool-table").toString();
-  } else {
-    loc =  "/usr/share/doc/emc2/examples/sample-configs/sim";
-  }
-  tooltable = QFileDialog::getOpenFileName ( uio::window(), "Locate tool table", loc, "*.tbl" );
-  if (!QFileInfo(tooltable).exists()){
+  if (!chooseToolTable())
     return false;
-  }
-  uio::conf().setValue("rs274/tool-table",tooltable);
 
   tc.start(interp,QStringList(file));
 
@@ -316,8 +332,7 @@ void g2m::createBlankWorkpiece() {
   a = f.a; a.SetZ(a.Z()-0.5);
   b = f.b; b.SetZ(b.Z()+0.5);
   minToolLength = b.Z() - f.a.Z();
-  blank = BRepPrimAPI_MakeBox(a,b).Solid();
-  workpiece = blank;
+  workpiece = BRepPrimAPI_MakeBox(a,b).Solid();
 
   fs = "All motion at feedrate fits within a bounding box with corners ";
   fs += uio::toString(f.a) + " and " + uio::toString(f.b) + ".\n";
@@ -338,6 +353,9 @@ void g2m::makeSolid(uint index) {
     //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
     ((canonMotion*)lineVector[index])->setSolidMode(SWEPT);
     ((canonMotion*)lineVector[index])->computeSolid();
+    #ifdef MULTITHREADED
+    #error subtraction cannot be performed in parallel
+    #endif //MULTITHREADED
     workpiece = ((canonMotion*)lineVector[index])->subtract(workpiece);
   }
   //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}

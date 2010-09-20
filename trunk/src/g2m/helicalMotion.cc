@@ -93,7 +93,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
     status.setEndDir(status.getPrevEndDir());
     unsolidErrors = true;
   } else {
-    cout << myLine; //endl supplied by helix() or arc()
+    //cout << myLine; //endl supplied by helix() or arc()
     if (fabs(hdist) > 0.000001) {
       /// Create a helix if the third-axis delta is > .000001.
       planar = false;
@@ -138,7 +138,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
 
 /// Create a helix, place it in myUnSolid
 void helicalMotion::helix( gp_Pnt start, gp_Pnt end ) {
-  cout << "helix" << endl;
+  if (uio::debuggingOn()) cout << "helix" << endl;
   Standard_Real pU,pV;
   Standard_Real radius = start.Distance(center);
   gp_Pnt2d p1,p2;
@@ -195,14 +195,14 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end ) {
 
 /// Create an arc, place it in myUnSolid
 void helicalMotion::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
-  cout << "arc" << endl;
+  if (uio::debuggingOn()) cout << "arc" << endl;
   Handle(Geom_TrimmedCurve) Tc;
   Tc = GC_MakeArcOfCircle ( start, startVec, end );
   myUnSolid = BRepBuilderAPI_MakeEdge ( Tc );
 }
 
 ///build solid from faces FIXME INCOMPLETE
-void helicalMotion::assembleSolid(millTool* theTool) {
+void helicalMotion::assembleSolid() {
   gp_Pnt a,b;
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
@@ -214,7 +214,7 @@ void helicalMotion::assembleSolid(millTool* theTool) {
   tb.SetTranslation(gp::Origin(),a);
   gp_Trsf tbr = trsfRotDirDir(gp::DY(),status.getEndDir());
 
-  TopoDS_Wire tool = TopoDS::Wire(theTool->getProfile());
+  TopoDS_Wire tool = TopoDS::Wire(getTool(status.getToolNum())->getProfile());
   TopoDS_Face toolb = BRepBuilderAPI_MakeFace(tool);
   TopoDS_Face toola = toolb; //for end a
 

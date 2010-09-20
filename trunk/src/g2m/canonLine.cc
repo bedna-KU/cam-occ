@@ -50,7 +50,7 @@ canonLine::canonLine(std::string canonL, machineStatus prevStatus): myLine(canon
 
 ///returns the number after N on the line, -1 if none
 int canonLine::getN() {
-  if ( (cantok(1).c_str()[1] == '.') && (cantok(1).c_str()[2] == '.') )
+  if ( (cantok(1).compare("N.....") == 0))//c_str()[1] == '.') && (cantok(1).c_str()[2] == '.') )
     return -1;
   else
     return tok2i(1,1);
@@ -95,7 +95,7 @@ inline int canonLine::tok2i(uint n,uint offset) {
   if (canonTokens.size() < n+1 ) return INT_MIN;
   char * end;
   int i = strtol( &canonTokens[n].c_str()[offset], &end, 10 );
-  assert ( *end == 0 );
+  //assert ( *end != 0 );
   return i;
 }
 
@@ -106,41 +106,13 @@ const std::string canonLine::getCanonicalCommand() {
 
 ///return a line identifier as string: getN() if !=-1, else getLineNum()
 const std::string canonLine::getLnum() {
-  return getN()==-1 ? uio::toString(getLineNum()) : std::string("N"+getN());
-}
-//from http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
-//0 is canon line
-//1 is gcode Nnnnnn line
-//2 is canonical command
-/** Splits a string using delimiters.
-\param str the string to be split
-\param tokenV a vector of strings, each of which is a piece of str
-\param delimiters defaults to: both parenthesis, comma, space
-\sa tokenize()
-*/
-void canonLine::tokenize(std::string str,
-			 std::vector<std::string>& tokenV,
-			 const std::string& delimiters) {
-  // Skip delimiters at beginning.
-  std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-  // Find first "non-delimiter".
-  std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
-
-  while (std::string::npos != pos || std::string::npos != lastPos)
-  {
-    // Found a token, add it to the vector.
-    tokenV.push_back(str.substr(lastPos, pos - lastPos));
-    // Skip delimiters.  Note the "not_of"
-    lastPos = str.find_first_not_of(delimiters, pos);
-    // Find next "non-delimiter"
-    pos = str.find_first_of(delimiters, lastPos);
-  }
+  return ((getN()==-1) ? (cantok(0)) : (cantok(1)));
 }
 
 ///tokenize myLine with the default delimiters `(), `
-///\sa tokenize(std::string str,std::vector<std::string>& tokenV,const std::string& delimiters)
+///\sa uio::tokenize(std::string str,std::vector<std::string>& tokenV,const std::string& delimiters)
 inline void canonLine::tokenize() {
-  tokenize(myLine,canonTokens);
+  uio::tokenize(myLine,canonTokens);
 }
 
 /**Create objects that inherit from canonLine. It determines which type of object to create, and returns a pointer to that object

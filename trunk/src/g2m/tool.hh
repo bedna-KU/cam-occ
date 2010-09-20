@@ -92,6 +92,15 @@ class ballnoseTool: public millTool {
     const TopoDS_Shape& get3d();
     ballnoseTool(double diameter, double length);
 };
+/**
+\class cylindricalTool
+\brief This class is for the standard endmill.
+*/
+class cylindricalTool: public millTool {
+  public:
+    const TopoDS_Shape& get3d();
+    cylindricalTool(double diameter, double length);
+};
 
 /**
 \class latheTool

@@ -60,8 +60,9 @@ class machineStatus: protected canon {
     machineStatus(gp_Ax1 initial);
     //void setPrevStatus(const machineStatus &oldStatus);
     void setMotionType(MOTION_TYPE m);
-    void setEndPose(gp_Ax1 newPose) {endPose = newPose;};
+    void setEndPose(gp_Ax1 newPose);
     void setEndPose(gp_Pnt p);
+    void addToBounds();
     void setFeed(const double f) {F=f;};
     void setSpindleSpeed(const double s) {S=s;};
     void setSpindleStatus(const SPINDLE_STATUS s) {spindleStat=s;};

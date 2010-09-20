@@ -51,6 +51,7 @@ machineStatus::machineStatus(gp_Ax1 initial) {
   //theTool = new ballnoseTool(0.0625,0.3125); //1/16" tool. TODO: use EMC's tool table for tool sizes
   startPose = endPose = initial;
   first = true;
+  setTool(1);
 }
 
 void machineStatus::clearAll() {
@@ -68,6 +69,9 @@ void machineStatus::clearAll() {
 ///sets motion type, and checks whether this is the second (or later) motion command.
 void machineStatus::setMotionType(MOTION_TYPE m) {
   motionType = m;
+  if (motionType == NOT_DEFINED) {
+    infoMsg("mt undef");
+  }
   static int count = 0;
   if ((first) && ((m == STRAIGHT_FEED) || (m == TRAVERSE) || (m == HELICAL)) ) {
     count++;
@@ -75,18 +79,23 @@ void machineStatus::setMotionType(MOTION_TYPE m) {
       first = false;
     }
   }
-
 }
 
 
-/**
-set end points, and if not first, add points to bndbox.
-for an arc or helix, the edge must be added from its ctor.
+/** \fn setEndPose
+Set end points, and call addToBounds to add points to bndbox. For an arc or helix, the edge must be added from its ctor with addArcToBbox.
 \sa addArcToBbox(TopoDS_Edge e)
 */
 void machineStatus::setEndPose(gp_Pnt p) {
   endPose = gp_Ax1( p, gp_Dir(0,0,1) );
+  addToBounds();
+}
+void machineStatus::setEndPose(gp_Ax1 newPose) {
+  endPose = newPose;
+  addToBounds();
+}
 
+void machineStatus::addToBounds() {
   if (first) {
     return;
   } else if (motionType == NOT_DEFINED) {
@@ -100,8 +109,8 @@ void machineStatus::setEndPose(gp_Pnt p) {
   }
 }
 
-
 void machineStatus::setTool(toolNumber n) {
+  infoMsg("adding tool " + n + ".");
   myTool = n;
   canon::addTool(n);
 }

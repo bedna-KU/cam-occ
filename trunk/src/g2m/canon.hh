@@ -20,9 +20,13 @@
 #ifndef CANON_HH
 #define CANON_HH
 
+typedef double degrees; //angle in degrees
+typedef int toolNumber;
+
 #include <QString>
 #include <string>
 #include <iostream>
+#include <map>
 
 #include <cmath>
 #include <limits.h>
@@ -32,10 +36,9 @@
 #include <gp_Ax1.hxx>
 #include <TopoDS_Shape.hxx>
 
-#include "tool.h"
+#include "tool.hh"
 
-typedef double degrees; //angle in degrees
-typedef int toolNumber;
+class millTool;
 
 /**
 \class canon
@@ -47,15 +50,21 @@ class canon {
   public:
     canon();
     void addTool(toolNumber n);
-    void buildTools(QString toolTableFile);
-    millTool & getTool(toolNumber n);
+    static void buildTools(std::string toolTableFile, double toolLen);
+    static millTool * getTool(toolNumber n);
   protected:
+    static bool toolsBuilt;
+    static std::string ttname;
+    static double toolLength;
+    static bool checkRange(std::string tline, std::string item,size_t c=std::string::npos) ;
+    static void checkTTskips();
+    static void readTTfile();
+    static millTool* createTool(double diam,std::string comment);
     static const gp_Dir abc2dir(double a, double b, double c);
-    void infoMsg(std::string s) {cout << s << endl;};
+    static void infoMsg(std::string s) {cout << s << endl;};
     static std::map<toolNumber,millTool*> toolTable;
-    bool toolsBuilt;
-    void parseTable(QString toolTableFile);
-    millTool* toolFromTable(toolNumber n);
+//    void parseTable(QString toolTableFile);
+    //millTool* toolFromTable(toolNumber n);
 };
 
 

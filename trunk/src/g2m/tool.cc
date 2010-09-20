@@ -105,10 +105,50 @@ ballnoseTool::ballnoseTool(double diameter, double length) {
   BRepBuilderAPI_MakeWire wm(Ec,E1,E2,E3);
   if ( wm.IsDone() ) {
     profile = wm.Wire();
-    validProfile = true;
-    shape = BALLNOSE;
+    if ( profile.Closed() ) {
+      validProfile = true;
+      shape = BALLNOSE;
+    }
+  }
+  if (!validProfile) {
+    uio::infoMsg("Error, invalid ball tool profile len=" + uio::toString(len) + " dia=" + uio::toString(dia));
+  }
+}
+
+const TopoDS_Shape& cylindricalTool::get3d() {
+  #ifdef MULTITHREADED
+  QMutex get3dMutex;
+  QMutexLocker g3ml(&get3dMutex);  //locks mutex on create, unlocks on destroy
+  #endif //MULTITHREADED
+  if (!myShape.IsNull()) {
+    return myShape;
   } else {
-    uio::infoMsg("Error, invalid tool profile len=" + uio::toString(len) + " dia=" + uio::toString(dia));
+    double r = dia / 2.0;
+    gp_Ax2 axis(gp_Pnt(0,0,0),gp::DZ()); //for cylinder. 0,0,0 is the center of the bottom face
+    myShape = TopoDS::Solid(BRepPrimAPI_MakeCylinder(axis,r,len).Solid());
+  }
+  return myShape;
+}
+
+cylindricalTool::cylindricalTool(double diameter, double length) {
+  dia = diameter;
+  len = length;
+  double r = dia/2.0;
+  validProfile = false;
+  TopoDS_Edge E1 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,0), gp_Pnt(r,0,length));
+  TopoDS_Edge E2 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,0), gp_Pnt(-r,0,length));
+  TopoDS_Edge E3 = BRepBuilderAPI_MakeEdge(gp_Pnt(-r,0,length), gp_Pnt(r,0,length));
+  TopoDS_Edge E4 = BRepBuilderAPI_MakeEdge(gp_Pnt(r,0,0),gp_Pnt(-r,0,0));
+  BRepBuilderAPI_MakeWire wm(E4,E1,E2,E3);
+  if ( wm.IsDone() ) {
+    profile = wm.Wire();
+    if ( profile.Closed() ) {
+      validProfile = true;
+      shape = CYLINDRICAL;
+    }
+  }
+  if (!validProfile) {
+    uio::infoMsg("Error, invalid cylindrical tool profile len=" + uio::toString(len) + " dia=" + uio::toString(dia));
   }
 }
 

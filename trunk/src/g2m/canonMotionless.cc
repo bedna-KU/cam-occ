@@ -27,11 +27,11 @@
 canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):canonLine(canonL, prevStatus) {
   match = true;
   handled = true;
+  status.setMotionType(MOTIONLESS);
   status.setEndPose(status.getStartPose());
   solidErrors = false;
   unsolidErrors = false;
   myUnSolid = BRepBuilderAPI_MakeVertex(status.getStartPose().Location());
-  status.setMotionType(MOTIONLESS);
 
   //match canonical commands. the string MUST be the complete command name
   //NOTE: cmdMatch ONLY looks at the command part of the line, canonTokens[2].
@@ -79,14 +79,8 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (cmdMatch("SELECT_TOOL")) {
     //this only tells the machine to reposition the tool carousel, correct? if so it can be ignored
   } else if (cmdMatch("CHANGE_TOOL")) {
-    //for now, always assume it's ballnose. divide tool number by 16 to get diameter
-    //i.e. tool 1 = 1/16" ball nose endmill, tool 24 = 1 1/2" ball nose endmill
-    //TODO: implement tool table stuff
-    //toolNumber n = tok2i(3);
     status.setTool(tok2i(3));
-    handled = false;
-  } else if (cmdMatch("USE_TOOL_LENGTH_OFFSET")) {
-    handled = false;
+  } else if (cmdMatch("USE_TOOL_LENGTH_OFFSET")) {  //don't need to do anything, unless the toolholder/spindle is modeled
   } else if (cmdMatch("SET_ORIGIN_OFFSETS")) {
     if (cantok(3).compare("0.0000") == 0) {
       /*

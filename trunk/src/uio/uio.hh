@@ -77,8 +77,7 @@ class uio : public QObject {
     static TopTools_ListOfShape latestSelection;
     static bool debugParam;
     static QSettings settings;
-    //static std::string args[10];
-  //  static void setArgs();
+    static int dump;
 
   public:
     uio(QoccHarnessWindow* window);
@@ -99,7 +98,7 @@ class uio : public QObject {
     static std::string toString(gp_Pnt p);
     static std::string toString(gp_Dir d);
     static inline std::string toString(int x){std::ostringstream o; o<<x; return o.str();};
-    //adapted from stringify at http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1
+    //adapted from stringify at http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1 :
     static inline std::string toString(double x){std::ostringstream o; o<<x; return o.str();};
     static void checkShapeType(TopoDS_Shape Shape);
     static void hideGrid();
@@ -107,11 +106,13 @@ class uio : public QObject {
     static void axoView();
     static void sleep(uint n = 1,bool usrEv = false);
     static bool fileExists(QString f);
+    static inline bool fileExists(std::string f) {return fileExists(QString(f.c_str()));};
     static double mass(TopoDS_Shape s);
     static void grabSelection();
     static bool debuggingOn() {return debugParam;};
     static QSettings& conf() {return settings;};
-
+    static void tokenize(std::string str, std::vector<std::string>& tokenV, const std::string& delimiters = "(), ");
+    static int getDump() {return dump;};
 
   public slots:
     static void slotNeutralSelection();
