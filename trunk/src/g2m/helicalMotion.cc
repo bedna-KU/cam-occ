@@ -92,6 +92,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
     cout << "Skipped zero-length arc at N" << getN() << endl;
     status.setEndDir(status.getPrevEndDir());
     unsolidErrors = true;
+    //myUnSolid.Nullify()
   } else {
     //cout << myLine; //endl supplied by helix() or arc()
     if (fabs(hdist) > 0.000001) {

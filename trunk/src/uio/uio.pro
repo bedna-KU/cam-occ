@@ -31,10 +31,10 @@ DEPENDPATH += . ../qocc
 INCLUDEPATH += /opt/occ63/inc/ . ../qocc /usr/include/opencascade
 
 LIBS += -L/opt/occ63/lib/ -L../../bin\
--lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase -lTKSTEP \
--lTKService -lTKV3d -lTKernel -lTKIGES -lPTKernel -lTKSTL \
--lTKVRML -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema \
--lrt
+#-lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase -lTKSTEP \
+#-lTKService -lTKV3d -lTKernel -lTKIGES -lPTKernel -lTKSTL \
+#-lTKVRML -lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema \
+#-lrt
 
 # Input
 HEADERS += uio.hh dispShape.hh tst.hh log.hh nanotimer.hh

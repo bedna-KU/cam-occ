@@ -4,6 +4,6 @@ TEMPLATE = subdirs
 #go inbetween because of circular dependencies
 #qocc MUST be last because it depends on the other libs
 #uio must be first
-SUBDIRS += uio g2m qocc
+SUBDIRS += contrib uio g2m qocc
 
 CONFIG += ordered

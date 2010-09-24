@@ -34,8 +34,8 @@
 
 //canon.cc - implementation of canonLine
 
-canonLine::canonLine(std::string canonL, machineStatus prevStatus): myLine(canonL), status(prevStatus), myUnSolid() {
-  //myUnSolid.Nullify();
+canonLine::canonLine(std::string canonL, machineStatus prevStatus): myLine(canonL), status(prevStatus) /*, myUnSolid()*/ {
+  myUnSolid.Nullify();
   tokenize(); //splits myLine using delimiters
   solidErrors = false;
   unsolidErrors = false;

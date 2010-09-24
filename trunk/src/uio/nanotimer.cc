@@ -58,7 +58,7 @@ std::string nanotimer::humanreadable(double s) {
   int m=0;
   if (s > 60) {
     m = s/60;
-    s = s-(m*60);
+    s = s-(double)(m*60);
   }
   std::string out = uio::toString(m) + "m, " + uio::toString(s) + "s";
   return out;

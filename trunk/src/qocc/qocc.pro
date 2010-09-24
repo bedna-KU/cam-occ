@@ -40,7 +40,8 @@ LIBS += -L/opt/occ63/lib -L../../bin \
 -lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
 -lTKSTEP -lTKService -lTKV3d -lTKernel -lTKIGES \
 -lPTKernel -lTKSTL -lTKVRML -lTKTopAlgo -lTKBRep \
--lTKPShape -lTKShapeSchema -lOccUio -lg2model -lstdc++
+-lTKPShape -lTKShapeSchema -lOccUio -lg2model -lstdc++ \
+-lSalomeGeomShHeal
 
 SOURCES += main.cpp \
 qoccapplication.cpp \

@@ -48,7 +48,6 @@ class machineStatus: protected canon {
     double F,S;  //feedrate, spindle speed
     SPINDLE_STATUS spindleStat;
     coolantStruct coolant;
-    //static millTool* theTool;
     gp_Dir startDir, endDir, prevEndDir;
     bool first;
     static Bnd_Box traverseBbox,feedBbox;
@@ -58,7 +57,6 @@ class machineStatus: protected canon {
   public:
     machineStatus(machineStatus const& oldStatus);
     machineStatus(gp_Ax1 initial);
-    //void setPrevStatus(const machineStatus &oldStatus);
     void setMotionType(MOTION_TYPE m);
     void setEndPose(gp_Ax1 newPose);
     void setEndPose(gp_Pnt p);
@@ -67,7 +65,6 @@ class machineStatus: protected canon {
     void setSpindleSpeed(const double s) {S=s;};
     void setSpindleStatus(const SPINDLE_STATUS s) {spindleStat=s;};
     void setCoolant(coolantStruct c) {coolant = c;};
-    //void setTool(toolNumber n); //n is the tool to be used
     void setTool(toolNumber n); //n is the ID of the tool to be used.
     void setPlane(CANON_PLANE p) {plane = p;};
     double getFeed() const {return F;};
@@ -84,14 +81,11 @@ class machineStatus: protected canon {
     const gp_Dir getPrevEndDir() {return prevEndDir;};
     void clearAll(void);
     bool isFirst() {return first;};
-    //static std::set<int> & getToolTable() {return toolTable;};
     toolNumber getToolNum() {return myTool;};
-    //millTool* getTool() {return theTool;};
     void addArcToBbox(TopoDS_Edge e); //LINEAR_* is added automagically
     static pntPair getTraverseBounds();  //bnd_box for *_TRAVERSE
     static pntPair getFeedBounds(); //bnd_box for *_FEED
 
-    //const millTool& getTool() {return toolTable.find(myTool)->second;};
   private:
     machineStatus();  //prevent use of this ctor by making it private
 };

@@ -32,11 +32,11 @@ DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 INCLUDEPATH += /opt/occ63/inc/ ../uio/ /usr/include/opencascade
 
 LIBS += -L/opt/occ63/lib/ -L../../bin\
--lTKShHealing -lTKOffset -lTKBool -lTKSTEPBase \
--lTKSTEP -lTKService -lTKV3d -lTKernel \
--lTKIGES -lPTKernel -lTKSTL -lTKVRML \
--lTKTopAlgo -lTKBRep -lTKPShape -lTKShapeSchema \
--lOccUio -lstdc++
+-lTKShHealing -lTKOffset -lTKBool  -lTKService -lTKV3d -lTKernel \
+-lTKTopAlgo -lTKBRep -lOccUio
+#-lstdc++
+
+# -lTKSTEPBase -lTKSTEP -lTKIGES -lPTKernel -lTKSTL -lTKVRML -lTKPShape -lTKShapeSchema
 
 SOURCES += g2m.cc canon.cc canonLine.cc canonMotionless.cc canonMotion.cc \
 linearMotion.cc helicalMotion.cc tool.cc machineStatus.cc

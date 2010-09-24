@@ -92,7 +92,7 @@ void g2m::slotModelFromFile() {
     }
   }
   if (!fromCmdLine) {
-    file = QFileDialog::getOpenFileName ( uio::window(), "Choose input file", "./ngc-in", "*.ngc *.canon" );
+    file = QFileDialog::getOpenFileName ( uio::window(), "Choose input file", "./ngc-in", "All types (*.ngc *.canon);;G-Code (*.ngc);;Canon (*.canon)" );
   }
   fromCmdLine = false;  //so that if a second file is processed, this time within gui, the program won't use the one from the command line instead
 
@@ -170,7 +170,7 @@ bool g2m::chooseToolTable() {
   } else {
     loc =  "/usr/share/doc/emc2/examples/sample-configs/sim";
   }
-  tooltable = QFileDialog::getOpenFileName ( uio::window(), "Locate tool table", loc, "*.tbl" );
+  tooltable = QFileDialog::getOpenFileName ( uio::window(), "Locate tool table", loc, "EMC2 new-style tool table (*.tbl)" );
 
   if (!QFileInfo(tooltable).exists()){
     return false;
@@ -189,7 +189,7 @@ bool g2m::startInterp(QProcess &tc) {
   interp = uio::conf().value("rs274/binary","/usr/bin/rs274").toString();
   if (!QFileInfo(interp).isExecutable()) {
     uio::infoMsg("Tried to use " + interp.toStdString() + " as the interpreter, but it doesn't exist or isn't executable.");
-    interp = QFileDialog::getOpenFileName ( uio::window(), "Locate rs274 interpreter", "~", "rs274" );
+    interp = QFileDialog::getOpenFileName ( uio::window(), "Locate rs274 interpreter", "~", "EMC2 stand-alone interpreter (rs274)" );
     if (!QFileInfo(interp).isExecutable()) {
       return false;
     }
@@ -356,10 +356,19 @@ void g2m::makeSolid(uint index) {
     #ifdef MULTITHREADED
     #error subtraction cannot be performed in parallel
     #endif //MULTITHREADED
-    workpiece = ((canonMotion*)lineVector[index])->subtract(workpiece);
+    subtractWorkpiece(uint i);
   }
   //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
   lineVector[index]->setSolidDone();
   lineVector[index]->setDispMode(THIN_MOTION);
   //lineVector[index]->display();
+}
+
+void subtractWorkpiece() {
+  //FIXME: move subtraction from canonMotion to here
+  workpiece = ((canonMotion*)lineVector[index])->subtract(workpiece);
+  TCollection_AsciiString cmdFile = "...";
+  ShHealOper_ShapeProcess sp(cmdFile, "heal_subtraction");
+  sp.Perform(in,out);
+
 }

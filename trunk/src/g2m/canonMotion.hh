@@ -48,7 +48,8 @@ class canonMotion: protected canonLine {
     virtual MOTION_TYPE getMotionType() = 0;
     virtual const TopoDS_Shape& getShape() = 0;
     TopoDS_Shape toolAtStart();
-    TopoDS_Shape subtract(TopoDS_Shape & s);
+    //TopoDS_Shape subtract(TopoDS_Shape & s);
+    TopoDS_Shape & getShape() {return myShape;};
     bool isMotion() {return true;};
     bool isVolumeSuspect() {return sweepIsSuspect;};
     void setSolidMode(SOLID_MODE s) {solidMode = s;};

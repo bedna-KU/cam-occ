@@ -1,0 +1,4 @@
+This code is from SALOME's GEOMETRY module. Downloaded from svn repository at https://salomegeometry.svn.sourceforge.net/svnroot/salomegeometry/trunk/
+
+This code is licensed under LGPL 2.1. According to the terms of that license (see file LICENSE.lgpl.txt), it can be converted to GPLv2 or to a later version of the GPL. I have not done that, and don't currently see any need to.
+

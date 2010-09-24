@@ -97,10 +97,13 @@ void machineStatus::setEndPose(gp_Ax1 newPose) {
 
 void machineStatus::addToBounds() {
   if (first) {
+    infoMsg("not adding to bndbox");
     return;
-  } else if (motionType == NOT_DEFINED) {
+  }
+  if (motionType == NOT_DEFINED) {
     infoMsg("error, mtype not defined");
   } else if (motionType == STRAIGHT_FEED) {
+    infoMsg("adding to bndbox");
     feedBbox.Add(startPose.Location());
     feedBbox.Add(endPose.Location());
   } else if (motionType == TRAVERSE) {
@@ -110,7 +113,8 @@ void machineStatus::addToBounds() {
 }
 
 void machineStatus::setTool(toolNumber n) {
-  infoMsg("adding tool " + n + ".");
+  std::string s = "adding tool " + n;
+  infoMsg( s+".");
   myTool = n;
   canon::addTool(n);
 }
@@ -127,6 +131,7 @@ void machineStatus::setTool(uint n) {
 ///if not first, add an arc or helix to feedBbox. STRAIGHT_* is added in setEndPose()
 void machineStatus::addArcToBbox(TopoDS_Edge e) {
   if (!first) {
+    infoMsg("adding to bndbox");
     BRepBndLib::Add(e,feedBbox);
   }
 }
