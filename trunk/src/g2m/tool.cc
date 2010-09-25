@@ -94,6 +94,8 @@ const TopoDS_Shape& ballnoseTool::get3d() {
 ballnoseTool::ballnoseTool(double diameter, double length) {
   dia = diameter;
   len = length;
+  if (len < dia) len = dia;
+
   double r = dia/2.0;
   validProfile = false;
   Handle(Geom_TrimmedCurve) Tc;

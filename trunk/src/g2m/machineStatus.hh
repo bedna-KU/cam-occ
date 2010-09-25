@@ -76,9 +76,9 @@ class machineStatus: protected canon {
     CANON_PLANE getPlane() const {return plane;};
     void setEndDir(gp_Dir d) {endDir = d;};
     void setStartDir(gp_Dir d) {startDir = d;};
-    const gp_Dir getStartDir() {return startDir;};
-    const gp_Dir getEndDir() {return endDir;};
-    const gp_Dir getPrevEndDir() {return prevEndDir;};
+    const gp_Dir getStartDir() const {return startDir;};
+    const gp_Dir getEndDir() const {return endDir;};
+    const gp_Dir getPrevEndDir() const {return prevEndDir;};
     void clearAll(void);
     bool isFirst() {return first;};
     toolNumber getToolNum() {return myTool;};

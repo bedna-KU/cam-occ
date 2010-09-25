@@ -38,6 +38,8 @@
 #include "nanotimer.hh"
 #include "dispShape.hh"
 
+#include "../contrib/salome/ShHealOper_ShapeProcess.hxx"
+
 #include <Handle_Geom_TrimmedCurve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
@@ -52,6 +54,7 @@
 #include <TopoDS_Edge.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
+#include <BRepTools.hxx>
 
 //init static members
 std::vector<canonLine*> g2m::lineVector;
@@ -262,7 +265,7 @@ void g2m::interpret() {
 
 bool g2m::processCanonLine (std::string l) {
   if (debug){
-    infoMsg(l);
+    cout << l; //has its own newline
   }
   nanotimer nt;
   nt.start();
@@ -327,12 +330,14 @@ void g2m::createBlankWorkpiece() {
   std::string fs,ts,ws;
   gp_Pnt a,b;
 
+  //TODO: check the box dimensions
   f = machineStatus::getFeedBounds();
   t = machineStatus::getTraverseBounds();
   a = f.a; a.SetZ(a.Z()-0.5);
   b = f.b; b.SetZ(b.Z()+0.5);
+  if (b.Y()-a.Y() < .01) b.SetY(b.Y()+.01);
+  if (b.X()-a.X() < .01) b.SetX(b.X()+.01);
   minToolLength = b.Z() - f.a.Z();
-  workpiece = BRepPrimAPI_MakeBox(a,b).Solid();
 
   fs = "All motion at feedrate fits within a bounding box with corners ";
   fs += uio::toString(f.a) + " and " + uio::toString(f.b) + ".\n";
@@ -340,6 +345,14 @@ void g2m::createBlankWorkpiece() {
   ts += uio::toString(t.a) + " and " + uio::toString(t.b) + ".\n";
   ws = "Creating workpiece between " + uio::toString(a) + " and " + uio::toString(b) + ".\n";
   uio::infoMsg("Workpiece size", fs + ts + ws);
+
+  workpiece = BRepPrimAPI_MakeBox(a,b).Solid();
+
+  if ( (uio::debuggingOn()) && (uio::getDump() ==-1) ) {  //dump if DUMP=-1 in env
+    std::string name="output/Dump_workpiece.brep";
+    BRepTools::Write(workpiece,name.c_str());
+  }
+
 }
 
 void g2m::makeSolid(uint index) {
@@ -356,7 +369,11 @@ void g2m::makeSolid(uint index) {
     #ifdef MULTITHREADED
     #error subtraction cannot be performed in parallel
     #endif //MULTITHREADED
-    subtractWorkpiece(uint i);
+    if (!((canonMotion*)lineVector[index])->solErrors()) {
+      subtractWorkpiece(index);
+    } else if (uio::debuggingOn()) {
+      infoMsg("skipped cut due to error, line " + lineVector[index]->getLnum());
+    }
   }
   //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
   lineVector[index]->setSolidDone();
@@ -364,11 +381,40 @@ void g2m::makeSolid(uint index) {
   //lineVector[index]->display();
 }
 
-void subtractWorkpiece() {
-  //FIXME: move subtraction from canonMotion to here
-  workpiece = ((canonMotion*)lineVector[index])->subtract(workpiece);
-  TCollection_AsciiString cmdFile = "...";
-  ShHealOper_ShapeProcess sp(cmdFile, "heal_subtraction");
-  sp.Perform(in,out);
+void g2m::subtractWorkpiece(uint index) {
+  Standard_Real angTol = 0.00175;  //approx .1 degree
+  TCollection_AsciiString cmdFile = "resources/ShHealingFullSet";
+  //TCollection_AsciiString cmdFile = "resources/ShHealingSub";
+  ShHealOper_ShapeProcess sp(cmdFile, "exec");
+  TopoDS_Shape curr;
 
+  sp.Perform(((canonMotion*)lineVector[index])->getShape(),curr);
+  BRepAlgoAPI_Cut cut(workpiece,curr);
+  cut.Build();
+  if (!cut.IsDone()) {
+    infoMsg("pipe cut not done");
+  } else {
+    sp.Perform(cut.Shape(),workpiece);
+  }
+  if (!lineVector[index]->getStatus()->getPrevEndDir().IsParallel(lineVector[index]->getStatus()->getStartDir(),angTol)) {
+    //add tool if there is discontinuity
+    BRepAlgoAPI_Cut cut(workpiece,((canonMotion*)lineVector[index])->toolAtStart());
+    cut.Build();
+    if (!cut.IsDone()) {
+      infoMsg("tool cut not done");
+    } else {
+      sp.Perform(cut.Shape(),workpiece);
+    }
+
+  }
+
+  //dump for debugging
+  if (uio::debuggingOn()) {
+    int l = lineVector[index]->getLineNum();
+//    infoMsg("line " + uio::toString(l));
+    if (( uio::getDump() == l) || (uio::getDump() == (l+1)) || (uio::getDump() ==-1)) {  //dump before and after, dump all if -1
+      std::string name="output/Dump_"+ uio::toString(l) + "_result.brep";
+      BRepTools::Write(workpiece,name.c_str());
+    }
+  }
 }

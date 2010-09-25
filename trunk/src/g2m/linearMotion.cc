@@ -90,7 +90,7 @@ void linearMotion::assembleSolid() {
 
 //need to return RAPID for rapids...
 MOTION_TYPE linearMotion::getMotionType() {
-  static bool traverse = cmdMatch("STRAIGHT_TRAVERSE");
+  bool traverse = cmdMatch("STRAIGHT_TRAVERSE");
   if (traverse) {
     return TRAVERSE;
   } else {

@@ -118,32 +118,6 @@ void canonMotion::addToolMaybe() {
 
 }
 
-//subtract mySolid from s, return the result
-TopoDS_Shape canonMotion::subtract(TopoDS_Shape & s) {
-  if (uio::debuggingOn() && (uio::getDump() == getLineNum())) {
-    std::string name="Dump_"+uio::toString(uio::getDump())+"_pre_sub_solid.brep";
-    BRepTools::Write(s,name.c_str());
-  }
-  /*ShapeProcessAPI_ApplySequence and applying ShapeProcess.FixFaceSize with tollerance 0.5 and afterwards ShapeProcess.FixWireGaps*/
-  try {
-    s = BRepAlgoAPI_Cut(s,myShape);
-    if (uio::debuggingOn() && (uio::getDump() == getLineNum())) {
-      std::string name="Dump_"+uio::toString(uio::getDump())+"_subtract_solid.brep";
-      BRepTools::Write(s,name.c_str());
-    }
-  } catch (...) {
-    infoMsg("cut failed at " + myLine);
-  }
-  Standard_Real angTol = 0.0175;  //approx 1 degree
-  if (!status.getPrevEndDir().IsParallel(status.getStartDir(),angTol)) {
-    try {
-      s = BRepAlgoAPI_Cut(s,toolAtStart());
-    } catch (...) {
-      infoMsg("cut tool failed at " + myLine);
-    }
-  }
-  return s;
-}
 
 ///Returns 3d tool, shifted to startpoint
 TopoDS_Shape canonMotion::toolAtStart() {
@@ -330,17 +304,17 @@ void canonMotion::sweepSolid() {
     infoMsg("pipe not ready!");
   }
 
-  //dump the data?
-  if (uio::debuggingOn() && (uio::getDump() == getLineNum())) {
+  //dump the data? used env var DUMP. dumps all if DUMP=-1
+  if (uio::debuggingOn() && ((uio::getDump() == getLineNum()) || (uio::getDump() ==-1))) {
     //what to dump: endpoints and end Dirs, tool wire, sweep path, myShape
     std::string name,type;
-    name="Dump_"+uio::toString(uio::getDump())+"_outline.brep";
+    name="output/Dump_"+cantok(0)+"_outline.brep";
     BRepTools::Write(toa.Shape(),name.c_str());
 
-    name="Dump_"+uio::toString(uio::getDump())+"_spine_edge.brep";
+    name="output/Dump_"+cantok(0)+"_spine_edge.brep";
     BRepTools::Write(myUnSolid,name.c_str());
 
-    name="Dump_"+uio::toString(uio::getDump())+"_pipe_shell.brep";
+    name="output/Dump_"+cantok(0)+"_pipe_shell.brep";
     BRepTools::Write(myShape,name.c_str());
 
     MOTION_TYPE mt = getMotionType();

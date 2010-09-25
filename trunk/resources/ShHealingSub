@@ -1,0 +1,14 @@
+
+!--------------------------------------------------------------------
+! Heal the shape that is the result of BRepAlgoAPI_Cut
+! Per advice from Fotis Sioutis
+!--------------------------------------------------------------------
+! From the GEOM module of SALOME, salome-platform.org
+!--------------------------------------------------------------------
+! Parameters for Shape Healing
+!--------------------------------------------------------------------
+
+ShapeProcess.exec.op : FixFaceSize,FixWireGaps
+
+ShapeProcess.FixFaceSize.Tolerance  	: 0.5
+

@@ -47,6 +47,7 @@ class g2m: public QObject {
     void slotModelFromFile();
   protected:
     TopoDS_Shape workpiece;
+    void subtractWorkpiece(uint index);
     void createBlankWorkpiece();
     double minToolLength;
     bool fromCmdLine;

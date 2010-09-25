@@ -20,6 +20,7 @@
 #include "machineStatus.hh"
 #include <BRepBndLib.hxx>
 #include <Bnd_Box.hxx>
+#include "uio.hh"
 
 
 //millTool* machineStatus::theTool = 0;
@@ -64,6 +65,7 @@ void machineStatus::clearAll() {
   endDir = prevEndDir = gp_Dir(0,0,-1);
   spindleStat = OFF;
   myTool = -1;
+  motionType = NOT_DEFINED;
 }
 
 ///sets motion type, and checks whether this is the second (or later) motion command.
@@ -97,18 +99,21 @@ void machineStatus::setEndPose(gp_Ax1 newPose) {
 
 void machineStatus::addToBounds() {
   if (first) {
-    infoMsg("not adding to bndbox");
+    if (uio::debuggingOn()) infoMsg("not adding to bndbox");
     return;
   }
   if (motionType == NOT_DEFINED) {
-    infoMsg("error, mtype not defined");
+    if (uio::debuggingOn()) infoMsg("error, mtype not defined");
   } else if (motionType == STRAIGHT_FEED) {
-    infoMsg("adding to bndbox");
+    if (uio::debuggingOn()) infoMsg("adding to feed bndbox");
     feedBbox.Add(startPose.Location());
     feedBbox.Add(endPose.Location());
   } else if (motionType == TRAVERSE) {
+    if (uio::debuggingOn()) infoMsg("adding to traverse bndbox");
     traverseBbox.Add(startPose.Location());
     traverseBbox.Add(endPose.Location());
+  } else {
+    if (uio::debuggingOn()) infoMsg("warning, motion type = "+uio::toString(motionType));
   }
 }
 
