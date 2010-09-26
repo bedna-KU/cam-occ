@@ -49,40 +49,49 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#ifndef CANON_HH</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define CANON_HH</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#include &lt;iostream&gt;</span>
+<a name="l00023"></a><a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">00023</a> <span class="keyword">typedef</span> <span class="keywordtype">double</span> degrees; <span class="comment">//angle in degrees</span>
+<a name="l00024"></a><a class="code" href="canon_8hh.html#a87f92cc0ab0a9f7c81e6f72e92992390">00024</a> <span class="keyword">typedef</span> <span class="keywordtype">int</span> toolNumber;
 <a name="l00025"></a>00025 
-<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;cmath&gt;</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include &lt;limits.h&gt;</span>
-<a name="l00028"></a>00028 
-<a name="l00029"></a>00029 <span class="preprocessor">#include &lt;gp_Pnt.hxx&gt;</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include &lt;gp_Dir.hxx&gt;</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include &lt;gp_Ax1.hxx&gt;</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span>
+<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;QString&gt;</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include &lt;iostream&gt;</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include &lt;map&gt;</span>
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="preprocessor">#include &lt;cmath&gt;</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include &lt;limits.h&gt;</span>
 <a name="l00033"></a>00033 
-<a name="l00034"></a><a class="code" href="canon_8hh.html#a610755e6f4b0c8c572927bd804bb66dd">00034</a> <span class="keyword">typedef</span> <span class="keywordtype">double</span> degrees; <span class="comment">//angle in degrees</span>
-<a name="l00035"></a><a class="code" href="canon_8hh.html#a87f92cc0ab0a9f7c81e6f72e92992390">00035</a> <span class="keyword">typedef</span> <span class="keywordtype">int</span> toolNumber;
-<a name="l00036"></a>00036 
-<a name="l00043"></a><a class="code" href="classcanon.html">00043</a> <span class="keyword">class </span><a class="code" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class.">canon</a> {
-<a name="l00044"></a>00044   <span class="keyword">public</span>:
-<a name="l00045"></a>00045     <a class="code" href="classcanon.html#a4e1218a68ee7ce17911472231ebbd664">canon</a>();
-<a name="l00046"></a>00046   <span class="keyword">protected</span>:
-<a name="l00047"></a>00047     <span class="keyword">static</span> <span class="keyword">const</span> gp_Dir <a class="code" href="classcanon.html#abbb13f000985fca6e22145f09ac6c784">abc2dir</a>(<span class="keywordtype">double</span> a, <span class="keywordtype">double</span> b, <span class="keywordtype">double</span> c);
-<a name="l00048"></a><a class="code" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448">00048</a>     <span class="keywordtype">void</span> <a class="code" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448">infoMsg</a>(std::string s) {cout &lt;&lt; s &lt;&lt; endl;};
-<a name="l00049"></a>00049 
-<a name="l00050"></a>00050 
-<a name="l00051"></a>00051 };
-<a name="l00052"></a>00052 
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <span class="preprocessor">#endif //CANON_HH</span>
-<a name="l00055"></a>00055 <span class="preprocessor"></span>
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057 
-<a name="l00058"></a>00058  <span class="comment">//create tool obj</span>
-<a name="l00059"></a>00059 <span class="comment">// toolTable[t] = tool(t);</span>
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061 <span class="comment">//access tool obj</span>
-<a name="l00063"></a>00063 <span class="comment"></span><span class="comment">// status.myTool = toolTable[t].getShape();</span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include &lt;gp_Pnt.hxx&gt;</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#include &lt;gp_Dir.hxx&gt;</span>
+<a name="l00036"></a>00036 <span class="preprocessor">#include &lt;gp_Ax1.hxx&gt;</span>
+<a name="l00037"></a>00037 <span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span>
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039 <span class="preprocessor">#include &quot;<a class="code" href="tool_8hh.html">tool.hh</a>&quot;</span>
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="keyword">class </span><a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a>;
+<a name="l00042"></a>00042 
+<a name="l00049"></a><a class="code" href="classcanon.html">00049</a> <span class="keyword">class </span><a class="code" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class.">canon</a> {
+<a name="l00050"></a>00050   <span class="keyword">public</span>:
+<a name="l00051"></a>00051     <a class="code" href="classcanon.html#a4e1218a68ee7ce17911472231ebbd664">canon</a>();
+<a name="l00052"></a>00052     <span class="keywordtype">void</span> <a class="code" href="classcanon.html#a96043bd8f9aaf3de46f01bc7f7f51835">addTool</a>(<a class="code" href="canon_8hh.html#a87f92cc0ab0a9f7c81e6f72e92992390">toolNumber</a> n);
+<a name="l00053"></a>00053     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcanon.html#ac1757537c1d1e1151d412e04ba7f4ada">buildTools</a>(std::string toolTableFile, <span class="keywordtype">double</span> toolLen);
+<a name="l00054"></a>00054     <span class="keyword">static</span> <a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a> * <a class="code" href="classcanon.html#a9b4190c1925554815e1518fc5fd002f4">getTool</a>(<a class="code" href="canon_8hh.html#a87f92cc0ab0a9f7c81e6f72e92992390">toolNumber</a> n);
+<a name="l00055"></a>00055   <span class="keyword">protected</span>:
+<a name="l00056"></a><a class="code" href="classcanon.html#a8f43ba829c8ef60327030a9e8da912b9">00056</a>     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcanon.html#a8f43ba829c8ef60327030a9e8da912b9">toolsBuilt</a>;
+<a name="l00057"></a><a class="code" href="classcanon.html#a5c85483372c020c1e6f281208176af59">00057</a>     <span class="keyword">static</span> std::string <a class="code" href="classcanon.html#a5c85483372c020c1e6f281208176af59">ttname</a>;
+<a name="l00058"></a><a class="code" href="classcanon.html#abd2c8f21fcae1c04538c6db373f511eb">00058</a>     <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classcanon.html#abd2c8f21fcae1c04538c6db373f511eb">toolLength</a>;
+<a name="l00059"></a>00059     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcanon.html#ab3191bbde574d5b89fa51b8b5e6f8d1a">checkRange</a>(std::string tline, std::string item,<span class="keywordtype">size_t</span> c=std::string::npos) ;
+<a name="l00060"></a>00060     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcanon.html#a3c0fe594af76727c9d7fbff964df58e5">checkTTskips</a>();
+<a name="l00061"></a>00061     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcanon.html#ace6faa517e3c5a70ff586a6d15e70d55">readTTfile</a>();
+<a name="l00062"></a>00062     <span class="keyword">static</span> <a class="code" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o...">millTool</a>* <a class="code" href="classcanon.html#a59534e932c02c90e3e0beab12cd8602c" title="create a tool. for now, only supports cylindricalTool and ballnoseTool">createTool</a>(<span class="keywordtype">double</span> diam,std::string comment);
+<a name="l00063"></a>00063     <span class="keyword">static</span> <span class="keyword">const</span> gp_Dir <a class="code" href="classcanon.html#abbb13f000985fca6e22145f09ac6c784">abc2dir</a>(<span class="keywordtype">double</span> a, <span class="keywordtype">double</span> b, <span class="keywordtype">double</span> c);
+<a name="l00064"></a><a class="code" href="classcanon.html#a40a931fad4b5bd72c112e0906f4e438b">00064</a>     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcanon.html#ab32f15149cca41438a2c22f52b8c5e22">infoMsg</a>(std::string s) {cout &lt;&lt; s &lt;&lt; endl;};
+<a name="l00065"></a>00065     <span class="keyword">static</span> std::map&lt;toolNumber,millTool*&gt; <a class="code" href="classcanon.html#a40a931fad4b5bd72c112e0906f4e438b">toolTable</a>;
+<a name="l00066"></a>00066 <span class="comment">//    void parseTable(QString toolTableFile);</span>
+<a name="l00067"></a>00067     <span class="comment">//millTool* toolFromTable(toolNumber n);</span>
+<a name="l00068"></a>00068 };
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 <span class="preprocessor">#endif //CANON_HH</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

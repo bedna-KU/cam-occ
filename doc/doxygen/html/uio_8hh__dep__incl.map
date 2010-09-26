@@ -1,12 +1,19 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="5,86,171,117"/>
-<area shape="rect" id="node5" href="$canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="195,86,384,117"/>
-<area shape="rect" id="node7" href="$g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="408,86,523,117"/>
-<area shape="rect" id="node9" href="$helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="547,86,712,117"/>
-<area shape="rect" id="node11" href="$linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="736,86,896,117"/>
-<area shape="rect" id="node13" href="$tool_8cc.html" title="src/g2m/tool.cc" alt="" coords="920,86,1032,117"/>
-<area shape="rect" id="node15" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="1056,86,1165,117"/>
-<area shape="rect" id="node17" href="$disp_shape_8cc.html" title="src/uio/dispShape.cc" alt="" coords="1189,86,1333,117"/>
-<area shape="rect" id="node19" href="$tst_8cc.html" title="src/uio/tst.cc" alt="" coords="1357,86,1456,117"/>
-<area shape="rect" id="node21" href="$uio_8cc.html" title="src/uio/uio.cc" alt="" coords="1480,86,1579,117"/>
+<area shape="rect" id="node3" href="$canon_8cc.html" title="src/g2m/canon.cc" alt="" coords="5,86,131,117"/>
+<area shape="rect" id="node5" href="$canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="155,86,304,117"/>
+<area shape="rect" id="node7" href="$canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="328,86,493,117"/>
+<area shape="rect" id="node9" href="$canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="517,86,707,117"/>
+<area shape="rect" id="node11" href="$g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="781,86,896,117"/>
+<area shape="rect" id="node13" href="$g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="649,166,764,197"/>
+<area shape="rect" id="node21" href="$helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="920,86,1085,117"/>
+<area shape="rect" id="node23" href="$linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="1109,86,1269,117"/>
+<area shape="rect" id="node25" href="$machine_status_8cc.html" title="src/g2m/machineStatus.cc" alt="" coords="1293,86,1472,117"/>
+<area shape="rect" id="node27" href="$tool_8cc.html" title="src/g2m/tool.cc" alt="" coords="1496,86,1608,117"/>
+<area shape="rect" id="node29" href="$lnk_8cc.html" title="src/qocc/lnk.cc" alt="" coords="1632,86,1741,117"/>
+<area shape="rect" id="node31" href="$disp_shape_8cc.html" title="src/uio/dispShape.cc" alt="" coords="1765,86,1909,117"/>
+<area shape="rect" id="node33" href="$nanotimer_8cc.html" title="src/uio/nanotimer.cc" alt="" coords="1933,86,2072,117"/>
+<area shape="rect" id="node35" href="$tst_8cc.html" title="src/uio/tst.cc" alt="" coords="2096,86,2195,117"/>
+<area shape="rect" id="node37" href="$uio_8cc.html" title="src/uio/uio.cc" alt="" coords="2219,86,2317,117"/>
+<area shape="rect" id="node15" href="$g2m__threaded_8hh.html" title="src/g2m/g2m_threaded.hh" alt="" coords="788,166,961,197"/>
+<area shape="rect" id="node17" href="$g2m__threaded_8cc.html" title="src/g2m/g2m_threaded.cc" alt="" coords="849,246,1023,277"/>
 </map>

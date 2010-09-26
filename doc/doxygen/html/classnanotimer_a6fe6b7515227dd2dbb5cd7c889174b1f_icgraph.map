@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classg2m__threaded.html#ae16080366f4b858b6b1b13d1f924d4bb" title="draw shapes and update statusbar/ui until threads are almost done, then join and display the rest of ..." alt="" coords="216,5,411,35"/>
+<area shape="rect" id="node5" href="$classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="460,55,596,86"/>
+<area shape="rect" id="node7" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="647,133,807,163"/>
+<area shape="rect" id="node11" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="232,159,395,190"/>
+<area shape="rect" id="node9" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="856,133,936,163"/>
+<area shape="rect" id="node13" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="477,210,579,241"/>
+</map>

@@ -1,5 +1,12 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="355,5,435,35"/>
-<area shape="rect" id="node5" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="145,30,305,61"/>
-<area shape="rect" id="node8" href="$classuio.html#ac024098c497a57f08cfa87c1b65cdd5a" title="uio::slotSaveSelection" alt="" coords="149,83,301,114"/>
+<area shape="rect" id="node3" href="$classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb" title="ask for a tool table, even if one is configured &#45; user may wish to change it" alt="" coords="144,198,296,228"/>
+<area shape="rect" id="node5" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="740,194,900,224"/>
+<area shape="rect" id="node7" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="949,324,1029,355"/>
+<area shape="rect" id="node9" href="$classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7" title="g2m::startInterp" alt="" coords="384,246,499,276"/>
+<area shape="rect" id="node11" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="588,272,689,303"/>
+<area shape="rect" id="node14" href="$classg2m__threaded.html#ae16080366f4b858b6b1b13d1f924d4bb" title="draw shapes and update statusbar/ui until threads are almost done, then join and display the rest of ..." alt="" coords="344,142,539,172"/>
+<area shape="rect" id="node16" href="$classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="373,88,509,119"/>
+<area shape="rect" id="node21" href="$classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="Sleep 1s and process events." alt="" coords="376,299,507,330"/>
+<area shape="rect" id="node25" href="$classuio.html#ac024098c497a57f08cfa87c1b65cdd5a" title="uio::slotSaveSelection" alt="" coords="144,403,296,434"/>
+<area shape="rect" id="node28" href="$classg2m.html#a9a882e0d5b5ecece6070d74cd56291c2" title="g2m::statusBarUp" alt="" coords="157,94,283,124"/>
 </map>

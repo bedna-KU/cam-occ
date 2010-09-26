@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else." alt="" coords="5,31,48,62"/>
+<area shape="rect" id="node3" href="$classlathe_tool.html" title="A 2d tool for the lathe. This class is incomplete. Furthermore, at this time g2m only supports millin..." alt="" coords="96,5,171,35"/>
+<area shape="rect" id="node5" href="$classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o..." alt="" coords="100,58,167,89"/>
+<area shape="rect" id="node7" href="$classapt_tool.html" title="This class is for the generic APT&#45;style milling tool. FIXME This class is not complete!" alt="" coords="239,5,303,35"/>
+<area shape="rect" id="node9" href="$classballnose_tool.html" title="This class is for the ballnose tool. It was created first because the ballnose tool is easy..." alt="" coords="224,58,317,89"/>
+<area shape="rect" id="node11" href="$classcylindrical_tool.html" title="This class is for the standard endmill." alt="" coords="219,111,323,142"/>
+</map>

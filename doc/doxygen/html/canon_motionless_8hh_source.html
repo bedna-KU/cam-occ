@@ -59,17 +59,18 @@
 <a name="l00030"></a>00030 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
 <a name="l00031"></a>00031 
 <a name="l00038"></a><a class="code" href="classcanon_motionless.html">00038</a> <span class="keyword">class </span><a class="code" href="classcanon_motionless.html" title="A canonical command that (generally) does not cause or alter axis motion This class is for anything o...">canonMotionless</a>: <span class="keyword">protected</span> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> {
-<a name="l00039"></a>00039   <span class="keyword">friend</span> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> * <a class="code" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o...">canonLine::canonLineFactory</a> (std::string l, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> s);
+<a name="l00039"></a>00039   <span class="keyword">friend</span> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> * <a class="code" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">canonLine::canonLineFactory</a> (std::string l, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> s);
 <a name="l00040"></a>00040   <span class="keyword">public</span>:
 <a name="l00041"></a>00041     <a class="code" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e">canonMotionless</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> prevStatus);
-<a name="l00042"></a><a class="code" href="classcanon_motionless.html#a8622b3d2e6876ef23f98b50c3194236e">00042</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motionless.html#a8622b3d2e6876ef23f98b50c3194236e">isThisMotion</a>() {<span class="keywordflow">return</span> <span class="keyword">false</span>;};
-<a name="l00043"></a><a class="code" href="classcanon_motionless.html#a60dfd8a126dbd95f9e6889c4edaa41e2">00043</a>     <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classcanon_motionless.html#acd7aea1c06d78731f5b9191f855f4ab0">getShape</a>() {<span class="keywordflow">return</span> <a class="code" href="classcanon_line.html#aecb5e697d95a7c5b99c57b1e16616830">canonLine::getUnSolid</a>();};
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045   <span class="keyword">protected</span>:
-<a name="l00046"></a>00046     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motionless.html#a60dfd8a126dbd95f9e6889c4edaa41e2">match</a>, <a class="code" href="classcanon_motionless.html#ad20c09bbc75cef29b4091ecdadb861e7">handled</a>;
-<a name="l00047"></a>00047 };
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="preprocessor">#endif //CANONMOTIONLESS_HH</span>
+<a name="l00042"></a><a class="code" href="classcanon_motionless.html#ad9f2b8c41414b9ccaeb84f929df88ebf">00042</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motionless.html#ad9f2b8c41414b9ccaeb84f929df88ebf">isMotion</a>() {<span class="keywordflow">return</span> <span class="keyword">false</span>;};
+<a name="l00043"></a><a class="code" href="classcanon_motionless.html#aa59c498b15f94df91c59108e2a61168b">00043</a>     <a class="code" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> <a class="code" href="classcanon_motionless.html#aa59c498b15f94df91c59108e2a61168b">getMotionType</a>() {<span class="keywordflow">return</span> MOTIONLESS;};
+<a name="l00044"></a><a class="code" href="classcanon_motionless.html#acd7aea1c06d78731f5b9191f855f4ab0">00044</a>     <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classcanon_motionless.html#acd7aea1c06d78731f5b9191f855f4ab0">getShape</a>() {<span class="keywordflow">return</span> <a class="code" href="classcanon_line.html#aecb5e697d95a7c5b99c57b1e16616830">canonLine::getUnSolid</a>();};
+<a name="l00045"></a>00045     <span class="keywordtype">void</span> <a class="code" href="classcanon_motionless.html#aa0047c380d35c4752ec6a5fbf56be255">display</a>();
+<a name="l00046"></a>00046   <span class="keyword">protected</span>:
+<a name="l00047"></a><a class="code" href="classcanon_motionless.html#a60dfd8a126dbd95f9e6889c4edaa41e2">00047</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motionless.html#a60dfd8a126dbd95f9e6889c4edaa41e2">match</a>, <a class="code" href="classcanon_motionless.html#ad20c09bbc75cef29b4091ecdadb861e7">handled</a>;
+<a name="l00048"></a>00048 };
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 <span class="preprocessor">#endif //CANONMOTIONLESS_HH</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

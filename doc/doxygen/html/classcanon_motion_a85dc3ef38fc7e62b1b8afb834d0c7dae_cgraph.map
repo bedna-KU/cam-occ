@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="221,5,413,35"/>
+<area shape="rect" id="node5" href="$classcanon.html#a9b4190c1925554815e1518fc5fd002f4" title="canon::getTool" alt="" coords="264,58,371,89"/>
+<area shape="rect" id="node7" href="$classmachine_status.html#ab68101b4a12c256721d3cd47190e3383" title="machineStatus::getToolNum" alt="" coords="224,111,411,142"/>
+</map>

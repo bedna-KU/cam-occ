@@ -37,20 +37,21 @@
 <code>#include &lt;limits.h&gt;</code><br/>
 <code>#include &lt;TopoDS_Edge.hxx&gt;</code><br/>
 <code>#include &lt;TopoDS_Shape.hxx&gt;</code><br/>
+<code>#include &quot;<a class="el" href="machine_status_8hh_source.html">machineStatus.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="canon_line_8hh_source.html">canonLine.hh</a>&quot;</code><br/>
 <div class="dynheader">
 Include dependency graph for canonMotion.hh:</div>
 <div class="dyncontent">
 <div class="center"><img src="canon_motion_8hh__incl.png" border="0" usemap="#src_2g2m_2canon_motion_8hh" alt=""/></div>
 <map name="src_2g2m_2canon_motion_8hh" id="src_2g2m_2canon_motion_8hh">
-<area shape="rect" id="node15" href="canon_line_8hh.html" title="canonLine.hh" alt="" coords="540,86,639,117"/><area shape="rect" id="node21" href="canon_8hh.html" title="canon.hh" alt="" coords="195,326,269,357"/><area shape="rect" id="node35" href="machine_status_8hh.html" title="machineStatus.hh" alt="" coords="427,166,552,197"/><area shape="rect" id="node37" href="tool_8hh.html" title="tool.hh" alt="" coords="508,246,569,277"/><area shape="rect" id="node51" href="disp_shape_8hh.html" title="dispShape.hh" alt="" coords="1121,326,1223,357"/></map>
+<area shape="rect" id="node15" href="machine_status_8hh.html" title="machineStatus.hh" alt="" coords="310,166,435,197"/><area shape="rect" id="node53" href="canon_line_8hh.html" title="canonLine.hh" alt="" coords="774,86,873,117"/><area shape="rect" id="node25" href="canon_8hh.html" title="canon.hh" alt="" coords="650,246,725,277"/><area shape="rect" id="node41" href="tool_8hh.html" title="tool.hh" alt="" coords="943,326,1005,357"/></map>
 </div>
 <div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="canon_motion_8hh__dep__incl.png" border="0" usemap="#src_2g2m_2canon_motion_8hhdep" alt=""/></div>
 <map name="src_2g2m_2canon_motion_8hhdep" id="src_2g2m_2canon_motion_8hhdep">
-<area shape="rect" id="node3" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="195,166,344,197"/><area shape="rect" id="node5" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="292,86,452,117"/><area shape="rect" id="node8" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="381,166,541,197"/><area shape="rect" id="node10" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="52,86,217,117"/><area shape="rect" id="node15" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="527,86,692,117"/><area shape="rect" id="node13" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="5,166,171,197"/></map>
+<area shape="rect" id="node3" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="195,166,344,197"/><area shape="rect" id="node5" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="292,86,452,117"/><area shape="rect" id="node8" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="381,166,541,197"/><area shape="rect" id="node10" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="52,86,217,117"/><area shape="rect" id="node15" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="527,86,692,117"/><area shape="rect" id="node17" href="g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="716,86,831,117"/><area shape="rect" id="node13" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="5,166,171,197"/></map>
 </div>
 
 <p><a href="canon_motion_8hh_source.html">Go to the source code of this file.</a></p>
@@ -58,31 +59,31 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_motion.html">canonMotion</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands.">canonMotion</a> is an ABC. Its children should only be instantiated via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o...">canonLine::canonLineFactory()</a>, which creates <a class="el" href="classlinear_motion.html" title="For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits from canonMotion...">linearMotion</a> objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and <a class="el" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs...">helicalMotion</a> objects for ARC_FEED commands.  <a href="classcanon_motion.html#_details">More...</a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. <a class="el" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands.">canonMotion</a> is an ABC. Its children should only be instantiated via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">canonLine::canonLineFactory()</a>, which creates <a class="el" href="classlinear_motion.html" title="For the canonical commands STRAIGHT_FEED and STRAIGHT_TRAVERSE. This class inherits from canonMotion...">linearMotion</a> objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and <a class="el" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs...">helicalMotion</a> objects for ARC_FEED commands.  <a href="classcanon_motion.html#_details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> { <a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379a56180eacca7bcf8905da648db2ca73a0">HELICAL</a>, 
-<a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379adc101ebf31c49c2d4b80b7c6f59f22cb">LINEAR</a>, 
-<a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4">TRAVERSE</a>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580b">SOLID_MODE</a> { <a class="el" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580ba20d5058ef805331f6932d3ef24fd5237">SWEPT</a>, 
+<a class="el" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580ba4ed30f79e62fd681ecd1e71004be644b">BRUTEFORCE</a>, 
+<a class="el" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580baaf94798c67dcd2f8a0e13f7bf4c7f974">ASSEMBLED</a>
  }</td></tr>
 </table>
 <hr/><h2>Enumeration Type Documentation</h2>
-<a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379"></a><!-- doxytag: member="canonMotion.hh::MOTION_TYPE" ref="abd6d177d63e98aa1b4ed4b8329e2a379" args="" -->
+<a class="anchor" id="a9f0ccb0a1374a53743ff08fd42aa580b"></a><!-- doxytag: member="canonMotion.hh::SOLID_MODE" ref="a9f0ccb0a1374a53743ff08fd42aa580b" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a></td>
+          <td class="memname">enum <a class="el" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580b">SOLID_MODE</a></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379a56180eacca7bcf8905da648db2ca73a0"></a><!-- doxytag: member="HELICAL" ref="abd6d177d63e98aa1b4ed4b8329e2a379a56180eacca7bcf8905da648db2ca73a0" args="" -->HELICAL</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a9f0ccb0a1374a53743ff08fd42aa580ba20d5058ef805331f6932d3ef24fd5237"></a><!-- doxytag: member="SWEPT" ref="a9f0ccb0a1374a53743ff08fd42aa580ba20d5058ef805331f6932d3ef24fd5237" args="" -->SWEPT</em>&nbsp;</td><td>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379adc101ebf31c49c2d4b80b7c6f59f22cb"></a><!-- doxytag: member="LINEAR" ref="abd6d177d63e98aa1b4ed4b8329e2a379adc101ebf31c49c2d4b80b7c6f59f22cb" args="" -->LINEAR</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a9f0ccb0a1374a53743ff08fd42aa580ba4ed30f79e62fd681ecd1e71004be644b"></a><!-- doxytag: member="BRUTEFORCE" ref="a9f0ccb0a1374a53743ff08fd42aa580ba4ed30f79e62fd681ecd1e71004be644b" args="" -->BRUTEFORCE</em>&nbsp;</td><td>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4"></a><!-- doxytag: member="TRAVERSE" ref="abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4" args="" -->TRAVERSE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="a9f0ccb0a1374a53743ff08fd42aa580baaf94798c67dcd2f8a0e13f7bf4c7f974"></a><!-- doxytag: member="ASSEMBLED" ref="a9f0ccb0a1374a53743ff08fd42aa580baaf94798c67dcd2f8a0e13f7bf4c7f974" args="" -->ASSEMBLED</em>&nbsp;</td><td>
 </td></tr>
 </table>
 </dd>

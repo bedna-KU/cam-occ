@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$class_sh_heal_oper___tool.html" title="Base class for geometric healing operations." alt="" coords="5,165,128,195"/>
+<area shape="rect" id="node3" href="$class_sh_heal_oper___change_orientation.html" title="ShHealOper_ChangeOrientation" alt="" coords="185,5,391,35"/>
+<area shape="rect" id="node5" href="$class_sh_heal_oper___close_contour.html" title="Closes contours." alt="" coords="200,58,376,89"/>
+<area shape="rect" id="node7" href="$class_sh_heal_oper___edge_divide.html" title="Intended for spitting edge in accordance to the specified mode and value." alt="" coords="205,111,371,142"/>
+<area shape="rect" id="node9" href="$class_sh_heal_oper___fill_holes.html" title="Intended for filling holes." alt="" coords="213,165,363,195"/>
+<area shape="rect" id="node11" href="$class_sh_heal_oper___remove_face.html" title="Class intended to removing faces from shape." alt="" coords="200,218,376,249"/>
+<area shape="rect" id="node13" href="$class_sh_heal_oper___remove_internal_wires.html" title="Intended for removing internal wires from faces." alt="" coords="177,271,399,302"/>
+<area shape="rect" id="node15" href="$class_sh_heal_oper___sewing.html" title="Intended for sewing of shapes." alt="" coords="217,325,359,355"/>
+</map>

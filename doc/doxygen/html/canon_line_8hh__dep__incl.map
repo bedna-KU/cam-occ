@@ -1,13 +1,15 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="227,246,376,277"/>
-<area shape="rect" id="node5" href="$canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="24,86,214,117"/>
-<area shape="rect" id="node10" href="$canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="488,86,654,117"/>
-<area shape="rect" id="node16" href="$linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="428,246,588,277"/>
-<area shape="rect" id="node18" href="$helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="574,166,739,197"/>
-<area shape="rect" id="node23" href="$canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="763,166,928,197"/>
-<area shape="rect" id="node28" href="$g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="1054,86,1168,117"/>
-<area shape="rect" id="node30" href="$g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="1028,166,1143,197"/>
-<area shape="rect" id="node8" href="$canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="24,166,214,197"/>
-<area shape="rect" id="node13" href="$linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="339,166,499,197"/>
-<area shape="rect" id="node21" href="$helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="612,246,778,277"/>
+<area shape="rect" id="node3" href="$canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="423,246,572,277"/>
+<area shape="rect" id="node5" href="$canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="137,86,327,117"/>
+<area shape="rect" id="node10" href="$canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="675,86,840,117"/>
+<area shape="rect" id="node16" href="$linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="677,246,837,277"/>
+<area shape="rect" id="node18" href="$helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="269,166,435,197"/>
+<area shape="rect" id="node23" href="$canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="795,166,960,197"/>
+<area shape="rect" id="node25" href="$g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="1035,166,1149,197"/>
+<area shape="rect" id="node30" href="$g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="1117,86,1232,117"/>
+<area shape="rect" id="node8" href="$canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="5,166,195,197"/>
+<area shape="rect" id="node13" href="$linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="560,166,720,197"/>
+<area shape="rect" id="node21" href="$helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="233,246,399,277"/>
+<area shape="rect" id="node33" href="$g2m__threaded_8hh.html" title="src/g2m/g2m_threaded.hh" alt="" coords="1224,166,1397,197"/>
+<area shape="rect" id="node35" href="$g2m__threaded_8cc.html" title="src/g2m/g2m_threaded.cc" alt="" coords="1161,246,1335,277"/>
 </map>

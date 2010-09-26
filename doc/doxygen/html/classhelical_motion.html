@@ -44,7 +44,7 @@ Collaboration diagram for helicalMotion:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhelical_motion__coll__graph.png" border="0" usemap="#helical_motion_coll__map" alt="Collaboration graph"/></div>
 <map name="helical_motion_coll__map" id="helical_motion_coll__map">
-<area shape="rect" id="node2" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands." alt="" coords="16,369,112,399"/><area shape="rect" id="node4" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c..." alt="" coords="24,286,104,317"/><area shape="rect" id="node6" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,89,61,119"/><area shape="rect" id="node8" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information stored include..." alt="" coords="68,187,177,218"/><area shape="rect" id="node11" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o..." alt="" coords="87,89,153,119"/><area shape="rect" id="node13" href="classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else." alt="" coords="99,6,141,37"/><area shape="rect" id="node15" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="177,89,276,119"/></map>
+<area shape="rect" id="node2" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands." alt="" coords="19,286,115,317"/><area shape="rect" id="node4" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c..." alt="" coords="27,203,107,234"/><area shape="rect" id="node6" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,6,61,37"/><area shape="rect" id="node8" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information stored include..." alt="" coords="71,105,180,135"/><area shape="rect" id="node11" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="85,6,184,37"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classhelical_motion-members.html">List of all members.</a></p>
@@ -52,8 +52,10 @@ Collaboration diagram for helicalMotion:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8">helicalMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">getMotionType</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">getMotionType</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a2783c813ce07630df059ad7ccf1c0934">getShape</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a841571048dde2d0a1fbdd77b086d217b">assembleSolid</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">build solid from faces FIXME INCOMPLETE  <a href="#a841571048dde2d0a1fbdd77b086d217b"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcanon_line.html">canonLine</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhelical_motion.html#a01cc53acf58a7b495a38e619a9523c33">canonLine::canonLineFactory</a> (std::string l, <a class="el" href="classmachine_status.html">machineStatus</a> s)</td></tr>
@@ -86,24 +88,60 @@ Friends</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p><p>Shuffle variables around based on the active plane.</p>
+<p>Create a helix if the third-axis delta is &gt; .000001.</p>
+<p>Otherwise, create an arc.</p>
+<p>Find vector direction at start and end of the edge, and save them in status </p>
+</p>
+
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhelical_motion_a507b873b0d8c12319985a3c913fdfff8_cgraph.png" border="0" usemap="#classhelical_motion_a507b873b0d8c12319985a3c913fdfff8_cgraph" alt=""/></div>
 <map name="classhelical_motion_a507b873b0d8c12319985a3c913fdfff8_cgraph" id="classhelical_motion_a507b873b0d8c12319985a3c913fdfff8_cgraph">
-<area shape="rect" id="node3" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="479,5,665,35"/><area shape="rect" id="node5" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="515,58,629,89"/><area shape="rect" id="node9" href="classmachine_status.html#a134831df227887d28dffa0c3346060a6" title="machineStatus::getPlane" alt="" coords="247,267,415,298"/><area shape="rect" id="node11" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="476,111,668,142"/><area shape="rect" id="node13" href="classmachine_status.html#a7bbe860c892c3b79cf1a5aa785254380" title="machineStatus::setEndDir" alt="" coords="244,321,417,351"/><area shape="rect" id="node15" href="classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="237,374,424,405"/><area shape="rect" id="node17" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780" title="canonMotion::sweep" alt="" coords="260,214,401,245"/><area shape="rect" id="node40" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="canonLine::tok2d" alt="" coords="271,427,391,458"/><area shape="rect" id="node7" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="720,58,837,89"/><area shape="rect" id="node19" href="classmill_tool.html#a3d8d0495fee5f877df1d1a9ba12cc6a1" title="millTool::Dia" alt="" coords="525,218,619,249"/><area shape="rect" id="node21" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="507,271,637,302"/><area shape="rect" id="node25" href="classmill_tool.html#a3ee89df994b523fd15fdb69c33ed52e5" title="millTool::get3d" alt="" coords="519,325,625,355"/><area shape="rect" id="node29" href="classmachine_status.html#a464ad9c51f4d560bd9860c8c0d54cfca" title="machineStatus::getPrevEndDir" alt="" coords="472,378,672,409"/><area shape="rect" id="node31" href="classtool.html#aa7d61ba51903f143f4437c11eb82ebd5" title="tool::getProfile" alt="" coords="519,431,625,462"/><area shape="rect" id="node34" href="classmachine_status.html#a91af3b3e7d55d0eda4348ca485ee1405" title="machineStatus::getTool" alt="" coords="493,485,651,515"/><area shape="rect" id="node36" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448" title="canon::infoMsg" alt="" coords="517,538,627,569"/><area shape="rect" id="node38" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="527,165,617,195"/><area shape="rect" id="node23" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="733,271,824,302"/></map>
+<area shape="rect" id="node3" href="classmachine_status.html#a30fcc9315834685d0d00f9dabfd52b18" title="if not first, add an arc or helix to feedBbox. STRAIGHT_* is added in setEndPose()" alt="" coords="485,17,688,48"/><area shape="rect" id="node7" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="244,56,431,87"/><area shape="rect" id="node9" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="280,109,395,140"/><area shape="rect" id="node15" href="classmachine_status.html#a134831df227887d28dffa0c3346060a6" title="machineStatus::getPlane" alt="" coords="253,163,421,193"/><area shape="rect" id="node17" href="classmachine_status.html#a7fc0c75270e1fa4a9749f0b6060e34f2" title="machineStatus::getPrevEndDir" alt="" coords="237,216,437,247"/><area shape="rect" id="node19" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="241,269,433,300"/><area shape="rect" id="node21" href="classmachine_status.html#a7bbe860c892c3b79cf1a5aa785254380" title="machineStatus::setEndDir" alt="" coords="251,323,424,353"/><area shape="rect" id="node23" href="classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="244,427,431,457"/><area shape="rect" id="node32" href="classmachine_status.html#a08a561f3b0cd61a73e9b9df49df3b9c1" title="sets motion type, and checks whether this is the second (or later) motion command." alt="" coords="485,373,688,404"/><area shape="rect" id="node35" href="classmachine_status.html#a31892a950ede109735bba32a3f442314" title="machineStatus::setStartDir" alt="" coords="248,480,427,511"/><area shape="rect" id="node37" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="canonLine::tok2d" alt="" coords="277,533,397,564"/><area shape="rect" id="node5" href="classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="743,373,852,404"/><area shape="rect" id="node11" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="523,96,651,127"/><area shape="rect" id="node13" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="528,149,645,180"/><area shape="rect" id="node25" href="classmachine_status.html#a4fd74d471b8ebdb97e2b1ae7ea32f779" title="machineStatus::addToBounds" alt="" coords="489,427,684,457"/><area shape="rect" id="node27" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="736,427,859,457"/><area shape="rect" id="node30" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="752,480,843,511"/></map>
 </div>
 </p>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a841571048dde2d0a1fbdd77b086d217b"></a><!-- doxytag: member="helicalMotion::assembleSolid" ref="a841571048dde2d0a1fbdd77b086d217b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void helicalMotion::assembleSolid </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>build solid from faces FIXME INCOMPLETE </p>
+
+<p>Implements <a class="el" href="classcanon_motion.html#af5d4d2af4367eb87d14821746b9e54d9">canonMotion</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classhelical_motion_a841571048dde2d0a1fbdd77b086d217b_cgraph.png" border="0" usemap="#classhelical_motion_a841571048dde2d0a1fbdd77b086d217b_cgraph" alt=""/></div>
+<map name="classhelical_motion_a841571048dde2d0a1fbdd77b086d217b_cgraph" id="classhelical_motion_a841571048dde2d0a1fbdd77b086d217b_cgraph">
+<area shape="rect" id="node3" href="classmachine_status.html#aee5dd1a796f4957e45399d9dc901159d" title="machineStatus::getEndDir" alt="" coords="255,5,428,35"/><area shape="rect" id="node5" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="248,58,435,89"/><area shape="rect" id="node7" href="classmachine_status.html#a714a036baf5d8a974962f936966c8e67" title="machineStatus::getStartDir" alt="" coords="252,111,431,142"/><area shape="rect" id="node9" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="245,165,437,195"/><area shape="rect" id="node11" href="classcanon.html#a9b4190c1925554815e1518fc5fd002f4" title="canon::getTool" alt="" coords="288,218,395,249"/><area shape="rect" id="node13" href="classmachine_status.html#ab68101b4a12c256721d3cd47190e3383" title="machineStatus::getToolNum" alt="" coords="248,271,435,302"/><area shape="rect" id="node15" href="classcanon_motion.html#a0f907ecff56d0b1fe80670749c1c3f3b" title="canonMotion::trsfRotDirDir" alt="" coords="255,325,428,355"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="a89b7cff94ddd4eeb7563aec7155478db"></a><!-- doxytag: member="helicalMotion::getMotionType" ref="a89b7cff94ddd4eeb7563aec7155478db" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> helicalMotion::getMotionType </td>
+          <td class="memname"><a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> helicalMotion::getMotionType </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>

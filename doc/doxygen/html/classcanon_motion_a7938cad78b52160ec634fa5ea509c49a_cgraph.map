@@ -1,0 +1,20 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classcanon_motion.html#af5d4d2af4367eb87d14821746b9e54d9" title="canonMotion::assembleSolid" alt="" coords="240,138,429,169"/>
+<area shape="rect" id="node5" href="$classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea &#45; *extremely* time consuming, potential for crashes, ..." alt="" coords="237,191,432,222"/>
+<area shape="rect" id="node23" href="$classmachine_status.html#a6ee9ccb6b55e6189aff223c5110e8e53" title="machineStatus::isFirst" alt="" coords="259,378,411,409"/>
+<area shape="rect" id="node25" href="$classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="249,325,420,355"/>
+<area shape="rect" id="node7" href="$classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="483,165,669,195"/>
+<area shape="rect" id="node9" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="519,58,633,89"/>
+<area shape="rect" id="node15" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="480,218,672,249"/>
+<area shape="rect" id="node17" href="$classcanon.html#a9b4190c1925554815e1518fc5fd002f4" title="canon::getTool" alt="" coords="523,271,629,302"/>
+<area shape="rect" id="node19" href="$classmachine_status.html#ab68101b4a12c256721d3cd47190e3383" title="machineStatus::getToolNum" alt="" coords="483,111,669,142"/>
+<area shape="rect" id="node21" href="$classcanon_line.html#a6f059f0cfdef3e62f7ae3cf64e4d7092" title="canonLine::Handle" alt="" coords="512,5,640,35"/>
+<area shape="rect" id="node11" href="$classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="720,445,848,475"/>
+<area shape="rect" id="node13" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="725,191,843,222"/>
+<area shape="rect" id="node28" href="$classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="515,378,637,409"/>
+<area shape="rect" id="node30" href="$classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="527,431,625,462"/>
+<area shape="rect" id="node33" href="$classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="497,325,655,355"/>
+<area shape="rect" id="node36" href="$classcanon_motion.html#aeb581319f165b5309d409f3a2f0367e2" title="canonMotion::getMotionType" alt="" coords="481,485,671,515"/>
+<area shape="rect" id="node41" href="$classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="521,538,631,569"/>
+<area shape="rect" id="node43" href="$classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="531,591,621,622"/>
+</map>

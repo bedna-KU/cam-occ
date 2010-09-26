@@ -3,7 +3,7 @@
 
 #delete old (all) files
 #too bad we can't figure out which ones are not obsolete...
-cd ~/projects/sw-dev/cam/cam-occ/trunk/doc/doxygen/html
+cd ~/projects/sw-dev/cam/cam-occ/doc/doxygen/html
 rm *
 
 #generate docs
@@ -12,7 +12,7 @@ make clean   #this gets rid of moc stuff...
 doxygen
 
 #add and remove files
-cd ~/projects/sw-dev/cam/cam-occ/trunk/doc/doxygen/html
+cd ~/projects/sw-dev/cam/cam-occ/doc/doxygen/html
 #add files which aren't in svn yet
 svn add `svn stat|grep ^\?|sed 's/^\? *//'`
 

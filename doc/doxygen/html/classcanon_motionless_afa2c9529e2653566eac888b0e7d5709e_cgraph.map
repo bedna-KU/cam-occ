@@ -1,13 +1,21 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="309,5,443,35"/>
-<area shape="rect" id="node5" href="$classmachine_status.html#a8346aaf643d60c2e8dc7d3a268fb62c6" title="machineStatus::getCoolant" alt="" coords="287,58,465,89"/>
-<area shape="rect" id="node7" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="280,111,472,142"/>
-<area shape="rect" id="node9" href="$classcanon.html#a4957b4be1b5882280ac0fa39defb4448" title="canon::infoMsg" alt="" coords="321,165,431,195"/>
-<area shape="rect" id="node11" href="$classmachine_status.html#a62f45efd9701a210ead5da268ffd65ea" title="machineStatus::setCoolant" alt="" coords="287,218,465,249"/>
-<area shape="rect" id="node13" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="283,271,469,302"/>
-<area shape="rect" id="node15" href="$classmachine_status.html#aacb50fcfd5ff98ce6d1b9baf308a087e" title="machineStatus::setFeed" alt="" coords="295,325,457,355"/>
-<area shape="rect" id="node17" href="$classmachine_status.html#af25b86191decf6b9bfb6717a7a712d5a" title="machineStatus::setPlane" alt="" coords="292,378,460,409"/>
-<area shape="rect" id="node19" href="$classmachine_status.html#a3d0994b2a38efb8bf75563ab46f7c543" title="machineStatus::setTool" alt="" coords="297,431,455,462"/>
-<area shape="rect" id="node21" href="$classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="canonLine::tok2d" alt="" coords="316,485,436,515"/>
-<area shape="rect" id="node23" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="317,538,435,569"/>
+<area shape="rect" id="node3" href="$classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="324,5,452,35"/>
+<area shape="rect" id="node5" href="$classcanon_line.html#a53ca9b6556a28f2ebe7b50a721544c2d" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="313,58,463,89"/>
+<area shape="rect" id="node7" href="$classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="795,163,917,194"/>
+<area shape="rect" id="node9" href="$classmachine_status.html#a8346aaf643d60c2e8dc7d3a268fb62c6" title="machineStatus::getCoolant" alt="" coords="299,162,477,193"/>
+<area shape="rect" id="node11" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="292,215,484,246"/>
+<area shape="rect" id="node13" href="$classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="801,413,911,443"/>
+<area shape="rect" id="node15" href="$classmachine_status.html#a62f45efd9701a210ead5da268ffd65ea" title="machineStatus::setCoolant" alt="" coords="299,322,477,353"/>
+<area shape="rect" id="node17" href="$classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="295,269,481,299"/>
+<area shape="rect" id="node25" href="$classmachine_status.html#aacb50fcfd5ff98ce6d1b9baf308a087e" title="machineStatus::setFeed" alt="" coords="307,426,469,457"/>
+<area shape="rect" id="node27" href="$classmachine_status.html#a08a561f3b0cd61a73e9b9df49df3b9c1" title="sets motion type, and checks whether this is the second (or later) motion command." alt="" coords="544,451,747,482"/>
+<area shape="rect" id="node30" href="$classmachine_status.html#af25b86191decf6b9bfb6717a7a712d5a" title="machineStatus::setPlane" alt="" coords="304,530,472,561"/>
+<area shape="rect" id="node32" href="$classmachine_status.html#ac77ad918e51a7332d67a4c111ff09b02" title="machineStatus::setSpindleSpeed" alt="" coords="281,583,495,614"/>
+<area shape="rect" id="node34" href="$classmachine_status.html#a459c7a81adf6e4b23c7c88331417418b" title="machineStatus::setSpindleStatus" alt="" coords="280,637,496,667"/>
+<area shape="rect" id="node36" href="$classmachine_status.html#a0ebc6ab5c3d20f31a16acd78e89628dd" title="machineStatus::setTool" alt="" coords="309,690,467,721"/>
+<area shape="rect" id="node41" href="$classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="canonLine::tok2d" alt="" coords="328,743,448,774"/>
+<area shape="rect" id="node43" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="329,797,447,827"/>
+<area shape="rect" id="node19" href="$classmachine_status.html#a4fd74d471b8ebdb97e2b1ae7ea32f779" title="machineStatus::addToBounds" alt="" coords="548,269,743,299"/>
+<area shape="rect" id="node23" href="$classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="811,269,901,299"/>
+<area shape="rect" id="node38" href="$classcanon.html#a96043bd8f9aaf3de46f01bc7f7f51835" title="canon::addTool" alt="" coords="591,690,700,721"/>
 </map>

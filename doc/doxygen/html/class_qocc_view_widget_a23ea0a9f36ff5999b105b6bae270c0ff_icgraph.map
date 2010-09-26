@@ -1,9 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="209,107,281,138"/>
-<area shape="rect" id="node5" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="331,55,493,86"/>
-<area shape="rect" id="node9" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="695,57,855,87"/>
-<area shape="rect" id="node15" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="363,159,461,190"/>
-<area shape="rect" id="node7" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="543,5,644,35"/>
-<area shape="rect" id="node11" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="904,57,984,87"/>
-<area shape="rect" id="node17" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="564,159,623,190"/>
+<area shape="rect" id="node3" href="$classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="209,85,281,115"/>
+<area shape="rect" id="node5" href="$classg2m__threaded.html#ae16080366f4b858b6b1b13d1f924d4bb" title="draw shapes and update statusbar/ui until threads are almost done, then join and display the rest of ..." alt="" coords="331,5,525,35"/>
+<area shape="rect" id="node7" href="$classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="360,58,496,89"/>
+<area shape="rect" id="node9" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="575,83,735,114"/>
+<area shape="rect" id="node14" href="$classtst.html#a2b1e38b9b3efeb79535359ad2e6b698e" title="tst::slotTest1" alt="" coords="379,162,477,193"/>
+<area shape="rect" id="node11" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="784,83,864,114"/>
+<area shape="rect" id="node16" href="$classtst.html#a2b42afe995bb4050970667717ad1aad2" title="tst::tst" alt="" coords="625,162,684,193"/>
 </map>

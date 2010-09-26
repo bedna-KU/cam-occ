@@ -57,27 +57,40 @@
 <a name="l00028"></a>00028 <span class="preprocessor">#include &lt;TopoDS_Edge.hxx&gt;</span>
 <a name="l00029"></a>00029 <span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span>
 <a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <span class="preprocessor">#include &quot;<a class="code" href="canon_line_8hh.html">canonLine.hh</a>&quot;</span>
-<a name="l00032"></a>00032 
-<a name="l00033"></a>00033 <span class="comment">//for STRAIGHT_TRAVERSE, STRAIGHT_FEED, ARC_FEED</span>
-<a name="l00034"></a>00034 
-<a name="l00035"></a><a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4">00035</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> { HELICAL, LINEAR, <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4">TRAVERSE</a> } MOTION_TYPE;
-<a name="l00045"></a><a class="code" href="classcanon_motion.html">00045</a> <span class="keyword">class </span><a class="code" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands.">canonMotion</a>: <span class="keyword">protected</span> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> {
-<a name="l00046"></a>00046   <span class="keyword">public</span>:
-<a name="l00047"></a>00047     <span class="keyword">virtual</span> <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> <a class="code" href="classcanon_motion.html#aeb581319f165b5309d409f3a2f0367e2">getMotionType</a>() = 0;
-<a name="l00048"></a>00048     <span class="keyword">virtual</span> <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classcanon_motion.html#a410357a570c6d943656e43f74ceb1162">getShape</a>() = 0;
-<a name="l00049"></a><a class="code" href="classcanon_motion.html#a790ed1dab4ab86af785a0f9d6f29948b">00049</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motion.html#a790ed1dab4ab86af785a0f9d6f29948b">isThisMotion</a>() {<span class="keywordflow">return</span> <span class="keyword">true</span>;};
-<a name="l00050"></a><a class="code" href="classcanon_motion.html#a80686e68479dd04b295969b3466d7524">00050</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motion.html#a80686e68479dd04b295969b3466d7524">isVolumeSuspect</a>() {<span class="keywordflow">return</span> <a class="code" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">sweepIsSuspect</a>;};
-<a name="l00051"></a>00051     <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classcanon_motion.html#ab6c5c89d6ea7347a009b7eb25ac3ca57">bruteForceSweep</a>(); <span class="comment">//sweep using brute force, i.e. fuse a solid many times</span>
-<a name="l00052"></a>00052   <span class="keyword">protected</span>:
-<a name="l00053"></a>00053     <a class="code" href="classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69">canonMotion</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> prevStatus);
-<a name="l00054"></a><a class="code" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">00054</a>     TopoDS_Shape <a class="code" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">myShape</a>;
-<a name="l00055"></a>00055     gp_Ax1 <a class="code" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc">getPoseFromCmd</a>();
-<a name="l00056"></a><a class="code" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">00056</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">sweepIsSuspect</a>;
-<a name="l00057"></a>00057     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780">sweep</a>(gp_Dir startDir);
-<a name="l00058"></a>00058 };
-<a name="l00059"></a>00059 
-<a name="l00060"></a>00060 <span class="preprocessor">#endif //CANONMOTION_HH</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include &quot;<a class="code" href="canon_line_8hh.html">canonLine.hh</a>&quot;</span>
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034 <span class="comment">//for STRAIGHT_TRAVERSE, STRAIGHT_FEED, ARC_FEED</span>
+<a name="l00035"></a>00035 
+<a name="l00036"></a><a class="code" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580ba20d5058ef805331f6932d3ef24fd5237">00036</a> <span class="keyword">enum</span> <a class="code" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580b">SOLID_MODE</a> { SWEPT,BRUTEFORCE,<a class="code" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580baaf94798c67dcd2f8a0e13f7bf4c7f974">ASSEMBLED</a> };
+<a name="l00046"></a><a class="code" href="classcanon_motion.html">00046</a> <span class="keyword">class </span><a class="code" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands.">canonMotion</a>: <span class="keyword">protected</span> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> {
+<a name="l00047"></a>00047   <span class="keyword">public</span>:
+<a name="l00048"></a>00048     <span class="keyword">virtual</span> <a class="code" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> <a class="code" href="classcanon_motion.html#aeb581319f165b5309d409f3a2f0367e2">getMotionType</a>() = 0;
+<a name="l00049"></a>00049     <span class="keyword">virtual</span> <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classcanon_motion.html#a410357a570c6d943656e43f74ceb1162">getShape</a>() = 0;
+<a name="l00050"></a>00050     TopoDS_Shape <a class="code" href="classcanon_motion.html#a85dc3ef38fc7e62b1b8afb834d0c7dae" title="Returns 3d tool, shifted to startpoint.">toolAtStart</a>();
+<a name="l00051"></a><a class="code" href="classcanon_motion.html#a1b05ffc246200d2b8189f06f1ef77d61">00051</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motion.html#a1b05ffc246200d2b8189f06f1ef77d61">isMotion</a>() {<span class="keywordflow">return</span> <span class="keyword">true</span>;};
+<a name="l00052"></a><a class="code" href="classcanon_motion.html#a672e69eb8343812897895242b9393d42">00052</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motion.html#a672e69eb8343812897895242b9393d42">solErrors</a>() {<span class="keywordflow">return</span> <a class="code" href="classcanon_line.html#aed6bda35f889c08302fdd907ef766653">solidErrors</a>;};
+<a name="l00053"></a><a class="code" href="classcanon_motion.html#a80686e68479dd04b295969b3466d7524">00053</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motion.html#a80686e68479dd04b295969b3466d7524">isVolumeSuspect</a>() {<span class="keywordflow">return</span> <a class="code" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">sweepIsSuspect</a>;};
+<a name="l00054"></a><a class="code" href="classcanon_motion.html#a6f9270893513243191806b08ee334e53">00054</a>     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#a6f9270893513243191806b08ee334e53">setSolidMode</a>(<a class="code" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580b">SOLID_MODE</a> s) {<a class="code" href="classcanon_motion.html#a8852ca7d680f39fed69de3680a9e8c39">solidMode</a> = s;};
+<a name="l00055"></a>00055     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a">computeSolid</a>();
+<a name="l00056"></a>00056     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#a480d7e6c2cce644eeae513e365ce9f97">display</a>();
+<a name="l00057"></a>00057   <span class="keyword">protected</span>:
+<a name="l00058"></a>00058     <a class="code" href="classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69">canonMotion</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> prevStatus);
+<a name="l00059"></a><a class="code" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">00059</a>     TopoDS_Shape <a class="code" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">myShape</a>;
+<a name="l00060"></a>00060     gp_Ax1 <a class="code" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc">getPoseFromCmd</a>();
+<a name="l00061"></a><a class="code" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">00061</a>     <span class="keywordtype">bool</span> <a class="code" href="classcanon_motion.html#a2a6d12a018a0ae1b7d65b5e7fd2316e4">sweepIsSuspect</a>;
+<a name="l00062"></a>00062     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape.">sweepSolid</a>();
+<a name="l00063"></a>00063     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#ad866712e205c6136c7167c4be1be646d">dumpSweep</a>();
+<a name="l00064"></a>00064     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#a1e759e2becb3e93cddbb308ee81ec850">dumpSubtract</a>();
+<a name="l00065"></a>00065     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea - *extremely* time consuming, potential for crashes, ...">bruteForceSolid</a>();
+<a name="l00066"></a>00066     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#af5d4d2af4367eb87d14821746b9e54d9">assembleSolid</a>()=0;
+<a name="l00067"></a>00067     gp_Trsf <a class="code" href="classcanon_motion.html#a0f907ecff56d0b1fe80670749c1c3f3b">trsfRotDirDir</a>(gp_Dir first, gp_Dir second,gp_Pnt center = gp::Origin());
+<a name="l00068"></a>00068     <span class="keywordtype">void</span> <a class="code" href="classcanon_motion.html#a31c7b2f0dff30b134637b85a63af17c3">addToolMaybe</a>();
+<a name="l00069"></a><a class="code" href="classcanon_motion.html#a8852ca7d680f39fed69de3680a9e8c39">00069</a>     <a class="code" href="canon_motion_8hh.html#a9f0ccb0a1374a53743ff08fd42aa580b">SOLID_MODE</a> <a class="code" href="classcanon_motion.html#a8852ca7d680f39fed69de3680a9e8c39">solidMode</a>;
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 };
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073 <span class="preprocessor">#endif //CANONMOTION_HH</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

@@ -31,21 +31,25 @@
 <h1>src/g2m/machineStatus.hh File Reference</h1>  </div>
 </div>
 <div class="contents">
-<code>#include &quot;<a class="el" href="tool_8hh_source.html">tool.hh</a>&quot;</code><br/>
+<code>#include &lt;map&gt;</code><br/>
+<code>#include &lt;limits.h&gt;</code><br/>
+<code>#include &lt;Bnd_Box.hxx&gt;</code><br/>
+<code>#include &lt;TopoDS_Edge.hxx&gt;</code><br/>
+<code>#include &lt;gp_Pnt.hxx&gt;</code><br/>
 <code>#include &quot;<a class="el" href="canon_8hh_source.html">canon.hh</a>&quot;</code><br/>
 <div class="dynheader">
 Include dependency graph for machineStatus.hh:</div>
 <div class="dyncontent">
 <div class="center"><img src="machine_status_8hh__incl.png" border="0" usemap="#src_2g2m_2machine_status_8hh" alt=""/></div>
 <map name="src_2g2m_2machine_status_8hh" id="src_2g2m_2machine_status_8hh">
-<area shape="rect" id="node3" href="tool_8hh.html" title="tool.hh" alt="" coords="333,86,395,117"/><area shape="rect" id="node15" href="canon_8hh.html" title="canon.hh" alt="" coords="603,166,677,197"/></map>
+<area shape="rect" id="node13" href="canon_8hh.html" title="canon.hh" alt="" coords="245,86,320,117"/><area shape="rect" id="node32" href="tool_8hh.html" title="tool.hh" alt="" coords="252,166,313,197"/></map>
 </div>
 <div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="machine_status_8hh__dep__incl.png" border="0" usemap="#src_2g2m_2machine_status_8hhdep" alt=""/></div>
 <map name="src_2g2m_2machine_status_8hhdep" id="src_2g2m_2machine_status_8hhdep">
-<area shape="rect" id="node3" href="canon_line_8hh.html" title="src/g2m/canonLine.hh" alt="" coords="484,86,634,117"/><area shape="rect" id="node5" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="484,326,634,357"/><area shape="rect" id="node7" href="canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="92,166,282,197"/><area shape="rect" id="node10" href="canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="23,246,212,277"/><area shape="rect" id="node15" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="767,246,927,277"/><area shape="rect" id="node18" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="822,326,982,357"/><area shape="rect" id="node20" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="951,246,1116,277"/><area shape="rect" id="node23" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="1116,326,1282,357"/><area shape="rect" id="node30" href="g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="306,166,420,197"/><area shape="rect" id="node44" href="machine_status_8cc.html" title="src/g2m/machineStatus.cc" alt="" coords="1292,86,1471,117"/><area shape="rect" id="node12" href="canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="596,166,762,197"/><area shape="rect" id="node25" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="476,246,642,277"/><area shape="rect" id="node32" href="g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="287,246,402,277"/></map>
+<area shape="rect" id="node3" href="canon_line_8hh.html" title="src/g2m/canonLine.hh" alt="" coords="726,86,875,117"/><area shape="rect" id="node5" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="285,326,434,357"/><area shape="rect" id="node7" href="canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="155,166,345,197"/><area shape="rect" id="node10" href="canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="23,246,213,277"/><area shape="rect" id="node12" href="canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="573,166,738,197"/><area shape="rect" id="node15" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="338,246,498,277"/><area shape="rect" id="node18" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="626,326,786,357"/><area shape="rect" id="node20" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="863,246,1029,277"/><area shape="rect" id="node23" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="1014,326,1179,357"/><area shape="rect" id="node32" href="g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="1293,166,1407,197"/><area shape="rect" id="node51" href="machine_status_8cc.html" title="src/g2m/machineStatus.cc" alt="" coords="1343,86,1522,117"/><area shape="rect" id="node25" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="623,246,789,277"/><area shape="rect" id="node27" href="g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="1053,246,1167,277"/><area shape="rect" id="node35" href="g2m__threaded_8hh.html" title="src/g2m/g2m_threaded.hh" alt="" coords="1293,246,1466,277"/><area shape="rect" id="node37" href="g2m__threaded_8cc.html" title="src/g2m/g2m_threaded.cc" alt="" coords="1354,326,1527,357"/></map>
 </div>
 
 <p><a href="machine_status_8hh_source.html">Go to the source code of this file.</a></p>
@@ -53,6 +57,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcoolant_struct.html">coolantStruct</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpnt_pair.html">pntPair</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmachine_status.html">machineStatus</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This class contains the machine's state for one canonical command. The information stored includes the coolant state, spindle speed and direction, feedrate, start and end pose, tool in use Important: 'pose' refers to how the machine's axes are positioned, while 'direction' refers to the direction of motion.  <a href="classmachine_status.html#_details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="enum-members"></a>
@@ -65,6 +70,15 @@ Enumerations</h2></td></tr>
 <a class="el" href="machine_status_8hh.html#a44af3383cdcd23d15e3e8daa074f4398a9d07bb3abb37dd009c410769de235419">CW</a>, 
 <a class="el" href="machine_status_8hh.html#a44af3383cdcd23d15e3e8daa074f4398a896dd0842cf7e102469756cf97117487">CCW</a>, 
 <a class="el" href="machine_status_8hh.html#a44af3383cdcd23d15e3e8daa074f4398a8b23c50cc938e0b366df8d8eeeb1bf9f">BRAKE</a>
+ }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> { <br/>
+&nbsp;&nbsp;<a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379a21b7cee34d63314e8ee2e7d0bcb419fd">NOT_DEFINED</a>, 
+<a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379ab3208182f1e8140cae632156af906294">MOTIONLESS</a>, 
+<a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379a56180eacca7bcf8905da648db2ca73a0">HELICAL</a>, 
+<a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379a2a53bab0f488601a46a954c83181e493">STRAIGHT_FEED</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4">TRAVERSE</a>
+<br/>
  }</td></tr>
 </table>
 <hr/><h2>Enumeration Type Documentation</h2>
@@ -84,6 +98,33 @@ Enumerations</h2></td></tr>
 <tr><td valign="top"><em><a class="anchor" id="ab14ae0680a82ab25b8466b08cf8bbef2a707f037694031125ff3ff04e4a7ed4f4"></a><!-- doxytag: member="CANON_PLANE_YZ" ref="ab14ae0680a82ab25b8466b08cf8bbef2a707f037694031125ff3ff04e4a7ed4f4" args="" -->CANON_PLANE_YZ</em>&nbsp;</td><td>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="ab14ae0680a82ab25b8466b08cf8bbef2af24dc2c73a38da3214859bf55d883782"></a><!-- doxytag: member="CANON_PLANE_XZ" ref="ab14ae0680a82ab25b8466b08cf8bbef2af24dc2c73a38da3214859bf55d883782" args="" -->CANON_PLANE_XZ</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379"></a><!-- doxytag: member="machineStatus.hh::MOTION_TYPE" ref="abd6d177d63e98aa1b4ed4b8329e2a379" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379a21b7cee34d63314e8ee2e7d0bcb419fd"></a><!-- doxytag: member="NOT_DEFINED" ref="abd6d177d63e98aa1b4ed4b8329e2a379a21b7cee34d63314e8ee2e7d0bcb419fd" args="" -->NOT_DEFINED</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379ab3208182f1e8140cae632156af906294"></a><!-- doxytag: member="MOTIONLESS" ref="abd6d177d63e98aa1b4ed4b8329e2a379ab3208182f1e8140cae632156af906294" args="" -->MOTIONLESS</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379a56180eacca7bcf8905da648db2ca73a0"></a><!-- doxytag: member="HELICAL" ref="abd6d177d63e98aa1b4ed4b8329e2a379a56180eacca7bcf8905da648db2ca73a0" args="" -->HELICAL</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379a2a53bab0f488601a46a954c83181e493"></a><!-- doxytag: member="STRAIGHT_FEED" ref="abd6d177d63e98aa1b4ed4b8329e2a379a2a53bab0f488601a46a954c83181e493" args="" -->STRAIGHT_FEED</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4"></a><!-- doxytag: member="TRAVERSE" ref="abd6d177d63e98aa1b4ed4b8329e2a379af7d40242c61c022464f130e12f62b5b4" args="" -->TRAVERSE</em>&nbsp;</td><td>
 </td></tr>
 </table>
 </dd>

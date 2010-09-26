@@ -1,6 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,89,61,119"/>
-<area shape="rect" id="node4" href="$classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o..." alt="" coords="85,89,152,119"/>
-<area shape="rect" id="node6" href="$classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else." alt="" coords="97,6,140,37"/>
-<area shape="rect" id="node8" href="$structcoolant_struct.html" title="coolantStruct" alt="" coords="176,89,275,119"/>
+<area shape="rect" id="node2" href="$classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,6,61,37"/>
+<area shape="rect" id="node4" href="$structcoolant_struct.html" title="coolantStruct" alt="" coords="85,6,184,37"/>
 </map>

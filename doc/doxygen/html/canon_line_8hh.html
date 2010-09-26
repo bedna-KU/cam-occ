@@ -25,7 +25,8 @@
 </div>
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <h1>src/g2m/canonLine.hh File Reference</h1>  </div>
 </div>
@@ -34,23 +35,23 @@
 <code>#include &lt;vector&gt;</code><br/>
 <code>#include &lt;cmath&gt;</code><br/>
 <code>#include &lt;limits.h&gt;</code><br/>
+<code>#include &lt;Handle_AIS_Shape.hxx&gt;</code><br/>
 <code>#include &quot;<a class="el" href="canon_8hh_source.html">canon.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="machine_status_8hh_source.html">machineStatus.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="tool_8hh_source.html">tool.hh</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="disp_shape_8hh_source.html">dispShape.hh</a>&quot;</code><br/>
 <div class="dynheader">
 Include dependency graph for canonLine.hh:</div>
 <div class="dyncontent">
 <div class="center"><img src="canon_line_8hh__incl.png" border="0" usemap="#src_2g2m_2canon_line_8hh" alt=""/></div>
 <map name="src_2g2m_2canon_line_8hh" id="src_2g2m_2canon_line_8hh">
-<area shape="rect" id="node11" href="canon_8hh.html" title="canon.hh" alt="" coords="240,246,315,277"/><area shape="rect" id="node26" href="machine_status_8hh.html" title="machineStatus.hh" alt="" coords="315,86,440,117"/><area shape="rect" id="node28" href="tool_8hh.html" title="tool.hh" alt="" coords="467,166,528,197"/><area shape="rect" id="node42" href="disp_shape_8hh.html" title="dispShape.hh" alt="" coords="987,246,1088,277"/></map>
+<area shape="rect" id="node13" href="canon_8hh.html" title="canon.hh" alt="" coords="656,166,731,197"/><area shape="rect" id="node32" href="tool_8hh.html" title="tool.hh" alt="" coords="249,246,311,277"/><area shape="rect" id="node44" href="machine_status_8hh.html" title="machineStatus.hh" alt="" coords="781,86,907,117"/></map>
 </div>
 <div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="canon_line_8hh__dep__incl.png" border="0" usemap="#src_2g2m_2canon_line_8hhdep" alt=""/></div>
 <map name="src_2g2m_2canon_line_8hhdep" id="src_2g2m_2canon_line_8hhdep">
-<area shape="rect" id="node3" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="227,246,376,277"/><area shape="rect" id="node5" href="canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="24,86,214,117"/><area shape="rect" id="node10" href="canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="488,86,654,117"/><area shape="rect" id="node16" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="428,246,588,277"/><area shape="rect" id="node18" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="574,166,739,197"/><area shape="rect" id="node23" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="763,166,928,197"/><area shape="rect" id="node28" href="g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="1054,86,1168,117"/><area shape="rect" id="node30" href="g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="1028,166,1143,197"/><area shape="rect" id="node8" href="canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="24,166,214,197"/><area shape="rect" id="node13" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="339,166,499,197"/><area shape="rect" id="node21" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="612,246,778,277"/></map>
+<area shape="rect" id="node3" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="423,246,572,277"/><area shape="rect" id="node5" href="canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="137,86,327,117"/><area shape="rect" id="node10" href="canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="675,86,840,117"/><area shape="rect" id="node16" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="677,246,837,277"/><area shape="rect" id="node18" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="269,166,435,197"/><area shape="rect" id="node23" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="795,166,960,197"/><area shape="rect" id="node25" href="g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="1035,166,1149,197"/><area shape="rect" id="node30" href="g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="1117,86,1232,117"/><area shape="rect" id="node8" href="canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="5,166,195,197"/><area shape="rect" id="node13" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="560,166,720,197"/><area shape="rect" id="node21" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="233,246,399,277"/><area shape="rect" id="node33" href="g2m__threaded_8hh.html" title="src/g2m/g2m_threaded.hh" alt="" coords="1224,166,1397,197"/><area shape="rect" id="node35" href="g2m__threaded_8cc.html" title="src/g2m/g2m_threaded.cc" alt="" coords="1161,246,1335,277"/></map>
 </div>
 
 <p><a href="canon_line_8hh_source.html">Go to the source code of this file.</a></p>
@@ -58,8 +59,47 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html">canonLine</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object represents one canonical command. Each gcode line produces one or more canonical commands. It can either be a motion command (one of LINEAR_TRAVERSE LINEAR_FEED ARC_FEED), or a motionless command (anything else) You cannot create objects of this class - instead, create an object of a class that inherits from this class via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o...">canonLineFactory()</a>.  <a href="classcanon_line.html#_details">More...</a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object represents one canonical command. Each gcode line produces one or more canonical commands. It can either be a motion command (one of LINEAR_TRAVERSE LINEAR_FEED ARC_FEED), or a motionless command (anything else) You cannot create objects of this class - instead, create an object of a class that inherits from this class via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">canonLineFactory()</a>.  <a href="classcanon_line.html#_details">More...</a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844">DISPLAY_MODE</a> { <br/>
+&nbsp;&nbsp;<a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844a275aac2213ab7bf7021d2dd7f27becf2">NO_DISP</a>, 
+<a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844a743295a96785bac3afc7610c8282b84d">THIN_MOTION</a>, 
+<a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844aad9e1f4f6bdc037721d7b0e1c76a0bc4">THIN</a>, 
+<a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844a285d336f2b079506bea6b7e8f99e89f8">ONLY_MOTION</a>, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844a200f932b77f5e7406f9afb7a70d8fb6e">BEST</a>
+<br/>
+ }</td></tr>
 </table>
+<hr/><h2>Enumeration Type Documentation</h2>
+<a class="anchor" id="aa694eadcc25ca533db97c79541ebf844"></a><!-- doxytag: member="canonLine.hh::DISPLAY_MODE" ref="aa694eadcc25ca533db97c79541ebf844" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844">DISPLAY_MODE</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="aa694eadcc25ca533db97c79541ebf844a275aac2213ab7bf7021d2dd7f27becf2"></a><!-- doxytag: member="NO_DISP" ref="aa694eadcc25ca533db97c79541ebf844a275aac2213ab7bf7021d2dd7f27becf2" args="" -->NO_DISP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aa694eadcc25ca533db97c79541ebf844a743295a96785bac3afc7610c8282b84d"></a><!-- doxytag: member="THIN_MOTION" ref="aa694eadcc25ca533db97c79541ebf844a743295a96785bac3afc7610c8282b84d" args="" -->THIN_MOTION</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aa694eadcc25ca533db97c79541ebf844aad9e1f4f6bdc037721d7b0e1c76a0bc4"></a><!-- doxytag: member="THIN" ref="aa694eadcc25ca533db97c79541ebf844aad9e1f4f6bdc037721d7b0e1c76a0bc4" args="" -->THIN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aa694eadcc25ca533db97c79541ebf844a285d336f2b079506bea6b7e8f99e89f8"></a><!-- doxytag: member="ONLY_MOTION" ref="aa694eadcc25ca533db97c79541ebf844a285d336f2b079506bea6b7e8f99e89f8" args="" -->ONLY_MOTION</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aa694eadcc25ca533db97c79541ebf844a200f932b77f5e7406f9afb7a70d8fb6e"></a><!-- doxytag: member="BEST" ref="aa694eadcc25ca533db97c79541ebf844a200f932b77f5e7406f9afb7a70d8fb6e" args="" -->BEST</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+</div>
+</div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;
 <a href="http://www.doxygen.org/index.html">

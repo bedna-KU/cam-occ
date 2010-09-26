@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlinear_motion.html#af183086bb5287c219f32d91f020201bc" title="linearMotion::assembleSolid" alt="" coords="245,5,429,35"/>
+<area shape="rect" id="node5" href="$classhelical_motion.html#a841571048dde2d0a1fbdd77b086d217b" title="build solid from faces FIXME INCOMPLETE" alt="" coords="243,58,432,89"/>
+<area shape="rect" id="node7" href="$classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea &#45; *extremely* time consuming, potential for crashes, ..." alt="" coords="240,111,435,142"/>
+<area shape="rect" id="node11" href="$classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="252,165,423,195"/>
+<area shape="rect" id="node14" href="$classcanon_motion.html#a85dc3ef38fc7e62b1b8afb834d0c7dae" title="Returns 3d tool, shifted to startpoint." alt="" coords="255,218,420,249"/>
+<area shape="rect" id="node9" href="$classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="487,138,668,169"/>
+<area shape="rect" id="node16" href="$classcanon_motion.html#a31c7b2f0dff30b134637b85a63af17c3" title="canonMotion::addToolMaybe" alt="" coords="484,218,671,249"/>
+</map>

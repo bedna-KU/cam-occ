@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o..." alt="" coords="24,86,91,117"/>
+<area shape="rect" id="node4" href="$classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else." alt="" coords="36,6,79,37"/>
+</map>

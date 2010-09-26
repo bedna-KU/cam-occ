@@ -1,7 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node11" href="$canon_line_8hh.html" title="canonLine.hh" alt="" coords="664,86,763,117"/>
-<area shape="rect" id="node32" href="$machine_status_8hh.html" title="machineStatus.hh" alt="" coords="500,166,625,197"/>
-<area shape="rect" id="node17" href="$canon_8hh.html" title="canon.hh" alt="" coords="741,326,816,357"/>
-<area shape="rect" id="node34" href="$tool_8hh.html" title="tool.hh" alt="" coords="548,246,609,277"/>
-<area shape="rect" id="node48" href="$disp_shape_8hh.html" title="dispShape.hh" alt="" coords="1087,326,1188,357"/>
+<area shape="rect" id="node11" href="$canon_line_8hh.html" title="canonLine.hh" alt="" coords="436,86,535,117"/>
+<area shape="rect" id="node50" href="$machine_status_8hh.html" title="machineStatus.hh" alt="" coords="272,166,397,197"/>
+<area shape="rect" id="node19" href="$canon_8hh.html" title="canon.hh" alt="" coords="683,246,757,277"/>
+<area shape="rect" id="node38" href="$tool_8hh.html" title="tool.hh" alt="" coords="1136,326,1197,357"/>
 </map>

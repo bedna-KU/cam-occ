@@ -51,39 +51,61 @@
 <a name="l00022"></a>00022 <span class="preprocessor"></span><span class="preprocessor">#define GTOM_HH</span>
 <a name="l00023"></a>00023 <span class="preprocessor"></span>
 <a name="l00024"></a>00024 <span class="preprocessor">#include &lt;vector&gt;</span>
-<a name="l00025"></a>00025 
-<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;QString&gt;</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include &lt;QObject&gt;</span>
-<a name="l00028"></a>00028 
-<a name="l00029"></a>00029 <span class="preprocessor">#include &quot;<a class="code" href="canon_line_8hh.html">canonLine.hh</a>&quot;</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include &quot;<a class="code" href="disp_shape_8hh.html">dispShape.hh</a>&quot;</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include &lt;limits.h&gt;</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="preprocessor">#include &lt;QString&gt;</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include &lt;QProcess&gt;</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include &lt;QObject&gt;</span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include &lt;BRepTools.hxx&gt;</span>
+<a name="l00031"></a>00031 
 <a name="l00032"></a>00032 
-<a name="l00033"></a>00033 <span class="comment">//the following comment is for doxygen</span>
-<a name="l00039"></a><a class="code" href="classg2m.html">00039</a> <span class="comment"></span><span class="keyword">class </span><a class="code" href="classg2m.html" title="This class does the high level stuff for creating a model from gcode. It runs the interpreter...">g2m</a>: <span class="keyword">public</span> QObject {
-<a name="l00040"></a>00040   Q_OBJECT;
-<a name="l00041"></a>00041   <span class="keyword">public</span>:
-<a name="l00042"></a>00042     <a class="code" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb">g2m</a>();
-<a name="l00043"></a>00043     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a7f571f72c100ef4b7de31c0d167cb853">start</a> (QString <a class="code" href="classg2m.html#a9dd4595db0fc5a9c955c95f7b21d5d0f">file</a>);
-<a name="l00044"></a><a class="code" href="classg2m.html#ac17ca4017743e92012b8b1aa1885ce23">00044</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#ac17ca4017743e92012b8b1aa1885ce23">isOK</a>() {<span class="keywordflow">return</span> <a class="code" href="classg2m.html#af23b06717458a2f13e891c74439c7433">success</a>;};
-<a name="l00045"></a>00045   <span class="keyword">public</span> slots:
-<a name="l00046"></a>00046     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf">slotModelFromFile</a>();
-<a name="l00047"></a>00047   <span class="keyword">protected</span>:
-<a name="l00048"></a><a class="code" href="classg2m.html#ad50bf33e2389d6dbaaec234894e62795">00048</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#ad50bf33e2389d6dbaaec234894e62795">fromCmdLine</a>;
-<a name="l00049"></a>00049     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7">interpret</a>();
-<a name="l00050"></a>00050     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0">processCanonLine</a>(std::string l);
-<a name="l00051"></a><a class="code" href="classg2m.html#af23b06717458a2f13e891c74439c7433">00051</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#af23b06717458a2f13e891c74439c7433">success</a>;
-<a name="l00052"></a>00052     <span class="comment">//inline void infoMsg(QString s) {infoMsg(s.toStdString();};</span>
-<a name="l00053"></a>00053     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b">infoMsg</a>(std::string s);
-<a name="l00054"></a>00054     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194">sleepSecond</a>();
-<a name="l00055"></a><a class="code" href="classg2m.html#a7d996d7f9fd2a233d9ce40c45865da43">00055</a>     std::vector&lt;canonLine*&gt; <a class="code" href="classg2m.html#a7d996d7f9fd2a233d9ce40c45865da43">lineVector</a>;
-<a name="l00056"></a><a class="code" href="classg2m.html#aaf4c24e9eff7ffebbd5bada4287fe6da">00056</a>     std::vector&lt;dispShape*&gt; <a class="code" href="classg2m.html#aaf4c24e9eff7ffebbd5bada4287fe6da">dispVector</a>;
-<a name="l00057"></a><a class="code" href="classg2m.html#a9dd4595db0fc5a9c955c95f7b21d5d0f">00057</a>     QString file;
-<a name="l00058"></a><a class="code" href="classg2m.html#a9b5865494a262c1794beebb61443a9b7">00058</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#a9b5865494a262c1794beebb61443a9b7">debug</a>;
-<a name="l00059"></a>00059     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#ae469849f9a988d939c9ac89ad05a3653">test</a>(); <span class="comment">//FIXME: temporary</span>
-<a name="l00060"></a>00060 };
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062 <span class="preprocessor">#endif //GTOM_HH</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include &quot;<a class="code" href="canon_line_8hh.html">canonLine.hh</a>&quot;</span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#include &quot;<a class="code" href="nanotimer_8hh.html">nanotimer.hh</a>&quot;</span>
+<a name="l00036"></a>00036 <span class="preprocessor">#include &quot;<a class="code" href="uio_8hh.html">uio.hh</a>&quot;</span>
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038 
+<a name="l00044"></a><a class="code" href="classg2m.html">00044</a> <span class="keyword">class </span><a class="code" href="classg2m.html" title="This class does the high level stuff for creating a model from gcode. It runs the interpreter...">g2m</a>: <span class="keyword">public</span> QObject {
+<a name="l00045"></a>00045   Q_OBJECT;
+<a name="l00046"></a>00046   <span class="keyword">public</span>:
+<a name="l00047"></a>00047     <a class="code" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb">g2m</a>();
+<a name="l00048"></a>00048     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a7f571f72c100ef4b7de31c0d167cb853">start</a> (QString <a class="code" href="classg2m.html#a9dd4595db0fc5a9c955c95f7b21d5d0f">file</a>);
+<a name="l00049"></a><a class="code" href="classg2m.html#ac17ca4017743e92012b8b1aa1885ce23">00049</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#ac17ca4017743e92012b8b1aa1885ce23">isOK</a>() {<span class="keywordflow">return</span> <a class="code" href="classg2m.html#af23b06717458a2f13e891c74439c7433">success</a>;};
+<a name="l00050"></a>00050   <span class="keyword">public</span> slots:
+<a name="l00051"></a>00051     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf">slotModelFromFile</a>();
+<a name="l00052"></a>00052   <span class="keyword">protected</span>:
+<a name="l00053"></a><a class="code" href="classg2m.html#a2d98be98b4373abd4a39c30063e2c139">00053</a>     TopoDS_Shape <a class="code" href="classg2m.html#a2d98be98b4373abd4a39c30063e2c139">workpiece</a>;
+<a name="l00054"></a>00054     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#aecc73d4e316ea465a011fe8060251203">subtractWorkpiece</a>(uint index);
+<a name="l00055"></a>00055     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#aae985c378c19c943d1da9f01c9598835" title="call this before creating solids, and use bbox size to figure out length of tools">createBlankWorkpiece</a>();
+<a name="l00056"></a><a class="code" href="classg2m.html#ad0d48dc66252a05fc09f6420bc2a75c3">00056</a>     <span class="keywordtype">double</span> <a class="code" href="classg2m.html#ad0d48dc66252a05fc09f6420bc2a75c3">minToolLength</a>;
+<a name="l00057"></a><a class="code" href="classg2m.html#ad50bf33e2389d6dbaaec234894e62795">00057</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#ad50bf33e2389d6dbaaec234894e62795">fromCmdLine</a>;
+<a name="l00058"></a>00058     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb" title="ask for a tool table, even if one is configured - user may wish to change it">chooseToolTable</a>();
+<a name="l00059"></a>00059     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7">interpret</a>();
+<a name="l00060"></a>00060     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0">processCanonLine</a>(std::string l);
+<a name="l00061"></a><a class="code" href="classg2m.html#af23b06717458a2f13e891c74439c7433">00061</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#af23b06717458a2f13e891c74439c7433">success</a>;
+<a name="l00062"></a>00062     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b">infoMsg</a>(std::string s);
+<a name="l00063"></a>00063     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="Sleep 1s and process events.">sleepSecond</a>();
+<a name="l00064"></a><a class="code" href="classg2m.html#a5fb085edd9b1c0a09a8132b933d218e8">00064</a>     <span class="keyword">static</span> std::vector&lt;canonLine*&gt; <a class="code" href="classg2m.html#a5fb085edd9b1c0a09a8132b933d218e8">lineVector</a>;
+<a name="l00065"></a><a class="code" href="classg2m.html#a940316af30f920c0ade576b611f2aeba">00065</a>     QString file, <a class="code" href="classg2m.html#a940316af30f920c0ade576b611f2aeba">tooltable</a>;
+<a name="l00066"></a><a class="code" href="classg2m.html#a9b5865494a262c1794beebb61443a9b7">00066</a>     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#a9b5865494a262c1794beebb61443a9b7">debug</a>;
+<a name="l00067"></a>00067     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a9a882e0d5b5ecece6070d74cd56291c2">statusBarUp</a>(std::string s, <span class="keywordtype">double</span> avgtime);
+<a name="l00068"></a>00068     <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2">makeSolid</a>(uint index);
+<a name="l00069"></a>00069     <span class="comment">//static bool interpDone;</span>
+<a name="l00070"></a>00070     <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7">startInterp</a>(QProcess &amp;tc);
+<a name="l00072"></a><a class="code" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea">00072</a>     <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped">shouldDump</a>(<span class="keywordtype">int</span> a,<span class="keywordtype">bool</span> dumpPrev = <span class="keyword">false</span>) {<span class="keywordtype">int</span> d=<a class="code" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b">uio::getDump</a>();<span class="keywordflow">return</span>( <a class="code" href="classuio.html#a853f8c923995ca39bb729656b0622f34">uio::debuggingOn</a>() &amp;&amp; ( (d==-1) || (d==a) || (dumpPrev &amp;&amp; (d==a+1)) ) );};
+<a name="l00074"></a><a class="code" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4">00074</a>     <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4" title="dump shape s to file named n">dumpBrep</a>(std::string n, TopoDS_Shape s) {BRepTools::Write(s,n.c_str());};
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077     <span class="comment">//functions overridden by g2m_threaded to make threading work</span>
+<a name="l00078"></a>00078     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde">finishAllSolids</a>(<a class="code" href="classnanotimer.html">nanotimer</a> &amp;timer);
+<a name="l00079"></a><a class="code" href="classg2m.html#a07968c726366bdde547ae5db8916bc66">00079</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classg2m.html#a07968c726366bdde547ae5db8916bc66">createThreads</a>() {};
+<a name="l00080"></a><a class="code" href="classg2m.html#afb5b20c0464667c797dc69ca85b8cbb3">00080</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classg2m.html#afb5b20c0464667c797dc69ca85b8cbb3">lockMutex</a>() {};
+<a name="l00081"></a><a class="code" href="classg2m.html#abeb32538f21d71270cca58e7f3595f81">00081</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classg2m.html#abeb32538f21d71270cca58e7f3595f81">unlockMutex</a>() {};
+<a name="l00082"></a>00082     <span class="comment">//virtual void waitOnThreads(nanotimer &amp;timer) {};</span>
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084 };
+<a name="l00085"></a>00085 
+<a name="l00086"></a>00086 <span class="preprocessor">#endif //GTOM_HH</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

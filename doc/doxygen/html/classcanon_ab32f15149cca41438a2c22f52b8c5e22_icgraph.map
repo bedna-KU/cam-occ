@@ -1,0 +1,20 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classmachine_status.html#a30fcc9315834685d0d00f9dabfd52b18" title="if not first, add an arc or helix to feedBbox. STRAIGHT_* is added in setEndPose()" alt="" coords="165,58,368,89"/>
+<area shape="rect" id="node7" href="$classmachine_status.html#a4fd74d471b8ebdb97e2b1ae7ea32f779" title="machineStatus::addToBounds" alt="" coords="169,5,364,35"/>
+<area shape="rect" id="node11" href="$classcanon_motion.html#a31c7b2f0dff30b134637b85a63af17c3" title="canonMotion::addToolMaybe" alt="" coords="173,111,360,142"/>
+<area shape="rect" id="node13" href="$classlinear_motion.html#af183086bb5287c219f32d91f020201bc" title="linearMotion::assembleSolid" alt="" coords="175,165,359,195"/>
+<area shape="rect" id="node15" href="$classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="416,270,643,301"/>
+<area shape="rect" id="node17" href="$classcanon.html#ab3191bbde574d5b89fa51b8b5e6f8d1a" title="canon::checkRange" alt="" coords="199,375,335,406"/>
+<area shape="rect" id="node19" href="$classcanon.html#ace6faa517e3c5a70ff586a6d15e70d55" title="canon::readTTfile" alt="" coords="468,401,591,431"/>
+<area shape="rect" id="node28" href="$classmachine_status.html#a08a561f3b0cd61a73e9b9df49df3b9c1" title="sets motion type, and checks whether this is the second (or later) motion command." alt="" coords="165,218,368,249"/>
+<area shape="rect" id="node34" href="$classmachine_status.html#a0ebc6ab5c3d20f31a16acd78e89628dd" title="machineStatus::setTool" alt="" coords="188,322,345,353"/>
+<area shape="rect" id="node39" href="$classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="181,479,352,510"/>
+<area shape="rect" id="node5" href="$classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="439,110,620,141"/>
+<area shape="rect" id="node9" href="$classmachine_status.html#a00ae4b75aeb3b08e495be0f4533e7e1d" title="machineStatus::setEndPose" alt="" coords="436,5,623,35"/>
+<area shape="rect" id="node21" href="$classcanon.html#ac1757537c1d1e1151d412e04ba7f4ada" title="canon::buildTools" alt="" coords="691,401,813,431"/>
+<area shape="rect" id="node23" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="863,401,1023,431"/>
+<area shape="rect" id="node25" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1072,401,1152,431"/>
+<area shape="rect" id="node32" href="$classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="444,217,615,247"/>
+<area shape="rect" id="node37" href="$classmachine_status.html#a721c67ecf5c4d0308a2194f2075f025d" title="machineStatus::machineStatus" alt="" coords="428,323,631,354"/>
+<area shape="rect" id="node41" href="$classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="439,479,620,510"/>
+</map>

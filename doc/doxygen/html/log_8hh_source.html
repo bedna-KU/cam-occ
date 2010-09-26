@@ -41,128 +41,130 @@
 <a name="l00012"></a>00012 <span class="comment">--type of object to use?</span>
 <a name="l00013"></a>00013 <span class="comment"></span>
 <a name="l00014"></a>00014 <span class="comment">--how to put the log messages in the obj?</span>
-<a name="l00015"></a>00015 <span class="comment">*/</span>
-<a name="l00016"></a>00016 
-<a name="l00017"></a>00017 
-<a name="l00018"></a>00018 <span class="keyword">inline</span> std::string <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>();
+<a name="l00015"></a>00015 <span class="comment">--see also comments in src/qocc/qoccharnesswindow.cpp</span>
+<a name="l00016"></a>00016 <span class="comment"></span>
+<a name="l00017"></a>00017 <span class="comment">*/</span>
+<a name="l00018"></a>00018 
 <a name="l00019"></a>00019 
-<a name="l00020"></a><a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">00020</a> <span class="keyword">enum</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> {logERROR, logWARNING, logINFO, logDEBUG, logDEBUG1, logDEBUG2, logDEBUG3, <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a176f7407a8bfb98d35382c989ca453df">logDEBUG4</a>};
+<a name="l00020"></a>00020 <span class="keyword">inline</span> std::string <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>();
 <a name="l00021"></a>00021 
-<a name="l00022"></a><a class="code" href="class_log.html">00022</a> <span class="keyword">class </span><a class="code" href="class_log.html">Log</a>
-<a name="l00023"></a>00023 {
-<a name="l00024"></a>00024 <span class="keyword">public</span>:
-<a name="l00025"></a>00025     <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log</a>();
-<a name="l00026"></a>00026     <span class="keyword">virtual</span> <a class="code" href="class_log.html#a0fbfda88fbee5027c89f6eb121059360">~Log</a>();
-<a name="l00027"></a>00027     std::ostringstream&amp; <a class="code" href="class_log.html#ac7c72c3bee646547c78a38286d88c202">Get</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level = <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a36b07a7dde9e15628d5c9711fe00bee9">logINFO</a>);
-<a name="l00028"></a>00028 <span class="keyword">public</span>:
-<a name="l00029"></a>00029     <span class="keyword">static</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a>&amp; <a class="code" href="class_log.html#aa4cfe92eb1c066161b1b06dfa2e8dc55">ReportingLevel</a>();
-<a name="l00030"></a>00030     <span class="keyword">static</span> std::string <a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">ToString</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level);
-<a name="l00031"></a>00031     <span class="keyword">static</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> <a class="code" href="class_log.html#a5def5382a04015d6e21c818448834068">FromString</a>(<span class="keyword">const</span> std::string&amp; level);
-<a name="l00032"></a>00032 <span class="keyword">protected</span>:
-<a name="l00033"></a><a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">00033</a>     std::ostringstream <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a>;
-<a name="l00034"></a>00034 <span class="keyword">private</span>:
-<a name="l00035"></a>00035     <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log</a>(<span class="keyword">const</span> <a class="code" href="class_log.html">Log</a>&amp;);
-<a name="l00036"></a>00036     <a class="code" href="class_log.html">Log</a>&amp; operator =(<span class="keyword">const</span> <a class="code" href="class_log.html">Log</a>&amp;);
-<a name="l00037"></a>00037 };
-<a name="l00038"></a>00038 
-<a name="l00039"></a><a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">00039</a> <span class="keyword">inline</span> <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log::Log</a>()
-<a name="l00040"></a>00040 {
-<a name="l00041"></a>00041 }
-<a name="l00042"></a>00042 
-<a name="l00043"></a><a class="code" href="class_log.html#ac7c72c3bee646547c78a38286d88c202">00043</a> <span class="keyword">inline</span> std::ostringstream&amp; <a class="code" href="class_log.html#ac7c72c3bee646547c78a38286d88c202">Log::Get</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level)
-<a name="l00044"></a>00044 {
-<a name="l00045"></a>00045     <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a> &lt;&lt; <span class="stringliteral">&quot;- &quot;</span> &lt;&lt; <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>();
-<a name="l00046"></a>00046     <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a> &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">ToString</a>(level) &lt;&lt; <span class="stringliteral">&quot;: &quot;</span>;
-<a name="l00047"></a>00047     os &lt;&lt; std::string(level &gt; <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a1101ecfc407894ef3d771d6bda32053e">logDEBUG</a> ? level - <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a1101ecfc407894ef3d771d6bda32053e">logDEBUG</a> : 0, <span class="charliteral">&#39;\t&#39;</span>);
-<a name="l00048"></a>00048     <span class="keywordflow">return</span> <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a>;
-<a name="l00049"></a>00049 }
-<a name="l00050"></a>00050 
-<a name="l00051"></a><a class="code" href="class_log.html#a0fbfda88fbee5027c89f6eb121059360">00051</a> <span class="keyword">inline</span> <a class="code" href="class_log.html#a0fbfda88fbee5027c89f6eb121059360">Log::~Log</a>()
-<a name="l00052"></a>00052 {
-<a name="l00053"></a>00053     <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a> &lt;&lt; std::endl;
-<a name="l00054"></a>00054     fprintf(stderr, <span class="stringliteral">&quot;%s&quot;</span>, <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a>.str().c_str());
-<a name="l00055"></a>00055     fflush(stderr);
-<a name="l00056"></a>00056 }
-<a name="l00057"></a>00057 
-<a name="l00058"></a><a class="code" href="class_log.html#aa4cfe92eb1c066161b1b06dfa2e8dc55">00058</a> <span class="keyword">inline</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a>&amp; <a class="code" href="class_log.html#aa4cfe92eb1c066161b1b06dfa2e8dc55">Log::ReportingLevel</a>()
-<a name="l00059"></a>00059 {
-<a name="l00060"></a>00060     <span class="keyword">static</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> reportingLevel = logDEBUG4;
-<a name="l00061"></a>00061     <span class="keywordflow">return</span> reportingLevel;
-<a name="l00062"></a>00062 }
-<a name="l00063"></a>00063 
-<a name="l00064"></a><a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">00064</a> <span class="keyword">inline</span> std::string <a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">Log::ToString</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level)
-<a name="l00065"></a>00065 {
-<a name="l00066"></a>00066         <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span> buffer[] = {<span class="stringliteral">&quot;ERROR&quot;</span>, <span class="stringliteral">&quot;WARNING&quot;</span>, <span class="stringliteral">&quot;INFO&quot;</span>, <span class="stringliteral">&quot;DEBUG&quot;</span>, <span class="stringliteral">&quot;DEBUG1&quot;</span>, <span class="stringliteral">&quot;DEBUG2&quot;</span>, <span class="stringliteral">&quot;DEBUG3&quot;</span>, <span class="stringliteral">&quot;DEBUG4&quot;</span>};
-<a name="l00067"></a>00067     <span class="keywordflow">return</span> buffer[level];
-<a name="l00068"></a>00068 }
-<a name="l00069"></a>00069 
-<a name="l00070"></a><a class="code" href="class_log.html#a5def5382a04015d6e21c818448834068">00070</a> <span class="keyword">inline</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> <a class="code" href="class_log.html#a5def5382a04015d6e21c818448834068">Log::FromString</a>(<span class="keyword">const</span> std::string&amp; level)
-<a name="l00071"></a>00071 {
-<a name="l00072"></a>00072     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG4&quot;</span>)
-<a name="l00073"></a>00073         <span class="keywordflow">return</span> logDEBUG4;
-<a name="l00074"></a>00074     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG3&quot;</span>)
-<a name="l00075"></a>00075         <span class="keywordflow">return</span> logDEBUG3;
-<a name="l00076"></a>00076     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG2&quot;</span>)
-<a name="l00077"></a>00077         <span class="keywordflow">return</span> logDEBUG2;
-<a name="l00078"></a>00078     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG1&quot;</span>)
-<a name="l00079"></a>00079         <span class="keywordflow">return</span> logDEBUG1;
-<a name="l00080"></a>00080     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG&quot;</span>)
-<a name="l00081"></a>00081         <span class="keywordflow">return</span> logDEBUG;
-<a name="l00082"></a>00082     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;INFO&quot;</span>)
-<a name="l00083"></a>00083         <span class="keywordflow">return</span> logINFO;
-<a name="l00084"></a>00084     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;WARNING&quot;</span>)
-<a name="l00085"></a>00085         <span class="keywordflow">return</span> logWARNING;
-<a name="l00086"></a>00086     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;ERROR&quot;</span>)
-<a name="l00087"></a>00087         <span class="keywordflow">return</span> logERROR;
-<a name="l00088"></a>00088     <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log</a>().Get(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a1cde7d2b618c0f760f108188f48c49c3">logWARNING</a>) &lt;&lt; <span class="stringliteral">&quot;Unknown logging level &#39;&quot;</span> &lt;&lt; level &lt;&lt; <span class="stringliteral">&quot;&#39;. Using INFO level as default.&quot;</span>;
-<a name="l00089"></a>00089     <span class="keywordflow">return</span> logINFO;
-<a name="l00090"></a>00090 }
-<a name="l00091"></a>00091 
-<a name="l00092"></a><a class="code" href="log_8hh.html#afc237585be59cde1efb44ab6f7e0e7d5">00092</a> <span class="keyword">typedef</span> <a class="code" href="class_log.html">Log</a> <a class="code" href="class_log.html">FILELog</a>;
+<a name="l00022"></a><a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">00022</a> <span class="keyword">enum</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> {logERROR, logWARNING, logINFO, logDEBUG, logDEBUG1, logDEBUG2, logDEBUG3, <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a176f7407a8bfb98d35382c989ca453df">logDEBUG4</a>};
+<a name="l00023"></a>00023 
+<a name="l00024"></a><a class="code" href="class_log.html">00024</a> <span class="keyword">class </span><a class="code" href="class_log.html">Log</a>
+<a name="l00025"></a>00025 {
+<a name="l00026"></a>00026 <span class="keyword">public</span>:
+<a name="l00027"></a>00027     <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log</a>();
+<a name="l00028"></a>00028     <span class="keyword">virtual</span> <a class="code" href="class_log.html#a0fbfda88fbee5027c89f6eb121059360">~Log</a>();
+<a name="l00029"></a>00029     std::ostringstream&amp; <a class="code" href="class_log.html#ac7c72c3bee646547c78a38286d88c202">Get</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level = <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a36b07a7dde9e15628d5c9711fe00bee9">logINFO</a>);
+<a name="l00030"></a>00030 <span class="keyword">public</span>:
+<a name="l00031"></a>00031     <span class="keyword">static</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a>&amp; <a class="code" href="class_log.html#aa4cfe92eb1c066161b1b06dfa2e8dc55">ReportingLevel</a>();
+<a name="l00032"></a>00032     <span class="keyword">static</span> std::string <a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">ToString</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level);
+<a name="l00033"></a>00033     <span class="keyword">static</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> <a class="code" href="class_log.html#a5def5382a04015d6e21c818448834068">FromString</a>(<span class="keyword">const</span> std::string&amp; level);
+<a name="l00034"></a>00034 <span class="keyword">protected</span>:
+<a name="l00035"></a><a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">00035</a>     std::ostringstream <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a>;
+<a name="l00036"></a>00036 <span class="keyword">private</span>:
+<a name="l00037"></a>00037     <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log</a>(<span class="keyword">const</span> <a class="code" href="class_log.html">Log</a>&amp;);
+<a name="l00038"></a>00038     <a class="code" href="class_log.html">Log</a>&amp; operator =(<span class="keyword">const</span> <a class="code" href="class_log.html">Log</a>&amp;);
+<a name="l00039"></a>00039 };
+<a name="l00040"></a>00040 
+<a name="l00041"></a><a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">00041</a> <span class="keyword">inline</span> <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log::Log</a>()
+<a name="l00042"></a>00042 {
+<a name="l00043"></a>00043 }
+<a name="l00044"></a>00044 
+<a name="l00045"></a><a class="code" href="class_log.html#ac7c72c3bee646547c78a38286d88c202">00045</a> <span class="keyword">inline</span> std::ostringstream&amp; <a class="code" href="class_log.html#ac7c72c3bee646547c78a38286d88c202">Log::Get</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level)
+<a name="l00046"></a>00046 {
+<a name="l00047"></a>00047     <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a> &lt;&lt; <span class="stringliteral">&quot;- &quot;</span> &lt;&lt; <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>();
+<a name="l00048"></a>00048     <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a> &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">ToString</a>(level) &lt;&lt; <span class="stringliteral">&quot;: &quot;</span>;
+<a name="l00049"></a>00049     os &lt;&lt; std::string(level &gt; <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a1101ecfc407894ef3d771d6bda32053e">logDEBUG</a> ? level - <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a1101ecfc407894ef3d771d6bda32053e">logDEBUG</a> : 0, <span class="charliteral">&#39;\t&#39;</span>);
+<a name="l00050"></a>00050     <span class="keywordflow">return</span> <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a>;
+<a name="l00051"></a>00051 }
+<a name="l00052"></a>00052 
+<a name="l00053"></a><a class="code" href="class_log.html#a0fbfda88fbee5027c89f6eb121059360">00053</a> <span class="keyword">inline</span> <a class="code" href="class_log.html#a0fbfda88fbee5027c89f6eb121059360">Log::~Log</a>()
+<a name="l00054"></a>00054 {
+<a name="l00055"></a>00055     <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a> &lt;&lt; std::endl;
+<a name="l00056"></a>00056     fprintf(stderr, <span class="stringliteral">&quot;%s&quot;</span>, <a class="code" href="class_log.html#aad14365bfb71db27b3e15ab78de0be94">os</a>.str().c_str());
+<a name="l00057"></a>00057     fflush(stderr);
+<a name="l00058"></a>00058 }
+<a name="l00059"></a>00059 
+<a name="l00060"></a><a class="code" href="class_log.html#aa4cfe92eb1c066161b1b06dfa2e8dc55">00060</a> <span class="keyword">inline</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a>&amp; <a class="code" href="class_log.html#aa4cfe92eb1c066161b1b06dfa2e8dc55">Log::ReportingLevel</a>()
+<a name="l00061"></a>00061 {
+<a name="l00062"></a>00062     <span class="keyword">static</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> reportingLevel = logDEBUG4;
+<a name="l00063"></a>00063     <span class="keywordflow">return</span> reportingLevel;
+<a name="l00064"></a>00064 }
+<a name="l00065"></a>00065 
+<a name="l00066"></a><a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">00066</a> <span class="keyword">inline</span> std::string <a class="code" href="class_log.html#ac8518398d37934ed15788c8203e840df">Log::ToString</a>(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> level)
+<a name="l00067"></a>00067 {
+<a name="l00068"></a>00068         <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span> buffer[] = {<span class="stringliteral">&quot;ERROR&quot;</span>, <span class="stringliteral">&quot;WARNING&quot;</span>, <span class="stringliteral">&quot;INFO&quot;</span>, <span class="stringliteral">&quot;DEBUG&quot;</span>, <span class="stringliteral">&quot;DEBUG1&quot;</span>, <span class="stringliteral">&quot;DEBUG2&quot;</span>, <span class="stringliteral">&quot;DEBUG3&quot;</span>, <span class="stringliteral">&quot;DEBUG4&quot;</span>};
+<a name="l00069"></a>00069     <span class="keywordflow">return</span> buffer[level];
+<a name="l00070"></a>00070 }
+<a name="l00071"></a>00071 
+<a name="l00072"></a><a class="code" href="class_log.html#a5def5382a04015d6e21c818448834068">00072</a> <span class="keyword">inline</span> <a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778">TLogLevel</a> <a class="code" href="class_log.html#a5def5382a04015d6e21c818448834068">Log::FromString</a>(<span class="keyword">const</span> std::string&amp; level)
+<a name="l00073"></a>00073 {
+<a name="l00074"></a>00074     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG4&quot;</span>)
+<a name="l00075"></a>00075         <span class="keywordflow">return</span> logDEBUG4;
+<a name="l00076"></a>00076     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG3&quot;</span>)
+<a name="l00077"></a>00077         <span class="keywordflow">return</span> logDEBUG3;
+<a name="l00078"></a>00078     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG2&quot;</span>)
+<a name="l00079"></a>00079         <span class="keywordflow">return</span> logDEBUG2;
+<a name="l00080"></a>00080     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG1&quot;</span>)
+<a name="l00081"></a>00081         <span class="keywordflow">return</span> logDEBUG1;
+<a name="l00082"></a>00082     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;DEBUG&quot;</span>)
+<a name="l00083"></a>00083         <span class="keywordflow">return</span> logDEBUG;
+<a name="l00084"></a>00084     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;INFO&quot;</span>)
+<a name="l00085"></a>00085         <span class="keywordflow">return</span> logINFO;
+<a name="l00086"></a>00086     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;WARNING&quot;</span>)
+<a name="l00087"></a>00087         <span class="keywordflow">return</span> logWARNING;
+<a name="l00088"></a>00088     <span class="keywordflow">if</span> (level == <span class="stringliteral">&quot;ERROR&quot;</span>)
+<a name="l00089"></a>00089         <span class="keywordflow">return</span> logERROR;
+<a name="l00090"></a>00090     <a class="code" href="class_log.html#af6071a60aa52b6c1b511f99b4bc1b8fe">Log</a>().Get(<a class="code" href="log_8hh.html#a2341a2a7c04d08eb40d2cb0b18b0b778a1cde7d2b618c0f760f108188f48c49c3">logWARNING</a>) &lt;&lt; <span class="stringliteral">&quot;Unknown logging level &#39;&quot;</span> &lt;&lt; level &lt;&lt; <span class="stringliteral">&quot;&#39;. Using INFO level as default.&quot;</span>;
+<a name="l00091"></a>00091     <span class="keywordflow">return</span> logINFO;
+<a name="l00092"></a>00092 }
 <a name="l00093"></a>00093 
-<a name="l00094"></a><a class="code" href="log_8hh.html#ad0de4260ab1f1fe62f457d2a1299e536">00094</a> <span class="preprocessor">#define FILE_LOG(level) \</span>
-<a name="l00095"></a>00095 <span class="preprocessor">    if (level &gt; FILELog::ReportingLevel()) ; \</span>
-<a name="l00096"></a>00096 <span class="preprocessor">    else Log().Get(level)</span>
-<a name="l00097"></a>00097 <span class="preprocessor"></span>
-<a name="l00098"></a>00098 <span class="preprocessor">#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)</span>
+<a name="l00094"></a><a class="code" href="log_8hh.html#afc237585be59cde1efb44ab6f7e0e7d5">00094</a> <span class="keyword">typedef</span> <a class="code" href="class_log.html">Log</a> <a class="code" href="class_log.html">FILELog</a>;
+<a name="l00095"></a>00095 
+<a name="l00096"></a><a class="code" href="log_8hh.html#ad0de4260ab1f1fe62f457d2a1299e536">00096</a> <span class="preprocessor">#define FILE_LOG(level) \</span>
+<a name="l00097"></a>00097 <span class="preprocessor">    if (level &gt; FILELog::ReportingLevel()) ; \</span>
+<a name="l00098"></a>00098 <span class="preprocessor">    else Log().Get(level)</span>
 <a name="l00099"></a>00099 <span class="preprocessor"></span>
-<a name="l00100"></a>00100 <span class="preprocessor">#include &lt;windows.h&gt;</span>
-<a name="l00101"></a>00101 
-<a name="l00102"></a>00102 <span class="keyword">inline</span> std::string <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>()
-<a name="l00103"></a>00103 {
-<a name="l00104"></a>00104     <span class="keyword">const</span> <span class="keywordtype">int</span> MAX_LEN = 200;
-<a name="l00105"></a>00105     <span class="keywordtype">char</span> buffer[MAX_LEN];
-<a name="l00106"></a>00106     <span class="keywordflow">if</span> (GetTimeFormatA(LOCALE_USER_DEFAULT, 0, 0,
-<a name="l00107"></a>00107             <span class="stringliteral">&quot;HH&#39;:&#39;mm&#39;:&#39;ss&quot;</span>, buffer, MAX_LEN) == 0)
-<a name="l00108"></a>00108         <span class="keywordflow">return</span> <span class="stringliteral">&quot;Error in NowTime()&quot;</span>;
-<a name="l00109"></a>00109 
-<a name="l00110"></a>00110     <span class="keywordtype">char</span> result[100] = {0};
-<a name="l00111"></a>00111     <span class="keyword">static</span> DWORD first = GetTickCount();
-<a name="l00112"></a>00112     std::sprintf(result, <span class="stringliteral">&quot;%s.%03ld&quot;</span>, buffer, (<span class="keywordtype">long</span>)(GetTickCount() - first) % 1000);
-<a name="l00113"></a>00113     <span class="keywordflow">return</span> result;
-<a name="l00114"></a>00114 }
-<a name="l00115"></a>00115 
-<a name="l00116"></a>00116 <span class="preprocessor">#else</span>
-<a name="l00117"></a>00117 <span class="preprocessor"></span>
-<a name="l00118"></a>00118 <span class="preprocessor">#include &lt;sys/time.h&gt;</span>
-<a name="l00119"></a>00119 
-<a name="l00120"></a><a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">00120</a> <span class="keyword">inline</span> std::string <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>()
-<a name="l00121"></a>00121 {
-<a name="l00122"></a>00122     <span class="keywordtype">char</span> buffer[11];
-<a name="l00123"></a>00123     time_t t;
-<a name="l00124"></a>00124     time(&amp;t);
-<a name="l00125"></a>00125     tm r = {0};
-<a name="l00126"></a>00126     strftime(buffer, <span class="keyword">sizeof</span>(buffer), <span class="stringliteral">&quot;%X&quot;</span>, localtime_r(&amp;t, &amp;r));
-<a name="l00127"></a>00127     <span class="keyword">struct </span>timeval tv;
-<a name="l00128"></a>00128     gettimeofday(&amp;tv, 0);
-<a name="l00129"></a>00129     <span class="keywordtype">char</span> result[100] = {0};
-<a name="l00130"></a>00130     std::sprintf(result, <span class="stringliteral">&quot;%s.%03ld&quot;</span>, buffer, (<span class="keywordtype">long</span>)tv.tv_usec / 1000);
-<a name="l00131"></a>00131     <span class="keywordflow">return</span> result;
-<a name="l00132"></a>00132 }
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134 <span class="preprocessor">#endif //WIN32</span>
-<a name="l00135"></a>00135 <span class="preprocessor"></span>
-<a name="l00136"></a>00136 <span class="preprocessor">#endif //__LOG_H__</span>
+<a name="l00100"></a>00100 <span class="preprocessor">#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)</span>
+<a name="l00101"></a>00101 <span class="preprocessor"></span>
+<a name="l00102"></a>00102 <span class="preprocessor">#include &lt;windows.h&gt;</span>
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104 <span class="keyword">inline</span> std::string <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>()
+<a name="l00105"></a>00105 {
+<a name="l00106"></a>00106     <span class="keyword">const</span> <span class="keywordtype">int</span> MAX_LEN = 200;
+<a name="l00107"></a>00107     <span class="keywordtype">char</span> buffer[MAX_LEN];
+<a name="l00108"></a>00108     <span class="keywordflow">if</span> (GetTimeFormatA(LOCALE_USER_DEFAULT, 0, 0,
+<a name="l00109"></a>00109             <span class="stringliteral">&quot;HH&#39;:&#39;mm&#39;:&#39;ss&quot;</span>, buffer, MAX_LEN) == 0)
+<a name="l00110"></a>00110         <span class="keywordflow">return</span> <span class="stringliteral">&quot;Error in NowTime()&quot;</span>;
+<a name="l00111"></a>00111 
+<a name="l00112"></a>00112     <span class="keywordtype">char</span> result[100] = {0};
+<a name="l00113"></a>00113     <span class="keyword">static</span> DWORD first = GetTickCount();
+<a name="l00114"></a>00114     std::sprintf(result, <span class="stringliteral">&quot;%s.%03ld&quot;</span>, buffer, (<span class="keywordtype">long</span>)(GetTickCount() - first) % 1000);
+<a name="l00115"></a>00115     <span class="keywordflow">return</span> result;
+<a name="l00116"></a>00116 }
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118 <span class="preprocessor">#else</span>
+<a name="l00119"></a>00119 <span class="preprocessor"></span>
+<a name="l00120"></a>00120 <span class="preprocessor">#include &lt;sys/time.h&gt;</span>
+<a name="l00121"></a>00121 
+<a name="l00122"></a><a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">00122</a> <span class="keyword">inline</span> std::string <a class="code" href="log_8hh.html#af90a9d943a7fb800048cdfb29a177f30">NowTime</a>()
+<a name="l00123"></a>00123 {
+<a name="l00124"></a>00124     <span class="keywordtype">char</span> buffer[11];
+<a name="l00125"></a>00125     time_t t;
+<a name="l00126"></a>00126     time(&amp;t);
+<a name="l00127"></a>00127     tm r = {0};
+<a name="l00128"></a>00128     strftime(buffer, <span class="keyword">sizeof</span>(buffer), <span class="stringliteral">&quot;%X&quot;</span>, localtime_r(&amp;t, &amp;r));
+<a name="l00129"></a>00129     <span class="keyword">struct </span>timeval tv;
+<a name="l00130"></a>00130     gettimeofday(&amp;tv, 0);
+<a name="l00131"></a>00131     <span class="keywordtype">char</span> result[100] = {0};
+<a name="l00132"></a>00132     std::sprintf(result, <span class="stringliteral">&quot;%s.%03ld&quot;</span>, buffer, (<span class="keywordtype">long</span>)tv.tv_usec / 1000);
+<a name="l00133"></a>00133     <span class="keywordflow">return</span> result;
+<a name="l00134"></a>00134 }
+<a name="l00135"></a>00135 
+<a name="l00136"></a>00136 <span class="preprocessor">#endif //WIN32</span>
+<a name="l00137"></a>00137 <span class="preprocessor"></span>
+<a name="l00138"></a>00138 <span class="preprocessor">#endif //__LOG_H__</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

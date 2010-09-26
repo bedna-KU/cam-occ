@@ -41,7 +41,7 @@
 
 <p>Inherits <a class="el" href="classtool.html">tool</a>.</p>
 
-<p>Inherited by <a class="el" href="classapt_tool.html">aptTool</a>, and <a class="el" href="classballnose_tool.html">ballnoseTool</a>.</p>
+<p>Inherited by <a class="el" href="classapt_tool.html">aptTool</a>, <a class="el" href="classballnose_tool.html">ballnoseTool</a>, and <a class="el" href="classcylindrical_tool.html">cylindricalTool</a>.</p>
 <div class="dynheader">
 Collaboration diagram for millTool:</div>
 <div class="dyncontent">
@@ -56,7 +56,8 @@ Collaboration diagram for millTool:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="tool_8hh.html#a733713fb5a6f60fae1f1fe872b3e391b">SHAPE_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a6c03cd9b9939804199dae992930dfef7">getShape</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a3ee89df994b523fd15fdb69c33ed52e5">get3d</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a3d8d0495fee5f877df1d1a9ba12cc6a1">Dia</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#ae96a0ca3707c72d7243f7ff86660f8ae">Dia</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#a6e1f35c76906d3b59e20a8f2e4ca04c1">Len</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmill_tool.html#acf39dcc83eac9b042b5ce19bcfa95ea6">millTool</a> ()</td></tr>
@@ -89,12 +90,12 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a3d8d0495fee5f877df1d1a9ba12cc6a1"></a><!-- doxytag: member="millTool::Dia" ref="a3d8d0495fee5f877df1d1a9ba12cc6a1" args="()" -->
+<a class="anchor" id="ae96a0ca3707c72d7243f7ff86660f8ae"></a><!-- doxytag: member="millTool::Dia" ref="ae96a0ca3707c72d7243f7ff86660f8ae" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const double millTool::Dia </td>
+          <td class="memname">double millTool::Dia </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -103,15 +104,6 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classmill_tool_a3d8d0495fee5f877df1d1a9ba12cc6a1_icgraph.png" border="0" usemap="#classmill_tool_a3d8d0495fee5f877df1d1a9ba12cc6a1_icgraph" alt=""/></div>
-<map name="classmill_tool_a3d8d0495fee5f877df1d1a9ba12cc6a1_icgraph" id="classmill_tool_a3d8d0495fee5f877df1d1a9ba12cc6a1_icgraph">
-<area shape="rect" id="node3" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780" title="canonMotion::sweep" alt="" coords="147,31,288,62"/><area shape="rect" id="node5" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="337,5,519,35"/><area shape="rect" id="node7" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="343,58,513,89"/></map>
-</div>
-</p>
 
 </div>
 </div>
@@ -130,16 +122,7 @@ Here is the caller graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classballnose_tool.html#a9a44d43bed4e242eee818001db14274c">ballnoseTool</a>.</p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph.png" border="0" usemap="#classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph" alt=""/></div>
-<map name="classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph" id="classmill_tool_a3ee89df994b523fd15fdb69c33ed52e5_icgraph">
-<area shape="rect" id="node3" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780" title="canonMotion::sweep" alt="" coords="160,31,301,62"/><area shape="rect" id="node5" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="351,5,532,35"/><area shape="rect" id="node7" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="356,58,527,89"/></map>
-</div>
-</p>
+<p>Reimplemented in <a class="el" href="classballnose_tool.html#a9a44d43bed4e242eee818001db14274c">ballnoseTool</a>, and <a class="el" href="classcylindrical_tool.html#a4ba3257ff6b6ce2e4c18da0b34c0425e">cylindricalTool</a>.</p>
 
 </div>
 </div>
@@ -153,6 +136,23 @@ Here is the caller graph for this function:</div>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
           <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6e1f35c76906d3b59e20a8f2e4ca04c1"></a><!-- doxytag: member="millTool::Len" ref="a6e1f35c76906d3b59e20a8f2e4ca04c1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double millTool::Len </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
         </tr>
       </table>
 </div>

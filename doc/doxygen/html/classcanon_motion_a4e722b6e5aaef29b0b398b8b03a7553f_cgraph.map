@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="251,5,437,35"/>
+<area shape="rect" id="node5" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="287,58,401,89"/>
+<area shape="rect" id="node11" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="248,111,440,142"/>
+<area shape="rect" id="node13" href="$classcanon.html#a9b4190c1925554815e1518fc5fd002f4" title="canon::getTool" alt="" coords="291,165,397,195"/>
+<area shape="rect" id="node15" href="$classmachine_status.html#ab68101b4a12c256721d3cd47190e3383" title="machineStatus::getToolNum" alt="" coords="251,218,437,249"/>
+<area shape="rect" id="node17" href="$classcanon_line.html#a6f059f0cfdef3e62f7ae3cf64e4d7092" title="canonLine::Handle" alt="" coords="280,271,408,302"/>
+<area shape="rect" id="node7" href="$classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="488,31,616,62"/>
+<area shape="rect" id="node9" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="493,85,611,115"/>
+</map>

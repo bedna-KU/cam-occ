@@ -44,7 +44,7 @@ Collaboration diagram for linearMotion:</div>
 <div class="dyncontent">
 <div class="center"><img src="classlinear_motion__coll__graph.png" border="0" usemap="#linear_motion_coll__map" alt="Collaboration graph"/></div>
 <map name="linear_motion_coll__map" id="linear_motion_coll__map">
-<area shape="rect" id="node2" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands." alt="" coords="16,369,112,399"/><area shape="rect" id="node4" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c..." alt="" coords="24,286,104,317"/><area shape="rect" id="node6" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,89,61,119"/><area shape="rect" id="node8" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information stored include..." alt="" coords="68,187,177,218"/><area shape="rect" id="node11" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o..." alt="" coords="87,89,153,119"/><area shape="rect" id="node13" href="classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else." alt="" coords="99,6,141,37"/><area shape="rect" id="node15" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="177,89,276,119"/></map>
+<area shape="rect" id="node2" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands." alt="" coords="19,286,115,317"/><area shape="rect" id="node4" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c..." alt="" coords="27,203,107,234"/><area shape="rect" id="node6" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,6,61,37"/><area shape="rect" id="node8" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information stored include..." alt="" coords="71,105,180,135"/><area shape="rect" id="node11" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="85,6,184,37"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classlinear_motion-members.html">List of all members.</a></p>
@@ -52,8 +52,9 @@ Collaboration diagram for linearMotion:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3">linearMotion</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">getMotionType</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">getMotionType</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#ab4fc542dffb7cb737f8402d1c6439197">getShape</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#af183086bb5287c219f32d91f020201bc">assembleSolid</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcanon_line.html">canonLine</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlinear_motion.html#a01cc53acf58a7b495a38e619a9523c33">canonLine::canonLineFactory</a> (std::string l, <a class="el" href="classmachine_status.html">machineStatus</a> s)</td></tr>
@@ -91,19 +92,47 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph.png" border="0" usemap="#classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph" alt=""/></div>
 <map name="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph" id="classlinear_motion_a0bc21dbaa32b5251cd8d39926548f2a3_cgraph">
-<area shape="rect" id="node3" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="452,5,639,35"/><area shape="rect" id="node5" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="488,58,603,89"/><area shape="rect" id="node9" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="449,111,641,142"/><area shape="rect" id="node11" href="classmachine_status.html#a7bbe860c892c3b79cf1a5aa785254380" title="machineStatus::setEndDir" alt="" coords="224,271,397,302"/><area shape="rect" id="node13" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780" title="canonMotion::sweep" alt="" coords="240,218,381,249"/><area shape="rect" id="node7" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="693,58,811,89"/><area shape="rect" id="node15" href="classmill_tool.html#a3d8d0495fee5f877df1d1a9ba12cc6a1" title="millTool::Dia" alt="" coords="499,218,592,249"/><area shape="rect" id="node17" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="480,271,611,302"/><area shape="rect" id="node21" href="classmill_tool.html#a3ee89df994b523fd15fdb69c33ed52e5" title="millTool::get3d" alt="" coords="492,325,599,355"/><area shape="rect" id="node25" href="classmachine_status.html#a464ad9c51f4d560bd9860c8c0d54cfca" title="machineStatus::getPrevEndDir" alt="" coords="445,378,645,409"/><area shape="rect" id="node27" href="classtool.html#aa7d61ba51903f143f4437c11eb82ebd5" title="tool::getProfile" alt="" coords="492,431,599,462"/><area shape="rect" id="node30" href="classmachine_status.html#a91af3b3e7d55d0eda4348ca485ee1405" title="machineStatus::getTool" alt="" coords="467,485,624,515"/><area shape="rect" id="node32" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448" title="canon::infoMsg" alt="" coords="491,538,600,569"/><area shape="rect" id="node34" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="500,165,591,195"/><area shape="rect" id="node19" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="707,271,797,302"/></map>
+<area shape="rect" id="node3" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="235,5,421,35"/><area shape="rect" id="node5" href="classcanon_line.html#ad32f1efae6a717e3eab4f07085b290c1" title="return a line identifier as string: getN() if !=&#45;1, else getLineNum()" alt="" coords="259,58,397,89"/><area shape="rect" id="node14" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb" title="linearMotion::getMotionType" alt="" coords="235,111,421,142"/><area shape="rect" id="node18" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="225,165,431,195"/><area shape="rect" id="node22" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="232,218,424,249"/><area shape="rect" id="node24" href="classmachine_status.html#a7bbe860c892c3b79cf1a5aa785254380" title="machineStatus::setEndDir" alt="" coords="241,271,415,302"/><area shape="rect" id="node26" href="classmachine_status.html#ab2accbe6ec632649dbc0f2de94e1b2c6" title="machineStatus::setEndPose" alt="" coords="235,325,421,355"/><area shape="rect" id="node36" href="classmachine_status.html#a08a561f3b0cd61a73e9b9df49df3b9c1" title="sets motion type, and checks whether this is the second (or later) motion command." alt="" coords="480,378,683,409"/><area shape="rect" id="node39" href="classmachine_status.html#a31892a950ede109735bba32a3f442314" title="machineStatus::setStartDir" alt="" coords="239,429,417,459"/><area shape="rect" id="node7" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="731,6,859,37"/><area shape="rect" id="node9" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="524,58,639,89"/><area shape="rect" id="node12" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="736,59,853,90"/><area shape="rect" id="node16" href="classcanon_line.html#a53ca9b6556a28f2ebe7b50a721544c2d" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="507,111,656,142"/><area shape="rect" id="node20" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2" title="canonLine::tok2d" alt="" coords="521,165,641,195"/><area shape="rect" id="node28" href="classmachine_status.html#a4fd74d471b8ebdb97e2b1ae7ea32f779" title="machineStatus::addToBounds" alt="" coords="484,325,679,355"/><area shape="rect" id="node30" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="733,271,856,302"/><area shape="rect" id="node32" href="classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="740,378,849,409"/><area shape="rect" id="node34" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="749,325,840,355"/></map>
 </div>
 </p>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="af183086bb5287c219f32d91f020201bc"></a><!-- doxytag: member="linearMotion::assembleSolid" ref="af183086bb5287c219f32d91f020201bc" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void linearMotion::assembleSolid </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="el" href="classcanon_motion.html#af5d4d2af4367eb87d14821746b9e54d9">canonMotion</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classlinear_motion_af183086bb5287c219f32d91f020201bc_cgraph.png" border="0" usemap="#classlinear_motion_af183086bb5287c219f32d91f020201bc_cgraph" alt=""/></div>
+<map name="classlinear_motion_af183086bb5287c219f32d91f020201bc_cgraph" id="classlinear_motion_af183086bb5287c219f32d91f020201bc_cgraph">
+<area shape="rect" id="node3" href="classmachine_status.html#a1c2a32eed790f05523655ff22a882f44" title="machineStatus::getEndPose" alt="" coords="243,5,429,35"/><area shape="rect" id="node5" href="classmachine_status.html#a714a036baf5d8a974962f936966c8e67" title="machineStatus::getStartDir" alt="" coords="247,58,425,89"/><area shape="rect" id="node7" href="classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="240,111,432,142"/><area shape="rect" id="node9" href="classcanon.html#a9b4190c1925554815e1518fc5fd002f4" title="canon::getTool" alt="" coords="283,165,389,195"/><area shape="rect" id="node11" href="classmachine_status.html#ab68101b4a12c256721d3cd47190e3383" title="machineStatus::getToolNum" alt="" coords="243,218,429,249"/><area shape="rect" id="node13" href="classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="281,271,391,302"/><area shape="rect" id="node15" href="classcanon_motion.html#a0f907ecff56d0b1fe80670749c1c3f3b" title="canonMotion::trsfRotDirDir" alt="" coords="249,325,423,355"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="a91fb6901f77402d43bf8c790fe40ddbb"></a><!-- doxytag: member="linearMotion::getMotionType" ref="a91fb6901f77402d43bf8c790fe40ddbb" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> linearMotion::getMotionType </td>
+          <td class="memname"><a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> linearMotion::getMotionType </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -120,7 +149,16 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_cgraph.png" border="0" usemap="#classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_cgraph" alt=""/></div>
 <map name="classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_cgraph" id="classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_cgraph">
-<area shape="rect" id="node3" href="classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="241,5,375,35"/><area shape="rect" id="node5" href="classcanon.html#a4957b4be1b5882280ac0fa39defb4448" title="canon::infoMsg" alt="" coords="253,58,363,89"/></map>
+<area shape="rect" id="node3" href="classcanon_line.html#a53ca9b6556a28f2ebe7b50a721544c2d" title="return true if the canonical command for this line matches &#39;m&#39;" alt="" coords="241,5,391,35"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_icgraph.png" border="0" usemap="#classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_icgraph" alt=""/></div>
+<map name="classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_icgraph" id="classlinear_motion_a91fb6901f77402d43bf8c790fe40ddbb_icgraph">
+<area shape="rect" id="node3" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="240,5,411,35"/></map>
 </div>
 </p>
 

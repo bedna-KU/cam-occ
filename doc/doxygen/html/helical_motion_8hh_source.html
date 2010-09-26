@@ -63,19 +63,22 @@
 <a name="l00034"></a>00034 <span class="preprocessor">#include &quot;<a class="code" href="machine_status_8hh.html">machineStatus.hh</a>&quot;</span>
 <a name="l00035"></a>00035 
 <a name="l00042"></a><a class="code" href="classhelical_motion.html">00042</a> <span class="keyword">class </span><a class="code" href="classhelical_motion.html" title="For the canonical command ARC_FEED. This class handles both planar arcs and helical arcs...">helicalMotion</a>: <span class="keyword">protected</span> <a class="code" href="classcanon_motion.html" title="This class is for the canonical commands STRAIGHT_TRAVERSE, STRAIGHT_FEED, and ARC_FEED. canonMotion is an ABC. Its children should only be instantiated via canonLine::canonLineFactory(), which creates linearMotion objects for STRAIGHT_TRAVERSE and STRAIGHT_FEED commands, and helicalMotion objects for ARC_FEED commands.">canonMotion</a> {
-<a name="l00043"></a>00043   <span class="keyword">friend</span> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> * <a class="code" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o...">canonLine::canonLineFactory</a> (std::string l, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> s);
+<a name="l00043"></a>00043   <span class="keyword">friend</span> <a class="code" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> * <a class="code" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">canonLine::canonLineFactory</a> (std::string l, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> s);
 <a name="l00044"></a>00044   <span class="keyword">public</span>:
 <a name="l00045"></a>00045     <a class="code" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8">helicalMotion</a>(std::string canonL, <a class="code" href="classmachine_status.html" title="This class contains the machine&amp;#39;s state for one canonical command. The information stored include...">machineStatus</a> prevStatus);
-<a name="l00046"></a><a class="code" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">00046</a>     <a class="code" href="canon_motion_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> <a class="code" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">getMotionType</a>() {<span class="keywordflow">return</span> HELICAL;};
+<a name="l00046"></a><a class="code" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">00046</a>     <a class="code" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> <a class="code" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">getMotionType</a>() {<span class="keywordflow">return</span> HELICAL;};
 <a name="l00047"></a><a class="code" href="classhelical_motion.html#a2783c813ce07630df059ad7ccf1c0934">00047</a>     <span class="keyword">const</span> TopoDS_Shape&amp; <a class="code" href="classhelical_motion.html#a2783c813ce07630df059ad7ccf1c0934">getShape</a>() {<span class="keywordflow">return</span> <a class="code" href="classcanon_motion.html#a5f6ad109e8e966e4e8eb18b09cdd1ffa">myShape</a>;};
-<a name="l00048"></a>00048   <span class="keyword">private</span>:
-<a name="l00049"></a>00049     <span class="keywordtype">void</span> helix(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, <span class="keywordtype">int</span> rot);
-<a name="l00050"></a>00050     <span class="comment">//void arc(status.getStartPose().Location(), startVec, status.endPose)</span>
-<a name="l00051"></a>00051     <span class="comment">//void arc(gp_Pnt start, gp_Pnt end, gp_Pnt c, gp_Dir dir, int rot);</span>
-<a name="l00052"></a>00052     <span class="keywordtype">void</span> arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end);
-<a name="l00053"></a>00053 };
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055 <span class="preprocessor">#endif //HELICALMOTION_HH</span>
+<a name="l00048"></a>00048     <span class="keywordtype">void</span> <a class="code" href="classhelical_motion.html#a841571048dde2d0a1fbdd77b086d217b" title="build solid from faces FIXME INCOMPLETE">assembleSolid</a>();
+<a name="l00049"></a>00049   <span class="keyword">private</span>:
+<a name="l00050"></a>00050     <span class="keywordtype">void</span> helix(gp_Pnt start, gp_Pnt end);
+<a name="l00051"></a>00051     <span class="keywordtype">void</span> arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end);
+<a name="l00052"></a>00052     <span class="keywordtype">bool</span> planar;
+<a name="l00053"></a>00053     gp_Pnt center;
+<a name="l00054"></a>00054     <span class="keywordtype">int</span> rotation;
+<a name="l00055"></a>00055     gp_Dir axis;
+<a name="l00056"></a>00056 };
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058 <span class="preprocessor">#endif //HELICALMOTION_HH</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated by&nbsp;

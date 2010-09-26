@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classmachine_status.html#a7fc0c75270e1fa4a9749f0b6060e34f2" title="machineStatus::getPrevEndDir" alt="" coords="243,5,443,35"/>
+<area shape="rect" id="node5" href="$classmachine_status.html#a714a036baf5d8a974962f936966c8e67" title="machineStatus::getStartDir" alt="" coords="253,58,432,89"/>
+<area shape="rect" id="node7" href="$classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="288,111,397,142"/>
+<area shape="rect" id="node9" href="$classcanon_motion.html#a85dc3ef38fc7e62b1b8afb834d0c7dae" title="Returns 3d tool, shifted to startpoint." alt="" coords="260,165,425,195"/>
+<area shape="rect" id="node11" href="$classmachine_status.html#a881d395803b3e583768c53d7c9d09042" title="machineStatus::getStartPose" alt="" coords="491,111,683,142"/>
+<area shape="rect" id="node13" href="$classcanon.html#a9b4190c1925554815e1518fc5fd002f4" title="canon::getTool" alt="" coords="533,165,640,195"/>
+<area shape="rect" id="node15" href="$classmachine_status.html#ab68101b4a12c256721d3cd47190e3383" title="machineStatus::getToolNum" alt="" coords="493,218,680,249"/>
+</map>

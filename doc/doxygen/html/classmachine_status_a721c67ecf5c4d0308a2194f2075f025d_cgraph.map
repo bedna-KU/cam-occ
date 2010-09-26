@@ -1,4 +1,7 @@
 <map id="G" name="G">
 <area shape="rect" id="node3" href="$classmachine_status.html#a49e92168f0437292db87dd672d156614" title="machineStatus::clearAll" alt="" coords="281,5,441,35"/>
 <area shape="rect" id="node5" href="$classmachine_status.html#ad666ffe127a695bc3134e9d97841f904" title="machineStatus::machineStatus" alt="" coords="260,82,463,113"/>
+<area shape="rect" id="node8" href="$classmachine_status.html#a0ebc6ab5c3d20f31a16acd78e89628dd" title="machineStatus::setTool" alt="" coords="283,135,440,166"/>
+<area shape="rect" id="node10" href="$classcanon.html#a96043bd8f9aaf3de46f01bc7f7f51835" title="canon::addTool" alt="" coords="513,109,623,139"/>
+<area shape="rect" id="node12" href="$classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="513,162,623,193"/>
 </map>

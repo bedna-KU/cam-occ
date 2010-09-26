@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classg2m.html#aae985c378c19c943d1da9f01c9598835" title="call this before creating solids, and use bbox size to figure out length of tools" alt="" coords="603,5,787,35"/>
+<area shape="rect" id="node9" href="$classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped" alt="" coords="175,57,300,87"/>
+<area shape="rect" id="node22" href="$classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="152,110,323,141"/>
+<area shape="rect" id="node5" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="1121,31,1281,62"/>
+<area shape="rect" id="node7" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1347,31,1427,62"/>
+<area shape="rect" id="node11" href="$classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="381,57,544,87"/>
+<area shape="rect" id="node13" href="$classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="637,58,752,89"/>
+<area shape="rect" id="node15" href="$classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="877,57,1013,87"/>
+<area shape="rect" id="node18" href="$classg2m__threaded.html#a8b06b1bb49f6febf96c6d2772b4fb477" title="g2m_threaded::makeSolidsThread" alt="" coords="836,110,1055,141"/>
+<area shape="rect" id="node20" href="$classg2m__threaded.html#a45ecab0095c7441015278fde0a273c3e" title="g2m_threaded::createThreads" alt="" coords="1104,110,1299,141"/>
+<area shape="rect" id="node24" href="$classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="372,110,553,141"/>
+</map>

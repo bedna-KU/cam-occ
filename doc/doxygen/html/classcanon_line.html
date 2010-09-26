@@ -35,7 +35,7 @@
 </div>
 <div class="contents">
 <!-- doxytag: class="canonLine" --><!-- doxytag: inherits="canon" -->
-<p>A <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object represents one canonical command. Each gcode line produces one or more canonical commands. It can either be a motion command (one of LINEAR_TRAVERSE LINEAR_FEED ARC_FEED), or a motionless command (anything else) You cannot create objects of this class - instead, create an object of a class that inherits from this class via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o...">canonLineFactory()</a>.  
+<p>A <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object represents one canonical command. Each gcode line produces one or more canonical commands. It can either be a motion command (one of LINEAR_TRAVERSE LINEAR_FEED ARC_FEED), or a motionless command (anything else) You cannot create objects of this class - instead, create an object of a class that inherits from this class via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">canonLineFactory()</a>.  
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="canon_line_8hh_source.html">canonLine.hh</a>&gt;</code></p>
@@ -48,7 +48,7 @@ Collaboration diagram for canonLine:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcanon_line__coll__graph.png" border="0" usemap="#canon_line_coll__map" alt="Collaboration graph"/></div>
 <map name="canon_line_coll__map" id="canon_line_coll__map">
-<area shape="rect" id="node2" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,89,61,119"/><area shape="rect" id="node4" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information stored include..." alt="" coords="68,187,177,218"/><area shape="rect" id="node7" href="classmill_tool.html" title="Rotary tool for the milling machine It must be possible to create both a 2d and a 3d representation o..." alt="" coords="87,89,153,119"/><area shape="rect" id="node9" href="classtool.html" title="Base class for all tools, whether they are mill tools, lathe tools, or something else." alt="" coords="99,6,141,37"/><area shape="rect" id="node11" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="177,89,276,119"/></map>
+<area shape="rect" id="node2" href="classcanon.html" title="Class canon was created so canonLine and machineStatus could easily share some things. The only shared items are the unimplemented function abc2dir, and the types degrees and toolNumber. At this time, the list of tools will be handled within the machineStatus class." alt="" coords="5,6,61,37"/><area shape="rect" id="node4" href="classmachine_status.html" title="This class contains the machine&#39;s state for one canonical command. The information stored include..." alt="" coords="71,105,180,135"/><area shape="rect" id="node7" href="structcoolant_struct.html" title="coolantStruct" alt="" coords="85,6,184,37"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classcanon_line-members.html">List of all members.</a></p>
@@ -64,35 +64,45 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">returns the canon line number  <a href="#aee5797d1e94aa4e525ba980f4c49ef6c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classmachine_status.html">machineStatus</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a8045f5cc93cee527123d57a4de754445">getStatus</a> ()</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">returns the machine's status after execution of this canon line  <a href="#a8045f5cc93cee527123d57a4de754445"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#aaaba8345d81852f529670a71a2531170">isThisMotion</a> ()=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a63fadf2dfb9815127aa01271e4fb6cc7">isMotion</a> ()=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a4346c4d0a9972c2f883625c87a4459c8">getMotionType</a> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const std::string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a45aefea90a04cec1e302c5d214a14376">getCanonType</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#aecb5e697d95a7c5b99c57b1e16616830">getUnSolid</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const TopoDS_Shape &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99">getShape</a> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f">checkErrors</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#afaf5e15df297e5c7563faf7ca0c840c1">display</a> ()=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a6b16eb02e38d303c236dcda57ee888db">setDispMode</a> (<a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844">DISPLAY_MODE</a> m)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a952e212c77d44ce1430bf346fa5457e9">setSolidDone</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a198283dd523677abab9fb832c379aa38">isSolidDone</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2">cantok</a> (uint n)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const std::string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#ad32f1efae6a717e3eab4f07085b290c1">getLnum</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">return a line identifier as string: <a class="el" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, -1 if none">getN()</a> if !=-1, else <a class="el" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number">getLineNum()</a>  <a href="#ad32f1efae6a717e3eab4f07085b290c1"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classcanon_line.html">canonLine</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">canonLineFactory</a> (std::string l, <a class="el" href="classmachine_status.html">machineStatus</a> s)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">canonLineFactory creates objects that inherit from <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> canonLineFactory determines which type of object to create, and returns a pointer to that object  <a href="#aef4afba5e1dccf8c6867d2be370afad5"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#ace3b1ed4390162525e62ec32b31f2652">canonLine</a> (std::string canonL, <a class="el" href="classmachine_status.html">machineStatus</a> prevStatus)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a7377f0fcdfcbc3d9252267276563bee2">tok2d</a> (uint n)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f">tok2i</a> (uint n, uint offset=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a134534a48882ee3168c5856a78310cc0">tokenize</a> (std::string str, std::vector&lt; std::string &gt; &amp;tokenV, const std::string &amp;delimiters=&quot;(), &quot;)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a0204ae8c48a4737cf9c8e00d588f807a">tokenize</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const std::string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a112a6f737dd35775913339febdd1ce1e">getCanonicalCommand</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a2c45ed5dfa2fa0435bdda51814d584a7">clMatch</a> (std::string m)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">return true if the canonical command for this line matches 'm'  <a href="#a2c45ed5dfa2fa0435bdda51814d584a7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a53ca9b6556a28f2ebe7b50a721544c2d">cmdMatch</a> (std::string m)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">return true if the canonical command for this line matches 'm'  <a href="#a53ca9b6556a28f2ebe7b50a721544c2d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a6f059f0cfdef3e62f7ae3cf64e4d7092">Handle</a> (AIS_Shape) aisShape</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a3496308cd55334a5d2904c272c1acf0e">myLine</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmachine_status.html">machineStatus</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">status</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#aa5ff804f07988125fd5c360b191336f1">canonTokens</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">errors</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#aed6bda35f889c08302fdd907ef766653">solidErrors</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a8a4de80dc95bebad25a0ef69267f34cb">unsolidErrors</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a231a018101820c7ee472d9668f5fb9ea">solidIsDone</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844">DISPLAY_MODE</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a156485510b64ff954732afe1fd55285c">dispMode</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">TopoDS_Shape&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcanon_line.html#a53f87f4ed0c22320f23bbd7ed1749252">myUnSolid</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>A <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object represents one canonical command. Each gcode line produces one or more canonical commands. It can either be a motion command (one of LINEAR_TRAVERSE LINEAR_FEED ARC_FEED), or a motionless command (anything else) You cannot create objects of this class - instead, create an object of a class that inherits from this class via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o...">canonLineFactory()</a>. </p>
+<p>A <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object represents one canonical command. Each gcode line produces one or more canonical commands. It can either be a motion command (one of LINEAR_TRAVERSE LINEAR_FEED ARC_FEED), or a motionless command (anything else) You cannot create objects of this class - instead, create an object of a class that inherits from this class via <a class="el" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5">canonLineFactory()</a>. </p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ace3b1ed4390162525e62ec32b31f2652"></a><!-- doxytag: member="canonLine::canonLine" ref="ace3b1ed4390162525e62ec32b31f2652" args="(std::string canonL, machineStatus prevStatus)" -->
 <div class="memitem">
@@ -155,8 +165,7 @@ Here is the call graph for this function:</div>
       </table>
 </div>
 <div class="memdoc">
-
-<p>canonLineFactory creates objects that inherit from <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> canonLineFactory determines which type of object to create, and returns a pointer to that object </p>
+<p>Create objects that inherit from <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a>. It determines which type of object to create, and returns a pointer to that object </p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -164,6 +173,33 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="classcanon_line_aef4afba5e1dccf8c6867d2be370afad5_icgraph.png" border="0" usemap="#classcanon_line_aef4afba5e1dccf8c6867d2be370afad5_icgraph" alt=""/></div>
 <map name="classcanon_line_aef4afba5e1dccf8c6867d2be370afad5_icgraph" id="classcanon_line_aef4afba5e1dccf8c6867d2be370afad5_icgraph">
 <area shape="rect" id="node3" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="245,31,408,62"/><area shape="rect" id="node5" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="457,5,559,35"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="609,31,769,62"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="819,31,899,62"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a6e60f0bae5c58fd804052cbb134e4dd2"></a><!-- doxytag: member="canonLine::cantok" ref="a6e60f0bae5c58fd804052cbb134e4dd2" args="(uint n)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string canonLine::cantok </td>
+          <td>(</td>
+          <td class="paramtype">uint&nbsp;</td>
+          <td class="paramname"> <em>n</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_a6e60f0bae5c58fd804052cbb134e4dd2_icgraph.png" border="0" usemap="#classcanon_line_a6e60f0bae5c58fd804052cbb134e4dd2_icgraph" alt=""/></div>
+<map name="classcanon_line_a6e60f0bae5c58fd804052cbb134e4dd2_icgraph" id="classcanon_line_a6e60f0bae5c58fd804052cbb134e4dd2_icgraph">
+<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="181,5,408,35"/><area shape="rect" id="node5" href="classcanon_line.html#ad32f1efae6a717e3eab4f07085b290c1" title="return a line identifier as string: getN() if !=&#45;1, else getLineNum()" alt="" coords="484,29,623,59"/><area shape="rect" id="node9" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="237,109,352,139"/><area shape="rect" id="node27" href="classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="209,187,380,218"/><area shape="rect" id="node7" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="705,29,876,59"/><area shape="rect" id="node11" href="classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea &#45; *extremely* time consuming, potential for crashes, ..." alt="" coords="456,189,651,219"/><area shape="rect" id="node16" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="463,82,644,113"/><area shape="rect" id="node18" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="472,135,635,166"/><area shape="rect" id="node13" href="classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="700,227,881,258"/><area shape="rect" id="node20" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="740,110,841,141"/><area shape="rect" id="node22" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="932,137,1092,167"/><area shape="rect" id="node24" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1141,137,1221,167"/></map>
 </div>
 </p>
 
@@ -195,12 +231,12 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a2c45ed5dfa2fa0435bdda51814d584a7"></a><!-- doxytag: member="canonLine::clMatch" ref="a2c45ed5dfa2fa0435bdda51814d584a7" args="(std::string m)" -->
+<a class="anchor" id="a53ca9b6556a28f2ebe7b50a721544c2d"></a><!-- doxytag: member="canonLine::cmdMatch" ref="a53ca9b6556a28f2ebe7b50a721544c2d" args="(std::string m)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool canonLine::clMatch </td>
+          <td class="memname">bool canonLine::cmdMatch </td>
           <td>(</td>
           <td class="paramtype">std::string&nbsp;</td>
           <td class="paramname"> <em>m</em></td>
@@ -216,11 +252,30 @@ Here is the caller graph for this function:</div>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classcanon_line_a2c45ed5dfa2fa0435bdda51814d584a7_icgraph.png" border="0" usemap="#classcanon_line_a2c45ed5dfa2fa0435bdda51814d584a7_icgraph" alt=""/></div>
-<map name="classcanon_line_a2c45ed5dfa2fa0435bdda51814d584a7_icgraph" id="classcanon_line_a2c45ed5dfa2fa0435bdda51814d584a7_icgraph">
-<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="189,5,416,35"/><area shape="rect" id="node5" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb" title="linearMotion::getMotionType" alt="" coords="209,58,396,89"/></map>
+<div class="center"><img src="classcanon_line_a53ca9b6556a28f2ebe7b50a721544c2d_icgraph.png" border="0" usemap="#classcanon_line_a53ca9b6556a28f2ebe7b50a721544c2d_icgraph" alt=""/></div>
+<map name="classcanon_line_a53ca9b6556a28f2ebe7b50a721544c2d_icgraph" id="classcanon_line_a53ca9b6556a28f2ebe7b50a721544c2d_icgraph">
+<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="205,5,432,35"/><area shape="rect" id="node5" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb" title="linearMotion::getMotionType" alt="" coords="225,58,412,89"/><area shape="rect" id="node7" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="480,58,651,89"/></map>
 </div>
 </p>
+
+</div>
+</div>
+<a class="anchor" id="afaf5e15df297e5c7563faf7ca0c840c1"></a><!-- doxytag: member="canonLine::display" ref="afaf5e15df297e5c7563faf7ca0c840c1" args="()=0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void canonLine::display </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implemented in <a class="el" href="classcanon_motion.html#a480d7e6c2cce644eeae513e365ce9f97">canonMotion</a>, and <a class="el" href="classcanon_motionless.html#aa0047c380d35c4752ec6a5fbf56be255">canonMotionless</a>.</p>
 
 </div>
 </div>
@@ -327,6 +382,71 @@ Here is the call graph for this function:</div>
 </div>
 </p>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_aee5797d1e94aa4e525ba980f4c49ef6c_icgraph.png" border="0" usemap="#classcanon_line_aee5797d1e94aa4e525ba980f4c49ef6c_icgraph" alt=""/></div>
+<map name="classcanon_line_aee5797d1e94aa4e525ba980f4c49ef6c_icgraph" id="classcanon_line_aee5797d1e94aa4e525ba980f4c49ef6c_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="217,55,380,86"/><area shape="rect" id="node12" href="classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="213,109,384,139"/><area shape="rect" id="node5" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="473,5,575,35"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="665,31,825,62"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="875,31,955,62"/><area shape="rect" id="node14" href="classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="433,109,615,139"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="ad32f1efae6a717e3eab4f07085b290c1"></a><!-- doxytag: member="canonLine::getLnum" ref="ad32f1efae6a717e3eab4f07085b290c1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string canonLine::getLnum </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>return a line identifier as string: <a class="el" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, -1 if none">getN()</a> if !=-1, else <a class="el" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number">getLineNum()</a> </p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_cgraph.png" border="0" usemap="#classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_cgraph" alt=""/></div>
+<map name="classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_cgraph" id="classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_cgraph">
+<area shape="rect" id="node3" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="357,5,485,35"/><area shape="rect" id="node5" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="193,57,308,87"/><area shape="rect" id="node8" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="363,58,480,89"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_icgraph.png" border="0" usemap="#classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_icgraph" alt=""/></div>
+<map name="classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_icgraph" id="classcanon_line_ad32f1efae6a717e3eab4f07085b290c1_icgraph">
+<area shape="rect" id="node3" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="192,5,363,35"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a4346c4d0a9972c2f883625c87a4459c8"></a><!-- doxytag: member="canonLine::getMotionType" ref="a4346c4d0a9972c2f883625c87a4459c8" args="()=0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="machine_status_8hh.html#abd6d177d63e98aa1b4ed4b8329e2a379">MOTION_TYPE</a> canonLine::getMotionType </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implemented in <a class="el" href="classcanon_motion.html#aeb581319f165b5309d409f3a2f0367e2">canonMotion</a>, <a class="el" href="classcanon_motionless.html#aa59c498b15f94df91c59108e2a61168b">canonMotionless</a>, <a class="el" href="classhelical_motion.html#a89b7cff94ddd4eeb7563aec7155478db">helicalMotion</a>, and <a class="el" href="classlinear_motion.html#a91fb6901f77402d43bf8c790fe40ddbb">linearMotion</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a046a01d50bc61abe11244421b75b136d"></a><!-- doxytag: member="canonLine::getN" ref="a046a01d50bc61abe11244421b75b136d" args="()" -->
@@ -351,7 +471,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcanon_line_a046a01d50bc61abe11244421b75b136d_cgraph.png" border="0" usemap="#classcanon_line_a046a01d50bc61abe11244421b75b136d_cgraph" alt=""/></div>
 <map name="classcanon_line_a046a01d50bc61abe11244421b75b136d_cgraph" id="classcanon_line_a046a01d50bc61abe11244421b75b136d_cgraph">
-<area shape="rect" id="node3" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="171,5,288,35"/></map>
+<area shape="rect" id="node3" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="171,5,299,35"/><area shape="rect" id="node5" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="176,58,293,89"/></map>
 </div>
 </p>
 
@@ -360,7 +480,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph.png" border="0" usemap="#classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph" alt=""/></div>
 <map name="classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph" id="classcanon_line_a046a01d50bc61abe11244421b75b136d_icgraph">
-<area shape="rect" id="node3" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="383,5,564,35"/><area shape="rect" id="node5" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="388,70,559,101"/><area shape="rect" id="node7" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="171,154,333,185"/><area shape="rect" id="node16" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780" title="canonMotion::sweep" alt="" coords="181,50,323,81"/><area shape="rect" id="node9" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="423,147,524,178"/><area shape="rect" id="node11" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="615,174,775,205"/><area shape="rect" id="node13" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="824,174,904,205"/></map>
+<area shape="rect" id="node3" href="classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea &#45; *extremely* time consuming, potential for crashes, ..." alt="" coords="171,5,365,35"/><area shape="rect" id="node7" href="classcanon_line.html#ad32f1efae6a717e3eab4f07085b290c1" title="return a line identifier as string: getN() if !=&#45;1, else getLineNum()" alt="" coords="199,58,337,89"/><area shape="rect" id="node11" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="177,111,359,142"/><area shape="rect" id="node13" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="187,165,349,195"/><area shape="rect" id="node5" href="classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="415,5,596,35"/><area shape="rect" id="node9" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="420,58,591,89"/><area shape="rect" id="node15" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="455,138,556,169"/><area shape="rect" id="node17" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="647,165,807,195"/><area shape="rect" id="node19" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="856,165,936,195"/></map>
 </div>
 </p>
 
@@ -382,15 +502,6 @@ Here is the caller graph for this function:</div>
 <div class="memdoc">
 
 <p>Implemented in <a class="el" href="classcanon_motion.html#a410357a570c6d943656e43f74ceb1162">canonMotion</a>, <a class="el" href="classcanon_motionless.html#acd7aea1c06d78731f5b9191f855f4ab0">canonMotionless</a>, <a class="el" href="classhelical_motion.html#a2783c813ce07630df059ad7ccf1c0934">helicalMotion</a>, and <a class="el" href="classlinear_motion.html#ab4fc542dffb7cb737f8402d1c6439197">linearMotion</a>.</p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph.png" border="0" usemap="#classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph" alt=""/></div>
-<map name="classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph" id="classcanon_line_a7aaebb9e888cf107e0e7a496e1085d99_icgraph">
-<area shape="rect" id="node3" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="197,31,360,62"/><area shape="rect" id="node5" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="409,5,511,35"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="561,31,721,62"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="771,31,851,62"/></map>
-</div>
-</p>
 
 </div>
 </div>
@@ -454,14 +565,50 @@ Here is the call graph for this function:</div>
 </div>
 <div class="memdoc">
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_aecb5e697d95a7c5b99c57b1e16616830_icgraph.png" border="0" usemap="#classcanon_line_aecb5e697d95a7c5b99c57b1e16616830_icgraph" alt=""/></div>
+<map name="classcanon_line_aecb5e697d95a7c5b99c57b1e16616830_icgraph" id="classcanon_line_aecb5e697d95a7c5b99c57b1e16616830_icgraph">
+<area shape="rect" id="node3" href="classcanon_motionless.html#acd7aea1c06d78731f5b9191f855f4ab0" title="canonMotionless::getShape" alt="" coords="207,5,388,35"/></map>
+</div>
+</p>
+
 </div>
 </div>
-<a class="anchor" id="aaaba8345d81852f529670a71a2531170"></a><!-- doxytag: member="canonLine::isThisMotion" ref="aaaba8345d81852f529670a71a2531170" args="()=0" -->
+<a class="anchor" id="a6f059f0cfdef3e62f7ae3cf64e4d7092"></a><!-- doxytag: member="canonLine::Handle" ref="a6f059f0cfdef3e62f7ae3cf64e4d7092" args="(AIS_Shape) aisShape" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool canonLine::isThisMotion </td>
+          <td class="memname">canonLine::Handle </td>
+          <td>(</td>
+          <td class="paramtype">AIS_Shape&nbsp;</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classcanon_line_a6f059f0cfdef3e62f7ae3cf64e4d7092_icgraph.png" border="0" usemap="#classcanon_line_a6f059f0cfdef3e62f7ae3cf64e4d7092_icgraph" alt=""/></div>
+<map name="classcanon_line_a6f059f0cfdef3e62f7ae3cf64e4d7092_icgraph" id="classcanon_line_a6f059f0cfdef3e62f7ae3cf64e4d7092_icgraph">
+<area shape="rect" id="node3" href="classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea &#45; *extremely* time consuming, potential for crashes, ..." alt="" coords="184,5,379,35"/><area shape="rect" id="node5" href="classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="428,5,609,35"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a63fadf2dfb9815127aa01271e4fb6cc7"></a><!-- doxytag: member="canonLine::isMotion" ref="a63fadf2dfb9815127aa01271e4fb6cc7" args="()=0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool canonLine::isMotion </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -471,7 +618,59 @@ Here is the call graph for this function:</div>
 </div>
 <div class="memdoc">
 
-<p>Implemented in <a class="el" href="classcanon_motion.html#a790ed1dab4ab86af785a0f9d6f29948b">canonMotion</a>, and <a class="el" href="classcanon_motionless.html#a8622b3d2e6876ef23f98b50c3194236e">canonMotionless</a>.</p>
+<p>Implemented in <a class="el" href="classcanon_motion.html#a1b05ffc246200d2b8189f06f1ef77d61">canonMotion</a>, and <a class="el" href="classcanon_motionless.html#ad9f2b8c41414b9ccaeb84f929df88ebf">canonMotionless</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a198283dd523677abab9fb832c379aa38"></a><!-- doxytag: member="canonLine::isSolidDone" ref="a198283dd523677abab9fb832c379aa38" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool canonLine::isSolidDone </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6b16eb02e38d303c236dcda57ee888db"></a><!-- doxytag: member="canonLine::setDispMode" ref="a6b16eb02e38d303c236dcda57ee888db" args="(DISPLAY_MODE m)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void canonLine::setDispMode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844">DISPLAY_MODE</a>&nbsp;</td>
+          <td class="paramname"> <em>m</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a952e212c77d44ce1430bf346fa5457e9"></a><!-- doxytag: member="canonLine::setSolidDone" ref="a952e212c77d44ce1430bf346fa5457e9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void canonLine::setSolidDone </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -504,7 +703,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcanon_line_a7377f0fcdfcbc3d9252267276563bee2_icgraph.png" border="0" usemap="#classcanon_line_a7377f0fcdfcbc3d9252267276563bee2_icgraph" alt=""/></div>
 <map name="classcanon_line_a7377f0fcdfcbc3d9252267276563bee2_icgraph" id="classcanon_line_a7377f0fcdfcbc3d9252267276563bee2_icgraph">
-<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="176,5,403,35"/><area shape="rect" id="node5" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="187,58,392,89"/><area shape="rect" id="node9" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="199,111,380,142"/><area shape="rect" id="node7" href="classcanon_motion.html#aa9c3153daba70575fdb5379a67472d69" title="canonMotion::canonMotion" alt="" coords="451,58,629,89"/></map>
+<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="176,5,403,35"/><area shape="rect" id="node5" href="classcanon_motion.html#a5b09857ac168a4fcc72ff2ecef197d5a" title="for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc" alt="" coords="187,58,392,89"/><area shape="rect" id="node9" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="199,111,380,142"/><area shape="rect" id="node7" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="451,58,621,89"/></map>
 </div>
 </p>
 
@@ -549,52 +748,9 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph.png" border="0" usemap="#classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph" alt=""/></div>
 <map name="classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph" id="classcanon_line_ab3ce27fbfb556d782b9395db05c7100f_icgraph">
-<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="171,5,397,35"/><area shape="rect" id="node5" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="205,58,363,89"/><area shape="rect" id="node7" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="227,111,341,142"/><area shape="rect" id="node9" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="657,39,839,70"/><area shape="rect" id="node11" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="663,105,833,135"/><area shape="rect" id="node13" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="445,189,608,219"/><area shape="rect" id="node22" href="classcanon_motion.html#ac0ff286b51416d5b7e78279e0a361780" title="canonMotion::sweep" alt="" coords="456,85,597,115"/><area shape="rect" id="node15" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="697,182,799,213"/><area shape="rect" id="node17" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="889,209,1049,239"/><area shape="rect" id="node19" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1099,209,1179,239"/></map>
+<area shape="rect" id="node3" href="classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="171,5,397,35"/><area shape="rect" id="node5" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="205,58,363,89"/><area shape="rect" id="node20" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="227,111,341,142"/><area shape="rect" id="node7" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="461,5,624,35"/><area shape="rect" id="node16" href="classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="457,58,628,89"/><area shape="rect" id="node9" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="729,31,831,62"/><area shape="rect" id="node11" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="921,6,1081,37"/><area shape="rect" id="node13" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1131,6,1211,37"/><area shape="rect" id="node18" href="classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="689,98,871,129"/><area shape="rect" id="node22" href="classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea &#45; *extremely* time consuming, potential for crashes, ..." alt="" coords="445,111,640,142"/><area shape="rect" id="node25" href="classcanon_line.html#ad32f1efae6a717e3eab4f07085b290c1" title="return a line identifier as string: getN() if !=&#45;1, else getLineNum()" alt="" coords="473,218,612,249"/><area shape="rect" id="node29" href="classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="452,165,633,195"/><area shape="rect" id="node27" href="classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="695,218,865,249"/></map>
 </div>
 </p>
-
-</div>
-</div>
-<a class="anchor" id="a134534a48882ee3168c5856a78310cc0"></a><!-- doxytag: member="canonLine::tokenize" ref="a134534a48882ee3168c5856a78310cc0" args="(std::string str, std::vector&lt; std::string &gt; &amp;tokenV, const std::string &amp;delimiters=&quot;(), &quot;)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void canonLine::tokenize </td>
-          <td>(</td>
-          <td class="paramtype">std::string&nbsp;</td>
-          <td class="paramname"> <em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&nbsp;</td>
-          <td class="paramname"> <em>tokenV</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&nbsp;</td>
-          <td class="paramname"> <em>delimiters</em> = <code>&quot;(),&nbsp;&quot;</code></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Splits a string using delimiters. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>str</em>&nbsp;</td><td>the string to be split </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>tokenV</em>&nbsp;</td><td>a vector of strings, each of which is a piece of str </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>delimiters</em>&nbsp;</td><td>defaults to: both parenthesis, comma, space </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classcanon_line.html#a0204ae8c48a4737cf9c8e00d588f807a">tokenize()</a> </dd></dl>
 
 </div>
 </div>
@@ -613,7 +769,7 @@ Here is the caller graph for this function:</div>
 </div>
 <div class="memdoc">
 <p>tokenize myLine with the default delimiters `(), ` </p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classcanon_line.html#a134534a48882ee3168c5856a78310cc0">tokenize(std::string str,std::vector&lt;std::string&gt;&amp; tokenV,const std::string&amp; delimiters)</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classuio.html#a93dd948ee8096bc8f47442969c7e0f18">uio::tokenize(std::string str,std::vector&lt;std::string&gt;&amp; tokenV,const std::string&amp; delimiters)</a> </dd></dl>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -640,12 +796,12 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ab0ccea2e608b745fb5ac38b9255cca42"></a><!-- doxytag: member="canonLine::errors" ref="ab0ccea2e608b745fb5ac38b9255cca42" args="" -->
+<a class="anchor" id="a156485510b64ff954732afe1fd55285c"></a><!-- doxytag: member="canonLine::dispMode" ref="a156485510b64ff954732afe1fd55285c" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classcanon_line.html#ab0ccea2e608b745fb5ac38b9255cca42">canonLine::errors</a><code> [protected]</code></td>
+          <td class="memname"><a class="el" href="canon_line_8hh.html#aa694eadcc25ca533db97c79541ebf844">DISPLAY_MODE</a> <a class="el" href="classcanon_line.html#a156485510b64ff954732afe1fd55285c">canonLine::dispMode</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -680,12 +836,51 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="aed6bda35f889c08302fdd907ef766653"></a><!-- doxytag: member="canonLine::solidErrors" ref="aed6bda35f889c08302fdd907ef766653" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcanon_line.html#aed6bda35f889c08302fdd907ef766653">canonLine::solidErrors</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a231a018101820c7ee472d9668f5fb9ea"></a><!-- doxytag: member="canonLine::solidIsDone" ref="a231a018101820c7ee472d9668f5fb9ea" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcanon_line.html#a231a018101820c7ee472d9668f5fb9ea">canonLine::solidIsDone</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="acb38ae34a594b0a7e117495be2546399"></a><!-- doxytag: member="canonLine::status" ref="acb38ae34a594b0a7e117495be2546399" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classmachine_status.html">machineStatus</a> <a class="el" href="classcanon_line.html#acb38ae34a594b0a7e117495be2546399">canonLine::status</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8a4de80dc95bebad25a0ef69267f34cb"></a><!-- doxytag: member="canonLine::unsolidErrors" ref="a8a4de80dc95bebad25a0ef69267f34cb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcanon_line.html#a8a4de80dc95bebad25a0ef69267f34cb">canonLine::unsolidErrors</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>

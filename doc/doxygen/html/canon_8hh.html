@@ -31,27 +31,30 @@
 <h1>src/g2m/canon.hh File Reference</h1>  </div>
 </div>
 <div class="contents">
+<code>#include &lt;QString&gt;</code><br/>
 <code>#include &lt;string&gt;</code><br/>
 <code>#include &lt;iostream&gt;</code><br/>
+<code>#include &lt;map&gt;</code><br/>
 <code>#include &lt;cmath&gt;</code><br/>
 <code>#include &lt;limits.h&gt;</code><br/>
 <code>#include &lt;gp_Pnt.hxx&gt;</code><br/>
 <code>#include &lt;gp_Dir.hxx&gt;</code><br/>
 <code>#include &lt;gp_Ax1.hxx&gt;</code><br/>
 <code>#include &lt;TopoDS_Shape.hxx&gt;</code><br/>
+<code>#include &quot;<a class="el" href="tool_8hh_source.html">tool.hh</a>&quot;</code><br/>
 <div class="dynheader">
 Include dependency graph for canon.hh:</div>
 <div class="dyncontent">
 <div class="center"><img src="canon_8hh__incl.png" border="0" usemap="#src_2g2m_2canon_8hh" alt=""/></div>
 <map name="src_2g2m_2canon_8hh" id="src_2g2m_2canon_8hh">
-</map>
+<area shape="rect" id="node23" href="tool_8hh.html" title="tool.hh" alt="" coords="963,86,1024,117"/></map>
 </div>
 <div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="canon_8hh__dep__incl.png" border="0" usemap="#src_2g2m_2canon_8hhdep" alt=""/></div>
 <map name="src_2g2m_2canon_8hhdep" id="src_2g2m_2canon_8hhdep">
-<area shape="rect" id="node3" href="canon_8cc.html" title="src/g2m/canon.cc" alt="" coords="251,86,376,117"/><area shape="rect" id="node5" href="canon_line_8hh.html" title="src/g2m/canonLine.hh" alt="" coords="403,246,552,277"/><area shape="rect" id="node38" href="tool_8hh.html" title="src/g2m/tool.hh" alt="" coords="400,86,512,117"/><area shape="rect" id="node40" href="machine_status_8hh.html" title="src/g2m/machineStatus.hh" alt="" coords="639,166,817,197"/><area shape="rect" id="node7" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="537,486,687,517"/><area shape="rect" id="node9" href="canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="880,326,1069,357"/><area shape="rect" id="node14" href="canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="349,326,515,357"/><area shape="rect" id="node20" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="5,486,165,517"/><area shape="rect" id="node22" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="589,406,755,437"/><area shape="rect" id="node27" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="248,406,413,437"/><area shape="rect" id="node32" href="g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="691,326,805,357"/><area shape="rect" id="node34" href="g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="779,406,893,437"/><area shape="rect" id="node12" href="canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="968,406,1157,437"/><area shape="rect" id="node17" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="64,406,224,437"/><area shape="rect" id="node25" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="967,486,1132,517"/><area shape="rect" id="node55" href="tool_8cc.html" title="src/g2m/tool.cc" alt="" coords="328,166,440,197"/><area shape="rect" id="node51" href="machine_status_8cc.html" title="src/g2m/machineStatus.cc" alt="" coords="576,246,755,277"/></map>
+<area shape="rect" id="node3" href="canon_8cc.html" title="src/g2m/canon.cc" alt="" coords="5,166,131,197"/><area shape="rect" id="node5" href="tool_8hh.html" title="src/g2m/tool.hh" alt="" coords="248,86,360,117"/><area shape="rect" id="node9" href="canon_line_8hh.html" title="src/g2m/canonLine.hh" alt="" coords="809,166,959,197"/><area shape="rect" id="node52" href="machine_status_8hh.html" title="src/g2m/machineStatus.hh" alt="" coords="1045,86,1224,117"/><area shape="rect" id="node21" href="linear_motion_8hh.html" title="src/g2m/linearMotion.hh" alt="" coords="384,326,544,357"/><area shape="rect" id="node49" href="tool_8cc.html" title="src/g2m/tool.cc" alt="" coords="155,166,267,197"/><area shape="rect" id="node11" href="canon_line_8cc.html" title="src/g2m/canonLine.cc" alt="" coords="857,406,1007,437"/><area shape="rect" id="node13" href="canon_motionless_8hh.html" title="src/g2m/canonMotionless.hh" alt="" coords="1440,246,1629,277"/><area shape="rect" id="node18" href="canon_motion_8hh.html" title="src/g2m/canonMotion.hh" alt="" coords="688,246,853,277"/><area shape="rect" id="node24" href="linear_motion_8cc.html" title="src/g2m/linearMotion.cc" alt="" coords="325,406,485,437"/><area shape="rect" id="node26" href="helical_motion_8hh.html" title="src/g2m/helicalMotion.hh" alt="" coords="909,326,1075,357"/><area shape="rect" id="node31" href="canon_motion_8cc.html" title="src/g2m/canonMotion.cc" alt="" coords="568,326,733,357"/><area shape="rect" id="node33" href="g2m_8cc.html" title="src/g2m/g2m.cc" alt="" coords="1099,326,1213,357"/><area shape="rect" id="node38" href="g2m_8hh.html" title="src/g2m/g2m.hh" alt="" coords="1288,246,1403,277"/><area shape="rect" id="node16" href="canon_motionless_8cc.html" title="src/g2m/canonMotionless.cc" alt="" coords="1587,326,1776,357"/><area shape="rect" id="node29" href="helical_motion_8cc.html" title="src/g2m/helicalMotion.cc" alt="" coords="1632,406,1797,437"/><area shape="rect" id="node41" href="g2m__threaded_8hh.html" title="src/g2m/g2m_threaded.hh" alt="" coords="1339,326,1512,357"/><area shape="rect" id="node43" href="g2m__threaded_8cc.html" title="src/g2m/g2m_threaded.cc" alt="" coords="1276,406,1449,437"/><area shape="rect" id="node64" href="machine_status_8cc.html" title="src/g2m/machineStatus.cc" alt="" coords="983,166,1161,197"/></map>
 </div>
 
 <p><a href="canon_8hh_source.html">Go to the source code of this file.</a></p>

@@ -1,22 +1,47 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classuio.html#a60e168378e86cc146cf1b865535e9e2b" title="uio::fileExists" alt="" coords="261,65,363,95"/>
-<area shape="rect" id="node5" href="$classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="748,5,820,35"/>
-<area shape="rect" id="node9" href="$class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d" title="QoccHarnessWindow::getArg" alt="" coords="216,478,408,509"/>
-<area shape="rect" id="node11" href="$classnanotimer.html#aa8f93cde1217a77ad15676061c065166" title="nanotimer::getElapsed" alt="" coords="708,58,860,89"/>
-<area shape="rect" id="node13" href="$classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="265,531,359,562"/>
-<area shape="rect" id="node17" href="$classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="733,378,835,409"/>
-<area shape="rect" id="node19" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="261,298,363,329"/>
-<area shape="rect" id="node22" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="467,219,629,250"/>
-<area shape="rect" id="node41" href="$classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="728,431,840,462"/>
-<area shape="rect" id="node47" href="$classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="268,585,356,615"/>
-<area shape="rect" id="node7" href="$class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="928,5,1083,35"/>
-<area shape="rect" id="node15" href="$class_qocc_viewer_context.html#a477fcbd378603439aea5486a13f5d3b1" title="Turn the grid off." alt="" coords="456,531,640,562"/>
-<area shape="rect" id="node43" href="$classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="g2m::sleepSecond" alt="" coords="483,273,613,303"/>
-<area shape="rect" id="node24" href="$classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="688,218,880,249"/>
-<area shape="rect" id="node26" href="$classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="705,271,863,302"/>
-<area shape="rect" id="node28" href="$classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="719,325,849,355"/>
-<area shape="rect" id="node34" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="727,111,841,142"/>
-<area shape="rect" id="node38" href="$classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="712,165,856,195"/>
-<area shape="rect" id="node30" href="$classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="960,325,1051,355"/>
-<area shape="rect" id="node36" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="947,111,1064,142"/>
+<area shape="rect" id="node3" href="$classcanon.html#ac1757537c1d1e1151d412e04ba7f4ada" title="canon::buildTools" alt="" coords="251,110,373,141"/>
+<area shape="rect" id="node16" href="$classuio.html#a60e168378e86cc146cf1b865535e9e2b" title="uio::fileExists" alt="" coords="733,213,835,243"/>
+<area shape="rect" id="node21" href="$classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb" title="ask for a tool table, even if one is configured &#45; user may wish to change it" alt="" coords="708,1141,860,1171"/>
+<area shape="rect" id="node25" href="$classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="1003,937,1091,967"/>
+<area shape="rect" id="node27" href="$classg2m.html#aae985c378c19c943d1da9f01c9598835" title="call this before creating solids, and use bbox size to figure out length of tools" alt="" coords="692,266,876,297"/>
+<area shape="rect" id="node37" href="$classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="996,637,1097,667"/>
+<area shape="rect" id="node40" href="$classg2m.html#a07968c726366bdde547ae5db8916bc66" title="g2m::createThreads" alt="" coords="243,579,381,610"/>
+<area shape="rect" id="node42" href="$classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="247,370,377,401"/>
+<area shape="rect" id="node47" href="$classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="244,633,380,663"/>
+<area shape="rect" id="node49" href="$classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="512,474,584,505"/>
+<area shape="rect" id="node53" href="$classnanotimer.html#a6fe6b7515227dd2dbb5cd7c889174b1f" title="nanotimer::getElapsedS" alt="" coords="704,733,864,763"/>
+<area shape="rect" id="node73" href="$classnanotimer.html#af9a156b8247ec1b6cd7759f8e0c16a47" title="nanotimer::humanreadable" alt="" coords="697,423,871,454"/>
+<area shape="rect" id="node79" href="$class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d" title="QoccHarnessWindow::getArg" alt="" coords="216,990,408,1021"/>
+<area shape="rect" id="node82" href="$classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="265,1234,359,1265"/>
+<area shape="rect" id="node88" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="261,937,363,967"/>
+<area shape="rect" id="node91" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="467,1182,629,1213"/>
+<area shape="rect" id="node108" href="$classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="728,1407,840,1438"/>
+<area shape="rect" id="node5" href="$classcanon.html#a3c0fe594af76727c9d7fbff964df58e5" title="canon::checkTTskips" alt="" coords="475,31,621,62"/>
+<area shape="rect" id="node9" href="$classcanon.html#ace6faa517e3c5a70ff586a6d15e70d55" title="canon::readTTfile" alt="" coords="487,110,609,141"/>
+<area shape="rect" id="node7" href="$classcanon.html#a59534e932c02c90e3e0beab12cd8602c" title="create a tool. for now, only supports cylindricalTool and ballnoseTool" alt="" coords="721,5,847,35"/>
+<area shape="rect" id="node11" href="$classcanon.html#ab3191bbde574d5b89fa51b8b5e6f8d1a" title="canon::checkRange" alt="" coords="716,58,852,89"/>
+<area shape="rect" id="node13" href="$classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="992,85,1101,115"/>
+<area shape="rect" id="node19" href="$classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="1001,423,1092,454"/>
+<area shape="rect" id="node23" href="$classuio.html#ac97519b41080b8c06d39e46720ab6693" title="uio::conf" alt="" coords="1011,1115,1083,1146"/>
+<area shape="rect" id="node29" href="$classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="1213,371,1336,402"/>
+<area shape="rect" id="node31" href="$classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="1225,241,1324,271"/>
+<area shape="rect" id="node33" href="$classmachine_status.html#a244b29cfdf7d6bf39424a03d3ff418be" title="machineStatus::getFeedBounds" alt="" coords="943,215,1151,246"/>
+<area shape="rect" id="node35" href="$classmachine_status.html#a7b2e38c37f4aa8d0bf89f76fab872dcd" title="machineStatus::getTraverseBounds" alt="" coords="932,269,1161,299"/>
+<area shape="rect" id="node44" href="$classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="503,370,593,401"/>
+<area shape="rect" id="node55" href="$classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="491,527,605,558"/>
+<area shape="rect" id="node71" href="$classg2m.html#a9a882e0d5b5ecece6070d74cd56291c2" title="g2m::statusBarUp" alt="" coords="485,581,611,611"/>
+<area shape="rect" id="node51" href="$class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="707,319,861,350"/>
+<area shape="rect" id="node59" href="$classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="703,477,865,507"/>
+<area shape="rect" id="node61" href="$classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4" title="dump shape s to file named n" alt="" coords="989,583,1104,614"/>
+<area shape="rect" id="node64" href="$class_sh_heal_oper___shape_process.html#a66dac68ef7190f0b1417e582c7b27999" title="Perform modifications of specified shape." alt="" coords="928,530,1165,561"/>
+<area shape="rect" id="node66" href="$classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped" alt="" coords="984,477,1109,507"/>
+<area shape="rect" id="node84" href="$class_qocc_viewer_context.html#a477fcbd378603439aea5486a13f5d3b1" title="Turn the grid off." alt="" coords="456,1235,640,1266"/>
+<area shape="rect" id="node110" href="$classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="Sleep 1s and process events." alt="" coords="483,989,613,1019"/>
+<area shape="rect" id="node113" href="$classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7" title="g2m::startInterp" alt="" coords="491,1042,605,1073"/>
+<area shape="rect" id="node93" href="$classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLine::canonLineFactory" alt="" coords="688,1194,880,1225"/>
+<area shape="rect" id="node95" href="$classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="705,1247,863,1278"/>
+<area shape="rect" id="node98" href="$classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="705,1301,863,1331"/>
+<area shape="rect" id="node102" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="727,1354,841,1385"/>
+<area shape="rect" id="node100" href="$classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="988,1301,1105,1331"/>
+<area shape="rect" id="node104" href="$classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="983,1354,1111,1385"/>
 </map>

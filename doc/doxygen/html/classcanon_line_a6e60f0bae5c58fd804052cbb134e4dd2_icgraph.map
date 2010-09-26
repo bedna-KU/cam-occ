@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classcanon_motionless.html#afa2c9529e2653566eac888b0e7d5709e" title="canonMotionless::canonMotionless" alt="" coords="181,5,408,35"/>
+<area shape="rect" id="node5" href="$classcanon_line.html#ad32f1efae6a717e3eab4f07085b290c1" title="return a line identifier as string: getN() if !=&#45;1, else getLineNum()" alt="" coords="484,29,623,59"/>
+<area shape="rect" id="node9" href="$classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="237,109,352,139"/>
+<area shape="rect" id="node27" href="$classcanon_motion.html#ac24b200c6307c7eb97518198afc40be8" title="Sweep tool outline along myUnSolid and put result in myShape." alt="" coords="209,187,380,218"/>
+<area shape="rect" id="node7" href="$classlinear_motion.html#a0bc21dbaa32b5251cd8d39926548f2a3" title="linearMotion::linearMotion" alt="" coords="705,29,876,59"/>
+<area shape="rect" id="node11" href="$classcanon_motion.html#a4e722b6e5aaef29b0b398b8b03a7553f" title="a *very* bad idea &#45; *extremely* time consuming, potential for crashes, ..." alt="" coords="456,189,651,219"/>
+<area shape="rect" id="node16" href="$classhelical_motion.html#a507b873b0d8c12319985a3c913fdfff8" title="helicalMotion::helicalMotion" alt="" coords="463,82,644,113"/>
+<area shape="rect" id="node18" href="$classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="472,135,635,166"/>
+<area shape="rect" id="node13" href="$classcanon_motion.html#a7938cad78b52160ec634fa5ea509c49a" title="canonMotion::computeSolid" alt="" coords="700,227,881,258"/>
+<area shape="rect" id="node20" href="$classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="740,110,841,141"/>
+<area shape="rect" id="node22" href="$classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="932,137,1092,167"/>
+<area shape="rect" id="node24" href="$classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1141,137,1221,167"/>
+</map>

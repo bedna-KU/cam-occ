@@ -29,7 +29,8 @@
 <a href="#pub-slots">Public Slots</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a>  </div>
   <div class="headertitle">
 <h1>g2m Class Reference</h1>  </div>
 </div>
@@ -39,6 +40,8 @@
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="g2m_8hh_source.html">g2m.hh</a>&gt;</code></p>
+
+<p>Inherited by <a class="el" href="classg2m__threaded.html">g2m_threaded</a>.</p>
 
 <p><a href="classg2m-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -52,19 +55,39 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#ac17ca4017743e92012b8b1aa1885ce23">isOK</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#aecc73d4e316ea465a011fe8060251203">subtractWorkpiece</a> (uint index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#aae985c378c19c943d1da9f01c9598835">createBlankWorkpiece</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">call this before creating solids, and use bbox size to figure out length of tools  <a href="#aae985c378c19c943d1da9f01c9598835"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb">chooseToolTable</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">ask for a tool table, even if one is configured - user may wish to change it  <a href="#ac46f8d2f08dab98af4e3a61a834743eb"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7">interpret</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0">processCanonLine</a> (std::string l)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b">infoMsg</a> (std::string s)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194">sleepSecond</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#ae469849f9a988d939c9ac89ad05a3653">test</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sleep 1s and process events.  <a href="#a2750d7a3ad622bee92a9b15864032194"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a9a882e0d5b5ecece6070d74cd56291c2">statusBarUp</a> (std::string s, double avgtime)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2">makeSolid</a> (uint index)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7">startInterp</a> (QProcess &amp;tc)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea">shouldDump</a> (int a, bool dumpPrev=false)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">used to determine if a shape needs to be dumped  <a href="#aac4d751a583973a266f2bfe59c2a17ea"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4">dumpBrep</a> (std::string n, TopoDS_Shape s)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">dump shape s to file named n  <a href="#a2f91130570b9be77d2e43ec74e0c5ff4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde">finishAllSolids</a> (<a class="el" href="classnanotimer.html">nanotimer</a> &amp;timer)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a07968c726366bdde547ae5db8916bc66">createThreads</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#afb5b20c0464667c797dc69ca85b8cbb3">lockMutex</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#abeb32538f21d71270cca58e7f3595f81">unlockMutex</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">TopoDS_Shape&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a2d98be98b4373abd4a39c30063e2c139">workpiece</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#ad0d48dc66252a05fc09f6420bc2a75c3">minToolLength</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#ad50bf33e2389d6dbaaec234894e62795">fromCmdLine</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#af23b06717458a2f13e891c74439c7433">success</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classcanon_line.html">canonLine</a> * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a7d996d7f9fd2a233d9ce40c45865da43">lineVector</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classdisp_shape.html">dispShape</a> * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#aaf4c24e9eff7ffebbd5bada4287fe6da">dispVector</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a9dd4595db0fc5a9c955c95f7b21d5d0f">file</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a940316af30f920c0ade576b611f2aeba">tooltable</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a9b5865494a262c1794beebb61443a9b7">debug</a></td></tr>
+<tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classcanon_line.html">canonLine</a> * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classg2m.html#a5fb085edd9b1c0a09a8132b933d218e8">lineVector</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>This class does the high level stuff for creating a model from gcode. It runs the interpreter, and creates a <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object for each canonical command generated by the interpreter. It also does error checking and stores the cannonLines. It calls methods on each <a class="el" href="classcanon_line.html" title="A canonLine object represents one canonical command. Each gcode line produces one or more canonical c...">canonLine</a> object to display it. Eventually it will enable the user to see which gcode line creates which bit of the path, and vice versa. </p>
@@ -89,13 +112,192 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classg2m_addacdf6af4a29a73f25a44c7dc7083fb_cgraph.png" border="0" usemap="#classg2m_addacdf6af4a29a73f25a44c7dc7083fb_cgraph" alt=""/></div>
 <map name="classg2m_addacdf6af4a29a73f25a44c7dc7083fb_cgraph" id="classg2m_addacdf6af4a29a73f25a44c7dc7083fb_cgraph">
-<area shape="rect" id="node3" href="classuio.html#a134076fd51090be2c4cae69745f7751e" title="uio::hm" alt="" coords="183,130,247,161"/><area shape="rect" id="node5" href="classuio.html#aff16186f3ae070fefe2225d716178c58" title="uio::mb" alt="" coords="183,183,247,214"/><area shape="rect" id="node7" href="classuio.html#a38722d25079adb9d4ea23a6c226d1f62" title="uio::sleep" alt="" coords="176,237,253,267"/><area shape="rect" id="node9" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="135,290,295,321"/><area shape="rect" id="node55" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="396,550,484,581"/><area shape="rect" id="node11" href="classuio.html#a60e168378e86cc146cf1b865535e9e2b" title="uio::fileExists" alt="" coords="389,187,491,218"/><area shape="rect" id="node13" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="876,155,948,186"/><area shape="rect" id="node17" href="class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d" title="QoccHarnessWindow::getArg" alt="" coords="344,81,536,111"/><area shape="rect" id="node19" href="classnanotimer.html#aa8f93cde1217a77ad15676061c065166" title="nanotimer::getElapsed" alt="" coords="836,209,988,239"/><area shape="rect" id="node21" href="classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="393,134,487,165"/><area shape="rect" id="node25" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="861,529,963,559"/><area shape="rect" id="node27" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="389,394,491,425"/><area shape="rect" id="node30" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="595,342,757,373"/><area shape="rect" id="node49" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="856,79,968,110"/><area shape="rect" id="node15" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="1056,155,1211,186"/><area shape="rect" id="node23" href="class_qocc_viewer_context.html#a477fcbd378603439aea5486a13f5d3b1" title="Turn the grid off." alt="" coords="584,134,768,165"/><area shape="rect" id="node51" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="g2m::sleepSecond" alt="" coords="611,395,741,426"/><area shape="rect" id="node32" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="816,315,1008,346"/><area shape="rect" id="node34" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="833,369,991,399"/><area shape="rect" id="node36" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="847,422,977,453"/><area shape="rect" id="node42" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="855,475,969,506"/><area shape="rect" id="node46" href="classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="840,262,984,293"/><area shape="rect" id="node38" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="1088,422,1179,453"/><area shape="rect" id="node44" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="1075,475,1192,506"/></map>
+<area shape="rect" id="node3" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="1341,330,1464,360"/><area shape="rect" id="node5" href="classuio.html#a134076fd51090be2c4cae69745f7751e" title="uio::hm" alt="" coords="183,515,247,546"/><area shape="rect" id="node7" href="classuio.html#aff16186f3ae070fefe2225d716178c58" title="uio::mb" alt="" coords="183,568,247,599"/><area shape="rect" id="node9" href="classuio.html#a38722d25079adb9d4ea23a6c226d1f62" title="uio::sleep" alt="" coords="176,622,253,652"/><area shape="rect" id="node11" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="135,675,295,706"/><area shape="rect" id="node35" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="1131,1318,1219,1348"/><area shape="rect" id="node13" href="classcanon.html#ac1757537c1d1e1151d412e04ba7f4ada" title="canon::buildTools" alt="" coords="379,278,501,308"/><area shape="rect" id="node26" href="classuio.html#a60e168378e86cc146cf1b865535e9e2b" title="uio::fileExists" alt="" coords="861,355,963,386"/><area shape="rect" id="node31" href="classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb" title="ask for a tool table, even if one is configured &#45; user may wish to change it" alt="" coords="836,1446,988,1476"/><area shape="rect" id="node37" href="classg2m.html#aae985c378c19c943d1da9f01c9598835" title="call this before creating solids, and use bbox size to figure out length of tools" alt="" coords="820,94,1004,124"/><area shape="rect" id="node46" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="1124,1027,1225,1058"/><area shape="rect" id="node49" href="classg2m.html#a07968c726366bdde547ae5db8916bc66" title="g2m::createThreads" alt="" coords="371,779,509,810"/><area shape="rect" id="node51" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="375,568,505,599"/><area shape="rect" id="node56" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="372,832,508,863"/><area shape="rect" id="node58" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="640,622,712,652"/><area shape="rect" id="node62" href="classnanotimer.html#a6fe6b7515227dd2dbb5cd7c889174b1f" title="nanotimer::getElapsedS" alt="" coords="832,782,992,812"/><area shape="rect" id="node82" href="classnanotimer.html#af9a156b8247ec1b6cd7759f8e0c16a47" title="nanotimer::humanreadable" alt="" coords="825,515,999,546"/><area shape="rect" id="node88" href="class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d" title="QoccHarnessWindow::getArg" alt="" coords="344,1419,536,1450"/><area shape="rect" id="node91" href="classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="393,120,487,151"/><area shape="rect" id="node97" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="389,1142,491,1172"/><area shape="rect" id="node100" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="595,675,757,706"/><area shape="rect" id="node117" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="856,408,968,439"/><area shape="rect" id="node15" href="classcanon.html#a3c0fe594af76727c9d7fbff964df58e5" title="canon::checkTTskips" alt="" coords="603,224,749,255"/><area shape="rect" id="node19" href="classcanon.html#ace6faa517e3c5a70ff586a6d15e70d55" title="canon::readTTfile" alt="" coords="615,278,737,308"/><area shape="rect" id="node17" href="classcanon.html#a59534e932c02c90e3e0beab12cd8602c" title="create a tool. for now, only supports cylindricalTool and ballnoseTool" alt="" coords="849,147,975,178"/><area shape="rect" id="node21" href="classcanon.html#ab3191bbde574d5b89fa51b8b5e6f8d1a" title="canon::checkRange" alt="" coords="844,200,980,231"/><area shape="rect" id="node23" href="classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="1120,278,1229,308"/><area shape="rect" id="node29" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="1129,423,1220,454"/><area shape="rect" id="node33" href="classuio.html#ac97519b41080b8c06d39e46720ab6693" title="uio::conf" alt="" coords="1139,1471,1211,1502"/><area shape="rect" id="node40" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="1353,691,1452,722"/><area shape="rect" id="node42" href="classmachine_status.html#a244b29cfdf7d6bf39424a03d3ff418be" title="machineStatus::getFeedBounds" alt="" coords="1071,70,1279,100"/><area shape="rect" id="node44" href="classmachine_status.html#a7b2e38c37f4aa8d0bf89f76fab872dcd" title="machineStatus::getTraverseBounds" alt="" coords="1060,123,1289,154"/><area shape="rect" id="node53" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="631,568,721,599"/><area shape="rect" id="node64" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="619,886,733,916"/><area shape="rect" id="node80" href="classg2m.html#a9a882e0d5b5ecece6070d74cd56291c2" title="g2m::statusBarUp" alt="" coords="613,832,739,863"/><area shape="rect" id="node60" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="835,462,989,492"/><area shape="rect" id="node68" href="classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="831,886,993,916"/><area shape="rect" id="node70" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4" title="dump shape s to file named n" alt="" coords="1117,898,1232,928"/><area shape="rect" id="node73" href="class_sh_heal_oper___shape_process.html#a66dac68ef7190f0b1417e582c7b27999" title="Perform modifications of specified shape." alt="" coords="1056,951,1293,982"/><area shape="rect" id="node75" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped" alt="" coords="1112,844,1237,875"/><area shape="rect" id="node93" href="class_qocc_viewer_context.html#a477fcbd378603439aea5486a13f5d3b1" title="Turn the grid off." alt="" coords="584,120,768,151"/><area shape="rect" id="node119" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="Sleep 1s and process events." alt="" coords="611,1266,741,1296"/><area shape="rect" id="node122" href="classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7" title="g2m::startInterp" alt="" coords="619,1342,733,1372"/><area shape="rect" id="node102" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLine::canonLineFactory" alt="" coords="816,728,1008,759"/><area shape="rect" id="node104" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="833,568,991,599"/><area shape="rect" id="node107" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="833,675,991,706"/><area shape="rect" id="node111" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="855,622,969,652"/><area shape="rect" id="node109" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="1116,675,1233,706"/><area shape="rect" id="node113" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="1111,622,1239,652"/></map>
 </div>
 </p>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ac46f8d2f08dab98af4e3a61a834743eb"></a><!-- doxytag: member="g2m::chooseToolTable" ref="ac46f8d2f08dab98af4e3a61a834743eb" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool g2m::chooseToolTable </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>ask for a tool table, even if one is configured - user may wish to change it </p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_ac46f8d2f08dab98af4e3a61a834743eb_cgraph.png" border="0" usemap="#classg2m_ac46f8d2f08dab98af4e3a61a834743eb_cgraph" alt=""/></div>
+<map name="classg2m_ac46f8d2f08dab98af4e3a61a834743eb_cgraph" id="classg2m_ac46f8d2f08dab98af4e3a61a834743eb_cgraph">
+<area shape="rect" id="node3" href="classuio.html#ac97519b41080b8c06d39e46720ab6693" title="uio::conf" alt="" coords="215,5,287,35"/><area shape="rect" id="node5" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="207,58,295,89"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_ac46f8d2f08dab98af4e3a61a834743eb_icgraph.png" border="0" usemap="#classg2m_ac46f8d2f08dab98af4e3a61a834743eb_icgraph" alt=""/></div>
+<map name="classg2m_ac46f8d2f08dab98af4e3a61a834743eb_icgraph" id="classg2m_ac46f8d2f08dab98af4e3a61a834743eb_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="521,5,681,35"/><area shape="rect" id="node7" href="classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7" title="g2m::startInterp" alt="" coords="205,30,320,61"/><area shape="rect" id="node5" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="731,5,811,35"/><area shape="rect" id="node9" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="369,30,471,61"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="aae985c378c19c943d1da9f01c9598835"></a><!-- doxytag: member="g2m::createBlankWorkpiece" ref="aae985c378c19c943d1da9f01c9598835" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void g2m::createBlankWorkpiece </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>call this before creating solids, and use bbox size to figure out length of tools </p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_aae985c378c19c943d1da9f01c9598835_cgraph.png" border="0" usemap="#classg2m_aae985c378c19c943d1da9f01c9598835_cgraph" alt=""/></div>
+<map name="classg2m_aae985c378c19c943d1da9f01c9598835_cgraph" id="classg2m_aae985c378c19c943d1da9f01c9598835_cgraph">
+<area shape="rect" id="node3" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="291,5,413,35"/><area shape="rect" id="node5" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="303,58,401,89"/><area shape="rect" id="node7" href="classmachine_status.html#a244b29cfdf7d6bf39424a03d3ff418be" title="machineStatus::getFeedBounds" alt="" coords="248,111,456,142"/><area shape="rect" id="node9" href="classmachine_status.html#a7b2e38c37f4aa8d0bf89f76fab872dcd" title="machineStatus::getTraverseBounds" alt="" coords="237,165,467,195"/><area shape="rect" id="node11" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="301,218,403,249"/><area shape="rect" id="node13" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="307,271,397,302"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_aae985c378c19c943d1da9f01c9598835_icgraph.png" border="0" usemap="#classg2m_aae985c378c19c943d1da9f01c9598835_icgraph" alt=""/></div>
+<map name="classg2m_aae985c378c19c943d1da9f01c9598835_icgraph" id="classg2m_aae985c378c19c943d1da9f01c9598835_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="239,5,399,35"/><area shape="rect" id="node5" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="448,5,528,35"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a07968c726366bdde547ae5db8916bc66"></a><!-- doxytag: member="g2m::createThreads" ref="a07968c726366bdde547ae5db8916bc66" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void g2m::createThreads </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline, protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classg2m__threaded.html#a45ecab0095c7441015278fde0a273c3e">g2m_threaded</a>.</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a07968c726366bdde547ae5db8916bc66_icgraph.png" border="0" usemap="#classg2m_a07968c726366bdde547ae5db8916bc66_icgraph" alt=""/></div>
+<map name="classg2m_a07968c726366bdde547ae5db8916bc66_icgraph" id="classg2m_a07968c726366bdde547ae5db8916bc66_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="193,5,353,35"/><area shape="rect" id="node5" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="403,5,483,35"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a2f91130570b9be77d2e43ec74e0c5ff4"></a><!-- doxytag: member="g2m::dumpBrep" ref="a2f91130570b9be77d2e43ec74e0c5ff4" args="(std::string n, TopoDS_Shape s)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void g2m::dumpBrep </td>
+          <td>(</td>
+          <td class="paramtype">std::string&nbsp;</td>
+          <td class="paramname"> <em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TopoDS_Shape&nbsp;</td>
+          <td class="paramname"> <em>s</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [inline, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>dump shape s to file named n </p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a2f91130570b9be77d2e43ec74e0c5ff4_icgraph.png" border="0" usemap="#classg2m_a2f91130570b9be77d2e43ec74e0c5ff4_icgraph" alt=""/></div>
+<map name="classg2m_a2f91130570b9be77d2e43ec74e0c5ff4_icgraph" id="classg2m_a2f91130570b9be77d2e43ec74e0c5ff4_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="168,31,331,62"/><area shape="rect" id="node5" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="380,31,495,62"/><area shape="rect" id="node7" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="587,5,723,35"/><area shape="rect" id="node13" href="classg2m__threaded.html#a8b06b1bb49f6febf96c6d2772b4fb477" title="g2m_threaded::makeSolidsThread" alt="" coords="545,58,764,89"/><area shape="rect" id="node9" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="831,5,991,35"/><area shape="rect" id="node11" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1056,5,1136,35"/><area shape="rect" id="node15" href="classg2m__threaded.html#a45ecab0095c7441015278fde0a273c3e" title="g2m_threaded::createThreads" alt="" coords="813,58,1008,89"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a2344f3f61450af589dab9c994ff33cde"></a><!-- doxytag: member="g2m::finishAllSolids" ref="a2344f3f61450af589dab9c994ff33cde" args="(nanotimer &amp;timer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void g2m::finishAllSolids </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnanotimer.html">nanotimer</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>timer</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>call makeSolid on each obj in lineVector this is overridden by <a class="el" href="classg2m__threaded.html" title="This class extends g2m to allow parallel processing. It was split out of g2m and is not guaranteed to...">g2m_threaded</a> </p>
+
+<p>Reimplemented in <a class="el" href="classg2m__threaded.html#ae16080366f4b858b6b1b13d1f924d4bb">g2m_threaded</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a2344f3f61450af589dab9c994ff33cde_cgraph.png" border="0" usemap="#classg2m_a2344f3f61450af589dab9c994ff33cde_cgraph" alt=""/></div>
+<map name="classg2m_a2344f3f61450af589dab9c994ff33cde_cgraph" id="classg2m_a2344f3f61450af589dab9c994ff33cde_cgraph">
+<area shape="rect" id="node3" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="237,18,309,49"/><area shape="rect" id="node7" href="classnanotimer.html#a6fe6b7515227dd2dbb5cd7c889174b1f" title="nanotimer::getElapsedS" alt="" coords="193,83,353,114"/><area shape="rect" id="node9" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="216,137,331,167"/><area shape="rect" id="node29" href="classg2m.html#a9a882e0d5b5ecece6070d74cd56291c2" title="g2m::statusBarUp" alt="" coords="211,215,336,246"/><area shape="rect" id="node34" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="447,269,535,299"/><area shape="rect" id="node5" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="413,5,568,35"/><area shape="rect" id="node11" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="912,137,1035,167"/><area shape="rect" id="node13" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="695,109,796,139"/><area shape="rect" id="node15" href="classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="409,162,572,193"/><area shape="rect" id="node17" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4" title="dump shape s to file named n" alt="" coords="688,162,803,193"/><area shape="rect" id="node20" href="class_sh_heal_oper___shape_process.html#a66dac68ef7190f0b1417e582c7b27999" title="Perform modifications of specified shape." alt="" coords="627,215,864,246"/><area shape="rect" id="node22" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped" alt="" coords="683,269,808,299"/><area shape="rect" id="node27" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="700,322,791,353"/><area shape="rect" id="node25" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="924,269,1023,299"/><area shape="rect" id="node31" href="classnanotimer.html#af9a156b8247ec1b6cd7759f8e0c16a47" title="nanotimer::humanreadable" alt="" coords="404,215,577,246"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a2344f3f61450af589dab9c994ff33cde_icgraph.png" border="0" usemap="#classg2m_a2344f3f61450af589dab9c994ff33cde_icgraph" alt=""/></div>
+<map name="classg2m_a2344f3f61450af589dab9c994ff33cde_icgraph" id="classg2m_a2344f3f61450af589dab9c994ff33cde_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="193,5,353,35"/><area shape="rect" id="node5" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="403,5,483,35"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="abb69febce1d01f4e90c866ec53eb303b"></a><!-- doxytag: member="g2m::infoMsg" ref="abb69febce1d01f4e90c866ec53eb303b" args="(std::string s)" -->
 <div class="memitem">
 <div class="memproto">
@@ -117,7 +319,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classg2m_abb69febce1d01f4e90c866ec53eb303b_icgraph.png" border="0" usemap="#classg2m_abb69febce1d01f4e90c866ec53eb303b_icgraph" alt=""/></div>
 <map name="classg2m_abb69febce1d01f4e90c866ec53eb303b_icgraph" id="classg2m_abb69febce1d01f4e90c866ec53eb303b_icgraph">
-<area shape="rect" id="node3" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="367,25,468,55"/><area shape="rect" id="node5" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="519,25,679,55"/><area shape="rect" id="node9" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="155,75,317,106"/><area shape="rect" id="node7" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="728,25,808,55"/></map>
+<area shape="rect" id="node3" href="classg2m__threaded.html#a21e437df5667f8fb334539887497996f" title="check occ env" alt="" coords="155,5,413,35"/><area shape="rect" id="node5" href="classg2m.html#aae985c378c19c943d1da9f01c9598835" title="call this before creating solids, and use bbox size to figure out length of tools" alt="" coords="461,159,645,190"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="980,186,1140,217"/><area shape="rect" id="node11" href="classg2m__threaded.html#a45ecab0095c7441015278fde0a273c3e" title="g2m_threaded::createThreads" alt="" coords="963,342,1157,373"/><area shape="rect" id="node13" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="503,106,604,137"/><area shape="rect" id="node16" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="496,289,611,319"/><area shape="rect" id="node25" href="classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7" title="g2m::startInterp" alt="" coords="227,109,341,139"/><area shape="rect" id="node28" href="classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="203,314,365,345"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1205,186,1285,217"/><area shape="rect" id="node18" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="736,263,872,294"/><area shape="rect" id="node21" href="classg2m__threaded.html#a8b06b1bb49f6febf96c6d2772b4fb477" title="g2m_threaded::makeSolidsThread" alt="" coords="695,317,913,347"/></map>
 </div>
 </p>
 
@@ -143,7 +345,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classg2m_ac14aa955c8d53b835b1ee02379059de7_cgraph.png" border="0" usemap="#classg2m_ac14aa955c8d53b835b1ee02379059de7_cgraph" alt=""/></div>
 <map name="classg2m_ac14aa955c8d53b835b1ee02379059de7_cgraph" id="classg2m_ac14aa955c8d53b835b1ee02379059de7_cgraph">
-<area shape="rect" id="node3" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="413,5,515,35"/><area shape="rect" id="node5" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="157,191,320,222"/><area shape="rect" id="node30" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="g2m::sleepSecond" alt="" coords="173,245,304,275"/><area shape="rect" id="node7" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="368,58,560,89"/><area shape="rect" id="node9" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="385,111,543,142"/><area shape="rect" id="node11" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="399,165,529,195"/><area shape="rect" id="node15" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="428,218,500,249"/><area shape="rect" id="node19" href="classnanotimer.html#aa8f93cde1217a77ad15676061c065166" title="nanotimer::getElapsed" alt="" coords="388,271,540,302"/><area shape="rect" id="node21" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="407,325,521,355"/><area shape="rect" id="node25" href="classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="392,378,536,409"/><area shape="rect" id="node28" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="408,431,520,462"/><area shape="rect" id="node13" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="640,165,731,195"/><area shape="rect" id="node17" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="608,218,763,249"/><area shape="rect" id="node23" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="627,325,744,355"/></map>
+<area shape="rect" id="node3" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="413,479,515,510"/><area shape="rect" id="node5" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="157,191,320,222"/><area shape="rect" id="node28" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="Sleep 1s and process events." alt="" coords="173,375,304,406"/><area shape="rect" id="node30" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="628,479,716,510"/><area shape="rect" id="node32" href="classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7" title="g2m::startInterp" alt="" coords="181,531,296,562"/><area shape="rect" id="node7" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLine::canonLineFactory" alt="" coords="368,325,560,355"/><area shape="rect" id="node9" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="385,5,543,35"/><area shape="rect" id="node11" href="classnanotimer.html#a6fe6b7515227dd2dbb5cd7c889174b1f" title="nanotimer::getElapsedS" alt="" coords="384,58,544,89"/><area shape="rect" id="node13" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="385,111,543,142"/><area shape="rect" id="node17" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="407,165,521,195"/><area shape="rect" id="node22" href="classnanotimer.html#af9a156b8247ec1b6cd7759f8e0c16a47" title="nanotimer::humanreadable" alt="" coords="377,218,551,249"/><area shape="rect" id="node26" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="408,271,520,302"/><area shape="rect" id="node15" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="613,111,731,142"/><area shape="rect" id="node19" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="608,165,736,195"/><area shape="rect" id="node24" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="627,218,717,249"/><area shape="rect" id="node34" href="classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb" title="ask for a tool table, even if one is configured &#45; user may wish to change it" alt="" coords="388,583,540,614"/><area shape="rect" id="node36" href="classuio.html#ac97519b41080b8c06d39e46720ab6693" title="uio::conf" alt="" coords="636,610,708,641"/></map>
 </div>
 </p>
 
@@ -175,6 +377,61 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="afb5b20c0464667c797dc69ca85b8cbb3"></a><!-- doxytag: member="g2m::lockMutex" ref="afb5b20c0464667c797dc69ca85b8cbb3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void g2m::lockMutex </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline, protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classg2m__threaded.html#ae65c6cc7baa583b305cd11e0ae2797ac">g2m_threaded</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0ee96175379b601f7427ccef0521f9b2"></a><!-- doxytag: member="g2m::makeSolid" ref="a0ee96175379b601f7427ccef0521f9b2" args="(uint index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void g2m::makeSolid </td>
+          <td>(</td>
+          <td class="paramtype">uint&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a0ee96175379b601f7427ccef0521f9b2_cgraph.png" border="0" usemap="#classg2m_a0ee96175379b601f7427ccef0521f9b2_cgraph" alt=""/></div>
+<map name="classg2m_a0ee96175379b601f7427ccef0521f9b2_cgraph" id="classg2m_a0ee96175379b601f7427ccef0521f9b2_cgraph">
+<area shape="rect" id="node3" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="667,65,789,95"/><area shape="rect" id="node5" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="449,37,551,67"/><area shape="rect" id="node7" href="classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="171,117,333,147"/><area shape="rect" id="node9" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4" title="dump shape s to file named n" alt="" coords="443,90,557,121"/><area shape="rect" id="node12" href="class_sh_heal_oper___shape_process.html#a66dac68ef7190f0b1417e582c7b27999" title="Perform modifications of specified shape." alt="" coords="381,143,619,174"/><area shape="rect" id="node14" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped" alt="" coords="437,197,563,227"/><area shape="rect" id="node19" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="455,250,545,281"/><area shape="rect" id="node17" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="679,197,777,227"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a0ee96175379b601f7427ccef0521f9b2_icgraph.png" border="0" usemap="#classg2m_a0ee96175379b601f7427ccef0521f9b2_icgraph" alt=""/></div>
+<map name="classg2m_a0ee96175379b601f7427ccef0521f9b2_icgraph" id="classg2m_a0ee96175379b601f7427ccef0521f9b2_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="213,5,349,35"/><area shape="rect" id="node9" href="classg2m__threaded.html#a8b06b1bb49f6febf96c6d2772b4fb477" title="g2m_threaded::makeSolidsThread" alt="" coords="172,58,391,89"/><area shape="rect" id="node5" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="457,5,617,35"/><area shape="rect" id="node7" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="683,5,763,35"/><area shape="rect" id="node11" href="classg2m__threaded.html#a45ecab0095c7441015278fde0a273c3e" title="g2m_threaded::createThreads" alt="" coords="440,58,635,89"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="ad3513ee28c284097d0b30f6bae325ac0"></a><!-- doxytag: member="g2m::processCanonLine" ref="ad3513ee28c284097d0b30f6bae325ac0" args="(std::string l)" -->
 <div class="memitem">
 <div class="memproto">
@@ -196,7 +453,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classg2m_ad3513ee28c284097d0b30f6bae325ac0_cgraph.png" border="0" usemap="#classg2m_ad3513ee28c284097d0b30f6bae325ac0_cgraph" alt=""/></div>
 <map name="classg2m_ad3513ee28c284097d0b30f6bae325ac0_cgraph" id="classg2m_ad3513ee28c284097d0b30f6bae325ac0_cgraph">
-<area shape="rect" id="node3" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="216,5,408,35"/><area shape="rect" id="node5" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="233,58,391,89"/><area shape="rect" id="node7" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="247,111,377,142"/><area shape="rect" id="node11" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="276,165,348,195"/><area shape="rect" id="node15" href="classnanotimer.html#aa8f93cde1217a77ad15676061c065166" title="nanotimer::getElapsed" alt="" coords="236,218,388,249"/><area shape="rect" id="node17" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="255,271,369,302"/><area shape="rect" id="node21" href="classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="240,325,384,355"/><area shape="rect" id="node23" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="261,378,363,409"/><area shape="rect" id="node25" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="256,431,368,462"/><area shape="rect" id="node9" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="488,111,579,142"/><area shape="rect" id="node13" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="456,165,611,195"/><area shape="rect" id="node19" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="475,271,592,302"/></map>
+<area shape="rect" id="node3" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLine::canonLineFactory" alt="" coords="216,5,408,35"/><area shape="rect" id="node5" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="233,58,391,89"/><area shape="rect" id="node7" href="classnanotimer.html#a6fe6b7515227dd2dbb5cd7c889174b1f" title="nanotimer::getElapsedS" alt="" coords="232,111,392,142"/><area shape="rect" id="node9" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="233,165,391,195"/><area shape="rect" id="node13" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="255,218,369,249"/><area shape="rect" id="node18" href="classnanotimer.html#af9a156b8247ec1b6cd7759f8e0c16a47" title="nanotimer::humanreadable" alt="" coords="225,271,399,302"/><area shape="rect" id="node22" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="256,325,368,355"/><area shape="rect" id="node11" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="461,165,579,195"/><area shape="rect" id="node15" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="456,218,584,249"/><area shape="rect" id="node20" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="475,271,565,302"/></map>
 </div>
 </p>
 
@@ -206,6 +463,53 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="classg2m_ad3513ee28c284097d0b30f6bae325ac0_icgraph.png" border="0" usemap="#classg2m_ad3513ee28c284097d0b30f6bae325ac0_icgraph" alt=""/></div>
 <map name="classg2m_ad3513ee28c284097d0b30f6bae325ac0_icgraph" id="classg2m_ad3513ee28c284097d0b30f6bae325ac0_icgraph">
 <area shape="rect" id="node3" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="217,5,319,35"/><area shape="rect" id="node5" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="369,31,529,62"/><area shape="rect" id="node7" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="579,31,659,62"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="aac4d751a583973a266f2bfe59c2a17ea"></a><!-- doxytag: member="g2m::shouldDump" ref="aac4d751a583973a266f2bfe59c2a17ea" args="(int a, bool dumpPrev=false)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool g2m::shouldDump </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>dumpPrev</em> = <code>false</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [inline, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>used to determine if a shape needs to be dumped </p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_aac4d751a583973a266f2bfe59c2a17ea_cgraph.png" border="0" usemap="#classg2m_aac4d751a583973a266f2bfe59c2a17ea_cgraph" alt=""/></div>
+<map name="classg2m_aac4d751a583973a266f2bfe59c2a17ea_cgraph" id="classg2m_aac4d751a583973a266f2bfe59c2a17ea_cgraph">
+<area shape="rect" id="node3" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="181,5,304,35"/><area shape="rect" id="node5" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="193,58,292,89"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_aac4d751a583973a266f2bfe59c2a17ea_icgraph.png" border="0" usemap="#classg2m_aac4d751a583973a266f2bfe59c2a17ea_icgraph" alt=""/></div>
+<map name="classg2m_aac4d751a583973a266f2bfe59c2a17ea_icgraph" id="classg2m_aac4d751a583973a266f2bfe59c2a17ea_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="181,31,344,62"/><area shape="rect" id="node5" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="393,31,508,62"/><area shape="rect" id="node7" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="600,5,736,35"/><area shape="rect" id="node13" href="classg2m__threaded.html#a8b06b1bb49f6febf96c6d2772b4fb477" title="g2m_threaded::makeSolidsThread" alt="" coords="559,58,777,89"/><area shape="rect" id="node9" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="844,5,1004,35"/><area shape="rect" id="node11" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="1069,5,1149,35"/><area shape="rect" id="node15" href="classg2m__threaded.html#a45ecab0095c7441015278fde0a273c3e" title="g2m_threaded::createThreads" alt="" coords="827,58,1021,89"/></map>
 </div>
 </p>
 
@@ -225,6 +529,17 @@ Here is the caller graph for this function:</div>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Sleep 1s and process events. </p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a2750d7a3ad622bee92a9b15864032194_cgraph.png" border="0" usemap="#classg2m_a2750d7a3ad622bee92a9b15864032194_cgraph" alt=""/></div>
+<map name="classg2m_a2750d7a3ad622bee92a9b15864032194_cgraph" id="classg2m_a2750d7a3ad622bee92a9b15864032194_cgraph">
+<area shape="rect" id="node3" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="185,5,273,35"/></map>
+</div>
+</p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -257,7 +572,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classg2m_a9b03bee02ba62427a4c64fdb2696fcdf_cgraph.png" border="0" usemap="#classg2m_a9b03bee02ba62427a4c64fdb2696fcdf_cgraph" alt=""/></div>
 <map name="classg2m_a9b03bee02ba62427a4c64fdb2696fcdf_cgraph" id="classg2m_a9b03bee02ba62427a4c64fdb2696fcdf_cgraph">
-<area shape="rect" id="node3" href="classuio.html#a60e168378e86cc146cf1b865535e9e2b" title="uio::fileExists" alt="" coords="261,65,363,95"/><area shape="rect" id="node5" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="748,5,820,35"/><area shape="rect" id="node9" href="class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d" title="QoccHarnessWindow::getArg" alt="" coords="216,478,408,509"/><area shape="rect" id="node11" href="classnanotimer.html#aa8f93cde1217a77ad15676061c065166" title="nanotimer::getElapsed" alt="" coords="708,58,860,89"/><area shape="rect" id="node13" href="classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="265,531,359,562"/><area shape="rect" id="node17" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="733,378,835,409"/><area shape="rect" id="node19" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="261,298,363,329"/><area shape="rect" id="node22" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="467,219,629,250"/><area shape="rect" id="node41" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="728,431,840,462"/><area shape="rect" id="node47" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="268,585,356,615"/><area shape="rect" id="node7" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="928,5,1083,35"/><area shape="rect" id="node15" href="class_qocc_viewer_context.html#a477fcbd378603439aea5486a13f5d3b1" title="Turn the grid off." alt="" coords="456,531,640,562"/><area shape="rect" id="node43" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="g2m::sleepSecond" alt="" coords="483,273,613,303"/><area shape="rect" id="node24" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLineFactory creates objects that inherit from canonLine canonLineFactory determines which type o..." alt="" coords="688,218,880,249"/><area shape="rect" id="node26" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="705,271,863,302"/><area shape="rect" id="node28" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="719,325,849,355"/><area shape="rect" id="node34" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="727,111,841,142"/><area shape="rect" id="node38" href="classcanon_line.html#a7aaebb9e888cf107e0e7a496e1085d99" title="canonLine::getShape" alt="" coords="712,165,856,195"/><area shape="rect" id="node30" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="960,325,1051,355"/><area shape="rect" id="node36" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="947,111,1064,142"/></map>
+<area shape="rect" id="node3" href="classcanon.html#ac1757537c1d1e1151d412e04ba7f4ada" title="canon::buildTools" alt="" coords="251,110,373,141"/><area shape="rect" id="node16" href="classuio.html#a60e168378e86cc146cf1b865535e9e2b" title="uio::fileExists" alt="" coords="733,213,835,243"/><area shape="rect" id="node21" href="classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb" title="ask for a tool table, even if one is configured &#45; user may wish to change it" alt="" coords="708,1141,860,1171"/><area shape="rect" id="node25" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="1003,937,1091,967"/><area shape="rect" id="node27" href="classg2m.html#aae985c378c19c943d1da9f01c9598835" title="call this before creating solids, and use bbox size to figure out length of tools" alt="" coords="692,266,876,297"/><area shape="rect" id="node37" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="996,637,1097,667"/><area shape="rect" id="node40" href="classg2m.html#a07968c726366bdde547ae5db8916bc66" title="g2m::createThreads" alt="" coords="243,579,381,610"/><area shape="rect" id="node42" href="classdisp_shape.html#a6f33d6cdcaa41b891a338b2ff9333e81" title="dispShape::display" alt="" coords="247,370,377,401"/><area shape="rect" id="node47" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="244,633,380,663"/><area shape="rect" id="node49" href="classuio.html#afd55da79b9ba59efb4bc44723b389cf1" title="uio::fitAll" alt="" coords="512,474,584,505"/><area shape="rect" id="node53" href="classnanotimer.html#a6fe6b7515227dd2dbb5cd7c889174b1f" title="nanotimer::getElapsedS" alt="" coords="704,733,864,763"/><area shape="rect" id="node73" href="classnanotimer.html#af9a156b8247ec1b6cd7759f8e0c16a47" title="nanotimer::humanreadable" alt="" coords="697,423,871,454"/><area shape="rect" id="node79" href="class_qocc_harness_window.html#a448df7785169092f1ee1ba54563bdf9d" title="QoccHarnessWindow::getArg" alt="" coords="216,990,408,1021"/><area shape="rect" id="node82" href="classuio.html#a66467444446e17d17fa06b297d1e6aad" title="uio::hideGrid" alt="" coords="265,1234,359,1265"/><area shape="rect" id="node88" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="261,937,363,967"/><area shape="rect" id="node91" href="classg2m.html#ad3513ee28c284097d0b30f6bae325ac0" title="g2m::processCanonLine" alt="" coords="467,1182,629,1213"/><area shape="rect" id="node108" href="classnanotimer.html#a61d1a6e32c72bbe4b28153ac99a57ebd" title="nanotimer::start" alt="" coords="728,1407,840,1438"/><area shape="rect" id="node5" href="classcanon.html#a3c0fe594af76727c9d7fbff964df58e5" title="canon::checkTTskips" alt="" coords="475,31,621,62"/><area shape="rect" id="node9" href="classcanon.html#ace6faa517e3c5a70ff586a6d15e70d55" title="canon::readTTfile" alt="" coords="487,110,609,141"/><area shape="rect" id="node7" href="classcanon.html#a59534e932c02c90e3e0beab12cd8602c" title="create a tool. for now, only supports cylindricalTool and ballnoseTool" alt="" coords="721,5,847,35"/><area shape="rect" id="node11" href="classcanon.html#ab3191bbde574d5b89fa51b8b5e6f8d1a" title="canon::checkRange" alt="" coords="716,58,852,89"/><area shape="rect" id="node13" href="classcanon.html#ab32f15149cca41438a2c22f52b8c5e22" title="canon::infoMsg" alt="" coords="992,85,1101,115"/><area shape="rect" id="node19" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="1001,423,1092,454"/><area shape="rect" id="node23" href="classuio.html#ac97519b41080b8c06d39e46720ab6693" title="uio::conf" alt="" coords="1011,1115,1083,1146"/><area shape="rect" id="node29" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="1213,371,1336,402"/><area shape="rect" id="node31" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="1225,241,1324,271"/><area shape="rect" id="node33" href="classmachine_status.html#a244b29cfdf7d6bf39424a03d3ff418be" title="machineStatus::getFeedBounds" alt="" coords="943,215,1151,246"/><area shape="rect" id="node35" href="classmachine_status.html#a7b2e38c37f4aa8d0bf89f76fab872dcd" title="machineStatus::getTraverseBounds" alt="" coords="932,269,1161,299"/><area shape="rect" id="node44" href="classuio.html#af82b14a89ab1d98b7c370bec1bdefaa2" title="uio::context" alt="" coords="503,370,593,401"/><area shape="rect" id="node55" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="491,527,605,558"/><area shape="rect" id="node71" href="classg2m.html#a9a882e0d5b5ecece6070d74cd56291c2" title="g2m::statusBarUp" alt="" coords="485,581,611,611"/><area shape="rect" id="node51" href="class_qocc_view_widget.html#a23ea0a9f36ff5999b105b6bae270c0ff" title="Fits the model to view extents This function fits the current objects to the window, reducing or increasing the Z extents as needed." alt="" coords="707,319,861,350"/><area shape="rect" id="node59" href="classg2m.html#aecc73d4e316ea465a011fe8060251203" title="g2m::subtractWorkpiece" alt="" coords="703,477,865,507"/><area shape="rect" id="node61" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4" title="dump shape s to file named n" alt="" coords="989,583,1104,614"/><area shape="rect" id="node64" href="class_sh_heal_oper___shape_process.html#a66dac68ef7190f0b1417e582c7b27999" title="Perform modifications of specified shape." alt="" coords="928,530,1165,561"/><area shape="rect" id="node66" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped" alt="" coords="984,477,1109,507"/><area shape="rect" id="node84" href="class_qocc_viewer_context.html#a477fcbd378603439aea5486a13f5d3b1" title="Turn the grid off." alt="" coords="456,1235,640,1266"/><area shape="rect" id="node110" href="classg2m.html#a2750d7a3ad622bee92a9b15864032194" title="Sleep 1s and process events." alt="" coords="483,989,613,1019"/><area shape="rect" id="node113" href="classg2m.html#a90bd0b8089417f6d9b1ace1e528d8db7" title="g2m::startInterp" alt="" coords="491,1042,605,1073"/><area shape="rect" id="node93" href="classcanon_line.html#aef4afba5e1dccf8c6867d2be370afad5" title="canonLine::canonLineFactory" alt="" coords="688,1194,880,1225"/><area shape="rect" id="node95" href="classcanon_line.html#a771e9a1769948907ffdab9cd0e91183f" title="canonLine::checkErrors" alt="" coords="705,1247,863,1278"/><area shape="rect" id="node98" href="classcanon_line.html#aee5797d1e94aa4e525ba980f4c49ef6c" title="returns the canon line number" alt="" coords="705,1301,863,1331"/><area shape="rect" id="node102" href="classcanon_line.html#a046a01d50bc61abe11244421b75b136d" title="returns the number after N on the line, &#45;1 if none" alt="" coords="727,1354,841,1385"/><area shape="rect" id="node100" href="classcanon_line.html#ab3ce27fbfb556d782b9395db05c7100f" title="canonLine::tok2i" alt="" coords="988,1301,1105,1331"/><area shape="rect" id="node104" href="classcanon_line.html#a6e60f0bae5c58fd804052cbb134e4dd2" title="canonLine::cantok" alt="" coords="983,1354,1111,1385"/></map>
 </div>
 </p>
 
@@ -290,20 +605,139 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ae469849f9a988d939c9ac89ad05a3653"></a><!-- doxytag: member="g2m::test" ref="ae469849f9a988d939c9ac89ad05a3653" args="()" -->
+<a class="anchor" id="a90bd0b8089417f6d9b1ace1e528d8db7"></a><!-- doxytag: member="g2m::startInterp" ref="a90bd0b8089417f6d9b1ace1e528d8db7" args="(QProcess &amp;tc)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void g2m::test </td>
+          <td class="memname">bool g2m::startInterp </td>
           <td>(</td>
-          <td class="paramname"></td>
+          <td class="paramtype">QProcess &amp;&nbsp;</td>
+          <td class="paramname"> <em>tc</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_cgraph.png" border="0" usemap="#classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_cgraph" alt=""/></div>
+<map name="classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_cgraph" id="classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_cgraph">
+<area shape="rect" id="node3" href="classg2m.html#ac46f8d2f08dab98af4e3a61a834743eb" title="ask for a tool table, even if one is configured &#45; user may wish to change it" alt="" coords="168,43,320,74"/><area shape="rect" id="node5" href="classuio.html#ac97519b41080b8c06d39e46720ab6693" title="uio::conf" alt="" coords="377,5,449,35"/><area shape="rect" id="node7" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="369,70,457,101"/><area shape="rect" id="node10" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="193,147,295,178"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_icgraph.png" border="0" usemap="#classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_icgraph" alt=""/></div>
+<map name="classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_icgraph" id="classg2m_a90bd0b8089417f6d9b1ace1e528d8db7_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#ac14aa955c8d53b835b1ee02379059de7" title="g2m::interpret" alt="" coords="169,5,271,35"/><area shape="rect" id="node5" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="321,5,481,35"/><area shape="rect" id="node7" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="531,5,611,35"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a9a882e0d5b5ecece6070d74cd56291c2"></a><!-- doxytag: member="g2m::statusBarUp" ref="a9a882e0d5b5ecece6070d74cd56291c2" args="(std::string s, double avgtime)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void g2m::statusBarUp </td>
+          <td>(</td>
+          <td class="paramtype">std::string&nbsp;</td>
+          <td class="paramname"> <em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>avgtime</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a9a882e0d5b5ecece6070d74cd56291c2_cgraph.png" border="0" usemap="#classg2m_a9a882e0d5b5ecece6070d74cd56291c2_cgraph" alt=""/></div>
+<map name="classg2m_a9a882e0d5b5ecece6070d74cd56291c2_cgraph" id="classg2m_a9a882e0d5b5ecece6070d74cd56291c2_cgraph">
+<area shape="rect" id="node3" href="classnanotimer.html#af9a156b8247ec1b6cd7759f8e0c16a47" title="nanotimer::humanreadable" alt="" coords="183,5,356,35"/><area shape="rect" id="node7" href="classuio.html#a7901a6430f530c912e3e79765ea3d796" title="uio::window" alt="" coords="225,58,313,89"/><area shape="rect" id="node5" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="407,5,497,35"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_a9a882e0d5b5ecece6070d74cd56291c2_icgraph.png" border="0" usemap="#classg2m_a9a882e0d5b5ecece6070d74cd56291c2_icgraph" alt=""/></div>
+<map name="classg2m_a9a882e0d5b5ecece6070d74cd56291c2_icgraph" id="classg2m_a9a882e0d5b5ecece6070d74cd56291c2_icgraph">
+<area shape="rect" id="node3" href="classg2m__threaded.html#ae16080366f4b858b6b1b13d1f924d4bb" title="draw shapes and update statusbar/ui until threads are almost done, then join and display the rest of ..." alt="" coords="181,5,376,35"/><area shape="rect" id="node5" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="211,58,347,89"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="425,58,585,89"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="635,58,715,89"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="aecc73d4e316ea465a011fe8060251203"></a><!-- doxytag: member="g2m::subtractWorkpiece" ref="aecc73d4e316ea465a011fe8060251203" args="(uint index)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void g2m::subtractWorkpiece </td>
+          <td>(</td>
+          <td class="paramtype">uint&nbsp;</td>
+          <td class="paramname"> <em>index</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_aecc73d4e316ea465a011fe8060251203_cgraph.png" border="0" usemap="#classg2m_aecc73d4e316ea465a011fe8060251203_cgraph" alt=""/></div>
+<map name="classg2m_aecc73d4e316ea465a011fe8060251203_cgraph" id="classg2m_aecc73d4e316ea465a011fe8060251203_cgraph">
+<area shape="rect" id="node3" href="classg2m.html#a2f91130570b9be77d2e43ec74e0c5ff4" title="dump shape s to file named n" alt="" coords="277,5,392,35"/><area shape="rect" id="node5" href="classg2m.html#abb69febce1d01f4e90c866ec53eb303b" title="g2m::infoMsg" alt="" coords="284,58,385,89"/><area shape="rect" id="node7" href="class_sh_heal_oper___shape_process.html#a66dac68ef7190f0b1417e582c7b27999" title="Perform modifications of specified shape." alt="" coords="216,111,453,142"/><area shape="rect" id="node9" href="classg2m.html#aac4d751a583973a266f2bfe59c2a17ea" title="used to determine if a shape needs to be dumped" alt="" coords="272,165,397,195"/><area shape="rect" id="node15" href="classuio.html#a039335b2ce987c4e2a36b073ccd1e9a1" title="uio::toString" alt="" coords="289,218,380,249"/><area shape="rect" id="node11" href="classuio.html#a853f8c923995ca39bb729656b0622f34" title="uio::debuggingOn" alt="" coords="501,138,624,169"/><area shape="rect" id="node13" href="classuio.html#a63f16cd604eb5da63e79fc1d128c9b0b" title="uio::getDump" alt="" coords="513,191,612,222"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classg2m_aecc73d4e316ea465a011fe8060251203_icgraph.png" border="0" usemap="#classg2m_aecc73d4e316ea465a011fe8060251203_icgraph" alt=""/></div>
+<map name="classg2m_aecc73d4e316ea465a011fe8060251203_icgraph" id="classg2m_aecc73d4e316ea465a011fe8060251203_icgraph">
+<area shape="rect" id="node3" href="classg2m.html#a0ee96175379b601f7427ccef0521f9b2" title="g2m::makeSolid" alt="" coords="217,31,332,62"/><area shape="rect" id="node5" href="classg2m.html#a2344f3f61450af589dab9c994ff33cde" title="g2m::finishAllSolids" alt="" coords="424,5,560,35"/><area shape="rect" id="node11" href="classg2m__threaded.html#a8b06b1bb49f6febf96c6d2772b4fb477" title="g2m_threaded::makeSolidsThread" alt="" coords="383,58,601,89"/><area shape="rect" id="node7" href="classg2m.html#a9b03bee02ba62427a4c64fdb2696fcdf" title="g2m::slotModelFromFile" alt="" coords="668,5,828,35"/><area shape="rect" id="node9" href="classg2m.html#addacdf6af4a29a73f25a44c7dc7083fb" title="g2m::g2m" alt="" coords="893,5,973,35"/><area shape="rect" id="node13" href="classg2m__threaded.html#a45ecab0095c7441015278fde0a273c3e" title="g2m_threaded::createThreads" alt="" coords="651,58,845,89"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="abeb32538f21d71270cca58e7f3595f81"></a><!-- doxytag: member="g2m::unlockMutex" ref="abeb32538f21d71270cca58e7f3595f81" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void g2m::unlockMutex </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline, protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classg2m__threaded.html#a763fb859ffa50ab8979fa0d569015a30">g2m_threaded</a>.</p>
 
 </div>
 </div>
@@ -314,19 +748,6 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classg2m.html#a9b5865494a262c1794beebb61443a9b7">g2m::debug</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aaf4c24e9eff7ffebbd5bada4287fe6da"></a><!-- doxytag: member="g2m::dispVector" ref="aaf4c24e9eff7ffebbd5bada4287fe6da" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classdisp_shape.html">dispShape</a>*&gt; <a class="el" href="classg2m.html#aaf4c24e9eff7ffebbd5bada4287fe6da">g2m::dispVector</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -360,12 +781,25 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a7d996d7f9fd2a233d9ce40c45865da43"></a><!-- doxytag: member="g2m::lineVector" ref="a7d996d7f9fd2a233d9ce40c45865da43" args="" -->
+<a class="anchor" id="a5fb085edd9b1c0a09a8132b933d218e8"></a><!-- doxytag: member="g2m::lineVector" ref="a5fb085edd9b1c0a09a8132b933d218e8" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classcanon_line.html">canonLine</a>*&gt; <a class="el" href="classg2m.html#a7d996d7f9fd2a233d9ce40c45865da43">g2m::lineVector</a><code> [protected]</code></td>
+          <td class="memname">std::vector&lt; <a class="el" href="classcanon_line.html">canonLine</a> * &gt; <a class="el" href="classg2m.html#a5fb085edd9b1c0a09a8132b933d218e8">g2m::lineVector</a><code> [static, protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad0d48dc66252a05fc09f6420bc2a75c3"></a><!-- doxytag: member="g2m::minToolLength" ref="ad0d48dc66252a05fc09f6420bc2a75c3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classg2m.html#ad0d48dc66252a05fc09f6420bc2a75c3">g2m::minToolLength</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -379,6 +813,32 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classg2m.html#af23b06717458a2f13e891c74439c7433">g2m::success</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a940316af30f920c0ade576b611f2aeba"></a><!-- doxytag: member="g2m::tooltable" ref="a940316af30f920c0ade576b611f2aeba" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="classg2m.html#a940316af30f920c0ade576b611f2aeba">g2m::tooltable</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2d98be98b4373abd4a39c30063e2c139"></a><!-- doxytag: member="g2m::workpiece" ref="a2d98be98b4373abd4a39c30063e2c139" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TopoDS_Shape <a class="el" href="classg2m.html#a2d98be98b4373abd4a39c30063e2c139">g2m::workpiece</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
