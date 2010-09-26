@@ -10,5 +10,7 @@
 
 ShapeProcess.exec.op : FixFaceSize,FixWireGaps
 
-ShapeProcess.FixFaceSize.Tolerance  	: 0.5
+!ShapeProcess.FixFaceSize.Tolerance  	: 0.5
+!ShapeProcess.FixFaceSize.Tolerance      : 0.05
+!ShapeProcess.FixFaceSize.Tolerance      : 1.e-2
 

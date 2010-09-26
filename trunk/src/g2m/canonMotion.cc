@@ -262,7 +262,7 @@ void canonMotion::sweepSolid() {
     t = pipe.Shape();
     pipe.MakeSolid();
     } catch (...) {
-      infoMsg("can't make solid - a:" + uio::toString(a) + " b:" + uio::toString(b) +" line: "+ myLine);
+      infoMsg("can't make solid - a:" + uio::toString(a) + " b:" + uio::toString(b) +" on "+ cantok(0) + "/" + cantok(1));
       solidErrors = true;
       solid.Nullify();
     }
@@ -298,10 +298,10 @@ void canonMotion::sweepSolid() {
 */
 
       myShape = solid;
-      if (uio::debuggingOn()) infoMsg("no errors on " + cantok(0) + "/" + cantok(1));
+      if (uio::debuggingOn()) infoMsg("pipe: no errors on " + cantok(0) + "/" + cantok(1));
   } else {
     solidErrors = true;
-    infoMsg("pipe not ready!");
+    if (uio::debuggingOn()) infoMsg("pipe not ready on "+ cantok(0) + "/" + cantok(1));
   }
 
   //dump the data? used env var DUMP. dumps all if DUMP=-1
@@ -314,7 +314,7 @@ void canonMotion::sweepSolid() {
     name="output/Dump_"+cantok(0)+"_spine_edge.brep";
     BRepTools::Write(myUnSolid,name.c_str());
 
-    name="output/Dump_"+cantok(0)+"_pipe_shell.brep";
+    name="output/Dump_"+cantok(0)+"_pipe.brep";
     BRepTools::Write(myShape,name.c_str());
 
     MOTION_TYPE mt = getMotionType();
@@ -326,7 +326,7 @@ void canonMotion::sweepSolid() {
       type = "TRAVERSE";
     } else type = "?!";
 
-    infoMsg("Dumping breps for " + myLine + ", starting at " +uio::toString(a)+" and ending at " +uio::toString(b)+" with type " + type);
+    infoMsg("Dumping breps for " + cantok(0) + " " + cantok(1) + " " + cantok(2) + ", starting at " + uio::toString(a) + " and ending at " + uio::toString(b) + " with type " + type);
 
   }
 }

@@ -40,6 +40,11 @@ machineStatus::machineStatus(const machineStatus& oldStatus) {
     prevEndDir = oldStatus.endDir;
     first = oldStatus.first;
     motionType = NOT_DEFINED;
+    ///lastMotionWasTraverse gets copied from the previous machine status, and only gets changed if the prev status was motion at feedrate
+    lastMotionWasTraverse = oldStatus.lastMotionWasTraverse;
+    if ( oldStatus.motionType == STRAIGHT_FEED || oldStatus.motionType == HELICAL) {
+      lastMotionWasTraverse = false;
+    }
 }
 
 /**
@@ -66,6 +71,7 @@ void machineStatus::clearAll() {
   spindleStat = OFF;
   myTool = -1;
   motionType = NOT_DEFINED;
+  lastMotionWasTraverse = false;
 }
 
 ///sets motion type, and checks whether this is the second (or later) motion command.
@@ -106,8 +112,16 @@ void machineStatus::addToBounds() {
     if (uio::debuggingOn()) infoMsg("error, mtype not defined");
   } else if (motionType == STRAIGHT_FEED) {
     if (uio::debuggingOn()) infoMsg("adding to feed bndbox");
-    feedBbox.Add(startPose.Location());
-    feedBbox.Add(endPose.Location());
+    gp_Pnt a,b;
+    a=startPose.Location();
+    b=endPose.Location();
+
+    //don't add the starting end of a vertical STRAIGHT_FEED if the previous motion was TRAVERSE
+    double angTol = .0175;
+    if (a.SquareDistance(b)>Precision::Confusion() && !( gp_Vec(a,b).IsParallel(gp::DZ(),angTol) && lastMotionWasTraverse )) {
+      feedBbox.Add(a);
+    }
+    feedBbox.Add(b);
   } else if (motionType == TRAVERSE) {
     if (uio::debuggingOn()) infoMsg("adding to traverse bndbox");
     traverseBbox.Add(startPose.Location());

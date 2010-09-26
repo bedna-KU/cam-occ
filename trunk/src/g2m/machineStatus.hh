@@ -49,7 +49,7 @@ class machineStatus: protected canon {
     SPINDLE_STATUS spindleStat;
     coolantStruct coolant;
     gp_Dir startDir, endDir, prevEndDir;
-    bool first;
+    bool first,lastMotionWasTraverse;
     static Bnd_Box traverseBbox,feedBbox;
     MOTION_TYPE motionType;
     toolNumber myTool;

@@ -22,14 +22,18 @@
 #define GTOM_HH
 
 #include <vector>
+#include <limits.h>
 
 #include <QString>
 #include <QProcess>
 #include <QObject>
+#include <BRepTools.hxx>
+
 
 #include "canonLine.hh"
 #include "machineStatus.hh"
 #include "nanotimer.hh"
+#include "uio.hh"
 
 
 /**
@@ -64,6 +68,11 @@ class g2m: public QObject {
     void makeSolid(uint index);
     //static bool interpDone;
     bool startInterp(QProcess &tc);
+    ///used to determine if a shape needs to be dumped
+    inline bool shouldDump(int a,bool dumpPrev = false) {int d=uio::getDump();return( uio::debuggingOn() && ( (d==-1) || (d==a) || (dumpPrev && (d==a+1)) ) );};
+    ///dump shape s to file named n
+    inline void dumpBrep(std::string n, TopoDS_Shape s) {BRepTools::Write(s,n.c_str());};
+
 
     //functions overridden by g2m_threaded to make threading work
     virtual void finishAllSolids(nanotimer &timer);

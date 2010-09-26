@@ -54,7 +54,6 @@
 #include <TopoDS_Edge.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
-#include <BRepTools.hxx>
 
 //init static members
 std::vector<canonLine*> g2m::lineVector;
@@ -330,7 +329,6 @@ void g2m::createBlankWorkpiece() {
   std::string fs,ts,ws;
   gp_Pnt a,b;
 
-  //TODO: check the box dimensions
   f = machineStatus::getFeedBounds();
   t = machineStatus::getTraverseBounds();
   a = f.a; a.SetZ(a.Z()-0.5);
@@ -383,22 +381,33 @@ void g2m::makeSolid(uint index) {
 
 void g2m::subtractWorkpiece(uint index) {
   Standard_Real angTol = 0.00175;  //approx .1 degree
+  int l = lineVector[index]->getLineNum();
+  TopoDS_Shape tmp;
   TCollection_AsciiString cmdFile = "resources/ShHealingFullSet";
   //TCollection_AsciiString cmdFile = "resources/ShHealingSub";
-  ShHealOper_ShapeProcess sp(cmdFile, "exec");
-  TopoDS_Shape curr;
 
-  sp.Perform(((canonMotion*)lineVector[index])->getShape(),curr);
-  BRepAlgoAPI_Cut cut(workpiece,curr);
+  ShHealOper_ShapeProcess sp(cmdFile, "exec");
+  sp.Perform(((canonMotion*)lineVector[index])->getShape(),tmp);
+
+  BRepAlgoAPI_Cut cut(workpiece,tmp);
   cut.Build();
   if (!cut.IsDone()) {
     infoMsg("pipe cut not done");
   } else {
     sp.Perform(cut.Shape(),workpiece);
   }
+
+  //add tool if there is discontinuity
   if (!lineVector[index]->getStatus()->getPrevEndDir().IsParallel(lineVector[index]->getStatus()->getStartDir(),angTol)) {
-    //add tool if there is discontinuity
-    BRepAlgoAPI_Cut cut(workpiece,((canonMotion*)lineVector[index])->toolAtStart());
+    tmp = ((canonMotion*)lineVector[index])->toolAtStart();
+
+    //dump for debugging
+    if (shouldDump(l)) {
+      dumpBrep("output/Dump_"+ uio::toString(l) + "_tas.brep",tmp);
+      dumpBrep("output/Dump_"+ uio::toString(l) + "_pretool.brep",workpiece);
+    }
+
+    BRepAlgoAPI_Cut cut(workpiece,tmp);
     cut.Build();
     if (!cut.IsDone()) {
       infoMsg("tool cut not done");
@@ -409,12 +418,6 @@ void g2m::subtractWorkpiece(uint index) {
   }
 
   //dump for debugging
-  if (uio::debuggingOn()) {
-    int l = lineVector[index]->getLineNum();
-//    infoMsg("line " + uio::toString(l));
-    if (( uio::getDump() == l) || (uio::getDump() == (l+1)) || (uio::getDump() ==-1)) {  //dump before and after, dump all if -1
-      std::string name="output/Dump_"+ uio::toString(l) + "_result.brep";
-      BRepTools::Write(workpiece,name.c_str());
-    }
-  }
+  if (shouldDump(l,true)) dumpBrep("output/Dump_"+ uio::toString(l) + "_result.brep",workpiece);
+
 }
