@@ -29,7 +29,7 @@ CONFIG(thread) {
 
 DEFINES += HAVE_CONFIG_H HAVE_IOSTREAM HAVE_FSTREAM HAVE_LIMITS
 
-INCLUDEPATH += /opt/occ63/inc/ ../uio/ /usr/include/opencascade
+INCLUDEPATH += /opt/occ63/inc/ ../uio/ /usr/include/opencascade ../contrib/salome
 
 LIBS += -L/opt/occ63/lib/ -L../../bin\
 -lTKShHealing -lTKOffset -lTKBool  -lTKService -lTKV3d -lTKernel \

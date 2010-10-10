@@ -46,7 +46,7 @@
 /**
 QShortcuts in use:
 qtocc: NOSPBX ZYXCV FARGD
-free: AEHIJKLMQRTUW
+free: EHIJKLMQRTUW
 
 me:
 M-g2m
@@ -316,9 +316,9 @@ void uio::slotSolidSelection()
 
 //getVC, getOCC
 
-void uio::hideGrid() {
+/*void uio::hideGrid() {
   vcPtr->gridOff();
-}
+}*/
 
 void uio::fitAll() {
   occPtr->fitAll();

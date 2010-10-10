@@ -92,7 +92,9 @@ ShapeProcess.SplitClosedFaces.SegmentSurfaceMode	        : 1
 
 ShapeProcess.FixWireGaps.Tolerance3d	                        : 1.e-7
 
+!disabled this to use default tolerance
 ShapeProcess.FixFaceSize.Tolerance	                        : 1.e-2
+!ShapeProcess.FixFaceSize.Tolerance                         : 0.5
 
 ShapeProcess.DropSmallEdges.Tolerance3d	                        : 1.e-7
 
@@ -107,7 +109,8 @@ ShapeProcess.FixShape.FixSolidMode	                        : -1
 ShapeProcess.FixShape.FixVertexPositionMode         	        : 0
 ShapeProcess.FixShape.FixShellMode		                : -1
 ShapeProcess.FixShape.CreateOpenSolidMode          	        : -1
-ShapeProcess.FixShape.FixFaceMode	                        : -1
+! changed fixfacemode from -1 to 1
+ShapeProcess.FixShape.FixFaceMode	                        : 1
 ShapeProcess.FixShape.FixWireMode         	                : 1
 ShapeProcess.FixShape.FixOrientationMode		        : 1
 ShapeProcess.FixShape.FixAddNaturalBoundMode          	        : -1

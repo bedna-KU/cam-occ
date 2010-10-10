@@ -46,8 +46,8 @@ public slots:
 	void gridXY   ( void );
 	void gridXZ   ( void );
 	void gridYZ   ( void );
-	void gridOn   ( void );
-	void gridOff  ( void );
+	void gridToggle   ( void );
+	//void gridOff  ( void );
 	void gridRect ( void );
 	void gridCirc ( void );
 

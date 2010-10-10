@@ -77,7 +77,7 @@ tst::tst() {
 }
 
 void tst::slotTest1() {
-  uio::hideGrid();
+  //uio::hideGrid();
   //uio::axoView();
 
   TopoDS_Shape b,p;

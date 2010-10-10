@@ -179,11 +179,13 @@ void canonMotion::bruteForceSolid() {
 
 /// Sweep tool outline along myUnSolid and put result in myShape
 void canonMotion::sweepSolid() {
-  Standard_Real angTol = 0.0175;  //approx 1 degree
+  Standard_Real angTol = 0.035;  //approx 2 degrees
+  double radius = getTool(status.getToolNum())->Dia()/2.0;
   TopoDS_Solid solid;
   gp_Pnt a,b;
   a = status.getStartPose().Location();
   b = status.getEndPose().Location();
+
   gp_Vec d(a,b);
 
   gp_Trsf oa,ob;
@@ -192,6 +194,12 @@ void canonMotion::sweepSolid() {
   ob.SetTranslation(gp::Origin(),b);
   BRepBuilderAPI_Transform tob(ob);
 
+  if (a.Distance(b) < radius/50.0) {  //FIXME? skip, motion is very short
+    tob.Perform(getTool(status.getToolNum())->get3d());
+    myShape = tob.Shape();
+    return;
+  }
+
   TopoDS_Wire w;
   bool vert = false;
 
@@ -199,7 +207,7 @@ void canonMotion::sweepSolid() {
   if ( d.IsParallel( gp::DZ(), angTol )) {
     vert = true;
     if (uio::debuggingOn()) infoMsg("Line " +cantok(0)+"/"+cantok(1)+" is vertical.");
-    gp_Circ c(gp::XOY(),getTool(status.getToolNum())->Dia()/2.0);
+    gp_Circ c(gp::XOY(),radius);
     w = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(c));
     tob.Perform(w,true);  //toa will always be used, whether vertical or not
 
@@ -326,7 +334,7 @@ void canonMotion::sweepSolid() {
       type = "TRAVERSE";
     } else type = "?!";
 
-    infoMsg("Dumping breps for " + cantok(0) + " " + cantok(1) + " " + cantok(2) + ", starting at " + uio::toString(a) + " and ending at " + uio::toString(b) + " with type " + type);
+    infoMsg("Dumping breps for " + cantok(0) + " " + cantok(1) + " " + cantok(2) + /*", starting at " + uio::toString(a) + " and ending at " + uio::toString(b) +*/ " with type " + type);
 
   }
 }

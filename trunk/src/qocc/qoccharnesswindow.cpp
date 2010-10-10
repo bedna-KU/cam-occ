@@ -13,7 +13,7 @@
 ** Copyright (C) Peter Dolbey 2006. All rights reserved.
 **
 **
-** Bugs (aka modifications) (C) 2009 Mark Pictor.  These modifications
+** Bugs (aka modifications) (C) 2009,2010 Mark Pictor.  These modifications
 ** can be re-licensed under GPL v3.
 **
 ****************************************************************************/
@@ -316,14 +316,14 @@ void QoccHarnessWindow::createActions()
     connect(aboutQtAction, SIGNAL(triggered()), this, SLOT(aboutQt()));
 
 	// Now for the QtOCCViewWidget slots.
-
+/*
 	fitAction = new QAction(tr("&Fit Window"), this);
 	fitAction->setShortcut(tr("Ctrl+F"));
     fitAction->setStatusTip(tr("Fit to window"));
     connect(fitAction, SIGNAL(triggered()), myOCC, SLOT(fitExtents()));
-
-	fitAllAction = new QAction(tr("Fit &All"), this);
-	fitAllAction->setShortcut(tr("Ctrl+A"));
+*/
+	fitAllAction = new QAction(tr("&Fit All"), this);
+	fitAllAction->setShortcut(tr("Ctrl+F"));
     fitAllAction->setStatusTip(tr("Fit contents to viewport"));
     connect(fitAllAction, SIGNAL(triggered()), myOCC, SLOT(fitAll()));
 
@@ -340,16 +340,16 @@ void QoccHarnessWindow::createActions()
     rotAction->setStatusTip(tr("Window rotation"));
     connect(rotAction, SIGNAL(triggered()), myOCC, SLOT(rotation()));
 
-	gridOnAction = new QAction(tr("&Grid On"), this);
-	gridOnAction->setShortcut(tr("Ctrl+G"));
-    gridOnAction->setStatusTip(tr("Turn the grid on"));
-    connect(gridOnAction, SIGNAL(triggered()), myVC, SLOT(gridOn()));
+	gridToggleAction = new QAction(tr("Toggle &Grid"), this);
+	gridToggleAction->setShortcut(tr("Ctrl+G"));
+    gridToggleAction->setStatusTip(tr("Turn the grid on or off"));
+    connect(gridToggleAction, SIGNAL(triggered()), myVC, SLOT(gridToggle()));
 
-	gridOffAction = new QAction(tr("Gri&d Off"), this);
+/*	gridOffAction = new QAction(tr("Gri&d Off"), this);
 	gridOffAction->setShortcut(tr("Ctrl+D"));
     gridOffAction->setStatusTip(tr("Turn the grid on"));
     connect(gridOffAction, SIGNAL(triggered()), myVC, SLOT(gridOff()));
-
+*/
 	gridXYAction = new QAction(tr("XY Grid"), this);
     gridXYAction->setStatusTip(tr("Grid on XY Plane"));
 	//gridOffAction->setShortcut(tr("Ctrl+Z"));
@@ -401,8 +401,9 @@ void QoccHarnessWindow::createActions()
 	viewRightAction->setStatusTip(tr("View From Right"));
     connect(viewRightAction, SIGNAL(triggered()), myOCC, SLOT(viewRight()));
 
-	viewAxoAction = new QAction(tr("Axonometric"), this);
-	viewAxoAction->setStatusTip(tr("Axonometric view"));
+	viewAxoAction = new QAction(tr("&Axonometric Fit"), this);
+	viewAxoAction->setStatusTip(tr("Axonometric view and fit all"));
+    viewAxoAction->setShortcut(tr("Ctrl+A"));
     connect(viewAxoAction, SIGNAL(triggered()), myOCC, SLOT(viewAxo()));
 
 	viewGridAction = new QAction(tr("Grid"), this);
@@ -480,15 +481,15 @@ void QoccHarnessWindow::createMenus()
 			viewDisplayMenu->addAction( backgroundAction );
 
 		viewActionsMenu = viewMenu->addMenu( tr("&Actions") );
-			viewActionsMenu->addAction( fitAction );
+			//viewActionsMenu->addAction( fitAction );
 			viewActionsMenu->addAction( fitAllAction );
 			viewActionsMenu->addAction( zoomAction );
 			viewActionsMenu->addAction( panAction );
 			viewActionsMenu->addAction( rotAction );
 
 		gridMenu = viewMenu->addMenu( tr("&Grid") );
-			gridMenu->addAction( gridOnAction );
-			gridMenu->addAction( gridOffAction );
+			gridMenu->addAction( gridToggleAction );
+			//gridMenu->addAction( gridOffAction );
 			gridMenu->addSeparator();
 			gridMenu->addAction( gridXYAction );
 			gridMenu->addAction( gridXZAction );

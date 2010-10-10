@@ -101,7 +101,7 @@ class uio : public QObject {
     //adapted from stringify at http://www.parashift.com/c++-faq-lite/misc-technical-issues.html#faq-39.1 :
     static inline std::string toString(double x){std::ostringstream o; o<<x; return o.str();};
     static void checkShapeType(TopoDS_Shape Shape);
-    static void hideGrid();
+    //static void hideGrid();
     static void fitAll();
     static void axoView();
     static void sleep(uint n = 1,bool usrEv = false);

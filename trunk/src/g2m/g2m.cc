@@ -38,13 +38,17 @@
 #include "nanotimer.hh"
 #include "dispShape.hh"
 
-#include "../contrib/salome/ShHealOper_ShapeProcess.hxx"
+#include "ShHealOper_ShapeProcess.hxx"
+#include "ShHealOper_FillHoles.hxx"
+#include "ShHealOper_Sewing.hxx"
+#include <ShapeFix_Solid.hxx>
 
 #include <Handle_Geom_TrimmedCurve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepCheck_Analyzer.hxx>
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRepPrimAPI_MakeBox.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
@@ -84,7 +88,7 @@ g2m::g2m() {
 
 void g2m::slotModelFromFile() {
   lineVector.clear();
-  uio::hideGrid();
+  //uio::hideGrid();
   //interpDone = false;
 
   if (fromCmdLine) {
@@ -145,7 +149,6 @@ void g2m::slotModelFromFile() {
 ///call makeSolid on each obj in lineVector
 ///this is overridden by g2m_threaded
 void g2m::finishAllSolids(nanotimer &timer) {
-  uio::window()->statusBar()->clearMessage();
 
   for (uint i=0;i<lineVector.size();i++) {
     makeSolid(i);
@@ -226,6 +229,7 @@ void g2m::interpret() {
     return;
 
   //cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
+  uio::window()->statusBar()->clearMessage();
   uio::window()->statusBar()->showMessage("Starting interpreter...");
   if (!toCanon.waitForReadyRead(1000) ) {
     if ( toCanon.state() == QProcess::NotRunning ){
@@ -293,6 +297,7 @@ bool g2m::processCanonLine (std::string l) {
 }
 
 void g2m::statusBarUp(std::string s, double avgtime) {
+  uio::window()->statusBar()->clearMessage();
   //  std::string s = "Last processed:";
   s+= "   |   Avg time: " + nanotimer::humanreadable(avgtime);
   uio::window()->statusBar()->showMessage(s.c_str());
@@ -300,6 +305,7 @@ void g2m::statusBarUp(std::string s, double avgtime) {
 
 ///Sleep 1s and process events
 void g2m::sleepSecond() {
+  uio::window()->statusBar()->clearMessage();
   uio::window()->statusBar()->showMessage("Waiting for interpreter...");
   QTime dieTime = QTime::currentTime().addSecs(1);
   while( QTime::currentTime() < dieTime )
@@ -382,19 +388,24 @@ void g2m::makeSolid(uint index) {
 void g2m::subtractWorkpiece(uint index) {
   Standard_Real angTol = 0.00175;  //approx .1 degree
   int l = lineVector[index]->getLineNum();
-  TopoDS_Shape tmp;
-  TCollection_AsciiString cmdFile = "resources/ShHealingFullSet";
+  TopoDS_Shape tmp,temp;
+  //TCollection_AsciiString cmdFile = "resources/ShHealingFullSet";
   //TCollection_AsciiString cmdFile = "resources/ShHealingSub";
 
-  ShHealOper_ShapeProcess sp(cmdFile, "exec");
-  sp.Perform(((canonMotion*)lineVector[index])->getShape(),tmp);
+  //ShHealOper_ShapeProcess sp(cmdFile, "exec");
+  //sp.Perform(((canonMotion*)lineVector[index])->getShape(),tmp);
+  temp = ((canonMotion*)lineVector[index])->getShape();
+  if (!temp.IsNull()) {
+    //tmp = heal(temp);
 
-  BRepAlgoAPI_Cut cut(workpiece,tmp);
-  cut.Build();
-  if (!cut.IsDone()) {
-    infoMsg("pipe cut not done");
-  } else {
-    sp.Perform(cut.Shape(),workpiece);
+    BRepAlgoAPI_Cut cut(workpiece,temp); /// tmp <==> temp: don't heal sweep
+    cut.Build();
+    if (!cut.IsDone()) {
+      infoMsg("pipe cut not done");
+    } else {
+      //sp.Perform(cut.Shape(),workpiece);
+      workpiece = heal(cut.Shape());
+    }
   }
 
   //add tool if there is discontinuity
@@ -412,7 +423,8 @@ void g2m::subtractWorkpiece(uint index) {
     if (!cut.IsDone()) {
       infoMsg("tool cut not done");
     } else {
-      sp.Perform(cut.Shape(),workpiece);
+      //sp.Perform(cut.Shape(),workpiece);
+      workpiece = heal(cut.Shape());
     }
 
   }
@@ -420,4 +432,61 @@ void g2m::subtractWorkpiece(uint index) {
   //dump for debugging
   if (shouldDump(l,true)) dumpBrep("output/Dump_"+ uio::toString(l) + "_result.brep",workpiece);
 
+}
+
+TopoDS_Shape g2m::heal(const TopoDS_Shape & s) {
+  bool fail = false;
+  BRepCheck_Analyzer an(s);
+  if ( an.IsValid() )
+    return s;
+
+  TopoDS_Shape a,b;
+
+  ShHealOper_FillHoles aHealer (s);
+  aHealer.InitParameters (2,2,12,0.0001,1.e-5,0.01,0.01,8,2);
+  /*InitParameters (theDegree=3, theNbPtsOnCur=5, theNbIter=12, theTol3d=0.0001, theTol2d=1.e-5, theTolAng=0.01, theTolCrv=0.01, theMaxDeg=8, theMaxSeg=9)*/
+  //file:///opt/OpenCASCADE6.3.0/doc/ReferenceDocumentation/ModelingAlgorithms/html/classGeomPlate__BuildPlateSurface.html
+
+  if (!aHealer.Fill()) {  //will this be false if there are no holes to fill?
+    cout << "filling holes failed" << endl;
+    fail = true;
+    a = s;
+  } else {
+    a = aHealer.GetResultShape();
+    an.Init(a);
+    if (an.IsValid()) {
+      return a;
+    } else {
+      fail = true;
+    }
+  }
+  if (fail) {//still bad, try ShapeProcess
+    TCollection_AsciiString cmdFile = "resources/ShHealingFullSet";
+    //TCollection_AsciiString cmdFile = "resources/ShHealingSub";
+    ShHealOper_ShapeProcess sp(cmdFile, "exec");
+    sp.Perform(a,b);
+    an.Init(b);
+    if (an.IsValid()) {
+      return b;
+    } else {
+      infoMsg("ShapeProcess failed");
+
+      ShHealOper_Sewing sew(b,.00001);
+      sew.Perform();
+      if (sew.IsDone()) {
+        return sew.GetResultShape();
+      } else {
+        try {
+          ShapeFix_Solid fs(TopoDS::Solid(b));
+          fs.Perform();
+          return TopoDS::Solid(fs.Solid());
+        } catch (...) {
+          cout << "heal failed, dumping shape" << endl;
+          dumpBrep("output/Dump_holes.brep",b);
+          b.Nullify();
+          return b;
+        }
+      }
+    }
+  }
 }

@@ -18,9 +18,9 @@
 **
 ****************************************************************************/
 /*!
-\class	QoccViewerContext 
+\class	QoccViewerContext
 \brief	This class provides a simple document element of the QtOpenCascade Toolkit.
-	
+
 		This class provides a interactive QObject derived container for both
 		the AIS context and its View manager, providing a very simple "document"
 		model,
@@ -50,7 +50,7 @@ QoccViewerContext::QoccViewerContext()
 
 	setGridOffset (0.0);
 	gridXY();
-	gridOn();
+	gridToggle();
 }
 
 
@@ -59,14 +59,14 @@ QoccViewerContext::~QoccViewerContext()
 
 }
 
-Handle_V3d_Viewer& QoccViewerContext::getViewer()  
-{ 
-	return myViewer; 
+Handle_V3d_Viewer& QoccViewerContext::getViewer()
+{
+	return myViewer;
 }
 
-Handle_AIS_InteractiveContext& QoccViewerContext::getContext() 
-{ 
-	return myContext; 
+Handle_AIS_InteractiveContext& QoccViewerContext::getContext()
+{
+	return myContext;
 }
 
 Handle_V3d_Viewer QoccViewerContext::createViewer(	const Standard_CString aDisplay,
@@ -76,7 +76,7 @@ Handle_V3d_Viewer QoccViewerContext::createViewer(	const Standard_CString aDispl
 {
 #ifndef WNT
     static Handle(Graphic3d_GraphicDevice) defaultdevice;
-	
+
     if( defaultdevice.IsNull() )
 	{
 		defaultdevice = new Graphic3d_GraphicDevice( getenv(aDisplay) );
@@ -109,7 +109,7 @@ Handle_V3d_Viewer QoccViewerContext::createViewer(	const Standard_CString aDispl
 							V3d_WAIT );
 #endif  // WNT
 }
-/*! 
+/*!
 \brief	Deletes all objects.
 
 		This function deletes all dispayed objects from the AIS context.
@@ -126,8 +126,8 @@ void QoccViewerContext::deleteAllObjects()
 		myContext->Remove( aListIterator.Value(), Standard_False);
 	}
 }
-/*! 
-\brief	Sets the privileged plane to the XY Axis.  
+/*!
+\brief	Sets the privileged plane to the XY Axis.
 */
 void QoccViewerContext::gridXY  ( void )
 {
@@ -149,7 +149,7 @@ void QoccViewerContext::gridXZ  ( void )
 	gp_Ax3 aPlane( gp_Pnt(0., 0., 0.),gp_Dir(0., -1., 0.) );
 	myViewer->SetPrivilegedPlane( aPlane );
 }
-/*! 
+/*!
 \brief	Sets the privileged plane to the XY Axis.
  */
 void QoccViewerContext::gridYZ  ( void )
@@ -161,22 +161,30 @@ void QoccViewerContext::gridYZ  ( void )
 }
 
 /*!
-\brief	Turn the grid on.
+\brief	Toggle the grid.
  */
-void QoccViewerContext::gridOn  ( void )
+void QoccViewerContext::gridToggle  ( void )
 {
+  static bool gridOff = true;
+  if (gridOff) {
 	myViewer->ActivateGrid( myGridType , myGridMode );
 	myViewer->SetGridEcho ( Standard_True );
+  } else {
+    myViewer->DeactivateGrid();
+    myViewer->SetGridEcho( Standard_False );
+  }
+  gridOff = !gridOff;
 }
 
-/*! 
+/*/*!
 \brief	Turn the grid off.
-*/
+* /
 void QoccViewerContext::gridOff ( void )
 {
 	myViewer->DeactivateGrid();
 	myViewer->SetGridEcho( Standard_False );
 }
+*/
 
 /*!
 \brief	Select a rectangular grid
@@ -187,7 +195,7 @@ void QoccViewerContext::gridRect ( void )
 	myViewer->ActivateGrid( myGridType , myGridMode );
 	myViewer->Grid()->SetColors( myGridColor, myGridTenthColor );
 }
-/*! 
+/*!
 \brief	Select a circular grid.
 */
 void QoccViewerContext::gridCirc ( void )
@@ -202,7 +210,7 @@ void QoccViewerContext::setGridOffset (Quantity_Length offset)
 	Quantity_Length radius;
 	Quantity_Length xSize, ySize;
 	Quantity_Length oldOffset;
-	
+
 	myViewer->CircularGridGraphicValues( radius, oldOffset );
 	myViewer->SetCircularGridGraphicValues( radius, offset);
 

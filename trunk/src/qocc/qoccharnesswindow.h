@@ -13,7 +13,7 @@
 ** Copyright (C) Peter Dolbey 2006. All rights reserved.
 **
 **
-** Bugs (aka modifications) (C) 2009 Mark Pictor.  These modifications
+** Bugs (aka modifications) (C) 2009,2010 Mark Pictor.  These modifications
 ** can be re-licensed under GPL v3.
 **
 ****************************************************************************/
@@ -70,8 +70,6 @@ private slots:
 
 private:
     QStringList args;
-//    int argc;
-//    char* argv[];
     void createActions();
     void createMenus();
 
@@ -97,7 +95,7 @@ private:
     QAction *pasteAction;
     QAction *aboutAction;
 
-	QAction *fitAction;
+	//QAction *fitAction;
 	QAction *fitAllAction;
 	QAction *zoomAction;
 	QAction *panAction;
@@ -106,10 +104,12 @@ private:
 	QAction *gridXYAction;
 	QAction *gridXZAction;
 	QAction *gridYZAction;
-	QAction *gridOnAction;
-	QAction *gridOffAction;
+	QAction *gridToggleAction;
+	//QAction *gridOffAction;
 	QAction *gridRectAction;
 	QAction *gridCircAction;
+
+    //QAction *viewDefaultAction;
 
 	QAction *viewFrontAction;
 	QAction *viewBackAction;

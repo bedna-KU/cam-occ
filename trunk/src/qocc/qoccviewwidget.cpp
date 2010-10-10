@@ -382,13 +382,13 @@ void QoccViewWidget::redraw( bool isPainting )
 	myViewResized = Standard_False;
 }
 
-/*!
+/* !
 \brief	Just fits the current window
 		This function just fits the current objects to the window, without
 		either reducing or increasing the Z extents. This can cause clipping
 		of the objects after rotation.
 \return	Nothing
-*/
+* /
 void QoccViewWidget::fitExtents( void )
 {
 	if (!myView.IsNull())
@@ -397,7 +397,7 @@ void QoccViewWidget::fitExtents( void )
 		viewPrecision( true );
 	}
 }
-
+*/
 /*!
 \brief	Fits the model to view extents
 		This function fits the current objects to the window,
@@ -562,6 +562,7 @@ void QoccViewWidget::viewAxo()
 	if(!myView.IsNull())
 	{
 	    myView->SetProj( V3d_XnegYnegZpos );
+        fitAll();
 	}
 }
 

@@ -72,7 +72,7 @@ class g2m: public QObject {
     inline bool shouldDump(int a,bool dumpPrev = false) {int d=uio::getDump();return( uio::debuggingOn() && ( (d==-1) || (d==a) || (dumpPrev && (d==a+1)) ) );};
     ///dump shape s to file named n
     inline void dumpBrep(std::string n, TopoDS_Shape s) {BRepTools::Write(s,n.c_str());};
-
+    TopoDS_Shape heal(const TopoDS_Shape & s);
 
     //functions overridden by g2m_threaded to make threading work
     virtual void finishAllSolids(nanotimer &timer);
