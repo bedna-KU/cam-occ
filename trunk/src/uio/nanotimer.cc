@@ -51,16 +51,22 @@ double nanotimer::getElapsedS(){
   clock_gettime(CLOCK_MONOTONIC_RAW, &now);
   delta.tv_sec = now.tv_sec - begin.tv_sec;
   delta.tv_nsec = now.tv_nsec - begin.tv_nsec;
-  return delta.tv_sec + delta.tv_nsec/1000000000;
+  return delta.tv_sec + delta.tv_nsec/1000000000.0;
 }
 
 std::string nanotimer::humanreadable(double s) {
-  int m=0;
+  std::string out = "";
   if (s > 60) {
+    int m;
     m = s/60;
     s = s-(double)(m*60);
+    out = uio::toString(m) + "m, ";
   }
-  std::string out = uio::toString(m) + "m, " + uio::toString(s) + "s";
+  if (s > .01) {
+    out += uio::toString(s) + "s";
+  } else {
+    out = uio::toString(s*1000000) + "us";
+  }
   return out;
 }
 

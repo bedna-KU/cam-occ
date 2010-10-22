@@ -50,7 +50,7 @@ QoccViewerContext::QoccViewerContext()
 
 	setGridOffset (0.0);
 	gridXY();
-	gridToggle();
+	//gridToggle();
 }
 
 

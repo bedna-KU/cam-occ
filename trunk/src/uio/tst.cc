@@ -65,6 +65,8 @@
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 
+#include <BRepTools.hxx>
+
 tst::tst() {
   QMenu* myMenu = new QMenu("test");
   uio::mb()->insertMenu(uio::hm(),myMenu);
@@ -125,6 +127,7 @@ TopoDS_Face tst::silhouette(TopoDS_Shape t, gp_Dir d) {
   //create a vector in YZ with same angle
   gp_Dir hDir(0,sin(theta),cos(theta));
   TopoDS_Compound edges = hlrLines(t,hDir); //get all the edges
+  BRepTools::Write(edges,"edges.brep");
   //TODO:transform the result to be normal to pose
   TopoDS_Wire w = outermost(edges);
   BRepBuilderAPI_MakeFace mf(w);

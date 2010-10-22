@@ -1,13 +1,14 @@
-(Circle Diamond Square Program)
-(Tom Kramer)
-(26-Sep-1994)
-(Assumes 4"x4"x2" finished stock)
-(Top of stock at Z=2")
-(X:  0.000 to 4.0)
-(Y: -0.250 to 3.915)
-(Z:  1.406 to 3.0)
-(Cutter does not descend more than 0.94" below top)
-m6 t4
+n0001 (Circle Diamond Square Program)
+n0003 (Tom Kramer)
+n0005 (26-Sep-1994)
+n0010 (Assumes 4"x4"x2" finished stock)
+n0020 (Top of stock at Z=2")
+n0030 (X:  0.000 to 4.0)
+n0040 (Y: -0.250 to 3.915)
+n0050 (Z:  1.406 to 3.0)
+n0060 (Cutter does not descend more than 0.94" below top)
+n0070 (m6 t4)
+n0075 m6 t1
 n0080 G90 M9
 n0090 G43 H1 g20
 n0140 F16.0 S3500 M3

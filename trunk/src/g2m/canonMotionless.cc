@@ -27,6 +27,7 @@
 canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):canonLine(canonL, prevStatus) {
   match = true;
   handled = true;
+  ncEnd = false;
   status.setMotionType(MOTIONLESS);
   status.setEndPose(status.getStartPose());
   solidErrors = false;
@@ -116,7 +117,9 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
   } else if (cmdMatch("SET_NAIVECAM_TOLERANCE")) {
     handled = false;
   } else if (cmdMatch("PROGRAM_END")) {
+    ncEnd = true;
   } else if (cmdMatch("PROGRAM_STOP")) {
+    ncEnd = true;
   } else if (cmdMatch("SELECT_PLANE" )) {
     if (cantok(3).compare("CANON_PLANE_XZ")==0) {
       status.setPlane(CANON_PLANE_XZ);

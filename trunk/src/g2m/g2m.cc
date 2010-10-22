@@ -35,6 +35,7 @@
 #include "uio.hh"
 #include "canonLine.hh"
 #include "canonMotion.hh"
+#include "canonMotionless.hh"
 #include "nanotimer.hh"
 #include "dispShape.hh"
 
@@ -107,6 +108,7 @@ void g2m::slotModelFromFile() {
 
   if ( file.endsWith(".ngc") ) {
     interpret();
+    if (!success) return;
   } else if (file.endsWith(".canon")) { //just process each line
     if (!chooseToolTable()) {
       uio::infoMsg("Can't find tool table. Aborting.");
@@ -149,20 +151,18 @@ void g2m::slotModelFromFile() {
 ///call makeSolid on each obj in lineVector
 ///this is overridden by g2m_threaded
 void g2m::finishAllSolids(nanotimer &timer) {
-
   for (uint i=0;i<lineVector.size();i++) {
     makeSolid(i);
     lineVector[i]->display();
-    if (i%20 == 0) { //every 20
+    //if (i%20 == 0) { //every 20
       uio::fitAll();
       std::string s = "Processing ";
       s+= lineVector[i]->getLnum();
       s+= " : " + i;
       s+= " of " + lineVector.size();
       statusBarUp(s,timer.getElapsedS()/double(i));
-    }
+    //}
   }
-
 }
 
 ///ask for a tool table, even if one is configured - user may wish to change it
@@ -213,10 +213,10 @@ bool g2m::startInterp(QProcess &tc) {
   - it requires no delays.
   **************************************************/
 
-  tc.write("1\n"); //start interpreting
+  tc.write("3\n");
   tc.write(tooltable.toAscii());
   tc.write("\n");
-
+  tc.write("1\n"); //start interpreting
   return true;
 }
 
@@ -228,7 +228,6 @@ void g2m::interpret() {
   if (!startInterp(toCanon))
     return;
 
-  //cout << "stderr: " << (const char*)toCanon.readAllStandardError() << endl;
   uio::window()->statusBar()->clearMessage();
   uio::window()->statusBar()->showMessage("Starting interpreter...");
   if (!toCanon.waitForReadyRead(1000) ) {
@@ -241,10 +240,9 @@ void g2m::interpret() {
     return;
   }
 
-  //if readLine is used at the wrong time, it is possible to pick up a line fragment! will canReadLine() fix that?
   qint64 lineLength;
   char line[260];
-  uint fails = 0;
+  int fails = 0;
   do {
     if (toCanon.canReadLine()) {
       lineLength = toCanon.readLine(line, sizeof(line));
@@ -259,17 +257,31 @@ void g2m::interpret() {
       sleepSecond();
     }
   } while ( (fails < 100) &&
-  ( (toCanon.canReadLine()) || ( toCanon.state() != QProcess::NotRunning ) )  );
-  //((lineLength > 0) || 	//loop until interp quits and all lines are read.
-  //toCanon.canReadLine() ||
-  success = foundEOF;
+           ( (toCanon.canReadLine()) ||
+            ( toCanon.state() != QProcess::NotRunning ) )  );
+  if (fails > 1) {
+    if (fails < 100) {
+    infoMsg("Waited for interpreter " + uio::toString(fails) + " times.");
+    } else {
+      uio::infoMsg("Waited 100 seconds for interpreter. Giving up.");
+      toCanon.close();
+      return;
+    }
+  }
+  std::string s = (const char *)toCanon.readAllStandardError();
+  s.erase(0,s.find("executing"));
+  if (s.size() > 10) {
+    uio::infoMsg("Interpreter exited with error:\n"+s.substr(10));
+    return;
+  }
+  if (!foundEOF) {
+    uio::infoMsg("Warning: file data not terminated correctly. If the file is terminated correctly, this indicates a problem interpreting the file.");
+  }
+  success = true;
   return;
 }
 
 bool g2m::processCanonLine (std::string l) {
-  if (debug){
-    cout << l; //has its own newline
-  }
   nanotimer nt;
   nt.start();
   canonLine * cl;
@@ -291,16 +303,23 @@ bool g2m::processCanonLine (std::string l) {
 */
 
   double t = nt.getElapsedS();
-  if (debug) cout << "Line " << cl->getLineNum() << "/N" << cl->getN() << " - time " << nt.humanreadable(t) << endl;
-
-  return cl->checkErrors();
+  if ((debug) && (t>.00005)) { //don't print if fast or not debugging
+    cout << "Line " << cl->getLineNum() << "/N" << cl->getN() << " - time " << nt.humanreadable(t) << endl;
+  }
+  //cl->checkErrors();
+  if (!cl->isMotion())
+    return ((canonMotionless*)cl)->isNCend();
+  return false;
 }
 
 void g2m::statusBarUp(std::string s, double avgtime) {
-  uio::window()->statusBar()->clearMessage();
+  QString m;
+  //uio::window()->statusBar()->clearMessage();
   //  std::string s = "Last processed:";
-  s+= "   |   Avg time: " + nanotimer::humanreadable(avgtime);
-  uio::window()->statusBar()->showMessage(s.c_str());
+  m = s.c_str();
+  m += "   |   Avg time: ";
+  m += nanotimer::humanreadable(avgtime).c_str();
+  uio::window()->statusBar()->showMessage(m);
 }
 
 ///Sleep 1s and process events
@@ -334,14 +353,18 @@ void g2m::createBlankWorkpiece() {
   pntPair f,t;
   std::string fs,ts,ws;
   gp_Pnt a,b;
+  double dist;
 
   f = machineStatus::getFeedBounds();
   t = machineStatus::getTraverseBounds();
-  a = f.a; a.SetZ(a.Z()-0.5);
-  b = f.b; b.SetZ(b.Z()+0.5);
+  a = f.a;
+  b = f.b;
+  dist = b.Z() - a.Z();
+  a.SetZ(a.Z()-0.1*dist);
+  b.SetZ(b.Z()+0.1*dist);
   if (b.Y()-a.Y() < .01) b.SetY(b.Y()+.01);
   if (b.X()-a.X() < .01) b.SetX(b.X()+.01);
-  minToolLength = b.Z() - f.a.Z();
+  minToolLength = b.Z() - f.a.Z() + 0.1*dist;
 
   fs = "All motion at feedrate fits within a bounding box with corners ";
   fs += uio::toString(f.a) + " and " + uio::toString(f.b) + ".\n";
@@ -396,15 +419,15 @@ void g2m::subtractWorkpiece(uint index) {
   //sp.Perform(((canonMotion*)lineVector[index])->getShape(),tmp);
   temp = ((canonMotion*)lineVector[index])->getShape();
   if (!temp.IsNull()) {
-    //tmp = heal(temp);
+    tmp = heal(temp,index);
 
-    BRepAlgoAPI_Cut cut(workpiece,temp); /// tmp <==> temp: don't heal sweep
+    BRepAlgoAPI_Cut cut(workpiece,tmp);
     cut.Build();
     if (!cut.IsDone()) {
       infoMsg("pipe cut not done");
     } else {
       //sp.Perform(cut.Shape(),workpiece);
-      workpiece = heal(cut.Shape());
+      workpiece = heal(cut.Shape(),index);
     }
   }
 
@@ -424,7 +447,7 @@ void g2m::subtractWorkpiece(uint index) {
       infoMsg("tool cut not done");
     } else {
       //sp.Perform(cut.Shape(),workpiece);
-      workpiece = heal(cut.Shape());
+      workpiece = heal(cut.Shape(),index);
     }
 
   }
@@ -434,12 +457,13 @@ void g2m::subtractWorkpiece(uint index) {
 
 }
 
-TopoDS_Shape g2m::heal(const TopoDS_Shape & s) {
+TopoDS_Shape g2m::heal(const TopoDS_Shape & s, uint index) {
   bool fail = false;
+  index++;
   BRepCheck_Analyzer an(s);
   if ( an.IsValid() )
     return s;
-
+  infoMsg("Healing " + uio::toString((int)index) + ".");
   TopoDS_Shape a,b;
 
   ShHealOper_FillHoles aHealer (s);
@@ -448,7 +472,7 @@ TopoDS_Shape g2m::heal(const TopoDS_Shape & s) {
   //file:///opt/OpenCASCADE6.3.0/doc/ReferenceDocumentation/ModelingAlgorithms/html/classGeomPlate__BuildPlateSurface.html
 
   if (!aHealer.Fill()) {  //will this be false if there are no holes to fill?
-    cout << "filling holes failed" << endl;
+    cout << "filling holes failed at " << index << endl;
     fail = true;
     a = s;
   } else {
@@ -469,24 +493,33 @@ TopoDS_Shape g2m::heal(const TopoDS_Shape & s) {
     if (an.IsValid()) {
       return b;
     } else {
-      infoMsg("ShapeProcess failed");
+      infoMsg("ShapeProcess failed at " + uio::toString((int)index));
 
       ShHealOper_Sewing sew(b,.00001);
       sew.Perform();
       if (sew.IsDone()) {
-        return sew.GetResultShape();
-      } else {
-        try {
-          ShapeFix_Solid fs(TopoDS::Solid(b));
-          fs.Perform();
-          return TopoDS::Solid(fs.Solid());
-        } catch (...) {
-          cout << "heal failed, dumping shape" << endl;
-          dumpBrep("output/Dump_holes.brep",b);
-          b.Nullify();
-          return b;
+        a = sew.GetResultShape();
+        an.Init(a);
+        if (an.IsValid()) {
+        return a;
         }
+      }
+      try {
+        ShapeFix_Solid fs(TopoDS::Solid(b));
+        fs.Perform();
+        a = fs.Solid();
+        an.Init(a);
+        if (!an.IsValid())
+          a.Nullify();
+        return a;
+      } catch (...) {
+        cout << "heal failed at " << index << ", dumping shape" << endl << flush;;
+        dumpBrep("output/Dump_holes" + uio::toString((int)index) + ".brep",b);
+        abort();
       }
     }
   }
+  abort(); //should NOT get here!
+  b.Nullify();
+  return b;
 }

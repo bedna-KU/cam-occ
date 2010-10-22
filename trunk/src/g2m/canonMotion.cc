@@ -44,6 +44,8 @@
 #include "uio.hh"
 
 canonMotion::canonMotion(std::string canonL, machineStatus prevStatus): canonLine(canonL,prevStatus) {
+  if (uio::debuggingOn())
+    infoMsg(myLine.substr(0,myLine.size()-1)); //remove newline
 }
 
 ///for STRAIGHT_* and ARC_FEED, first 3 are always xyz and last 3 always abc
@@ -194,7 +196,7 @@ void canonMotion::sweepSolid() {
   ob.SetTranslation(gp::Origin(),b);
   BRepBuilderAPI_Transform tob(ob);
 
-  if (a.Distance(b) < radius/50.0) {  //FIXME? skip, motion is very short
+  if (a.Distance(b) < radius/10.0) {  //FIXME? skip, motion is very short
     tob.Perform(getTool(status.getToolNum())->get3d());
     myShape = tob.Shape();
     return;

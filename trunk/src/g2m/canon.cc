@@ -36,8 +36,11 @@ canon::canon() {
 }
 
 void canon::addTool(toolNumber n) {
-  assert(n>0);
-  toolTable.insert(std::pair<toolNumber,millTool*>(n, (millTool *) NULL));
+  if(n>0) {
+    toolTable.insert(std::pair<toolNumber,millTool*>(n, (millTool *) NULL));
+  } else {
+    cout << "Tool numbers must be greater than 0!" << endl;
+  }
 }
 
 void canon::buildTools(std::string toolTableFile, double toolLen) {
@@ -52,6 +55,7 @@ void canon::buildTools(std::string toolTableFile, double toolLen) {
 void canon::checkTTskips() {
   std::map<toolNumber,millTool*>::iterator it;
   for(it=toolTable.begin() ; it != toolTable.end(); it++ ) {
+    if (it->first == 0) continue;
     if (it->second == NULL) {
       double dia = (double)it->first/(double)4.0;
       it->second = createTool(dia,"ball");
@@ -62,12 +66,15 @@ void canon::checkTTskips() {
 
 millTool * canon::getTool(toolNumber n) {
   assert(toolsBuilt);
-  assert(n>0);
-  std::map<toolNumber,millTool*>::iterator it;
-  it=toolTable.find(n);
-  assert(it!=toolTable.end());
-  assert(it->second != NULL);
-  return it->second;
+  if (n>0) {
+    std::map<toolNumber,millTool*>::iterator it;
+    it=toolTable.find(n);
+    assert(it!=toolTable.end());
+    assert(it->second != NULL);
+    return it->second;
+  } else {
+    return NULL;
+  }
 }
 
 bool canon::checkRange(std::string tline, std::string item,size_t c) {

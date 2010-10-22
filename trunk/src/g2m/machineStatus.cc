@@ -40,7 +40,7 @@ machineStatus::machineStatus(const machineStatus& oldStatus) {
     prevEndDir = oldStatus.endDir;
     first = oldStatus.first;
     motionType = NOT_DEFINED;
-    ///lastMotionWasTraverse gets copied from the previous machine status, and only gets changed if the prev status was motion at feedrate
+    ///lastMotionWasTraverse gets copied from the previous machine status, and only gets changed if the prev status was motion at feedrate (this way, motionless cmds don't mess things up)
     lastMotionWasTraverse = oldStatus.lastMotionWasTraverse;
     if ( oldStatus.motionType == STRAIGHT_FEED || oldStatus.motionType == HELICAL) {
       lastMotionWasTraverse = false;
@@ -78,14 +78,16 @@ void machineStatus::clearAll() {
 void machineStatus::setMotionType(MOTION_TYPE m) {
   motionType = m;
   if (motionType == NOT_DEFINED) {
-    infoMsg("mt undef");
+    uio::infoMsg("mt undef");
+  } else if (motionType == TRAVERSE) {
+    lastMotionWasTraverse = true;
   }
   static int count = 0;
   if ((first) && ((m == STRAIGHT_FEED) || (m == TRAVERSE) || (m == HELICAL)) ) {
-    count++;
-    if (count == 2) {
+    if (count == 0)
+      count++;
+    else
       first = false;
-    }
   }
 }
 
@@ -103,6 +105,7 @@ void machineStatus::setEndPose(gp_Ax1 newPose) {
   addToBounds();
 }
 
+
 void machineStatus::addToBounds() {
   if (first) {
     if (uio::debuggingOn()) infoMsg("not adding to bndbox");
@@ -116,7 +119,8 @@ void machineStatus::addToBounds() {
     a=startPose.Location();
     b=endPose.Location();
 
-    //don't add the starting end of a vertical STRAIGHT_FEED if the previous motion was TRAVERSE
+    ///don't add the start of a vertical STRAIGHT_FEED if the previous motion was TRAVERSE
+    //what about the end of a vert S_F when next motion is TRAVERSE? pita to implement...
     double angTol = .0175;
     if (a.SquareDistance(b)>Precision::Confusion() && !( gp_Vec(a,b).IsParallel(gp::DZ(),angTol) && lastMotionWasTraverse )) {
       feedBbox.Add(a);
@@ -127,25 +131,15 @@ void machineStatus::addToBounds() {
     traverseBbox.Add(startPose.Location());
     traverseBbox.Add(endPose.Location());
   } else {
-    if (uio::debuggingOn()) infoMsg("warning, motion type = "+uio::toString(motionType));
+    //if (uio::debuggingOn()) infoMsg("warning, motion type = "+uio::toString(motionType));
   }
 }
 
 void machineStatus::setTool(toolNumber n) {
-  std::string s = "adding tool " + n;
-  infoMsg( s+".");
+  infoMsg("adding tool " + uio::toString(n) + ".");
   myTool = n;
   canon::addTool(n);
 }
-
-/*
-void machineStatus::setTool(uint n) {
-  if (theTool != 0)
-    delete theTool;
-  double d = double(n)/16.0; //for testing, n is diameter in 16ths, and length is 5*diameter. FIXME
-  theTool = new ballnoseTool(d,d*5.0); //TODO: use EMC's tool table for tool sizes
-}
-*/
 
 ///if not first, add an arc or helix to feedBbox. STRAIGHT_* is added in setEndPose()
 void machineStatus::addArcToBbox(TopoDS_Edge e) {
@@ -166,10 +160,23 @@ pntPair machineStatus::getTraverseBounds() {
 
 pntPair machineStatus::getFeedBounds() {
   double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
-  feedBbox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
   pntPair b;
-  b.a=gp_Pnt(aXmin,aYmin,aZmin);
-  b.b=gp_Pnt(aXmax,aYmax,aZmax);
+  int fail = 0;
+  if (!feedBbox.IsVoid()) {
+    try {
+      feedBbox.Get ( aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
+      b.a=gp_Pnt(aXmin,aYmin,aZmin);
+      b.b=gp_Pnt(aXmax,aYmax,aZmax);
+    } catch (Standard_ConstructionError) {
+      fail = 1;
+    }
+  } else {
+    fail = 2;
+  }
+  if (fail) {
+    uio::infoMsg("feedBbox problem - " + uio::toString(fail));
+    abort();
+  }
   return b;
 }
 
