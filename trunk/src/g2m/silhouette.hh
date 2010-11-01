@@ -21,29 +21,40 @@
 #ifndef SILHOUETTE_HH
 #define SILHOUETTE_HH
 
+#include <limits.h>
+
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Wire.hxx>
+#include <TopoDS_Solid.hxx>
+#include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
+#include <gp_Dir.hxx>
+
 /** Create the silhouette (outline) of a tool
 */
 class silhouette {
   public:
-    silhouette(TopoDS_Solid tool, gp_Dir normal, double radius);
-    init(TopoDS_Solid tool, gp_Dir normal, double radius);
-    newAngle(gp_Dir normal);
+    silhouette(TopoDS_Solid tool, gp_Dir normal, double radius, double height);
+    void init(TopoDS_Solid tool, gp_Dir normal, double radius, double height);
+    void newAngle(gp_Dir normal);
     bool done() {return myDone;};
     TopoDS_Wire result() {return myOutline;}
   protected: //data
     TopoDS_Wire myOutline;
+    gp_Dir myNormal;
     bool myDone;
     TopTools_IndexedDataMapOfShapeListOfShape hlrMap;
     //TopoDS_ListOfShape myEdges;
     TopoDS_Solid myTool;
-    double myRadius,myAngle;
+    double myRadius,myAngle,myHeight;
 
   protected: //functions
-    void hlrLines(TopoDS_Shape t, gp_Dir dir);
-    void removeFromList(TopoDS_Edge e);
-    void prune();
+    void createHlrLines(TopoDS_Shape t, gp_Dir dir);
+    bool removeFromList(TopoDS_Edge e);
+    bool prune();
+    bool reduceMultis();
+    double getRemovableDist(TopoDS_Edge e);
 
-}
+};
 
 
 #endif //SILHOUETTE_HH

@@ -34,30 +34,60 @@ TopTools_IndexedDataMapOfShapeListOfShape
 */
 
 #include "silhouette.hh"
+#include <gp_Pnt.hxx>
+#include <gp_Ax3.hxx>
+#include <Handle_HLRBRep_Algo.hxx>
+#include <HLRBRep_Algo.hxx>
+#include <HLRAlgo_Projector.hxx>
+#include <HLRBRep_HLRToShape.hxx>
+#include <TopoDS_Compound.hxx>
+#include <BRep_Builder.hxx>
+#include <TopExp.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <TopTools_ListIteratorOfListOfShape.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <TopoDS.hxx>
+/*
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
+*/
 
-silhouette::silhouette(TopoDS_Solid tool, gp_Dir normal, double radius):
-                       myTool=tool,myRadius=radius {
 
+silhouette::silhouette(TopoDS_Solid tool, gp_Dir normal, double radius, double height):
+                       myTool(tool), myRadius(radius), myHeight(height) {
   newAngle(normal);
 }
 
-silhouette::init(TopoDS_Solid tool, gp_Dir normal, double radius):
-                 myTool=tool,myRadius=radius {
+void silhouette::init(TopoDS_Solid tool, gp_Dir normal, double radius, double height):
+                 myTool(tool), myRadius(radius), myHeight(height) {
   newAngle(normal);
 }
 
-silhouette::newAngle(gp_Dir normal):myNormal = normal {
+void silhouette::newAngle(gp_Dir normal): myNormal(normal) {
   myOutline.Nullify();
   myDone = false;
-  myEdges.Clear();
+  //myEdges.Clear();
 
-  findEdges();
-  removeShortEdges();
+  createHlrLines(myTool,myNormal);
 
+  // remove zero-length edges?
+
+  bool r;
+  do {
+    prune();
+    r = reduceMultis();
+  } while (r);
 }
 
 
-void silhouette::hlrLines(TopoDS_Shape t, gp_Dir dir) {
+///creates the hlr lines. NOTE: they are in the XY plane!
+void silhouette::createHlrLines(TopoDS_Shape t, gp_Dir dir) {
 
   gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
   gp_Dir xDir(-1,0,0);
@@ -112,29 +142,77 @@ void silhouette::hlrLines(TopoDS_Shape t, gp_Dir dir) {
 
 }
 
-///remove any edges which have a loose end, return true if one was removed (so prune can be ran again)
-bool silhouette::prune() {
-  bool mapHasChange = false;
-  //wtf is difference between extent() and NbBuckets() in tcollection_basicmap?!
+///find vertices with >2 edges and remove one edge. return false if no changes
+bool silhouette::reduceMultis() {
+  bool found = false;
   int n = hlrMap.Extent();
   for (int i = 0; i <= n; i++) {
     TopTools_ListOfShape los ( hlrMap.FindFromIndex(i));
     int l = los.Extent();
-    if ( l < 2 ) { //one or zero edges connect to it
-      if ( l == 1 ) {
-        removeFromList(TopoDS::Edge( los.First() ));
+    if ( l > 2 ) {
+      //figure out which edge is unnecessary, and remove it
+      TopTools_ListIteratorOfListOfShape lit(los), closest;
+      double minDist = DBL_MAX;
+      for( ; lit.More() ; lit.Next() ) {
+        double d = getRemovableDist(TopoDS::Edge( lit.Value() ));
+        if ( (d >= 0) && (d < minDist) ) {
+          minDist = d;
+          closest = lit;
+        } else if ( d == minDist ) {
+          cout << "Error! two edges with same distance!" << endl;
+          abort();
+        }
       }
-      //remove vertex
-      hlrMap.Substitute(
-      mapHasChange = true;
+      los.Remove(closest);
+      found = true;
     }
-
-
   }
-  return mapHasChange;
+  return found;
 }
+
+///intersect e with gp::OY(). return distance to center, or -1 if no intersection
+double silhouette::getRemovableDist(TopoDS_Edge e) {
+  //find intersection i of e and gp::OY()
+  bool intersect = false;
+  //intersection from java app?
+  gp_Pnt i;
+  i = ...
+  if (!intersect) return -1.0;
+  //find dist between i and center
+  gp_Pnt center(0,myHeight/2,0);
+  return center.Distance(i);
+}
+
+///remove any edges which have a loose end, return true if map was updated
+bool silhouette::prune() {
+  bool pruned = false;
+  bool mapHasChange = false;
+
+  //wtf is difference between Extent() and NbBuckets() in tcollection_basicmap?!
+  do {
+    int n = hlrMap.Extent();
+    for (int i = 0; i <= n; i++) {
+      TopTools_ListOfShape los ( hlrMap.FindFromIndex(i));
+      int l = los.Extent();
+      if ( l < 2 ) { //one or zero edges connect to the current vertex
+        if ( l == 1 ) {
+          removeFromList(TopoDS::Edge( los.First() ));
+        }
+        //remove vertex
+        TopoDS_Vertex v;
+        v.Nullify();
+        los.Clear();
+        hlrMap.Substitute(i,v,los);
+        mapHasChange = true;
+        pruned = true;
+      } else mapHasChange = false;
+    }
+  } while (mapHasChange);
+  return pruned;
+}
+
 /*
-TopExp::MapShapesAndAncestors( theShell, TopAbs_VERTEX, TopAbs_EDGE, veMap );
+    TopExp::MapShapesAndAncestors( theShell, TopAbs_VERTEX, TopAbs_EDGE, veMap );
     gp_Vec dir001 = gp::DZ();
     gp_Pnt p000 = BRep_Tool::Pnt( TopoDS::Vertex( V000 ));
     double maxVal = -DBL_MAX;
@@ -151,6 +229,25 @@ TopExp::MapShapesAndAncestors( theShell, TopAbs_VERTEX, TopAbs_EDGE, veMap );
       }
     }
 */
-void silhouette::removeFromList(TopoDS_Edge e) {
 
+///find all instances of e in the lists in hlrMap, and remove them
+///return true if hlrMap was modified
+bool silhouette::removeFromList(TopoDS_Edge e) {
+  bool found = false;
+  int m = hlrMap.Extent();
+  for (int i = 0; i <= m; i++) {
+    TopTools_ListOfShape los ( hlrMap.ChangeFromIndex(i) );
+    TopTools_ListIteratorOfListOfShape lit(los);
+    for( ; lit.More() ; lit.Next() ) {
+      if( compareEdges(e,lit.Value()) ) {
+        los.Remove(lit);
+        found = true;
+      }
+    }
+  }
+  return found;
+}
+
+bool silhouette::compareEdges(TopoDS_Edge a, TopoDS_Edge b) {
+  return a.IsEqual(b);
 }
