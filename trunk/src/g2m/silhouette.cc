@@ -47,7 +47,22 @@ TopTools_IndexedDataMapOfShapeListOfShape
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS.hxx>
+#include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <gp_Lin.hxx>
+#include <ShapeAnalysis_FreeBounds.hxx>
+#include <TopTools_MapIteratorOfMapOfOrientedShape.hxx>
+#include <TopTools_MapOfOrientedShape.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
+#include <Handle_TopTools_HSequenceOfShape.hxx>
+#include <BRepTools_ReShape.hxx>
+#include <TopExp_Explorer.hxx>
+#include <BRepTools.hxx>
 /*
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
+#include <.hxx>
 #include <.hxx>
 #include <.hxx>
 #include <.hxx>
@@ -59,156 +74,282 @@ TopTools_IndexedDataMapOfShapeListOfShape
 */
 
 
-silhouette::silhouette(TopoDS_Solid tool, gp_Dir normal, double radius, double height):
-                       myTool(tool), myRadius(radius), myHeight(height) {
+silhouette::silhouette(TopoDS_Shape tool, gp_Dir normal, double radius, double height):
+        myTool(tool), myRadius(radius), myHeight(height) {
+	  
+    newAngle(normal);
+}
+
+void silhouette::init(TopoDS_Shape tool, gp_Dir normal, double radius, double height) {
+  myTool = tool;
+  myRadius = radius; 
+  myHeight = height;
+  
   newAngle(normal);
 }
 
-void silhouette::init(TopoDS_Solid tool, gp_Dir normal, double radius, double height):
-                 myTool(tool), myRadius(radius), myHeight(height) {
-  newAngle(normal);
+
+void silhouette::newAngle(gp_Dir normal) {
+    myNormal = normal;
+    myOutline.Nullify();
+    myDone = false;
+    //myEdges.Clear();
+
+    createHlrLines(myTool,myNormal);
+
+    // remove zero-length edges?
+    dumpMap();
+    bool r,p;
+    int iter=0;
+    do {
+      iter++;
+        p = prune();
+        r = reduceMultis();
+    } while (r || p);
+   
+    //create a wire from the remaining edges
+    createWireFromEdgeSeq(getRemainingEdges());
 }
 
-void silhouette::newAngle(gp_Dir normal): myNormal(normal) {
-  myOutline.Nullify();
-  myDone = false;
-  //myEdges.Clear();
-
-  createHlrLines(myTool,myNormal);
-
-  // remove zero-length edges?
-
-  bool r;
-  do {
-    prune();
-    r = reduceMultis();
-  } while (r);
+void silhouette::dumpMap() {
+  hlrMap.Statistics(std::cout);
 }
 
+///find all remaining edges in hlrMap and return them as an HSequence, filtering out duplicates
+Handle_TopTools_HSequenceOfShape silhouette::getRemainingEdges() {
+  TopTools_MapOfOrientedShape mos;  //use a map because the hashing will remove duplicates
+  TopTools_ListOfShape los;
+  int n = hlrMap.Extent();
+  for (int i = 1; i <= n; i++) {
+    los = hlrMap.FindFromIndex(i);
+    int l = los.Extent();  //should always be 2 or 0 - otherwise the map wasn't cleaned up correctly
+    if (l == 2) {
+      mos.Add(los.First());
+      mos.Add(los.Last());
+      std::cout << "adding edges to mos" << std::endl;
+    } else if (l != 0) {
+      std::cout << "error! los.extent = " << l << " at i=" << i << endl;
+    }
+    los.Clear();
+  }
+  //copy from map to hsequence, for createWireFromEdgeList()
+  TopTools_MapIteratorOfMapOfOrientedShape mimos;
+  Handle_TopTools_HSequenceOfShape hsos = new TopTools_HSequenceOfShape;
+  mimos.Initialize(mos);
+  for (;mimos.More();mimos.Next()) {
+    hsos->Append(mimos.Key());
+  }
+  return hsos;
+}
+
+///create a wire from an unordered sequence of edges that has no duplicates
+void silhouette::createWireFromEdgeSeq ( Handle_TopTools_HSequenceOfShape edges ) {
+  Handle_TopTools_HSequenceOfShape NewWires = new TopTools_HSequenceOfShape();
+  double tol = Precision::Confusion();
+  ShapeAnalysis_FreeBounds::ConnectEdgesToWires(edges,tol,Standard_False,NewWires);
+  
+  int l = NewWires->Length();
+  if ( l >= 1) {
+    myOutline = TopoDS::Wire(NewWires->Value(1));
+  } 
+  if ( l != 1) {
+    std::cout << "error, " << l << " wires from ShapeAnalysis_FreeBounds::ConnectEdgesToWires!" << std::endl << 
+    "started with " << edges->Length() << " edges" << std::endl;
+  } else {
+    myDone = true;
+  }
+}
 
 ///creates the hlr lines. NOTE: they are in the XY plane!
 void silhouette::createHlrLines(TopoDS_Shape t, gp_Dir dir) {
 
-  gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
-  gp_Dir xDir(-1,0,0);
-  gp_Trsf pTrsf;
-  pTrsf.SetTransformation(gp_Ax3(viewpnt,dir,xDir));
-  Handle(HLRBRep_Algo) myAlgo = new HLRBRep_Algo();
-  myAlgo->Add(t);
-  myAlgo->Projector(HLRAlgo_Projector (pTrsf,false,0));
-  myAlgo->Update();
-  myAlgo->Hide(); //from pdf
-  //myAlgo->Update(); //just in case
+    gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
+    gp_Dir xDir(-1,0,0);
+    gp_Trsf pTrsf;
+    pTrsf.SetTransformation(gp_Ax3(viewpnt,dir,xDir));
+    Handle(HLRBRep_Algo) myAlgo = new HLRBRep_Algo();
+    myAlgo->Add(t);
+    myAlgo->Projector(HLRAlgo_Projector (pTrsf,false,0));
+    myAlgo->Update();
+    myAlgo->Hide(); //from pdf
+    //myAlgo->Update(); //just in case
 
-  HLRBRep_HLRToShape aHLRToShape(myAlgo);
+    HLRBRep_HLRToShape aHLRToShape(myAlgo);
 
-  TopoDS_Compound comp;
-  BRep_Builder builder;
-  builder.MakeCompound( comp );
+    TopoDS_Compound comp;
+    BRep_Builder builder;
+    builder.MakeCompound( comp );
 
-  TopoDS_Shape VCompound = aHLRToShape.VCompound();
-  if(!VCompound.IsNull())
-    builder.Add(comp, VCompound);
-  TopoDS_Shape Rg1LineVCompound = aHLRToShape.Rg1LineVCompound();
-  if(!Rg1LineVCompound.IsNull())
-    builder.Add(comp, Rg1LineVCompound);
-  TopoDS_Shape RgNLineVCompound = aHLRToShape.RgNLineVCompound();
-  if(!RgNLineVCompound.IsNull())
-    builder.Add(comp, RgNLineVCompound);
-  TopoDS_Shape OutLineVCompound = aHLRToShape.OutLineVCompound();
-  if(!OutLineVCompound.IsNull())
-    builder.Add(comp, OutLineVCompound);
-  TopoDS_Shape IsoLineVCompound = aHLRToShape.IsoLineVCompound();
-  if(!IsoLineVCompound.IsNull())
-    builder.Add(comp, IsoLineVCompound);
-  TopoDS_Shape HCompound = aHLRToShape.HCompound();
-  if(!HCompound.IsNull())
-    builder.Add(comp, HCompound);
-  TopoDS_Shape Rg1LineHCompound = aHLRToShape.Rg1LineHCompound();
-  if(!Rg1LineHCompound.IsNull())
-    builder.Add(comp, Rg1LineHCompound);
-  TopoDS_Shape RgNLineHCompound = aHLRToShape.RgNLineHCompound();
-  if(!RgNLineHCompound.IsNull())
-    builder.Add(comp, RgNLineHCompound);
-  TopoDS_Shape OutLineHCompound = aHLRToShape.OutLineHCompound();
-  if(!OutLineHCompound.IsNull())
-    builder.Add(comp, OutLineHCompound);
-  TopoDS_Shape IsoLineHCompound = aHLRToShape.IsoLineHCompound();
-  if(!IsoLineHCompound.IsNull())
-    builder.Add(comp, IsoLineHCompound);
-
-  hlrMap.Clear();
-  TopExp::MapShapesAndAncestors(comp,TopAbs_VERTEX,TopAbs_EDGE,hlrMap);
+    TopoDS_Shape VCompound = aHLRToShape.VCompound();
+    if (!VCompound.IsNull())
+        builder.Add(comp, VCompound);
+    TopoDS_Shape Rg1LineVCompound = aHLRToShape.Rg1LineVCompound();
+    if (!Rg1LineVCompound.IsNull())
+        builder.Add(comp, Rg1LineVCompound);
+    TopoDS_Shape RgNLineVCompound = aHLRToShape.RgNLineVCompound();
+    if (!RgNLineVCompound.IsNull())
+        builder.Add(comp, RgNLineVCompound);
+    TopoDS_Shape OutLineVCompound = aHLRToShape.OutLineVCompound();
+    if (!OutLineVCompound.IsNull())
+        builder.Add(comp, OutLineVCompound);
+    TopoDS_Shape IsoLineVCompound = aHLRToShape.IsoLineVCompound();
+    if (!IsoLineVCompound.IsNull())
+        builder.Add(comp, IsoLineVCompound);
+    TopoDS_Shape HCompound = aHLRToShape.HCompound();
+    if (!HCompound.IsNull())
+        builder.Add(comp, HCompound);
+    TopoDS_Shape Rg1LineHCompound = aHLRToShape.Rg1LineHCompound();
+    if (!Rg1LineHCompound.IsNull())
+        builder.Add(comp, Rg1LineHCompound);
+    TopoDS_Shape RgNLineHCompound = aHLRToShape.RgNLineHCompound();
+    if (!RgNLineHCompound.IsNull())
+        builder.Add(comp, RgNLineHCompound);
+    TopoDS_Shape OutLineHCompound = aHLRToShape.OutLineHCompound();
+    if (!OutLineHCompound.IsNull())
+        builder.Add(comp, OutLineHCompound);
+    TopoDS_Shape IsoLineHCompound = aHLRToShape.IsoLineHCompound();
+    if (!IsoLineHCompound.IsNull())
+        builder.Add(comp, IsoLineHCompound);
+    /*
+    each edge has two vertices that it does not share with the other edges
+    fix this before putting edges in map!
+    */
+    fixCommonVertices(comp);
+    hlrMap.Clear();
+    TopExp::MapShapesAndAncestors(comp,TopAbs_VERTEX,TopAbs_EDGE,hlrMap);
 
 }
+
+///replaces close/identical vertices with a single vertex
+void silhouette::fixCommonVertices ( TopoDS_Compound& c ) {
+
+  //for debugging
+  int e=0;
+  TopExp_Explorer ex(c,TopAbs_EDGE);
+  for (; ex.More(); ex.Next()) {
+    e++;
+  }
+  std::cout << "initial edges " << e << std::endl;
+
+  TopTools_IndexedMapOfShape map;
+  bool reload = false;
+  bool done = false;
+  map.Clear();
+  TopExp::MapShapes (c, TopAbs_VERTEX, map);
+  int x = map.Extent();
+  BRepTools_ReShape rsh;
+  TopoDS_Vertex vi,vj;
+  for (int i = 1; i<=x; i++) {
+    vi = TopoDS::Vertex(map.FindKey(i));
+    for (int j = i+1; j<=x; j++) {
+      vj = TopoDS::Vertex(map.FindKey(j));
+      if (BRepTools::Compare(vi,vj)) {
+	if (!rsh.IsRecorded(vj)) {
+	  rsh.Replace(vj,vi);
+	  std::cout << "replacing " << j << " with " << i << std::endl;
+	}
+      }
+    }
+  }
+  c=TopoDS::Compound(rsh.Apply(c));
+  
+  //for debugging
+  e=0;
+  ex.ReInit();
+  for (; ex.More(); ex.Next()) {
+    e++;
+  }
+  std::cout << "subst edges " << e << std::endl;
+
+}
+
 
 ///find vertices with >2 edges and remove one edge. return false if no changes
 bool silhouette::reduceMultis() {
-  bool found = false;
-  int n = hlrMap.Extent();
-  for (int i = 0; i <= n; i++) {
-    TopTools_ListOfShape los ( hlrMap.FindFromIndex(i));
-    int l = los.Extent();
-    if ( l > 2 ) {
-      //figure out which edge is unnecessary, and remove it
-      TopTools_ListIteratorOfListOfShape lit(los), closest;
-      double minDist = DBL_MAX;
-      for( ; lit.More() ; lit.Next() ) {
-        double d = getRemovableDist(TopoDS::Edge( lit.Value() ));
-        if ( (d >= 0) && (d < minDist) ) {
-          minDist = d;
-          closest = lit;
-        } else if ( d == minDist ) {
-          cout << "Error! two edges with same distance!" << endl;
-          abort();
+    bool found = false;
+    int n = hlrMap.Extent();
+   // TopTools_ListOfShape &los();
+    for (int i = 1; i <= n; i++) {
+	TopTools_ListOfShape &los = hlrMap.ChangeFromIndex(i);
+        int l = los.Extent();
+        if ( l > 2 ) {
+            //figure out which edge is unnecessary, and remove it
+            TopTools_ListIteratorOfListOfShape lit, closest;
+	    lit = los;
+            double minDist = DBL_MAX;
+            for ( ; lit.More() ; lit.Next() ) {
+                double d = getRemovableDist(TopoDS::Edge( lit.Value() ));
+                if ( (d >= 0) && (d < minDist) ) {
+                    minDist = d;
+                    closest = lit;
+                } else if ( d == minDist ) {
+                    cout << "Error! two edges with same distance!" << endl;
+                    abort();
+                }
+            }
+            los.Remove(closest);
+            found = true;
         }
-      }
-      los.Remove(closest);
-      found = true;
     }
-  }
-  return found;
+    return found;
 }
 
-///intersect e with gp::OY(). return distance to center, or -1 if no intersection
+/** intersect e with gp::OY()
+find distance from intersection to geometric center of tool
+return distance to center, or -1 if no intersection
+*/
 double silhouette::getRemovableDist(TopoDS_Edge e) {
-  //find intersection i of e and gp::OY()
-  bool intersect = false;
-  //intersection from java app?
-  gp_Pnt i;
-  i = ...
-  if (!intersect) return -1.0;
-  //find dist between i and center
-  gp_Pnt center(0,myHeight/2,0);
-  return center.Distance(i);
+    bool intersect = false;
+    TopoDS_Edge v = BRepBuilderAPI_MakeEdge(gp_Lin(gp::OY()));
+    gp_Pnt i;
+    if (e.IsNull()) abort();
+    BRepTools::Dump(e,std::cout);
+    BRepTools::Dump(v,std::cout);
+    BRepExtrema_DistShapeShape dss(e,v);
+    dss.Perform();
+    if ( dss.IsDone() && (dss.Value() < 1.0e-5) ) {
+      i = dss.PointOnShape1(1);
+      intersect = true;
+    } else {
+      //warning
+    }
+    if (!intersect) return -1.0;
+    //find dist between i and center
+    gp_Pnt center(0,myHeight/2,0); //remember, silhouette is in XY plane, symmetric about Y
+    return center.Distance(i);
 }
 
 ///remove any edges which have a loose end, return true if map was updated
 bool silhouette::prune() {
-  bool pruned = false;
-  bool mapHasChange = false;
+    bool pruned = false;
+    bool mapHasChange = false;
 
-  //wtf is difference between Extent() and NbBuckets() in tcollection_basicmap?!
-  do {
-    int n = hlrMap.Extent();
-    for (int i = 0; i <= n; i++) {
-      TopTools_ListOfShape los ( hlrMap.FindFromIndex(i));
-      int l = los.Extent();
-      if ( l < 2 ) { //one or zero edges connect to the current vertex
-        if ( l == 1 ) {
-          removeFromList(TopoDS::Edge( los.First() ));
+    //wtf is difference between Extent() and NbBuckets() in tcollection_basicmap?!
+    do {
+        int n = hlrMap.Extent();
+        for (int i = 1; i <= n; i++) {
+            TopTools_ListOfShape los;
+	    los = hlrMap.FindFromIndex(i);
+            int l = los.Extent();
+            //if ( l < 2 ) { //one or zero edges connect to the current vertex
+                if ( l == 1 ) {
+                    removeFromList(TopoDS::Edge( los.First() ));
+              //  }
+                /*
+		//remove vertex
+                TopoDS_Vertex v;
+                v.Nullify();
+                los.Clear();
+                hlrMap.Substitute(i,v,los);
+		*/
+		//clear list but don't nullify vertex 
+		hlrMap.ChangeFromIndex(i).Clear();
+                mapHasChange = true;
+                pruned = true;
+            } else mapHasChange = false;
         }
-        //remove vertex
-        TopoDS_Vertex v;
-        v.Nullify();
-        los.Clear();
-        hlrMap.Substitute(i,v,los);
-        mapHasChange = true;
-        pruned = true;
-      } else mapHasChange = false;
-    }
-  } while (mapHasChange);
-  return pruned;
+    } while (mapHasChange);
+    return pruned;
 }
 
 /*
@@ -233,21 +374,23 @@ bool silhouette::prune() {
 ///find all instances of e in the lists in hlrMap, and remove them
 ///return true if hlrMap was modified
 bool silhouette::removeFromList(TopoDS_Edge e) {
-  bool found = false;
-  int m = hlrMap.Extent();
-  for (int i = 0; i <= m; i++) {
-    TopTools_ListOfShape los ( hlrMap.ChangeFromIndex(i) );
-    TopTools_ListIteratorOfListOfShape lit(los);
-    for( ; lit.More() ; lit.Next() ) {
-      if( compareEdges(e,lit.Value()) ) {
-        los.Remove(lit);
-        found = true;
-      }
+    bool found = false;
+    int m = hlrMap.Extent();
+    for (int i = 1; i <= m; i++) {
+        TopTools_ListOfShape los;
+	los = hlrMap.ChangeFromIndex(i);
+        TopTools_ListIteratorOfListOfShape lit(los);
+        for ( ; lit.More() ; lit.Next() ) {
+            if ( compareEdges(e,TopoDS::Edge(lit.Value())) ) {
+                los.Remove(lit);
+                found = true;
+		break;
+            }
+        }
     }
-  }
-  return found;
+    return found;
 }
 
 bool silhouette::compareEdges(TopoDS_Edge a, TopoDS_Edge b) {
-  return a.IsEqual(b);
+    return a.IsEqual(b);
 }

@@ -28,13 +28,17 @@
 #include <TopoDS_Solid.hxx>
 #include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Pnt.hxx>
+#include <Handle_TopTools_HSequenceOfShape.hxx>
+#include <TopoDS_Compound.hxx>
+
 
 /** Create the silhouette (outline) of a tool
 */
 class silhouette {
   public:
-    silhouette(TopoDS_Solid tool, gp_Dir normal, double radius, double height);
-    void init(TopoDS_Solid tool, gp_Dir normal, double radius, double height);
+    silhouette(TopoDS_Shape tool, gp_Dir normal, double radius, double height);
+    void init(TopoDS_Shape tool, gp_Dir normal, double radius, double height);
     void newAngle(gp_Dir normal);
     bool done() {return myDone;};
     TopoDS_Wire result() {return myOutline;}
@@ -44,7 +48,7 @@ class silhouette {
     bool myDone;
     TopTools_IndexedDataMapOfShapeListOfShape hlrMap;
     //TopoDS_ListOfShape myEdges;
-    TopoDS_Solid myTool;
+    TopoDS_Shape myTool;
     double myRadius,myAngle,myHeight;
 
   protected: //functions
@@ -53,7 +57,11 @@ class silhouette {
     bool prune();
     bool reduceMultis();
     double getRemovableDist(TopoDS_Edge e);
-
+    bool compareEdges(TopoDS_Edge a, TopoDS_Edge b);
+    void createWireFromEdgeSeq( Handle_TopTools_HSequenceOfShape edges);
+    Handle_TopTools_HSequenceOfShape getRemainingEdges();
+    void dumpMap();
+    void fixCommonVertices ( TopoDS_Compound & c );
 };
 
 
