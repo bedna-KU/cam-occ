@@ -58,8 +58,12 @@ TopTools_IndexedDataMapOfShapeListOfShape
 #include <BRepTools_ReShape.hxx>
 #include <TopExp_Explorer.hxx>
 #include <BRepTools.hxx>
+#include <TopOpeBRep_EdgesIntersector.hxx>
+#include <TopOpeBRep_Point2d.hxx>
+#include <ShapeAnalysis_Edge.hxx>
+#include <BRepCheck_Analyzer.hxx>
+
 /*
-#include <.hxx>
 #include <.hxx>
 #include <.hxx>
 #include <.hxx>
@@ -74,17 +78,18 @@ TopTools_IndexedDataMapOfShapeListOfShape
 */
 
 
+
 silhouette::silhouette(TopoDS_Shape tool, gp_Dir normal, double radius, double height):
         myTool(tool), myRadius(radius), myHeight(height) {
-	  
+
     newAngle(normal);
 }
 
 void silhouette::init(TopoDS_Shape tool, gp_Dir normal, double radius, double height) {
   myTool = tool;
-  myRadius = radius; 
+  myRadius = radius;
   myHeight = height;
-  
+
   newAngle(normal);
 }
 
@@ -106,7 +111,7 @@ void silhouette::newAngle(gp_Dir normal) {
         p = prune();
         r = reduceMultis();
     } while (r || p);
-   
+
     //create a wire from the remaining edges
     createWireFromEdgeSeq(getRemainingEdges());
 }
@@ -147,13 +152,13 @@ void silhouette::createWireFromEdgeSeq ( Handle_TopTools_HSequenceOfShape edges 
   Handle_TopTools_HSequenceOfShape NewWires = new TopTools_HSequenceOfShape();
   double tol = Precision::Confusion();
   ShapeAnalysis_FreeBounds::ConnectEdgesToWires(edges,tol,Standard_False,NewWires);
-  
+
   int l = NewWires->Length();
   if ( l >= 1) {
     myOutline = TopoDS::Wire(NewWires->Value(1));
-  } 
+  }
   if ( l != 1) {
-    std::cout << "error, " << l << " wires from ShapeAnalysis_FreeBounds::ConnectEdgesToWires!" << std::endl << 
+    std::cout << "error, " << l << " wires from ShapeAnalysis_FreeBounds::ConnectEdgesToWires!" << std::endl <<
     "started with " << edges->Length() << " edges" << std::endl;
   } else {
     myDone = true;
@@ -162,6 +167,9 @@ void silhouette::createWireFromEdgeSeq ( Handle_TopTools_HSequenceOfShape edges 
 
 ///creates the hlr lines. NOTE: they are in the XY plane!
 void silhouette::createHlrLines(TopoDS_Shape t, gp_Dir dir) {
+    if (!BRepCheck_Analyzer(t).IsValid() ) {
+      std::cout << "bca: tool bad" << std::endl;
+    }
 
     gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
     gp_Dir xDir(-1,0,0);
@@ -214,6 +222,12 @@ void silhouette::createHlrLines(TopoDS_Shape t, gp_Dir dir) {
     each edge has two vertices that it does not share with the other edges
     fix this before putting edges in map!
     */
+    if (BRepCheck_Analyzer(comp).IsValid() ) {
+      std::cout << "bca: hlr good" << std::endl;
+    } else {
+      std::cout << "bca: hlr bad" << std::endl;
+    }
+
     fixCommonVertices(comp);
     hlrMap.Clear();
     TopExp::MapShapesAndAncestors(comp,TopAbs_VERTEX,TopAbs_EDGE,hlrMap);
@@ -225,9 +239,18 @@ void silhouette::fixCommonVertices ( TopoDS_Compound& c ) {
 
   //for debugging
   int e=0;
+  ShapeAnalysis_Edge sae;
+  TopExp_Explorer exv(c,TopAbs_VERTEX);
+  for (; exv.More(); exv.Next()) 
+    e++;
+  std::cout << "initial vertex count: " << e << std::endl;
+  e = 0;
   TopExp_Explorer ex(c,TopAbs_EDGE);
   for (; ex.More(); ex.Next()) {
     e++;
+    if ( !sae.CheckVerticesWithCurve3d(TopoDS::Edge(ex.Current())) ) {
+      std::cout << "edge " << e << " bad before subst" << std::endl;
+    }
   }
   std::cout << "initial edges " << e << std::endl;
 
@@ -252,12 +275,21 @@ void silhouette::fixCommonVertices ( TopoDS_Compound& c ) {
     }
   }
   c=TopoDS::Compound(rsh.Apply(c));
-  
+
   //for debugging
   e=0;
-  ex.ReInit();
+  exv.Init(c,TopAbs_VERTEX);
+  for (; exv.More(); exv.Next()) 
+    e++;
+  std::cout << "final vertex count: " << e << std::endl;
+
+  e=0;
+  ex.Init(c,TopAbs_EDGE);
   for (; ex.More(); ex.Next()) {
     e++;
+    if ( !sae.CheckVerticesWithCurve3d(TopoDS::Edge(ex.Current())) ) {
+      std::cout << "edge " << e << " bad after subst" << std::endl;
+    }
   }
   std::cout << "subst edges " << e << std::endl;
 
@@ -299,21 +331,46 @@ find distance from intersection to geometric center of tool
 return distance to center, or -1 if no intersection
 */
 double silhouette::getRemovableDist(TopoDS_Edge e) {
-    bool intersect = false;
+    ShapeAnalysis_Edge sae;
+      if ( !sae.CheckVerticesWithCurve3d(e) ) {
+        abort();
+      }
+    bool found = false;
     TopoDS_Edge v = BRepBuilderAPI_MakeEdge(gp_Lin(gp::OY()));
     gp_Pnt i;
     if (e.IsNull()) abort();
-    BRepTools::Dump(e,std::cout);
-    BRepTools::Dump(v,std::cout);
+    //BRepTools::Dump(e,std::cout);
+    //BRepTools::Dump(v,std::cout);
+    BRepTools::Write(e,"edge.brep");
     BRepExtrema_DistShapeShape dss(e,v);
     dss.Perform();
     if ( dss.IsDone() && (dss.Value() < 1.0e-5) ) {
       i = dss.PointOnShape1(1);
-      intersect = true;
+      found = true;
     } else {
-      //warning
+      std::cout << "BRepExtrema_DistShapeShape failed" << std::endl;
     }
-    if (!intersect) return -1.0;
+    /*
+    TopOpeBRep_EdgesIntersector ei;
+    ei.Perform(e,v);
+    if (ei.NbPoints() == 1) {
+      i = ei.Point(1).Value();
+      found = true;
+    } else {
+      std::cout << "TopOpeBRep_EdgesIntersector failed, trying BRepExtrema_DistShapeShape" << std::endl;
+      BRepExtrema_DistShapeShape dss(e,v);
+      dss.Perform();
+      if ( dss.IsDone() && (dss.Value() < 1.0e-5) ) {
+	i = dss.PointOnShape1(1);
+	found = true;
+      } else {
+        //warning
+        std::cout << "BRepExtrema_DistShapeShape failed" << std::endl;
+	abort();
+      }
+    }
+    */
+    if (!found) return -1.0;
     //find dist between i and center
     gp_Pnt center(0,myHeight/2,0); //remember, silhouette is in XY plane, symmetric about Y
     return center.Distance(i);
@@ -342,7 +399,7 @@ bool silhouette::prune() {
                 los.Clear();
                 hlrMap.Substitute(i,v,los);
 		*/
-		//clear list but don't nullify vertex 
+		//clear list but don't nullify vertex
 		hlrMap.ChangeFromIndex(i).Clear();
                 mapHasChange = true;
                 pruned = true;
