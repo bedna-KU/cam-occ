@@ -62,6 +62,9 @@ TopTools_IndexedDataMapOfShapeListOfShape
 #include <TopOpeBRep_Point2d.hxx>
 #include <ShapeAnalysis_Edge.hxx>
 #include <BRepCheck_Analyzer.hxx>
+#include <ShapeFix_Edge.hxx>
+#include <Geom_Plane.hxx>
+#include <TopLoc_Location.hxx>
 
 /*
 #include <.hxx>
@@ -234,24 +237,63 @@ void silhouette::createHlrLines(TopoDS_Shape t, gp_Dir dir) {
 
 }
 
+///find and check subshapes, ensuring that they aren't null (i.e. handle address = 0xfefdfefdfefd0000)
+int silhouette::checkSubShapes(TopoDS_Shape const & c) {
+  std::cout << "checkSS" << std::endl;
+
+  int inval = 0;
+  if (c.IsNull()) //IsNull compares to UndefinedHandleAddress ( which is 0xfefd0000 or 0xfefdfefdfefd0000 )
+    return 1;
+  //TopAbs_ShapeEnum contains 8 useable types. use i to iterate over them. they are in order from most to least inclusive
+  TopAbs_ShapeEnum se;
+  for (se = TopAbs_ShapeEnum(c.ShapeType()+1); se<9 ; se=TopAbs_ShapeEnum(se+1)) {
+    TopExp_Explorer ex(c,se);
+    int cnt = 0;
+    for (; ex.More(); ex.Next() ) {
+      std::cout << "checkSS: " << se << " num: " << cnt++ << std::endl;
+      if (ex.Current().IsNull()) {
+        inval++;
+      } else if (ex.Current().ShapeType() != TopAbs_VERTEX) { //vertex will have no sub shapes
+        inval += checkSubShapes(ex.Current());
+      }
+    }
+  }
+  return inval;
+}
+
 ///replaces close/identical vertices with a single vertex
 void silhouette::fixCommonVertices ( TopoDS_Compound& c ) {
-
+  std::cout << "void entities: " << checkSubShapes(c) << " in c" << std::endl;
   //for debugging
   int e=0;
   ShapeAnalysis_Edge sae;
-  TopExp_Explorer exv(c,TopAbs_VERTEX);
-  for (; exv.More(); exv.Next()) 
+  ShapeFix_Edge sfe;
+  TopExp_Explorer ex(c,TopAbs_VERTEX);
+  for (; ex.More(); ex.Next())
     e++;
   std::cout << "initial vertex count: " << e << std::endl;
   e = 0;
-  TopExp_Explorer ex(c,TopAbs_EDGE);
+  Handle(Geom_Surface) xyp = new Geom_Plane(gp::Origin(),gp::DZ());  //xy plane, necessary to add pcurve below
+  TopLoc_Location loc;
+  loc.Identity();
+  BRepTools_ReShape swap;
+  ex.Init(c,TopAbs_EDGE);
   for (; ex.More(); ex.Next()) {
     e++;
-    if ( !sae.CheckVerticesWithCurve3d(TopoDS::Edge(ex.Current())) ) {
+    TopoDS_Edge edge = TopoDS::Edge(ex.Current());
+    if ( !sae.CheckVerticesWithCurve3d(edge) ) {
+      //FIXME - check/remove pcurve and curve3d; add pcurve with xy plane as surface; add curve3d
+      sfe.FixRemoveCurve3d (edge);
+      sfe.FixAddCurve3d (edge);
+      sfe.FixAddPCurve (edge,xyp,loc,false);
+      swap.Replace(ex.Current(),edge);
+      //ex.Current() = edge;
+
       std::cout << "edge " << e << " bad before subst" << std::endl;
     }
   }
+  c=TopoDS::Compound(swap.Apply(c));
+
   std::cout << "initial edges " << e << std::endl;
 
   TopTools_IndexedMapOfShape map;
@@ -278,8 +320,8 @@ void silhouette::fixCommonVertices ( TopoDS_Compound& c ) {
 
   //for debugging
   e=0;
-  exv.Init(c,TopAbs_VERTEX);
-  for (; exv.More(); exv.Next()) 
+  ex.Init(c,TopAbs_VERTEX);
+  for (; ex.More(); ex.Next())
     e++;
   std::cout << "final vertex count: " << e << std::endl;
 
@@ -287,6 +329,8 @@ void silhouette::fixCommonVertices ( TopoDS_Compound& c ) {
   ex.Init(c,TopAbs_EDGE);
   for (; ex.More(); ex.Next()) {
     e++;
+    //checkSubShapes(ex.Current());
+    std::cout << "void entities: " << checkSubShapes(ex.Current()) << " in current" << std::endl;
     if ( !sae.CheckVerticesWithCurve3d(TopoDS::Edge(ex.Current())) ) {
       std::cout << "edge " << e << " bad after subst" << std::endl;
     }

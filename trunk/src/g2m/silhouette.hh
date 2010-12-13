@@ -62,6 +62,7 @@ class silhouette {
     Handle_TopTools_HSequenceOfShape getRemainingEdges();
     void dumpMap();
     void fixCommonVertices ( TopoDS_Compound & c );
+    int checkSubShapes(const TopoDS_Shape & c);
 };
 
 
