@@ -13,3 +13,31 @@ include_directories (
 	${OpenCASCADE_INCLUDE_DIR}
 	)
 add_subdirectory( src )
+
+IF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+  set(PKG_ARCH i386)
+ELSE( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+  set(PKG_ARCH amd64)
+ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+
+#-------------------- package generation -------------------------
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Mark Pictor")
+set(CPACK_PACKAGE_NAME "camocc2")
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 2)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_beta-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}_${PKG_ARCH}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "cam-occ2, gcode to solid model beta using opencascade")
+set(CPACK_DEBIAN_PACKAGE_SECTION "Science")
+set(CPACK_DEBIAN_PACKAGE_VERSION "")
+
+#find libs: ldd bin/camocc2 |sed -n 's/^.lib/lib/;s/\ .*$//;s/^lib/&/p'|sort|uniq
+#then: apt-cache show `apt-file search libXt.so.6|grep -v -e lib32 -e -dbg -e -dev|head -n1|cut -d: -f1`|sed -n 's/Version:\ //;p'
+
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libxt6 ")
+
+
+include(CPack)
+

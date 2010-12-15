@@ -33,3 +33,5 @@ QT4_WRAP_CPP(MOCS ${OccUio_MOCS})
 add_library ( OccUio SHARED ${OccUio_SRCS} ${OccUio_HDRS} ${UIS} ${RSCS} ${TRS} ${MOCS} )
 target_link_libraries ( OccUio  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                         ${OpenCASCADE_LIBRARIES} -lstdc++ )
+
+install(TARGETS OccUio DESTINATION local/lib)

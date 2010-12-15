@@ -50,3 +50,6 @@ QT4_WRAP_CPP(MOCS ${camocc2_MOCS})
 add_executable ( camocc2 ${camocc2_SRCS} ${camocc2_HDRS} ${UIS} ${RSCS} ${TRS} ${MOCS} )
 target_link_libraries ( camocc2  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                                  ${OpenCASCADE_LIBRARIES} ${OPENGL_LIBRARIES} ${camocc2_LIBS} )
+
+install(TARGETS camocc2 DESTINATION local/bin)
+

@@ -42,3 +42,6 @@ QT4_WRAP_CPP(MOCS ${g2model_MOCS})
 add_library ( g2model SHARED ${g2model_SRCS} ${g2model_HDRS} ${UIS} ${RSCS} ${TRS} ${MOCS} )
 target_link_libraries ( g2model  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                           ${OpenCASCADE_LIBRARIES} )
+
+install(TARGETS g2model DESTINATION local/lib)
+
