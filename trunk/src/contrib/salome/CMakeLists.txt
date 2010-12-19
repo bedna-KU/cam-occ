@@ -2,7 +2,7 @@ project( SalomeGeomShHeal )
 cmake_minimum_required( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall )
-find_package ( OpenCASCADE REQUIRED COMPONENTS TKLCAF TKernel TKCAF PTKernel TKBRep TKMath
+find_package ( OpenCASCADE REQUIRED COMPONENTS TKernel TKCAF PTKernel TKBRep TKMath
                TKPCAF TKXCAF TKLCAF )
 
 find_package ( Qt4 REQUIRED )
@@ -41,7 +41,7 @@ set ( SalomeGeomShHeal_SRCS
 	)
 
 add_library ( SalomeGeomShHeal SHARED ${SalomeGeomShHeal_SRCS} ${UIS} ${RSCS} ${TRS} ${MOCS} )
-target_link_libraries ( SalomeGeomShHeal  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
+target_link_libraries ( SalomeGeomShHeal  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCASCADE_LIBRARIES} )
 
 install(TARGETS SalomeGeomShHeal DESTINATION local/lib)
 
