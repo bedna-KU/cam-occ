@@ -48,7 +48,8 @@ class helicalMotion: protected canonMotion {
     void assembleSolid();
   private:
     void helix(gp_Pnt start, gp_Pnt end);
-    void arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end);
+    void arc(gp_Pnt start, gp_Pnt end);
+    //void arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end);
     bool planar;
     gp_Pnt center;
     int rotation;

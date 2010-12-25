@@ -72,7 +72,18 @@ g2m::g2m() {
   myAction->setShortcut(QString("Ctrl+M"));
   myAction->setStatusTip ( "Load a .ngc file and create a 3d model" );
   connect(myAction,SIGNAL(triggered()),this,SLOT(slotModelFromFile()));
+
+  solidToggle = false;
+  solidAction = new QAction ( "Toggle solid creation", this );
+  solidAction->setShortcut(QString("Ctrl+T"));
+  solidAction->setStatusTip ( "Toggle solid" );
+  solidAction->setCheckable(true);
+  solidAction->setChecked(false);
+  connect(solidAction,SIGNAL(triggered()),this,SLOT(slotToggleSolid()));
+
+
   myMenu->addAction( myAction );
+  myMenu->addAction( solidAction );
   uio::mb()->insertMenu(uio::hm(),myMenu);
 
   debug = uio::debuggingOn();
@@ -85,6 +96,11 @@ g2m::g2m() {
       slotModelFromFile();
     }
   }
+}
+
+void g2m::slotToggleSolid() {
+  solidToggle = !solidToggle;
+  solidAction->setChecked(solidToggle);
 }
 
 void g2m::slotModelFromFile() {
@@ -139,8 +155,10 @@ void g2m::slotModelFromFile() {
   finishAllSolids(timer);
 
   //now display the workpiece
-  dispShape wp(workpiece);
-  wp.display();
+  if ( solidToggle ) {
+    dispShape wp(workpiece);
+    wp.display();
+  }
 
   double e = timer.getElapsedS();
   std::cout << "Total time to process that file: " << timer.humanreadable(e) << std::endl;
@@ -336,7 +354,6 @@ void g2m::infoMsg(std::string s) {
   cout << s << endl;
 }
 
-
 /*
 void g2m::slotSaveAll() {
   std::string saveFile = (QFileDialog::getSaveFileName ( uio::window(), "Choose base name for shapes", "./output", "*" )).toStdString();
@@ -389,21 +406,24 @@ void g2m::makeSolid(uint index) {
     infoMsg("motion type not defined at " + lineVector[index]->getLnum() );
     return;
   }
-  if ( mt != MOTIONLESS ) {
-    //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
-    ((canonMotion*)lineVector[index])->setSolidMode(SWEPT);
-    ((canonMotion*)lineVector[index])->computeSolid();
-    #ifdef MULTITHREADED
-    #error subtraction cannot be performed in parallel
-    #endif //MULTITHREADED
-    if (!((canonMotion*)lineVector[index])->solErrors()) {
-      subtractWorkpiece(index);
-    } else if (uio::debuggingOn()) {
-      infoMsg("skipped cut due to error, line " + lineVector[index]->getLnum());
+  if ( solidToggle ) {
+    if ( mt != MOTIONLESS ) {
+      //enum SOLID_MODE { SWEPT,BRUTEFORCE,ASSEMBLED }
+      ((canonMotion*)lineVector[index])->setSolidMode(SWEPT);
+      ((canonMotion*)lineVector[index])->computeSolid();
+      #ifdef MULTITHREADED
+      #error subtraction cannot be performed in parallel
+      #endif //MULTITHREADED
+      if (!((canonMotion*)lineVector[index])->solErrors()) {
+        subtractWorkpiece(index);
+      } else if (uio::debuggingOn()) {
+        infoMsg("skipped cut due to error, line " + lineVector[index]->getLnum());
+      }
     }
+    lineVector[index]->setSolidDone();
   }
+
   //DISPLAY_MODE { NO_DISP,THIN_MOTION,THIN,ONLY_MOTION,BEST}
-  lineVector[index]->setSolidDone();
   lineVector[index]->setDispMode(THIN_MOTION);
   //lineVector[index]->display();
 }

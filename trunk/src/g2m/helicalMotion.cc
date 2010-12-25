@@ -26,6 +26,7 @@
 #include <Geom2d_TrimmedCurve.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
+#include <GC_MakeCircle.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <GCE2d_MakeSegment.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
@@ -52,8 +53,8 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
   double a1,a2,e1,e2,e3,ea,eb,ec,hdist;
 //  x=y=z=a1=a2=e1=e2=e3=ea=eb=ec=0;
 
-  e1  = tok2d(3); //first_end
-  e2  = tok2d(4); //second_end
+  e1 = tok2d(3); //first_end
+  e2 = tok2d(4); //second_end
   a1 = tok2d(5); //first_axis
   a2 = tok2d(6); //second_axis
   rotation = tok2d(7); //rotation (ccw if rotation==1,cw if rotation==-1)
@@ -88,12 +89,13 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
   }
   end = status.getEndPose().Location();
 
-  if (start.Distance(end) < Precision::Confusion()) { //skip arc if zero length; caught this bug thanks to tort.ngc
+    /* //skip arc if zero length; caught this bug thanks to tort.ngc
     cout << "Skipped zero-length arc at N" << getN() << endl;
     status.setEndDir(status.getPrevEndDir());
     unsolidErrors = true;
     //myUnSolid.Nullify()
   } else {
+*/
     //cout << myLine; //endl supplied by helix() or arc()
     if (fabs(hdist) > 0.000001) {
       /// Create a helix if the third-axis delta is > .000001.
@@ -101,12 +103,8 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
       helix(start, end);
     } else {
       /// Otherwise, create an arc.
-      gp_Vec Vr = gp_Vec(center,start);	//vector from center to start
-      gp_Vec Va = gp_Vec(axis);		//vector along arc's axis
-      gp_Vec startVec = Vr^Va;		//find perpendicular vector using cross product
-      if (rotation==1) startVec *= -1;
-      //cout << "Arc with vector at start: " << uio::toString(startVec) << endl;
-      arc(start, startVec, end);
+      //arc(start, startVec, end);
+      arc(start, end);
     }
     status.addArcToBbox(TopoDS::Edge(myUnSolid));
 
@@ -133,7 +131,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
       status.setEndDir(lv);
       status.setStartDir(fv);
     }
-  }
+  //}
 }
 
 
@@ -185,7 +183,11 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end ) {
   //switch direction if necessary, only works for simple cases
   //should always work for G02/G03 because they are less than 1 rotation
   if (rotation==1) {
-    p2.SetX(p2.X()-2*M_PI);
+    if (p2.X() < p1.X()) {
+      p2.SetX(p2.X()+2*M_PI);
+    } else {
+      p2.SetX(p2.X()-2*M_PI);
+    }
     //cout << "p2x now " << p2.X() << endl;
   }
   Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
@@ -195,12 +197,39 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end ) {
 }
 
 /// Create an arc, place it in myUnSolid
+void helicalMotion::arc(gp_Pnt start, gp_Pnt end) {
+  gp_Vec Va = gp_Vec(axis);     //vector along arc's axis
+  //if the endpoints are the same, assume it's a complete circle
+  //previous behaviour was to assume no motion
+  if (start.SquareDistance(end) < Precision::Confusion()) {
+    //make circle
+    double radius = fabs(center.Distance(start));
+    if (uio::debuggingOn())
+      cout << "Circle with radius " << radius << endl;
+    Handle(Geom_Curve) C;
+    C = GC_MakeCircle ( center, axis, radius);
+    myUnSolid = BRepBuilderAPI_MakeEdge ( C );
+  } else {
+    gp_Vec Vr = gp_Vec(center,start);   //vector from center to start
+    gp_Vec startVec = Vr^Va;      //find perpendicular vector using cross product
+    if (rotation==1)
+      startVec *= -1;
+    if (uio::debuggingOn())
+      cout << "Arc with vector at start: " << uio::toString(startVec) << endl;
+    Handle(Geom_TrimmedCurve) Tc;
+    Tc = GC_MakeArcOfCircle ( start, startVec, end );
+    myUnSolid = BRepBuilderAPI_MakeEdge ( Tc );
+  }
+}
+
+/*
 void helicalMotion::arc(gp_Pnt start, gp_Vec startVec, gp_Pnt end) {
   if (uio::debuggingOn()) cout << "arc" << endl;
   Handle(Geom_TrimmedCurve) Tc;
   Tc = GC_MakeArcOfCircle ( start, startVec, end );
   myUnSolid = BRepBuilderAPI_MakeEdge ( Tc );
 }
+*/
 
 ///build solid from faces FIXME INCOMPLETE
 void helicalMotion::assembleSolid() {

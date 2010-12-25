@@ -49,7 +49,10 @@ class g2m: public QObject {
     bool isOK() {return success;};
   public slots:
     void slotModelFromFile();
+    void slotToggleSolid();
   protected:
+    QAction* solidAction;
+    bool solidToggle;
     TopoDS_Shape workpiece;
     void subtractWorkpiece(uint index);
     void createBlankWorkpiece();
