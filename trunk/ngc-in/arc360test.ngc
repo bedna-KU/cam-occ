@@ -1,0 +1,12 @@
+n12    (missing circle)
+n13    g0 x1 y1 z0 f30 (start xy circle)
+n14    g17 g02 i.5 j.5
+n16    g0 z.1 (add xy lettering)
+n102   (partial circle)
+n103   x3 y3 z0 f30 (start xy circle)
+n104   g17 g02 x4 y4 i.5 j.5
+n106   g0 z.1
+n108   g17 g02 x5 y4 i.5 j.5
+
+n1000  g0 z5
+n1010   M30

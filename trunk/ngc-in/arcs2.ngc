@@ -1,5 +1,6 @@
 
 (as of r136, the last 3 helices are drawn backwards)
+(should be fixed in r137)
 M09 M05 M48 G17 G21 G40
 G00 X0 Y0 Z0
 G01 X0.0 Y-1.0 F20.0

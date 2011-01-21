@@ -44,12 +44,12 @@
 #include <TopExp_Explorer.hxx>
 
 /**
-QShortcuts in use:
+QShortcuts keys in use:
 qtocc: NOSPBX ZYXCV FARGD
 free: EHIJKLMQRTUW
 
 me:
-M-g2m
+M,T-g2m
 L-tst
 */
 

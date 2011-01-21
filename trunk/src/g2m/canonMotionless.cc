@@ -68,35 +68,43 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
     c.flood = false;
     status.setCoolant(c);
   } else if (cmdMatch("DWELL")) {
-  //} else if (cmdMatch("FEEDRATE")) {
+  } else if (cmdMatch("SET_FEED_MODE")) { // do nothing?
+  } else if (cmdMatch("SET_SPINDLE_MODE")) { // do nothing?
+  } else if (cmdMatch("PALLET_SHUTTLE")) { // do nothing?
   } else if (cmdMatch("SET_FEED_RATE")) {
     status.setFeed(tok2d(3));
   } else if (cmdMatch("SET_FEED_REFERENCE")) {
-    if (cantok(3).compare("CANON_XYZ") == 0) {
-      //this is the standard feed reference, do nothing
-    } else {  //SET_FEED_REFERENCE(CANON_WORKPIECE)
-      handled = false;
-    }
+    if (cantok(3).compare("CANON_XYZ") == 0) {//this is the standard feed reference, do nothing
+    } else if (cantok(3).compare("CANON_WORKPIECE")) { // do nothing?
+    } else handled = false;
   } else if (cmdMatch("SELECT_TOOL")) {
     //this only tells the machine to reposition the tool carousel, correct? if so it can be ignored
   } else if (cmdMatch("CHANGE_TOOL")) {
     status.setTool(tok2i(3));
   } else if (cmdMatch("USE_TOOL_LENGTH_OFFSET")) {  //don't need to do anything, unless the toolholder/spindle is modeled
-  } else if (cmdMatch("SET_ORIGIN_OFFSETS")) {
-    if (cantok(3).compare("0.0000") == 0) {
+  } else if ( (cmdMatch("SET_ORIGIN_OFFSETS")) || cmdMatch("SET_G5X_OFFSET")) {
+    uint i = 3;
+    if (cmdMatch("SET_G5X_OFFSET")) {
+      i=4;
+    } else if (uio::debuggingOn()) {
+      uio::infoMsg("Using old version of interpreter!");
+    }
+    if (cantok(i).compare("0.0000") == 0) {
       /*
       ** this is a common canon statement. we are going to hijack it to produce a warning,
-      ** because the data we're getting was produced with a format of %.4f or so.
+      ** because the data we're getting was produced with a format of %.4f or so. The
+      ** reduced precision may give OCC indigestion.
       */
-      uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine +"\nModel may fail!");
-    } else if (canonTokens.size() == 9) {
-      if ((tok2d(3)==0) && (tok2d(4)==0) && (tok2d(5)==0) && (tok2d(6)==0) && (tok2d(7)==0) && (tok2d(8)==0)) {
+      if (uio::debuggingOn())
+        uio::infoMsg("Warning, input has reduced precision - expected more zeros: \n" + myLine +"\nModel may fail!");
+    } else if (canonTokens.size() == (i+6) ) {  //6 axes, tokens 3-8 (old interp) or 4-9 (new)
+      if ((tok2d(i++)==0) && (tok2d(i++)==0) && (tok2d(i++)==0) && (tok2d(i++)==0) && (tok2d(i++)==0) && (tok2d(i)==0)) {
       //do nothing if all zeros, interp issues this when it starts up and it has no effect
       } else {
-        handled = false;
+        handled = false; //because I still don't know what to do with the correct data...
       }
     } else {
-      handled = false; //because I still don't know what to do if we have the correct data...
+      handled = false; //not 9 tokens - so not 6 axes!
     }
   } else if (cmdMatch("USE_LENGTH_UNITS")) {
     handled = false;
@@ -132,15 +140,15 @@ canonMotionless::canonMotionless(std::string canonL, machineStatus prevStatus):c
     }
   } else match = false;
 
-  if ( !match || !handled ) {
+  if ( (uio::debuggingOn()) && (!match || !handled) ) {
     std::string m;
     if (!handled) {
       m = "Unhandled canonical command ("+cantok(2)+")";
     } else {
-      m = "Unknown canonical command ("+cantok(2)+"): " + canonL;
+      //m = "Unknown canonical command ("+cantok(2)+") at " + cantok(0) + " " + cantok(1);
+      m = "No match for " + canonL;
     }
-    if (uio::debuggingOn())
-      infoMsg(m);
+    infoMsg(m);
   }
 }
 

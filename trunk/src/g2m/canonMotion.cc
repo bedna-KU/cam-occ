@@ -231,6 +231,7 @@ void canonMotion::sweepSolid() {
       */
       try {
       pipe.SetMode(gp_Dir(0,0,1)); //binormal mode: can only rotate about Z
+      //FIXME: above line causes segfault at nas.ngc:N0029 (helix)
       } catch (...) {
         solidErrors = true;
         infoMsg("pipe set mode failed for " + myLine);
@@ -281,14 +282,22 @@ void canonMotion::sweepSolid() {
       if (s.ShapeType()==TopAbs_SOLID) {
         ShapeFix_Solid fs(TopoDS::Solid(s));
         fs.Perform();
-        solid = TopoDS::Solid(fs.Solid());
+          try {
+            solid = TopoDS::Solid(fs.Solid());
+          } catch (...) {
+            cout << "shapefix_solid exception at " << cantok(0) << cantok(1) << cantok(2) << endl;
+            solidErrors = true;
+          }
       } else {
-        cout << "pipe isn't solid: " << cantok(0) << cantok(1) << cantok(2) << endl;
+        solidErrors = true;
+        cout << "pipe isn't of type solid even though pipe.MakeSolid() didn't fail: " << cantok(0) << cantok(1) << cantok(2) << endl;
+      }
+      if (solidErrors) {
         solidErrors = true;
         myShape = s;
       }
     } else {
-      myShape = t; //
+      myShape = t; //couldn't make the pipe solid
     }
   } else {
     solid.Nullify();

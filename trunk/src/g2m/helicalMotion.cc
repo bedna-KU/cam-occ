@@ -94,7 +94,7 @@ helicalMotion::helicalMotion(std::string canonL, machineStatus prevStatus): cano
     status.setEndDir(status.getPrevEndDir());
     unsolidErrors = true;
     //myUnSolid.Nullify()
-  } else {
+  //} else {
 */
     //cout << myLine; //endl supplied by helix() or arc()
     if (fabs(hdist) > 0.000001) {
@@ -151,7 +151,8 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end ) {
   if(proj.NbPoints() > 0) {
     proj.LowerDistanceParameters(pU, pV);
     if(proj.LowerDistance() > 1.0e-6 ) {
-      //cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
+      if (uio::debuggingOn())
+        cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
     }
     success++;
     p1 = gp_Pnt2d(pU,pV);
@@ -161,15 +162,16 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end ) {
   if(proj.NbPoints() > 0) {
     proj.LowerDistanceParameters(pU, pV);
     if(proj.LowerDistance() > 1.0e-6 ) {
-      //cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
+      if (uio::debuggingOn())
+        cout << "Point fitting distance " << double(proj.LowerDistance()) << endl;
     }
     success++;
     p2 = gp_Pnt2d(pU,pV);
   }
 
   if (success != 2) {
-    //cout << "Couldn't create a helix from " << uio::toString(start) << " to " << uio::toString(end)  << ". Replacing with a line." <<endl;
-
+    if (uio::debuggingOn())
+      cout << "Couldn't create a helix from " << uio::toString(start) << " to " << uio::toString(end)  << ". Replacing with a line." <<endl;
     unsolidErrors=true;
     myUnSolid = BRepBuilderAPI_MakeEdge( start, end );
     return;
@@ -181,15 +183,14 @@ void helicalMotion::helix( gp_Pnt start, gp_Pnt end ) {
   //cout << "p1x " << p1.X() << ", p2x " << p2.X() << endl;
 
   //switch direction if necessary, only works for simple cases
-  //should always work for G02/G03 because they are less than 1 rotation
-  if (rotation==1) {
-    if (p2.X() < p1.X()) {
-      p2.SetX(p2.X()+2*M_PI);
-    } else {
-      p2.SetX(p2.X()-2*M_PI);
-    }
-    //cout << "p2x now " << p2.X() << endl;
+  //should always work for G02/G03 because they are not multi-revolution
+  if ( (rotation==1) && (p2.X() <= p1.X()) ) {
+    p2.SetX(p2.X()+2*M_PI);
+  } else if ( (rotation==-1) && (p2.X() >= p1.X()) ) {
+    p2.SetX(p2.X()-2*M_PI);
   }
+    //cout << "p2x now " << p2.X() << endl;
+
   Handle(Geom2d_TrimmedCurve) segment = GCE2d_MakeSegment(p1 , p2);
   myUnSolid = BRepBuilderAPI_MakeEdge(segment , cyl);
 

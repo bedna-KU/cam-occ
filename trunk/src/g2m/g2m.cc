@@ -73,12 +73,10 @@ g2m::g2m() {
   myAction->setStatusTip ( "Load a .ngc file and create a 3d model" );
   connect(myAction,SIGNAL(triggered()),this,SLOT(slotModelFromFile()));
 
-  solidToggle = false;
   solidAction = new QAction ( "Toggle solid creation", this );
   solidAction->setShortcut(QString("Ctrl+T"));
   solidAction->setStatusTip ( "Toggle solid" );
   solidAction->setCheckable(true);
-  solidAction->setChecked(false);
   connect(solidAction,SIGNAL(triggered()),this,SLOT(slotToggleSolid()));
 
 
@@ -87,6 +85,12 @@ g2m::g2m() {
   uio::mb()->insertMenu(uio::hm(),myMenu);
 
   debug = uio::debuggingOn();
+
+  if ( (debug) && (uio::getDump()!=0) )
+    solidToggle = true;  //if we're dumping shapes then obviously they need to be created
+  else
+    solidToggle = false;
+  solidAction->setChecked(solidToggle);
 
   fromCmdLine = false;
   if (uio::window()->getArgs()->count() > 1) {
@@ -533,7 +537,7 @@ TopoDS_Shape g2m::heal(const TopoDS_Shape & s, uint index) {
           a.Nullify();
         return a;
       } catch (...) {
-        cout << "heal failed at " << index << ", dumping shape" << endl << flush;;
+        cout << "heal failed at " << index << ", dumping shape & aborting..." << endl << flush;;
         dumpBrep("output/Dump_holes" + uio::toString((int)index) + ".brep",b);
         abort();
       }

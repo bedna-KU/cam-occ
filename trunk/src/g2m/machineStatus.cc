@@ -150,11 +150,16 @@ void machineStatus::addArcToBbox(TopoDS_Edge e) {
 }
 
 pntPair machineStatus::getTraverseBounds() {
-  double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
-  traverseBbox.Get (aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
   pntPair b;
-  b.a=gp_Pnt(aXmin,aYmin,aZmin);
-  b.b=gp_Pnt(aXmax,aYmax,aZmax);
+  if (!traverseBbox.IsVoid()) {
+    double aXmin,aYmin,aZmin, aXmax,aYmax,aZmax;
+    traverseBbox.Get (aXmin,aYmin,aZmin, aXmax,aYmax,aZmax );
+    b.a=gp_Pnt(aXmin,aYmin,aZmin);
+    b.b=gp_Pnt(aXmax,aYmax,aZmax);
+  } else {
+    b.a=gp_Pnt(0,0,0);
+    b.b=gp_Pnt(0,0,0);
+  }
   return b;
 }
 
