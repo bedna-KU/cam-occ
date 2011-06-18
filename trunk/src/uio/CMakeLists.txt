@@ -34,4 +34,4 @@ add_library ( OccUio SHARED ${OccUio_SRCS} ${OccUio_HDRS} ${UIS} ${RSCS} ${TRS} 
 target_link_libraries ( OccUio  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                         ${OpenCASCADE_LIBRARIES} -lstdc++ )
 
-install(TARGETS OccUio DESTINATION local/lib)
+install(TARGETS OccUio DESTINATION lib)

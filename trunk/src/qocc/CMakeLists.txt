@@ -4,7 +4,7 @@ set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall )
 find_package ( Qt4 REQUIRED )
 find_package ( OpenCASCADE REQUIRED COMPONENTS TKernel TKBool TKBO TKHLR TKTopAlgo
-               TKShHealing TKV3d TKGeomBase TKBRep TKOffset TKIGES TKSTEP PTKernel TKShapeSchema TKSTL TKVRML TKService TKMath )
+               TKShHealing TKV3d TKGeomBase TKBRep TKOffset TKIGES TKSTEP PTKernel TKShapeSchema TKSTL TKVRML TKService TKMath TKG3d TKG2d TKPrim TKV2d TKFillet TKXSBase TKPShape )
 find_package ( OpenGL REQUIRED )
 
 include ( ${QT_USE_FILE} )
@@ -51,5 +51,5 @@ add_executable ( camocc2 ${camocc2_SRCS} ${camocc2_HDRS} ${UIS} ${RSCS} ${TRS} $
 target_link_libraries ( camocc2  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                                  ${OpenCASCADE_LIBRARIES} ${OPENGL_LIBRARIES} ${camocc2_LIBS} )
 
-install(TARGETS camocc2 DESTINATION local/bin)
+install(TARGETS camocc2 DESTINATION bin)
 

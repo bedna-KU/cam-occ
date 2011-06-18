@@ -67,7 +67,7 @@ class g2m: public QObject {
     static std::vector<canonLine*> lineVector;
     QString file, tooltable;
     bool debug;
-    void statusBarUp(std::string s, double avgtime);
+    void statusBarUp(QString s, double avgtime);
     void makeSolid(uint index);
     //static bool interpDone;
     bool startInterp(QProcess &tc);

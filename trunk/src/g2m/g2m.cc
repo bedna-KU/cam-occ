@@ -165,7 +165,7 @@ void g2m::slotModelFromFile() {
   }
 
   double e = timer.getElapsedS();
-  std::cout << "Total time to process that file: " << timer.humanreadable(e) << std::endl;
+  std::cout << "Total time to process that file: " << timer.humanreadable(e).toStdString() << std::endl;
 
   uio::fitAll();
 }
@@ -178,8 +178,8 @@ void g2m::finishAllSolids(nanotimer &timer) {
     lineVector[i]->display();
     //if (i%20 == 0) { //every 20
       uio::fitAll();
-      std::string s = "Processing ";
-      s+= lineVector[i]->getLnum();
+      QString s = "Processing ";
+      s+= lineVector[i]->getLnum().c_str();
       s+= " : " + i;
       s+= " of " + lineVector.size();
       statusBarUp(s,timer.getElapsedS()/double(i));
@@ -326,7 +326,7 @@ bool g2m::processCanonLine (std::string l) {
 
   double t = nt.getElapsedS();
   if ((debug) && (t>.00005)) { //don't print if fast or not debugging
-    cout << "Line " << cl->getLineNum() << "/N" << cl->getN() << " - time " << nt.humanreadable(t) << endl;
+    cout << "Line " << cl->getLineNum() << "/N" << cl->getN() << " - time " << nt.humanreadable(t).toStdString() << endl;
   }
   //cl->checkErrors();
   if (!cl->isMotion())
@@ -334,13 +334,13 @@ bool g2m::processCanonLine (std::string l) {
   return false;
 }
 
-void g2m::statusBarUp(std::string s, double avgtime) {
+void g2m::statusBarUp(QString s, double avgtime) {
   QString m;
   //uio::window()->statusBar()->clearMessage();
   //  std::string s = "Last processed:";
-  m = s.c_str();
+  m = s;
   m += "   |   Avg time: ";
-  m += nanotimer::humanreadable(avgtime).c_str();
+  m += nanotimer::humanreadable(avgtime);
   uio::window()->statusBar()->showMessage(m);
 }
 

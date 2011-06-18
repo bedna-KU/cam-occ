@@ -22,7 +22,7 @@
 
 
 #include <cstdio>
-#include <string>
+#include <QString>
 #include "uio.hh"
 #include "nanotimer.hh"
 
@@ -54,18 +54,20 @@ double nanotimer::getElapsedS(){
   return delta.tv_sec + delta.tv_nsec/1000000000.0;
 }
 
-std::string nanotimer::humanreadable(double s) {
-  std::string out = "";
+QString nanotimer::humanreadable(double s) {
+  QString out;// = "";
   if (s > 60) {
     int m;
     m = s/60;
     s = s-(double)(m*60);
-    out = uio::toString(m) + "m, ";
+    out = m /*uio::toString(m)*/ + QString("m, ");
   }
   if (s > .01) {
-    out += uio::toString(s) + "s";
+    out += s; /*uio::toString(s)*/ 
+    out += "s";
   } else {
-    out = uio::toString(s*1000000) + "us";
+    out = s*1000000; /*uio::toString(s*1000000)*/ 
+    out += "us";
   }
   return out;
 }

@@ -33,7 +33,7 @@ class nanotimer {
     void start();
     long getElapsed();
     double getElapsedS();
-    static std::string humanreadable(double s);
+    static QString humanreadable(double s);
 };
 
 #endif //NANOTIMER_HH

@@ -43,5 +43,5 @@ add_library ( g2model SHARED ${g2model_SRCS} ${g2model_HDRS} ${UIS} ${RSCS} ${TR
 target_link_libraries ( g2model  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                           ${OpenCASCADE_LIBRARIES} )
 
-install(TARGETS g2model DESTINATION local/lib)
+install(TARGETS g2model DESTINATION lib)
 

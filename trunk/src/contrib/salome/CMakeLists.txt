@@ -43,5 +43,5 @@ set ( SalomeGeomShHeal_SRCS
 add_library ( SalomeGeomShHeal SHARED ${SalomeGeomShHeal_SRCS} ${UIS} ${RSCS} ${TRS} ${MOCS} )
 target_link_libraries ( SalomeGeomShHeal  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCASCADE_LIBRARIES} )
 
-install(TARGETS SalomeGeomShHeal DESTINATION local/lib)
+install(TARGETS SalomeGeomShHeal DESTINATION lib)
 
