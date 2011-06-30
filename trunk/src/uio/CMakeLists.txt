@@ -3,7 +3,16 @@ cmake_minimum_required( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall )
 find_package ( Qt4 REQUIRED )
-find_package ( OpenCASCADE REQUIRED COMPONENTS TKernel TKBRep TKTopAlgo TKService TKMath )
+
+set( CASCADE_LIBS "TKernel;TKBRep;TKTopAlgo;TKService;TKMath" )
+if( ${OCE_FOUND} )
+  add_definitions ( -DHAVE_CONFIG_H )
+  set( OpenCASCADE_LIBRARIES ${CASCADE_LIBS} )
+  set( OpenCASCADE_INCLUDE_DIR ${OCE_INCLUDE_DIRS} )
+else() #look for OpenCASCADE
+  find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS})
+endif()
+
 include ( ${QT_USE_FILE} )
 include_directories (
 	${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}

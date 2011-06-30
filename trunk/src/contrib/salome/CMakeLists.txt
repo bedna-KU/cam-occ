@@ -2,8 +2,15 @@ project( SalomeGeomShHeal )
 cmake_minimum_required( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall )
-find_package ( OpenCASCADE REQUIRED COMPONENTS TKernel TKCAF PTKernel TKBRep TKMath
-               TKPCAF TKXCAF TKLCAF )
+
+set( CASCADE_LIBS "TKernel;TKCAF;PTKernel;TKBRep;TKMath;TKPCAF;TKXCAF;TKLCAF" )
+if( ${OCE_FOUND} )
+  add_definitions ( -DHAVE_CONFIG_H )
+  set( OpenCASCADE_LIBRARIES ${CASCADE_LIBS} )
+  set( OpenCASCADE_INCLUDE_DIR ${OCE_INCLUDE_DIRS} )
+else() #look for OpenCASCADE
+  find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS})
+endif()
 
 find_package ( Qt4 REQUIRED )
 include ( ${QT_USE_FILE} )

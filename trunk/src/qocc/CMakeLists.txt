@@ -3,8 +3,17 @@ cmake_minimum_required( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall )
 find_package ( Qt4 REQUIRED )
-find_package ( OpenCASCADE REQUIRED COMPONENTS TKernel TKBool TKBO TKHLR TKTopAlgo
-               TKShHealing TKV3d TKGeomBase TKBRep TKOffset TKIGES TKSTEP PTKernel TKShapeSchema TKSTL TKVRML TKService TKMath TKG3d TKG2d TKPrim TKV2d TKFillet TKXSBase TKPShape )
+
+set( CASCADE_LIBS "TKernel;TKBool;TKBO;TKHLR;TKTopAlgo;TKShHealing;TKV3d;TKGeomBase;TKBRep;TKOffset;TKIGES;TKSTEP;PTKernel;TKShapeSchema;TKSTL;TKVRML;TKService;TKMath;TKG3d;TKG2d;TKPrim;TKV2d;TKFillet;TKXSBase;TKPShape" )
+if( ${OCE_FOUND} )
+  add_definitions ( -DHAVE_CONFIG_H )
+  set( OpenCASCADE_LIBRARIES ${CASCADE_LIBS} )
+  set( OpenCASCADE_INCLUDE_DIR ${OCE_INCLUDE_DIRS} )
+else() #look for OpenCASCADE
+  find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS})
+endif()
+
+
 find_package ( OpenGL REQUIRED )
 
 include ( ${QT_USE_FILE} )
