@@ -1,0 +1,63 @@
+# Introduction #
+
+cam-occ2 doesn't do much, but with additional eyes I'll be able to squash bugs and improve the things that matter most to users - so I thought I'd write up instructions.
+
+I normally develop on 64-bit Debian, but wrote this up because Ubuntu is so common.
+
+# Required Packages #
+
+**Install the following** (and all packages they require):
+```
+libopencascade-dev
+libqt4-dev
+g++
+subversion
+libxext-dev
+libxmu-dev
+```
+
+# Get the Source #
+
+From a terminal, type the following:
+```
+cd
+svn checkout http://cam-occ.googlecode.com/svn/trunk/ cam-occ
+```
+
+# Compile #
+
+```
+cd cam-occ
+qmake
+make
+```
+Look at the last few lines of output from make. If you don't see the word "error", make succeeded.
+
+# Execute #
+
+`./ubuntu.sh ngc-in/face-sc.canon`
+
+The program will probably crash if threads are enabled ( as of [r115](https://code.google.com/p/cam-occ/source/detail?r=115), enabling threads would require modifying the source )
+
+A file can also be chosen from the gcode menu - typing it on the command line isn't necessary. If EMC2's stand-alone interpreter can be found, gcode files can be interpreted. If it isn't available, the only files that can be interpreted are files containing the SAI's output. (At the moment, using the interpreter seems to be broken...)
+
+If you don't have EMC2 already, you can install a simulator which includes the necessary binary. Use the following script to install:
+```
+#!/bin/sh
+
+#adapted from the script at http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#On_Ubuntu_10_04_using_precompiled_EMC2_packages
+
+gksudo -m "Enter your password to install EMC2-sim" true
+gpg --keyserver pgpkeys.mit.edu --recv-key 8F374FEF
+gpg -a --export 8F374FEF | sudo apt-key add -
+
+sudo sh -c 'cat > /etc/apt/sources.list.d/linuxcnc.list' <<EOF
+deb http://www.linuxcnc.org/emc2 lucid base emc2.4-sim
+deb-src http://www.linuxcnc.org/emc2 lucid base emc2.4-sim
+EOF
+
+sudo apt-get update
+sudo apt-get -o Apt::Install-Recommends=true install emc2-sim
+
+```
+Or if you wish to compile it yourself, see [Compiling EMC2 from source](http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#On_Ubuntu_10_04_or_8_04_from_source) and [Building EMC2 simulator](http://wiki.linuxcnc.org/cgi-bin/emcinfo.pl?Installing_EMC2#Building_emc2_simulator).

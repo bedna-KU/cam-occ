@@ -1,0 +1,20 @@
+![http://code.google.com/p/cam-occ/source/browse/wiki/images/cam-occ1.png](http://code.google.com/p/cam-occ/source/browse/wiki/images/cam-occ1.png)
+# Introduction #
+
+## cam-occ ##
+A CAM program exclusively using solid models.  Apparently, most CAM programs convert the solid model to mesh, then calculate paths.  The intent of this program is to stay with solids, in the hopes that it will be more accurate and produce more efficient g-code.
+
+
+# Details #
+
+  * Methods of creating toolpaths
+    * RoughToolPaths
+    * FinishToolPaths
+    * AutomaticFeatureRecognition
+  * Excluding unnecessary (air) toolpaths
+    * Load two models, rough (R) and finish (F).
+      * Subtract F from R. This is the material to be removed, M.
+      * Truncate any path which extends outside M.
+    * Optimize and re-order cuts (script on EMC list years ago?)
+      * Minimize rapid time
+    * Minimize delta-Z for all cut transitions
